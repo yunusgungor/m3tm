@@ -1,117 +1,137 @@
 {
-  "evolution_id": "m3tm_v2.3_initial",
-  "creation_date": "2024-05-23",
+  "evolution_id": "initial_v2",
+  "creation_date": "2024-05-09",
   "trends": [
     {
-      "date": "2024-05-23",
-      "iteration_id": "iter_1",
-      "story_id": "story_1",
-      "new_patterns": ["PT-001", "PT-002"],
-      "updated_patterns": [],
-      "deprecated_patterns": [],
-      "pattern_count": 2,
-      "adoption_metrics": {
-        "average_adoption_rate": 1.0,
-        "average_implementation_consistency": 1.0
-      },
-      "effectiveness_metrics": {
-        "average_complexity_reduction": 0.65,
-        "average_maintainability_improvement": 0.75,
-        "average_effectiveness_score": 0.7
-      },
-      "category_distribution": {
-        "architectural": 2,
-        "performance": 0,
-        "security": 0,
-        "maintainability": 0
-      },
-      "notes": "İlk örüntüler tanımlandı ve kataloglandı. ConfigurationDataclass ve ModelCheckpointManager örüntüleri proje geliştirme ortamı kurulumu sırasında oluşturuldu."
-    },
-    {
-      "date": "2024-05-23",
-      "iteration_id": "iter_1",
-      "story_id": "story_2",
-      "new_patterns": ["PT-003", "PT-004", "PT-005"],
-      "updated_patterns": [],
-      "deprecated_patterns": [],
-      "pattern_count": 5,
-      "adoption_metrics": {
-        "average_adoption_rate": 1.0,
-        "average_implementation_consistency": 1.0
-      },
-      "effectiveness_metrics": {
-        "average_complexity_reduction": 0.68,
-        "average_maintainability_improvement": 0.72,
-        "average_effectiveness_score": 0.69
-      },
-      "category_distribution": {
-        "architectural": 3,
-        "performance": 2,
-        "security": 0,
-        "maintainability": 0
-      },
-      "notes": "PyTorch Mobile ile ilgili örüntüler tanımlandı ve kataloglandı. Architectural ve performance kategorilerinde yeni örüntüler eklendi: MobileModelConverter, BenchmarkStrategy ve MobileOptimizationPipeline. Bu örüntüler mobil performans optimizasyonu ve model dönüşümü için güçlü temel sağlıyor."
+      "date": "2024-05-09",
+      "pattern_count": 8,
+      "total_implementations": 10,
+      "categories": {
+        "configuration": 1,
+        "creation": 1,
+        "structural": 1,
+        "evaluation": 1,
+        "functional": 1,
+        "optimization": 1,
+        "registration": 1,
+        "measurement": 1
+      }
     },
     {
       "date": "2024-05-24",
-      "iteration_id": "iter_1",
-      "story_id": "story_3",
-      "new_patterns": ["PT-007", "PT-008"],
-      "updated_patterns": ["PT-001", "PT-004"],
-      "deprecated_patterns": [],
-      "pattern_count": 7,
-      "adoption_metrics": {
-        "average_adoption_rate": 1.0,
-        "average_implementation_consistency": 0.96
-      },
-      "effectiveness_metrics": {
-        "average_complexity_reduction": 0.71,
-        "average_maintainability_improvement": 0.77,
-        "average_effectiveness_score": 0.74
-      },
-      "category_distribution": {
-        "architectural": 3,
-        "performance": 2,
-        "security": 0,
-        "maintainability": 0,
+      "pattern_count": 10,
+      "total_implementations": 13,
+      "categories": {
+        "configuration": 1,
+        "creation": 1,
+        "structural": 1,
+        "evaluation": 1,
+        "functional": 1,
+        "optimization": 1,
         "registration": 1,
         "measurement": 1,
-        "configuration": 1
-      },
-      "notes": "Story 3 (Mobil dikkat ve konvolüsyon mekanizmaları araştırması) tamamlanırken iki yeni örüntü keşfedildi ve kataloglandı: MechanismRegistry ve MetricsCollector. Ayrıca, ConfigurationDataclass ve BenchmarkStrategy örüntüleri güncellendi ve yeni kategoriler tanımlandı: registration, measurement ve configuration. Özellikle MechanismRegistry örüntüsü, hem dikkat hem de konvolüsyon mekanizmalarının tutarlı ve genişletilebilir bir şekilde yönetilmesini sağlayarak kod kalitesini önemli ölçüde artırdı."
+        "validation": 1,
+        "notification": 1
+      }
     },
     {
       "date": "2024-05-26",
-      "iteration_id": "iter_1",
-      "story_id": "story_4",
-      "new_patterns": ["PT-009", "PT-010", "PT-011", "PT-012"],
-      "updated_patterns": ["PT-001", "PT-007"],
-      "deprecated_patterns": [],
-      "pattern_count": 11,
-      "adoption_metrics": {
-        "average_adoption_rate": 1.0,
-        "average_implementation_consistency": 0.95
-      },
-      "effectiveness_metrics": {
-        "average_complexity_reduction": 0.73,
-        "average_maintainability_improvement": 0.79,
-        "average_effectiveness_score": 0.76
-      },
-      "category_distribution": {
-        "architectural": 3,
-        "performance": 2,
-        "security": 0,
-        "maintainability": 0,
+      "pattern_count": 12,
+      "total_implementations": 16,
+      "categories": {
+        "configuration": 1,
+        "creation": 2,
+        "structural": 2,
+        "evaluation": 1,
+        "functional": 1,
+        "optimization": 1,
         "registration": 1,
         "measurement": 1,
+        "validation": 1,
+        "notification": 1
+      }
+    },
+    {
+      "date": "2024-05-28",
+      "pattern_count": 15,
+      "total_implementations": 20,
+      "categories": {
         "configuration": 1,
+        "creation": 3,
+        "structural": 2,
+        "evaluation": 1,
+        "functional": 1,
+        "optimization": 2,
+        "registration": 1,
+        "measurement": 1,
         "validation": 1,
         "notification": 1,
-        "creation": 2,
-        "structural": 2
+        "processing": 1
       },
-      "notes": "Story 4 (Yapılandırma formatının belirlenmesi) tamamlanırken dört yeni örüntü tespit edildi ve kataloglandı: ConfigValidationPipeline, ConfigurationObserver, DefaultConfigFactory ve ConfigurationComposite. Özellikle ConfigurationDataclass (PT-001) örüntüsü tam olarak uygulandı ve genişletildi. MechanismRegistry (PT-007) örüntüsü, yapılandırma kaynaklarının merkezi yönetimi için adapte edildi. Eklenen yeni örüntüler yapılandırma sisteminin esnekliğini, doğrulamasını ve gözlemlenebilirliğini büyük ölçüde artırdı. Validation, notification, creation ve structural kategorilerinde yeni örüntüler eklendi."
+      "new_patterns": ["TokenProcessingStrategy", "EmbeddingFactory", "CachingDecorator"],
+      "pattern_adoption_changes": {
+        "PT-001": "+0.05",
+        "PT-007": "+0.10",
+        "PT-009": "+0.15",
+        "PT-011": "+0.10",
+        "PT-012": "+0.20"
+      }
     }
   ],
-  "last_updated": "2024-05-26"
+  "pattern_lifecycle": {
+    "PT-001": {
+      "discovery_date": "2024-05-09",
+      "maturity_level": "mature",
+      "evolution_stages": [
+        {
+          "date": "2024-05-09",
+          "adoption_rate": 0.70,
+          "effectiveness_score": 8.0
+        },
+        {
+          "date": "2024-05-28",
+          "adoption_rate": 0.85,
+          "effectiveness_score": 8.5
+        }
+      ]
+    },
+    "PT-013": {
+      "discovery_date": "2024-05-28",
+      "maturity_level": "emerging",
+      "evolution_stages": [
+        {
+          "date": "2024-05-28",
+          "adoption_rate": 0.40,
+          "effectiveness_score": 7.8
+        }
+      ]
+    },
+    "PT-014": {
+      "discovery_date": "2024-05-28",
+      "maturity_level": "emerging",
+      "evolution_stages": [
+        {
+          "date": "2024-05-28",
+          "adoption_rate": 0.35,
+          "effectiveness_score": 8.0
+        }
+      ]
+    },
+    "PT-015": {
+      "discovery_date": "2024-05-28",
+      "maturity_level": "concept",
+      "evolution_stages": [
+        {
+          "date": "2024-05-28",
+          "adoption_rate": 0.10,
+          "effectiveness_score": 7.5
+        }
+      ]
+    }
+  },
+  "pattern_relationships": {
+    "PT-013": ["PT-014"],
+    "PT-014": ["PT-002", "PT-013"]
+  },
+  "last_updated": "2024-05-28"
 } 

@@ -6,7 +6,15 @@
     "story_2": ["environment_setup", "pytorch_mobile"],
     "story_3": ["research", "model_core"],
     "story_4": ["config"],
-    "story_5": ["model_core", "text_processing"],
+    "story_5": {
+      "primary_module": "embedding",
+      "secondary_modules": ["tokenization", "config"],
+      "file_paths": [
+        "src/m3tm/embedding/text_embedding.py",
+        "src/m3tm/embedding/tokenizer.py",
+        "src/m3tm/embedding/config.py"
+      ]
+    },
     "story_6": ["model_core", "transformer"],
     "story_7": ["model_core", "task_heads", "training"],
     "story_8": ["model_core", "image_processing"],

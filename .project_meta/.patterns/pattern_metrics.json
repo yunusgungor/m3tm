@@ -1,154 +1,79 @@
 {
-  "metrics_id": "m3tm_v2.3_initial",
-  "creation_date": "2024-05-23",
+  "metrics_id": "initial_v2",
+  "creation_date": "2024-05-09",
   "metrics": {
-    "pattern_adoption": {
-      "description": "Örüntü kullanım yaygınlığı",
-      "data": {
-        "PT-001": {
-          "usage_count": 3,
-          "files_count": 3,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 1.0
-        },
-        "PT-002": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 1.0
-        },
-        "PT-003": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 1.0
-        },
-        "PT-004": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 1.0
-        },
-        "PT-005": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 1.0
-        },
-        "PT-007": {
-          "usage_count": 2,
-          "files_count": 2,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 0.95
-        },
-        "PT-008": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 1.0
-        },
-        "PT-009": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 0.9
-        },
-        "PT-010": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 0.9
-        },
-        "PT-011": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 0.95
-        },
-        "PT-012": {
-          "usage_count": 1,
-          "files_count": 1,
-          "adoption_rate": 1.0,
-          "implementation_consistency": 0.95
-        }
+    "pattern_adoption_rate": {
+      "PT-001": 0.85,
+      "PT-002": 0.25,
+      "PT-003": 0.15,
+      "PT-004": 0.65,
+      "PT-005": 0.10,
+      "PT-006": 0.05,
+      "PT-007": 0.55,
+      "PT-008": 0.60,
+      "PT-009": 0.70,
+      "PT-010": 0.35,
+      "PT-011": 0.70,
+      "PT-012": 0.65,
+      "PT-013": 0.40,
+      "PT-014": 0.35,
+      "PT-015": 0.10
+    },
+    "pattern_effectiveness_score": {
+      "PT-001": 8.5,
+      "PT-002": 7.2,
+      "PT-003": 7.5,
+      "PT-004": 8.2,
+      "PT-005": 7.0,
+      "PT-006": 6.5,
+      "PT-007": 7.8,
+      "PT-008": 8.0,
+      "PT-009": 8.3,
+      "PT-010": 7.7,
+      "PT-011": 8.4,
+      "PT-012": 8.2,
+      "PT-013": 7.8,
+      "PT-014": 8.0,
+      "PT-015": 7.5
+    },
+    "pattern_consistency_score": {
+      "PT-001": 0.92,
+      "PT-002": 0.85,
+      "PT-003": 0.80,
+      "PT-004": 0.88,
+      "PT-005": 0.78,
+      "PT-006": 0.75,
+      "PT-007": 0.86,
+      "PT-008": 0.87,
+      "PT-009": 0.90,
+      "PT-010": 0.86,
+      "PT-011": 0.91,
+      "PT-012": 0.89,
+      "PT-013": 0.85,
+      "PT-014": 0.87,
+      "PT-015": 0.80
+    },
+    "anti_pattern_density": {
+      "global": 0.15,
+      "by_module": {
+        "config": 0.08,
+        "research": 0.12,
+        "embedding": 0.10
       }
     },
-    "pattern_effectiveness": {
-      "description": "Örüntü etkinliği",
-      "data": {
-        "PT-001": {
-          "complexity_reduction": 0.7,
-          "maintainability_improvement": 0.8,
-          "effectiveness_score": 0.75
-        },
-        "PT-002": {
-          "complexity_reduction": 0.6,
-          "maintainability_improvement": 0.7,
-          "effectiveness_score": 0.65
-        },
-        "PT-003": {
-          "complexity_reduction": 0.7,
-          "maintainability_improvement": 0.7,
-          "effectiveness_score": 0.7
-        },
-        "PT-004": {
-          "complexity_reduction": 0.6,
-          "maintainability_improvement": 0.8,
-          "effectiveness_score": 0.7
-        },
-        "PT-005": {
-          "complexity_reduction": 0.7,
-          "maintainability_improvement": 0.6,
-          "effectiveness_score": 0.65
-        },
-        "PT-007": {
-          "complexity_reduction": 0.8,
-          "maintainability_improvement": 0.9,
-          "effectiveness_score": 0.85
-        },
-        "PT-008": {
-          "complexity_reduction": 0.7,
-          "maintainability_improvement": 0.8,
-          "effectiveness_score": 0.75
-        },
-        "PT-009": {
-          "complexity_reduction": 0.7,
-          "maintainability_improvement": 0.8,
-          "effectiveness_score": 0.75
-        },
-        "PT-010": {
-          "complexity_reduction": 0.7,
-          "maintainability_improvement": 0.8,
-          "effectiveness_score": 0.75
-        },
-        "PT-011": {
-          "complexity_reduction": 0.8,
-          "maintainability_improvement": 0.9,
-          "effectiveness_score": 0.85
-        },
-        "PT-012": {
-          "complexity_reduction": 0.8,
-          "maintainability_improvement": 0.85,
-          "effectiveness_score": 0.82
-        }
-      }
+    "pattern_churn_rate": {
+      "added_per_week": 2.5,
+      "modified_per_week": 1.2,
+      "deprecated_per_week": 0.2
     },
-    "pattern_categories": {
-      "description": "Kategorilere göre örüntü dağılımı",
-      "data": {
-        "architectural": 3,
-        "performance": 2,
-        "security": 0,
-        "maintainability": 0,
-        "registration": 1,
-        "measurement": 1,
-        "configuration": 1,
-        "validation": 1,
-        "notification": 1,
-        "creation": 2,
-        "structural": 2
+    "refactoring_effort_ratio": {
+      "global": 0.25,
+      "by_module": {
+        "config": 0.18,
+        "research": 0.22,
+        "embedding": 0.20
       }
     }
   },
-  "last_updated": "2024-05-26"
+  "last_updated": "2024-05-28"
 } 

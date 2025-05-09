@@ -1,0 +1,71 @@
+{
+  "story_id": "story_5",
+  "title": "TextEmbedding modülü implementasyonu",
+  "description": "Metinleri sayısal vektörlere dönüştürmek için TextEmbedding modülünün implementasyonu. Bu modül, girdileri tokenize ederek numerik indekslere dönüştürecek, ardından embedding tablosu kullanarak bu indeksleri anlamlı vektörlere çevirecektir. Modül, mobil cihazlarda etkin çalışmak için optimizasyon içerecektir.",
+  "acceptance_criteria": [
+    "TokenizerConfig yapılandırma sınıfı oluşturulmalı",
+    "TextEmbeddingConfig yapılandırma sınıfı oluşturulmalı",
+    "Basit ve hızlı bir tokenizer implementasyonu yapılmalı",
+    "TextEmbedding PyTorch modülü implementasyonu yapılmalı",
+    "Optimizasyon için embedding boyut düşürme mekanizması eklenebilmeli",
+    "Modülün doğru çalıştığını gösteren unit test yazılmalı",
+    "Bellek ve performans ölçümleri yapılmalı"
+  ],
+  "tasks": [
+    {
+      "task_id": "task_5.1",
+      "description": "TokenizerConfig ve TextEmbeddingConfig yapılandırma sınıflarının oluşturulması",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_5.2",
+      "description": "Basit ve hızlı tokenizer implementasyonu",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_5.3",
+      "description": "TextEmbedding PyTorch modülü implementasyonu",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_5.4",
+      "description": "Modül için optimizasyon mekanizmalarının implementasyonu",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_5.5",
+      "description": "Birim testleri yazılması",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_5.6",
+      "description": "Bellek ve performans ölçümleri",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_5.7",
+      "description": "Örüntü tespiti ve kataloglama",
+      "status": "todo"
+    }
+  ],
+  "modules": ["embedding", "tokenization"],
+  "dependencies": ["story_4"],
+  "patterns_to_apply": [
+    "PT-001: ConfigurationDataclass - Tokenizer ve Embedding yapılandırmaları için",
+    "PT-009: ConfigValidationPipeline - Yapılandırma doğrulaması için",
+    "PT-012: ConfigurationComposite - TextEmbedding'in alt yapılandırmalarını organize etmek için"
+  ],
+  "potential_patterns": [
+    "TokenProcessingStrategy: Farklı tokenizasyon stratejilerini standardize etmek için",
+    "EmbeddingFactory: Farklı embedding tiplerini oluşturmak için fabrika deseni",
+    "CachingDecorator: Sık kullanılan token embeddingleri için önbellekleme"
+  ],
+  "created_date": "2024-05-28",
+  "status": "in_progress",
+  "priority": "high",
+  "assigned_to": "codeflow_agent",
+  "estimated_effort": "medium",
+  "related_requirements": ["FR-003", "NFR-001", "NFR-003"],
+  "tags": ["embedding", "nlp", "tokenization", "optimization"],
+  "notes": "Bu hikaye, modelin metin modalitesinin temelini oluşturuyor. Etkin bir tokenizer ve embedding modülü, tüm sistemin performansını belirleyecek. ConfigurationDataclass ve ConfigValidationPipeline örüntüleri önceki hikayede oluşturuldu ve burada yeniden kullanılacak. Embedding boyut düşürme için matris faktorizasyon yöntemleri düşünülebilir."
+} 

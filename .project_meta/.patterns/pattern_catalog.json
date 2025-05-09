@@ -187,7 +187,57 @@
       ],
       "creation_date": "2024-05-26",
       "last_updated": "2024-05-26"
+    },
+    {
+      "pattern_id": "PT-013",
+      "name": "TokenProcessingStrategy",
+      "description": "Farklı tokenizasyon stratejilerini standart bir arayüz altında sunan ve değiştirilebilir kılan strateji deseni.",
+      "category": "processing",
+      "examples": [
+        "src/m3tm/embedding/tokenizer.py"
+      ],
+      "advantages": [
+        "Farklı tokenizasyon stratejileri arasında kolay geçiş",
+        "Standartlaştırılmış arayüz",
+        "Yeni tokenizasyon yöntemlerinin kolay entegrasyonu",
+        "Modüler ve test edilebilir kod"
+      ],
+      "creation_date": "2024-05-28",
+      "last_updated": "2024-05-28"
+    },
+    {
+      "pattern_id": "PT-014",
+      "name": "EmbeddingFactory",
+      "description": "Farklı tipte ve özellikte embedding modülleri oluşturmak için kullanılan fabrika deseni.",
+      "category": "creation",
+      "examples": [
+        "src/m3tm/embedding/text_embedding.py"
+      ],
+      "advantages": [
+        "Farklı embedding yapılandırmalarının merkezi yönetimi",
+        "Özelleştirilmiş embedding modüllerinin kolay oluşturulması",
+        "Sıkıştırılmış veya optimize edilmiş embeddingler için tutarlı arayüz",
+        "İstemci kodunun embedding oluşturma detaylarından soyutlanması"
+      ],
+      "creation_date": "2024-05-28",
+      "last_updated": "2024-05-28"
+    },
+    {
+      "pattern_id": "PT-015",
+      "name": "CachingDecorator",
+      "description": "Sık kullanılan işlem sonuçlarını önbellekleme için decorator deseni uygulaması.",
+      "category": "optimization",
+      "examples": [],
+      "advantages": [
+        "Tekrarlanan işlemlerin hızlandırılması",
+        "Mobil cihazlarda enerji verimliliği",
+        "Kaynak kullanımının optimize edilmesi",
+        "Mevcut sınıflara müdahale etmeden optimizasyon eklenmesi"
+      ],
+      "potential_implementation": "Token kodlama/çözümleme işlemlerini önbellekleme",
+      "creation_date": "2024-05-28",
+      "last_updated": "2024-05-28"
     }
   ],
-  "last_updated": "2024-05-26"
+  "last_updated": "2024-05-28"
 } 
