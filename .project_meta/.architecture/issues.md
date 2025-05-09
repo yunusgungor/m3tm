@@ -28,6 +28,24 @@ Bu belge, proje geliştirme sürecinde tespit edilen mimari sorunları, potansiy
 - **Açıklama**: Mobil cihazlarda model mimarisinin derinlik ve genişlik dengesinin optimal olmayabileceği, özellikle konvolüsyon katmanlarında kaynak kullanımını etkileyebileceği görüldü. 
 - **Çözüm Önerisi**: MobileNetV2 mimarisinde olduğu gibi ters darboğaz (inverted bottleneck) yapısı ile az sayıda kanal genişliği artırılıp, daha fazla derinlik eklenebilir. Derinlik yönlü ayrılabilir konvolüsyonlar kullanılmalı.
 
+### IS-005: LongMethodAntiPattern tespit edildi
+- **Durum**: Açık
+- **Öncelik**: Orta
+- **Tespit Tarihi**: 2024-05-31
+- **Atanan**: Henüz atanmadı
+- **Açıklama**: `m3tm/examples/text_classification.py` içerisindeki `main()` fonksiyonu 50+ satır ile birden fazla sorumluluğu (argüman işleme, model oluşturma, veri yükleme, eğitim) karıştırmaktadır. Bu Tek Sorumluluk İlkesi'ne (SRP) aykırıdır ve bakım zorluğu yaratmaktadır.
+- **Çözüm Önerisi**: `main()` fonksiyonu daha küçük, odaklı fonksiyonlara bölünmelidir: `parse_arguments()`, `setup_environment()`, `prepare_dataset()`, `build_model()`, `train_and_evaluate()`. Özellikle örnek kodda, desen uygulaması daha net olmalıdır.
+- **İlgili Desen/Anti-desen**: AP-001 (LongMethodAntiPattern), PT-013 (TrainingLoopTemplate)
+
+### IS-006: DatasetFactory'de eksik soyutlama
+- **Durum**: Açık
+- **Öncelik**: Düşük
+- **Tespit Tarihi**: 2024-05-31
+- **Atanan**: Henüz atanmadı
+- **Açıklama**: `DatasetFactory` sınıfı şu anda sadece metin sınıflandırma veri kümeleri oluşturmaktadır ve görüntü veri kümeleri için genişleme potansiyeli sınırlıdır. API, gelecekteki veri türleri için değişiklik gerektirecektir.
+- **Çözüm Önerisi**: Genel bir `create_dataset()` metodu eklenmeli ve dataset türleri enum veya strateji deseni ile tanımlanmalıdır. Görüntü ve çoklu modalite veri kümeleri için hazırlık yapılmalıdır.
+- **İlgili Desen/Anti-desen**: AP-002 (IncompleteAbstractionAntiPattern), PT-007 (DatasetFactory)
+
 ## Çözülen Sorunlar
 
 ### IS-004: Dikkat mekanizması standardizasyonu
