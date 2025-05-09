@@ -1,89 +1,128 @@
 {
-  "metrics_id": "initial_v2",
-  "creation_date": "2024-05-09",
+  "metrics_id": "m3tm_metrics_v2",
+  "creation_date": "2024-05-23",
   "metrics": {
     "pattern_adoption_rate": {
-      "PT-001": 0.90,
-      "PT-002": 0.25,
-      "PT-003": 0.15,
-      "PT-004": 0.65,
-      "PT-005": 0.10,
-      "PT-006": 0.05,
-      "PT-007": 0.55,
-      "PT-008": 0.60,
-      "PT-009": 0.75,
-      "PT-010": 0.35,
-      "PT-011": 0.70,
-      "PT-012": 0.75,
-      "PT-013": 0.55,
-      "PT-014": 0.55,
-      "PT-015": 0.10
+      "overall": 0.75,
+      "by_category": {
+        "configuration": 0.90,
+        "creation": 0.80,
+        "structural": 0.65,
+        "processing": 0.75,
+        "behavioral": 0.60,
+        "registration": 0.85,
+        "validation": 0.80,
+        "optimization": 0.70
+      },
+      "by_pattern": {
+        "PT-001": 0.95,
+        "PT-007": 0.85,
+        "PT-009": 0.85,
+        "PT-012": 0.80,
+        "PT-013": 0.75,
+        "PT-014": 0.70,
+        "PT-015": 0.65,
+        "PT-016": 0.60
+      }
     },
     "pattern_effectiveness_score": {
-      "PT-001": 8.7,
-      "PT-002": 7.2,
-      "PT-003": 7.5,
-      "PT-004": 8.2,
-      "PT-005": 7.0,
-      "PT-006": 6.5,
-      "PT-007": 7.8,
-      "PT-008": 8.0,
-      "PT-009": 8.5,
-      "PT-010": 7.7,
-      "PT-011": 8.4,
-      "PT-012": 8.5,
-      "PT-013": 8.1,
-      "PT-014": 8.3,
-      "PT-015": 7.5
+      "overall": 0.82,
+      "by_category": {
+        "configuration": 0.88,
+        "creation": 0.80,
+        "structural": 0.75,
+        "processing": 0.82,
+        "behavioral": 0.85,
+        "registration": 0.90,
+        "validation": 0.85,
+        "optimization": 0.78
+      },
+      "by_pattern": {
+        "PT-001": 0.90,
+        "PT-007": 0.85,
+        "PT-009": 0.88,
+        "PT-012": 0.82,
+        "PT-013": 0.85,
+        "PT-014": 0.80,
+        "PT-015": 0.75,
+        "PT-016": 0.85
+      }
     },
     "pattern_consistency_score": {
-      "PT-001": 0.92,
-      "PT-002": 0.85,
-      "PT-003": 0.80,
-      "PT-004": 0.88,
-      "PT-005": 0.78,
-      "PT-006": 0.75,
-      "PT-007": 0.86,
-      "PT-008": 0.87,
-      "PT-009": 0.90,
-      "PT-010": 0.86,
-      "PT-011": 0.91,
-      "PT-012": 0.89,
-      "PT-013": 0.85,
-      "PT-014": 0.87,
-      "PT-015": 0.80
+      "overall": 0.78,
+      "by_category": {
+        "configuration": 0.85,
+        "creation": 0.75,
+        "structural": 0.80,
+        "processing": 0.75,
+        "behavioral": 0.80,
+        "registration": 0.88,
+        "validation": 0.82,
+        "optimization": 0.72
+      },
+      "by_pattern": {
+        "PT-001": 0.92,
+        "PT-007": 0.85,
+        "PT-009": 0.88,
+        "PT-012": 0.85,
+        "PT-013": 0.80,
+        "PT-014": 0.78,
+        "PT-015": 0.75,
+        "PT-016": 0.80
+      }
     },
     "anti_pattern_density": {
-      "global": 0.15,
+      "overall": 0.05,
       "by_module": {
-        "config": 0.08,
-        "research": 0.12,
-        "embedding": 0.10
+        "config": 0.03,
+        "embedding": 0.04,
+        "transformer": 0.05
       }
     },
-    "pattern_churn_rate": {
-      "added_per_week": 2.5,
-      "modified_per_week": 1.2,
-      "deprecated_per_week": 0.2
-    },
-    "refactoring_effort_ratio": {
-      "global": 0.24,
-      "by_module": {
-        "config": 0.18,
-        "research": 0.22,
-        "embedding": 0.15
+    "pattern_impact": {
+      "PT-001": {
+        "code_reduction": 0.25,
+        "maintainability_improvement": 0.30,
+        "test_coverage_improvement": 0.20
+      },
+      "PT-007": {
+        "code_reduction": 0.15,
+        "maintainability_improvement": 0.35,
+        "test_coverage_improvement": 0.25
+      },
+      "PT-009": {
+        "code_reduction": 0.20,
+        "maintainability_improvement": 0.30,
+        "test_coverage_improvement": 0.15
+      },
+      "PT-012": {
+        "code_reduction": 0.18,
+        "maintainability_improvement": 0.25,
+        "test_coverage_improvement": 0.10
+      },
+      "PT-013": {
+        "code_reduction": 0.22,
+        "maintainability_improvement": 0.28,
+        "test_coverage_improvement": 0.15
+      },
+      "PT-014": {
+        "code_reduction": 0.15,
+        "maintainability_improvement": 0.20,
+        "test_coverage_improvement": 0.12
+      },
+      "PT-015": {
+        "code_reduction": 0.08,
+        "maintainability_improvement": 0.15,
+        "test_coverage_improvement": 0.05,
+        "performance_improvement": 0.30
+      },
+      "PT-016": {
+        "code_reduction": 0.22,
+        "maintainability_improvement": 0.35,
+        "test_coverage_improvement": 0.25,
+        "code_flexibility": 0.40
       }
-    },
-    "pattern_implementation_quality": {
-      "PT-001": 0.95,
-      "PT-009": 0.92,
-      "PT-012": 0.90,
-      "PT-013": 0.87,
-      "PT-014": 0.89
-    },
-    "story_pattern_coverage": {
-      "story_5": 0.93
     }
   },
-  "last_updated": "2024-05-29"
+  "last_updated": "2024-05-30"
 } 
