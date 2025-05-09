@@ -1,0 +1,56 @@
+{
+  "status_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-05-23",
+  "modules": {
+    "model_core": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "text_processing": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "image_processing": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "transformer": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "fusion": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "search": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "model_growth": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    },
+    "sdk": {
+      "status": "pending",
+      "last_test_date": null,
+      "test_results": null,
+      "issues": []
+    }
+  },
+  "stories": {},
+  "overall_status": "pending"
+} 

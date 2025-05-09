@@ -1,0 +1,29 @@
+{
+  "map_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-05-23",
+  "mappings": {
+    "story_1": ["environment_setup"],
+    "story_2": ["environment_setup", "pytorch_mobile"],
+    "story_3": ["research", "model_core"],
+    "story_4": ["config"],
+    "story_5": ["model_core", "text_processing"],
+    "story_6": ["model_core", "transformer"],
+    "story_7": ["model_core", "task_heads", "training"],
+    "story_8": ["model_core", "image_processing"],
+    "story_9": ["model_core", "fusion"],
+    "story_10": ["model_core", "search"],
+    "story_11": ["model_growth", "adapters"],
+    "story_12": ["model_growth", "adapters", "transformer"],
+    "story_13": ["model_growth", "task_heads"],
+    "story_14": ["model_growth", "training"],
+    "story_15": ["search", "indexing"],
+    "story_16": ["search", "api"],
+    "story_17": ["data_export", "api"],
+    "story_18": ["sdk", "android"],
+    "story_19": ["sdk", "ios"],
+    "story_20": ["sdk", "documentation"],
+    "story_21": ["testing"],
+    "story_22": ["optimization"],
+    "story_23": ["demo_app", "testing"]
+  }
+} 

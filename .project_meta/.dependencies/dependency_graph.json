@@ -1,0 +1,289 @@
+{
+  "graph_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-05-23",
+  "nodes": [
+    {
+      "id": "model_core",
+      "type": "module"
+    },
+    {
+      "id": "text_processing",
+      "type": "module"
+    },
+    {
+      "id": "image_processing",
+      "type": "module"
+    },
+    {
+      "id": "transformer",
+      "type": "module"
+    },
+    {
+      "id": "fusion",
+      "type": "module"
+    },
+    {
+      "id": "search",
+      "type": "module"
+    },
+    {
+      "id": "indexing",
+      "type": "module"
+    },
+    {
+      "id": "api",
+      "type": "module"
+    },
+    {
+      "id": "model_growth",
+      "type": "module"
+    },
+    {
+      "id": "adapters",
+      "type": "module"
+    },
+    {
+      "id": "task_heads",
+      "type": "module"
+    },
+    {
+      "id": "training",
+      "type": "module"
+    },
+    {
+      "id": "data_export",
+      "type": "module"
+    },
+    {
+      "id": "sdk",
+      "type": "module"
+    },
+    {
+      "id": "android",
+      "type": "module"
+    },
+    {
+      "id": "ios",
+      "type": "module"
+    },
+    {
+      "id": "documentation",
+      "type": "module"
+    },
+    {
+      "id": "testing",
+      "type": "module"
+    },
+    {
+      "id": "optimization",
+      "type": "module"
+    },
+    {
+      "id": "demo_app",
+      "type": "module"
+    },
+    {
+      "id": "environment_setup",
+      "type": "module"
+    },
+    {
+      "id": "pytorch_mobile",
+      "type": "module"
+    },
+    {
+      "id": "config",
+      "type": "module"
+    },
+    {
+      "id": "research",
+      "type": "module"
+    }
+  ],
+  "edges": [
+    {
+      "source": "text_processing",
+      "target": "model_core",
+      "type": "component_of"
+    },
+    {
+      "source": "image_processing",
+      "target": "model_core",
+      "type": "component_of"
+    },
+    {
+      "source": "transformer",
+      "target": "model_core",
+      "type": "component_of"
+    },
+    {
+      "source": "fusion",
+      "target": "model_core",
+      "type": "component_of"
+    },
+    {
+      "source": "search",
+      "target": "model_core",
+      "type": "component_of"
+    },
+    {
+      "source": "model_core",
+      "target": "transformer",
+      "type": "depends_on"
+    },
+    {
+      "source": "fusion",
+      "target": "text_processing",
+      "type": "depends_on"
+    },
+    {
+      "source": "fusion",
+      "target": "image_processing",
+      "type": "depends_on"
+    },
+    {
+      "source": "search",
+      "target": "fusion",
+      "type": "depends_on"
+    },
+    {
+      "source": "indexing",
+      "target": "search",
+      "type": "component_of"
+    },
+    {
+      "source": "adapters",
+      "target": "model_growth",
+      "type": "component_of"
+    },
+    {
+      "source": "task_heads",
+      "target": "model_growth",
+      "type": "component_of"
+    },
+    {
+      "source": "training",
+      "target": "model_growth",
+      "type": "component_of"
+    },
+    {
+      "source": "adapters",
+      "target": "transformer",
+      "type": "depends_on"
+    },
+    {
+      "source": "task_heads",
+      "target": "model_core",
+      "type": "depends_on"
+    },
+    {
+      "source": "training",
+      "target": "adapters",
+      "type": "depends_on"
+    },
+    {
+      "source": "training",
+      "target": "task_heads",
+      "type": "depends_on"
+    },
+    {
+      "source": "api",
+      "target": "search",
+      "type": "component_of"
+    },
+    {
+      "source": "api",
+      "target": "data_export",
+      "type": "component_of"
+    },
+    {
+      "source": "android",
+      "target": "sdk",
+      "type": "component_of"
+    },
+    {
+      "source": "ios",
+      "target": "sdk",
+      "type": "component_of"
+    },
+    {
+      "source": "documentation",
+      "target": "sdk",
+      "type": "component_of"
+    },
+    {
+      "source": "sdk",
+      "target": "api",
+      "type": "depends_on"
+    },
+    {
+      "source": "sdk",
+      "target": "model_core",
+      "type": "depends_on"
+    },
+    {
+      "source": "sdk",
+      "target": "model_growth",
+      "type": "depends_on"
+    },
+    {
+      "source": "testing",
+      "target": "model_core",
+      "type": "depends_on"
+    },
+    {
+      "source": "testing",
+      "target": "model_growth",
+      "type": "depends_on"
+    },
+    {
+      "source": "testing",
+      "target": "sdk",
+      "type": "depends_on"
+    },
+    {
+      "source": "optimization",
+      "target": "model_core",
+      "type": "depends_on"
+    },
+    {
+      "source": "optimization",
+      "target": "model_growth",
+      "type": "depends_on"
+    },
+    {
+      "source": "optimization",
+      "target": "testing",
+      "type": "depends_on"
+    },
+    {
+      "source": "demo_app",
+      "target": "sdk",
+      "type": "depends_on"
+    },
+    {
+      "source": "pytorch_mobile",
+      "target": "environment_setup",
+      "type": "component_of"
+    },
+    {
+      "source": "config",
+      "target": "environment_setup",
+      "type": "component_of"
+    },
+    {
+      "source": "model_core",
+      "target": "pytorch_mobile",
+      "type": "depends_on"
+    },
+    {
+      "source": "model_core",
+      "target": "config",
+      "type": "depends_on"
+    },
+    {
+      "source": "model_growth",
+      "target": "config",
+      "type": "depends_on"
+    }
+  ]
+} 

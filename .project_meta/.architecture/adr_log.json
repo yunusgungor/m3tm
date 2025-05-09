@@ -1,0 +1,86 @@
+{
+  "log_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-05-23",
+  "adrs": [
+    {
+      "adr_id": "ADR-001",
+      "title": "Multi-Modal Çekirdek Model Mimarisi",
+      "status": "accepted",
+      "date": "2024-05-23",
+      "context": "M³TM v2.3 projesinin temel bileşeni olan çekirdek modelin mimari tasarımı hakkında karar vermek gerekiyor. Çekirdek model, metin ve görüntü verilerini işleyebilmeli ve cihaz üzerinde verimli çalışmalıdır.",
+      "decision": "Çekirdek model, hafif 'Proto-Transformer' blokları kullanacak şekilde tasarlanacaktır. Bu bloklar, standart transformer mimarisinin hafifletilmiş versiyonlarıdır. Dikkat mekanizması yerine, hafif konvolüsyonel bloklar veya seyrek dikkat alternatifi kullanılabilir. Çekirdek, temel modalite işleme, füzyon ve arama gömme üretme yeteneklerine sahip olacaktır.",
+      "consequences": {
+        "positive": [
+          "Mobil cihazlarda verimli çalışabilen hafif bir mimari",
+          "Standart transformer mimari bilgisinin yeniden kullanımı",
+          "Adapter'lar için uygun entegrasyon noktaları"
+        ],
+        "negative": [
+          "Standart transformer'lara göre daha sınırlı temsil kapasitesi",
+          "Dikkat mekanizmasının sınırlandırılmasından kaynaklanan potansiyel performans düşüşü"
+        ]
+      },
+      "related_requirements": ["5.1", "5.1.3"]
+    },
+    {
+      "adr_id": "ADR-002",
+      "title": "Büyüyebilen Modüler Tasarım için Adapter Mekanizması",
+      "status": "accepted",
+      "date": "2024-05-23",
+      "context": "M³TM v2.3 projesinde, modelin kullanıcı verisiyle büyüyebilmesi ve kişiselleştirilebilmesi gerekiyor. Aynı zamanda, çekirdek modelin hafif kalması ve temel işlevselliği koruması önemli.",
+      "decision": "Çekirdek modelin Proto-Transformer bloklarına eklenebilen 'Adapter' modülleri kullanılacaktır. Her Proto-Transformer bloğu, bir Adapter Slot içerecek ve bu slot aracılığıyla özelleştirilmiş Adapter'lar eklenebilecektir. Adapter'lar, daralan-genişleyen mimari kullanacak, böylece az sayıda parametre ile etkili öğrenme sağlayacaktır.",
+      "consequences": {
+        "positive": [
+          "Çekirdek model değiştirilmeden kişiselleştirme yapılabilir",
+          "Küçük, eğitilebilir parametre kümeleri",
+          "Çoklu adapter desteği ile farklı kullanım senaryolarına uyum"
+        ],
+        "negative": [
+          "Çıkarım sırasında ekstra hesaplama katmanları",
+          "Adapter koordinasyonu için ek karmaşıklık"
+        ]
+      },
+      "related_requirements": ["5.2", "5.2.1"]
+    },
+    {
+      "adr_id": "ADR-003",
+      "title": "Cihaz Üzerinde Arama İndeksleme Stratejisi",
+      "status": "accepted",
+      "date": "2024-05-23",
+      "context": "M³TM v2.3 projesinde, kullanıcının kişisel verilerinde (metin, görüntü) semantik arama yapabilme yetenekleri gerekmektedir. Bu aramanın tamamen cihaz üzerinde, verimli ve hızlı çalışması önemlidir.",
+      "decision": "Arama için, çekirdek modelden elde edilen gömme vektörlerini (embeddings) kullanacak bir indeksleme modülü geliştirilecektir. Mobil cihazlarda çalışabilecek hafif bir Approximate Nearest Neighbor (ANN) çözümü veya küçük veri setleri için brute-force k-NN kullanılacaktır. İndeks, cihazda SQLite veya özel binary format ile saklanacaktır.",
+      "consequences": {
+        "positive": [
+          "Tamamen cihaz üzerinde çalışan semantik arama",
+          "Kullanıcı verilerinin gizliliğinin korunması",
+          "Çeşitli modaliteler üzerinde arama yapabilme"
+        ],
+        "negative": [
+          "Büyük veri setlerinde potansiyel performans sınırlamaları",
+          "İndeks boyutu büyüdükçe artan depolama gereksinimi"
+        ]
+      },
+      "related_requirements": ["5.2.2"]
+    },
+    {
+      "adr_id": "ADR-004",
+      "title": "SDK Mimarisi ve Platform Desteği",
+      "status": "accepted",
+      "date": "2024-05-23",
+      "context": "M³TM v2.3 projesi, geliştiricilerin uygulamalarında kullanabilecekleri bir SDK sağlamalıdır. SDK, modelin tüm yeteneklerine kolay erişim sağlamalı ve Android ve iOS platformlarını desteklemelidir.",
+      "decision": "Platform-bağımsız bir çekirdek API tasarımı yapılacak, bu API her iki mobil platform için spesifik sarmalayıcılar (wrappers) ile uygulanacaktır. PyTorch Mobile C++ API'leri alt seviyede kullanılacak ve bunlar platform-spesifik dillerde (Kotlin/Java ve Swift/Objective-C) sarmalanacaktır. SDK, M3TMManager, DataProcessor, TrainingController, InferenceEngine, SearchService ve DataExporter gibi ana bileşenlere sahip olacaktır.",
+      "consequences": {
+        "positive": [
+          "Her iki mobil platformda tutarlı API",
+          "Geliştiriciler için kolay entegrasyon",
+          "Tüm model yeteneklerine yapılandırılmış erişim"
+        ],
+        "negative": [
+          "Platform-spesifik sarmalayıcıların bakım yükü",
+          "PyTorch Mobile bağımlılığı ile ilgili potansiyel kısıtlamalar"
+        ]
+      },
+      "related_requirements": ["6"]
+    }
+  ]
+} 

@@ -1,0 +1,166 @@
+{
+  "roadmap_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-05-23",
+  "current_iteration_id": "iter_1",
+  "iterations": [
+    {
+      "iteration_id": "iter_1",
+      "goal": "Hazırlık ve Temel Araştırma",
+      "status": "planned",
+      "story_ids": ["story_1", "story_2", "story_3", "story_4"]
+    },
+    {
+      "iteration_id": "iter_2",
+      "goal": "Çekirdek Model MVP - Metin Modalitesi",
+      "status": "planned",
+      "story_ids": ["story_5", "story_6", "story_7"]
+    },
+    {
+      "iteration_id": "iter_3",
+      "goal": "Çekirdek Model MVP - Görüntü Modalitesi ve Füzyon",
+      "status": "planned",
+      "story_ids": ["story_8", "story_9", "story_10"]
+    },
+    {
+      "iteration_id": "iter_4",
+      "goal": "Büyüme Modülleri ve Görev Başlıkları",
+      "status": "planned",
+      "story_ids": ["story_11", "story_12", "story_13", "story_14"]
+    },
+    {
+      "iteration_id": "iter_5",
+      "goal": "Semantik Arama ve Veri İndirme",
+      "status": "planned",
+      "story_ids": ["story_15", "story_16", "story_17"]
+    },
+    {
+      "iteration_id": "iter_6",
+      "goal": "SDK Geliştirme",
+      "status": "planned",
+      "story_ids": ["story_18", "story_19", "story_20"]
+    },
+    {
+      "iteration_id": "iter_7",
+      "goal": "Test, Optimizasyon ve Entegrasyon",
+      "status": "planned",
+      "story_ids": ["story_21", "story_22", "story_23"]
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "story_1",
+      "title": "Geliştirme ortamı kurulumu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_2",
+      "title": "PyTorch Mobile ile temel deneyler",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_3",
+      "title": "Mobil dikkat ve konvolüsyon mekanizmaları araştırması",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_4",
+      "title": "Yapılandırma (config) formatının belirlenmesi",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_5",
+      "title": "TextEmbedding modülü implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_6",
+      "title": "ProtoTransformerBlock (tek blok) implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_7",
+      "title": "Basit ClassificationHead implementasyonu ve metin cihaz üzerinde eğitim testi",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_8",
+      "title": "ImagePatchEmbedding modülü implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_9",
+      "title": "Temel Füzyon mekanizması implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_10",
+      "title": "Arama Gömme Projeksiyonu implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_11",
+      "title": "Adapter sınıfı implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_12",
+      "title": "AdapterSlot mekanizmasının ProtoTransformerBlock entegrasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_13",
+      "title": "Dinamik görev başlıkları implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_14",
+      "title": "Adapter'lar ve görev başlıklarını eğitme mekanizması",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_15",
+      "title": "Arama İndeksleme Modülü implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_16",
+      "title": "Arama Servisi API implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_17",
+      "title": "Veri İndirme Modülü ve API implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_18",
+      "title": "Android SDK sarmalayıcı implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_19",
+      "title": "iOS SDK sarmalayıcı implementasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_20",
+      "title": "SDK API dokümantasyonu",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_21",
+      "title": "Birim ve entegrasyon testleri",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_22",
+      "title": "Model küçültme ve optimizasyon",
+      "status": "todo"
+    },
+    {
+      "story_id": "story_23",
+      "title": "Demo uygulama geliştirme ve baştan sona test",
+      "status": "todo"
+    }
+  ]
+} 

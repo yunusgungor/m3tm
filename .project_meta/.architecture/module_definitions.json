@@ -1,0 +1,213 @@
+{
+  "def_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-05-23",
+  "modules": {
+    "model_core": {
+      "description": "M³TM çekirdek modeli, temel veri akışını ve modalite etkileşimini sağlayan bileşenler",
+      "sub_modules": ["text_processing", "image_processing", "transformer", "fusion", "search"],
+      "responsibilities": [
+        "Temel veri akışını sağlama",
+        "Minimal modalite etkileşimi",
+        "Büyüme modüllerinin entegrasyonu için zemin hazırlama"
+      ]
+    },
+    "text_processing": {
+      "description": "Metin verilerini işleme ve gömme bileşenleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "Tokenizasyon",
+        "Gömme (Embedding)",
+        "Konumsal kodlama"
+      ]
+    },
+    "image_processing": {
+      "description": "Görüntü verilerini işleme ve yama gömme bileşenleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "Yama çıkarımı",
+        "Yama gömme",
+        "Konumsal kodlama"
+      ]
+    },
+    "transformer": {
+      "description": "Hafif transformer blokları ve ilgili bileşenler",
+      "sub_modules": [],
+      "responsibilities": [
+        "Self-attention alternatifi uygulama",
+        "Feed-forward ağ alternatifi",
+        "Adapter yuva mekanizması"
+      ]
+    },
+    "fusion": {
+      "description": "Farklı modaliteleri birleştiren bileşenler",
+      "sub_modules": [],
+      "responsibilities": [
+        "Modalite temsillerini birleştirme",
+        "Çoklu modalite etkileşimini sağlama"
+      ]
+    },
+    "search": {
+      "description": "Semantik arama ve indeksleme bileşenleri",
+      "sub_modules": ["indexing", "api"],
+      "responsibilities": [
+        "Arama gömme uzayı oluşturma",
+        "Arama indeksleme",
+        "Sorgu işleme"
+      ]
+    },
+    "indexing": {
+      "description": "Arama indeksleme mekanizmaları",
+      "sub_modules": [],
+      "responsibilities": [
+        "Verimli indeks oluşturma",
+        "Benzerlik hesaplama",
+        "İndeks saklama ve yükleme"
+      ]
+    },
+    "model_growth": {
+      "description": "Modelin büyüyebilmesini sağlayan bileşenler",
+      "sub_modules": ["adapters", "task_heads", "training"],
+      "responsibilities": [
+        "Kişiselleştirilebilir model parametreleri sağlama",
+        "Görev odaklı modüller ekleme",
+        "Kullanıcı verisiyle eğitilebilme"
+      ]
+    },
+    "adapters": {
+      "description": "Çekirdek modele eklenebilen adaptör bileşenleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "Küçük, eğitilebilir parametre kümeleri sağlama",
+        "Çekirdek model üzerine kişiselleştirme katmanı ekleme"
+      ]
+    },
+    "task_heads": {
+      "description": "Çeşitli görevler için özelleştirilmiş başlıklar",
+      "sub_modules": [],
+      "responsibilities": [
+        "Sınıflandırma, regresyon gibi özel görevleri gerçekleştirme",
+        "Görev odaklı çıktılar üretme"
+      ]
+    },
+    "training": {
+      "description": "Cihaz üzerinde eğitim mekanizmaları",
+      "sub_modules": [],
+      "responsibilities": [
+        "Eğitim döngüsü yönetimi",
+        "Gradyan hesaplama ve güncelleme",
+        "Optimizasyon ve kayıp fonksiyonları"
+      ]
+    },
+    "data_export": {
+      "description": "Kullanıcı verilerini dışa aktarma mekanizmaları",
+      "sub_modules": ["api"],
+      "responsibilities": [
+        "Veri formatlama",
+        "Filtreleme",
+        "Güvenli indirme"
+      ]
+    },
+    "api": {
+      "description": "Uygulama Programlama Arayüzleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "Geliştirici erişim noktaları sağlama",
+        "SDK fonksiyonlarını tanımlama",
+        "Platform bağımsız arayüz tanımlama"
+      ]
+    },
+    "sdk": {
+      "description": "Yazılım Geliştirme Kiti",
+      "sub_modules": ["android", "ios", "documentation"],
+      "responsibilities": [
+        "Mobil uygulamalara entegrasyon sağlama",
+        "Platformlara özgü sarmalayıcılar",
+        "Kullanım dokümantasyonu"
+      ]
+    },
+    "android": {
+      "description": "Android platforma özgü SDK bileşenleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "Android uyumlu API sarmalama",
+        "Java/Kotlin arayüzü sağlama"
+      ]
+    },
+    "ios": {
+      "description": "iOS platforma özgü SDK bileşenleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "iOS uyumlu API sarmalama",
+        "Swift/Objective-C arayüzü sağlama"
+      ]
+    },
+    "documentation": {
+      "description": "SDK ve API dokümantasyonu",
+      "sub_modules": [],
+      "responsibilities": [
+        "Kullanım kılavuzları",
+        "API referansları",
+        "Örnek kodlar"
+      ]
+    },
+    "testing": {
+      "description": "Test ve doğrulama bileşenleri",
+      "sub_modules": [],
+      "responsibilities": [
+        "Birim testleri",
+        "Entegrasyon testleri",
+        "Performans değerlendirme"
+      ]
+    },
+    "optimization": {
+      "description": "Model optimizasyon mekanizmaları",
+      "sub_modules": [],
+      "responsibilities": [
+        "Model küçültme (nicemleme, budama)",
+        "Performans iyileştirme",
+        "Bellek ve batarya optimizasyonu"
+      ]
+    },
+    "demo_app": {
+      "description": "Örnek uygulama",
+      "sub_modules": [],
+      "responsibilities": [
+        "SDK kullanım örneği",
+        "Uçtan uca test"
+      ]
+    },
+    "environment_setup": {
+      "description": "Geliştirme ortamı kurulumu",
+      "sub_modules": ["pytorch_mobile", "config"],
+      "responsibilities": [
+        "Geliştirme araçlarının hazırlanması",
+        "Kütüphane bağımlılıklarının yönetimi"
+      ]
+    },
+    "pytorch_mobile": {
+      "description": "PyTorch Mobile ile ilgili bileşenler",
+      "sub_modules": [],
+      "responsibilities": [
+        "PyTorch Mobile entegrasyonu",
+        "Mobil cihazlarda model çalıştırma"
+      ]
+    },
+    "config": {
+      "description": "Yapılandırma yönetimi",
+      "sub_modules": [],
+      "responsibilities": [
+        "Model yapılandırma dosyalarının tanımlanması",
+        "Parametre yönetimi"
+      ]
+    },
+    "research": {
+      "description": "Araştırma ve literatür taraması",
+      "sub_modules": [],
+      "responsibilities": [
+        "Literatür incelemesi",
+        "Prototipler geliştirme",
+        "Yaklaşım karşılaştırmaları"
+      ]
+    }
+  }
+} 
