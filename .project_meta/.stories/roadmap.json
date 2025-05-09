@@ -1,12 +1,12 @@
 {
   "roadmap_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "current_iteration_id": "iter_1",
+  "current_iteration_id": "iter_2",
   "iterations": [
     {
       "iteration_id": "iter_1",
       "goal": "Hazırlık ve Temel Araştırma",
-      "status": "planned",
+      "status": "completed",
       "story_ids": ["story_1", "story_2", "story_3", "story_4"]
     },
     {
