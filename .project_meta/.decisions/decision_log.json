@@ -1,0 +1,73 @@
+{
+  "log_id": "m3tm_v2.3_decision_log",
+  "creation_date": "2024-05-23",
+  "decisions": [
+    {
+      "decision_id": "DEC-001",
+      "title": "Yapılandırma yönetimi için dataclass tabanlı yaklaşımın benimsenmesi",
+      "description": "Model yapılandırması için dataclass tabanlı bir yaklaşım benimsendi. Bu, tip güvenliği, doğrulama ve kullanım kolaylığı sağlıyor.",
+      "date": "2024-05-25",
+      "participants": ["codeflow_agent"],
+      "related_stories": ["story_4"],
+      "rationale": "Dataclass yaklaşımı, seriazlaition/deserialization kolaylığı ve tip güvenliği sağlarken, hiyerarşik yapılandırma desteği de sunuyor.",
+      "impact": {
+        "scope": ["config", "model_core", "embedding"],
+        "estimated_effort": "medium",
+        "risks": "Kompleks nested yapılandırmalarda zorluklar olabilir."
+      },
+      "related_patterns": ["PT-001", "PT-009", "PT-012"]
+    },
+    {
+      "decision_id": "DEC-002",
+      "title": "TextEmbedding modülünde fabrika ve strateji desenlerinin kullanılması",
+      "description": "TextEmbedding modülünün geliştirilmesinde fabrika (EmbeddingFactory) ve strateji (TokenProcessingStrategy) desenlerinin kullanılması kararlaştırıldı.",
+      "date": "2024-05-29",
+      "participants": ["codeflow_agent"],
+      "related_stories": ["story_5"],
+      "rationale": "Farklı embedding ve tokenizasyon stratejilerinin kolay değiştirilebilir olması, genişletilebilirlik ve test edilebilirliği artırıyor.",
+      "impact": {
+        "scope": ["embedding", "tokenization", "model_core"],
+        "estimated_effort": "medium",
+        "pattern_impact": {
+          "PT-013": {
+            "complexity_reduction": "high",
+            "maintainability_improvement": "high",
+            "performance_impact": "neutral"
+          },
+          "PT-014": {
+            "complexity_reduction": "medium",
+            "maintainability_improvement": "high",
+            "performance_impact": "positive"
+          }
+        },
+        "risks": "Fabrika ve strateji örüntüleri başlangıçta biraz fazla kod üretebilir, ancak proje büyüdükçe faydaları görülecektir."
+      },
+      "related_patterns": ["PT-013", "PT-014", "PT-001", "PT-012"],
+      "alternatives_considered": [
+        "Sade sınıflar kullanmak - Reddedildi (genişletilebilirlik eksikliği)",
+        "Soyut fabrika kullanmak - Reddedildi (bu aşamada fazla karmaşık)"
+      ]
+    },
+    {
+      "decision_id": "DEC-003",
+      "title": "Bellek optimizasyonu için TextEmbedding'de boyut düşürme mekanizması",
+      "description": "TextEmbedding modülünde, mobil cihazlarda bellek optimizasyonu için embedding boyutlarını düşürme mekanizması eklendi.",
+      "date": "2024-05-29",
+      "participants": ["codeflow_agent"],
+      "related_stories": ["story_5"],
+      "rationale": "Mobil cihazlarda bellek kısıtlamaları kritik olduğundan, büyük embedding boyutlarını azaltabilen bir mekanizma önemlidir. TextEmbeddingFactory.create_compressed_embedding metodu bu ihtiyacı karşılamaktadır.",
+      "impact": {
+        "scope": ["embedding", "model_core", "optimization"],
+        "estimated_effort": "low",
+        "metrics": {
+          "memory_reduction": "~50% (compression_ratio=0.5 ile)",
+          "performance_overhead": "minimal (sadece ileri geçişte tek matris çarpımı)"
+        },
+        "risks": "Boyut düşürme, model doğruluğunu etkileyebilir, dikkatli dengelenmeli."
+      },
+      "related_patterns": ["PT-014"],
+      "implementation_details": "Linear projection layer ile boyut düşürme. Alternatif olarak ileride SVD veya distillation tabanlı yaklaşımlar eklenebilir."
+    }
+  ],
+  "last_updated": "2024-05-29"
+} 
