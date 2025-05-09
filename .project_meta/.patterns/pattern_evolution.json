@@ -51,6 +51,35 @@
         "maintainability": 0
       },
       "notes": "PyTorch Mobile ile ilgili örüntüler tanımlandı ve kataloglandı. Architectural ve performance kategorilerinde yeni örüntüler eklendi: MobileModelConverter, BenchmarkStrategy ve MobileOptimizationPipeline. Bu örüntüler mobil performans optimizasyonu ve model dönüşümü için güçlü temel sağlıyor."
+    },
+    {
+      "date": "2024-05-24",
+      "iteration_id": "iter_1",
+      "story_id": "story_3",
+      "new_patterns": ["PT-007", "PT-008"],
+      "updated_patterns": ["PT-001", "PT-004"],
+      "deprecated_patterns": [],
+      "pattern_count": 7,
+      "adoption_metrics": {
+        "average_adoption_rate": 1.0,
+        "average_implementation_consistency": 0.96
+      },
+      "effectiveness_metrics": {
+        "average_complexity_reduction": 0.71,
+        "average_maintainability_improvement": 0.77,
+        "average_effectiveness_score": 0.74
+      },
+      "category_distribution": {
+        "architectural": 3,
+        "performance": 2,
+        "security": 0,
+        "maintainability": 0,
+        "registration": 1,
+        "measurement": 1,
+        "configuration": 1
+      },
+      "notes": "Story 3 (Mobil dikkat ve konvolüsyon mekanizmaları araştırması) tamamlanırken iki yeni örüntü keşfedildi ve kataloglandı: MechanismRegistry ve MetricsCollector. Ayrıca, ConfigurationDataclass ve BenchmarkStrategy örüntüleri güncellendi ve yeni kategoriler tanımlandı: registration, measurement ve configuration. Özellikle MechanismRegistry örüntüsü, hem dikkat hem de konvolüsyon mekanizmalarının tutarlı ve genişletilebilir bir şekilde yönetilmesini sağlayarak kod kalitesini önemli ölçüde artırdı."
     }
-  ]
+  ],
+  "last_updated": "2024-05-24"
 } 

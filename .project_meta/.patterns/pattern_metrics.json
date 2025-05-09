@@ -6,8 +6,8 @@
       "description": "Örüntü kullanım yaygınlığı",
       "data": {
         "PT-001": {
-          "usage_count": 1,
-          "files_count": 1,
+          "usage_count": 3,
+          "files_count": 3,
           "adoption_rate": 1.0,
           "implementation_consistency": 1.0
         },
@@ -30,6 +30,18 @@
           "implementation_consistency": 1.0
         },
         "PT-005": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 1.0
+        },
+        "PT-007": {
+          "usage_count": 2,
+          "files_count": 2,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 0.95
+        },
+        "PT-008": {
           "usage_count": 1,
           "files_count": 1,
           "adoption_rate": 1.0,
@@ -64,6 +76,16 @@
           "complexity_reduction": 0.7,
           "maintainability_improvement": 0.6,
           "effectiveness_score": 0.65
+        },
+        "PT-007": {
+          "complexity_reduction": 0.8,
+          "maintainability_improvement": 0.9,
+          "effectiveness_score": 0.85
+        },
+        "PT-008": {
+          "complexity_reduction": 0.7,
+          "maintainability_improvement": 0.8,
+          "effectiveness_score": 0.75
         }
       }
     },
@@ -73,8 +95,12 @@
         "architectural": 3,
         "performance": 2,
         "security": 0,
-        "maintainability": 0
+        "maintainability": 0,
+        "registration": 1,
+        "measurement": 1,
+        "configuration": 1
       }
     }
-  }
+  },
+  "last_updated": "2024-05-24"
 } 
