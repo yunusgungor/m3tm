@@ -1,0 +1,87 @@
+__config_type__: M3TMModelConfig
+__config_version__: 1.0.0
+name: m3tm-v2.3-tiny
+description: M³TM Tiny - Temel test ve prototipleme için minimum boyutlu model
+version: 2.3.0
+
+text_config:
+  __config_type__: TextEmbeddingConfig
+  __config_version__: 1.0.0
+  vocab_size: 1000
+  embed_dim: 32
+  max_seq_len: 128
+  pad_token_id: 0
+  use_positional_embedding: true
+
+image_config:
+  __config_type__: ImagePatchEmbeddingConfig
+  __config_version__: 1.0.0
+  in_channels: 3
+  patch_size: 8
+  embed_dim: 32
+  image_size: [112, 112]
+  use_positional_embedding: true
+  dropout: 0.1
+  num_patches: 196
+
+transformer_config:
+  __config_type__: TransformerConfig
+  __config_version__: 1.0.0
+  embed_dim: 32
+  num_heads: 1
+  mlp_ratio: 2.0
+  dropout: 0.1
+  attention_dropout: 0.1
+  use_bias: true
+  use_adapter_slots: true
+  activation: gelu
+  attention_type: MobileAttention
+  ffn_type: GLU
+  attention_config: {}
+  ffn_config: {}
+
+fusion_config:
+  __config_type__: FusionConfig
+  __config_version__: 1.0.0
+  fusion_type: concat
+  text_dim: 32
+  image_dim: 32
+  output_dim: 64
+  dropout: 0.1
+  use_layer_norm: true
+
+search_config:
+  __config_type__: SearchConfig
+  __config_version__: 1.0.0
+  input_dim: 64
+  search_dim: 64
+  index_type: simple
+  metric: cosine
+  use_normalization: true
+
+adapter_config:
+  __config_type__: AdapterConfig
+  __config_version__: 1.0.0
+  embed_dim: 32
+  reduction_factor: 8
+  activation: gelu
+  init_scale: 0.001
+
+training_config:
+  __config_type__: TrainingConfig
+  __config_version__: 1.0.0
+  batch_size: 4
+  learning_rate: 0.001
+  weight_decay: 0.01
+  epochs: 5
+  optimizer: adamw
+  scheduler: cosine
+  warmup_steps: 50
+  gradient_clip: 1.0
+  early_stopping_patience: 3
+  device: cpu
+  mixed_precision: false
+
+num_transformer_blocks: 1
+use_text_modality: true
+use_image_modality: true 

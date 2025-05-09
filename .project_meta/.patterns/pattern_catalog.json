@@ -123,7 +123,39 @@
       ],
       "creation_date": "2024-05-24",
       "last_updated": "2024-05-24"
+    },
+    {
+      "pattern_id": "PT-009",
+      "name": "ConfigValidationPipeline",
+      "description": "Yapılandırma doğrulama adımlarını bir boru hattında birleştirerek hiyerarşik ve kurallara dayalı doğrulama sağlayan örüntü.",
+      "category": "validation",
+      "examples": [
+        "src/m3tm/config/config_base.py"
+      ],
+      "advantages": [
+        "Modüler doğrulama adımları",
+        "Esnek ve genişletilebilir doğrulama kuralları",
+        "Tutarlı hata raporlama"
+      ],
+      "creation_date": "2024-05-25",
+      "last_updated": "2024-05-25"
+    },
+    {
+      "pattern_id": "PT-010",
+      "name": "ConfigurationObserver",
+      "description": "Yapılandırma değişikliklerini izleyip ilgili bileşenlere bildirim yapan gözlemci mekanizması.",
+      "category": "notification",
+      "examples": [
+        "src/m3tm/config/config_manager.py"
+      ],
+      "advantages": [
+        "Gevşek bağlı bileşenler",
+        "Gerçek zamanlı yapılandırma değişikliği bildirimleri",
+        "Bileşenlerin otomatik olarak güncellenen yapılandırma ile senkronize olması"
+      ],
+      "creation_date": "2024-05-25",
+      "last_updated": "2024-05-25"
     }
   ],
-  "last_updated": "2024-05-24"
+  "last_updated": "2024-05-25"
 } 

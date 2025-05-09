@@ -1,0 +1,96 @@
+{
+  "__config_type__": "M3TMModelConfig",
+  "__config_version__": "1.0.0",
+  "name": "m3tm-v2.3-base",
+  "description": "Mobil Multi-Modal Modüler Transformer",
+  "version": "2.3.0",
+  
+  "text_config": {
+    "__config_type__": "TextEmbeddingConfig",
+    "__config_version__": "1.0.0",
+    "vocab_size": 4000,
+    "embed_dim": 64,
+    "max_seq_len": 256,
+    "pad_token_id": 0,
+    "use_positional_embedding": true
+  },
+  
+  "image_config": {
+    "__config_type__": "ImagePatchEmbeddingConfig",
+    "__config_version__": "1.0.0",
+    "in_channels": 3,
+    "patch_size": 4,
+    "embed_dim": 64,
+    "image_size": [224, 224],
+    "use_positional_embedding": true,
+    "dropout": 0.1,
+    "num_patches": 3136
+  },
+  
+  "transformer_config": {
+    "__config_type__": "TransformerConfig",
+    "__config_version__": "1.0.0",
+    "embed_dim": 64,
+    "num_heads": 2,
+    "mlp_ratio": 2.0,
+    "dropout": 0.1,
+    "attention_dropout": 0.1,
+    "use_bias": true,
+    "use_adapter_slots": true,
+    "activation": "gelu",
+    "attention_type": "MobileAttention",
+    "ffn_type": "GLU",
+    "attention_config": {},
+    "ffn_config": {}
+  },
+  
+  "fusion_config": {
+    "__config_type__": "FusionConfig",
+    "__config_version__": "1.0.0",
+    "fusion_type": "concat",
+    "text_dim": 64,
+    "image_dim": 64,
+    "output_dim": 128,
+    "dropout": 0.1,
+    "use_layer_norm": true
+  },
+  
+  "search_config": {
+    "__config_type__": "SearchConfig",
+    "__config_version__": "1.0.0",
+    "input_dim": 128,
+    "search_dim": 128,
+    "index_type": "faiss",
+    "metric": "cosine",
+    "use_normalization": true
+  },
+  
+  "adapter_config": {
+    "__config_type__": "AdapterConfig",
+    "__config_version__": "1.0.0",
+    "embed_dim": 64,
+    "reduction_factor": 16,
+    "activation": "gelu",
+    "init_scale": 0.001
+  },
+  
+  "training_config": {
+    "__config_type__": "TrainingConfig",
+    "__config_version__": "1.0.0",
+    "batch_size": 16,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "epochs": 10,
+    "optimizer": "adamw",
+    "scheduler": "cosine",
+    "warmup_steps": 100,
+    "gradient_clip": 1.0,
+    "early_stopping_patience": 5,
+    "device": "cpu",
+    "mixed_precision": false
+  },
+  
+  "num_transformer_blocks": 3,
+  "use_text_modality": true,
+  "use_image_modality": true
+} 
