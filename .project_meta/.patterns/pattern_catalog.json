@@ -1,146 +1,129 @@
 {
-  "catalog_id": "m3tm_v2.3_initial",
-  "creation_date": "2024-05-23",
+  "catalog_id": "initial_v2",
+  "creation_date": "2024-05-09",
   "patterns": [
     {
       "pattern_id": "PT-001",
       "name": "ConfigurationDataclass",
-      "category": "architectural",
-      "description": "Yapılandırma seçenekleri için Python dataclass kullanımı. Bu örüntü, model parametrelerini yapılandırılabilir ve tip-güvenli bir şekilde yönetmeyi sağlar.",
-      "intent": "Model yapılandırma parametrelerini organize etmek, tip kontrolü sağlamak ve default değerler tanımlamak.",
-      "applicability": "Model parametrelerinin yapılandırılması gereken her durumda; özellikle çok sayıda parametre olduğunda ve bunların hiyerarşik bir yapıda düzenlenmesi gerektiğinde.",
-      "structure": "- Yapılandırma parametreleri için `dataclass` dekoratörüyle sınıf tanımlama\n- Alt-yapılandırmalar için ayrı dataclass'lar kullanma\n- Parametre bağımlılıklarını yönetmek için `__post_init__` metodu\n- Önceden tanımlanmış yapılandırmaları üreten yardımcı fonksiyonlar",
-      "code_example": "```python\n@dataclass\nclass TextConfig:\n    vocab_size: int = 4000\n    embed_dim: int = 32\n    max_seq_len: int = 512\n\n@dataclass\nclass M3TMConfig:\n    text_config: TextConfig = TextConfig()\n    \n    def __post_init__(self):\n        # Tutarlılık kontrolü ve güncelleme\n        pass\n```",
-      "consequences": {
-        "benefits": [
-          "Yapılandırma parametrelerinin merkezi yönetimi",
-          "Tip kontrolü sayesinde hataların erken tespiti",
-          "Varsayılan değerlerin açık tanımlanması",
-          "Modül hiyerarşisine uyumlu yapılandırma hiyerarşisi",
-          "Ek serialize/deserialize işlemleri gerektirmeden kaydedilebilir"
-        ],
-        "liabilities": [
-          "Alt yapılandırmalar arasındaki bağımlılıklar __post_init__ ile manuel yönetilmeli",
-          "Çok sayıda iç içe dataclass, yapıyı karmaşıklaştırabilir",
-          "Farklı Python sürümleri arasında dataclass uyumluluğu dikkate alınmalıdır (Python 3.7+ gerekli)"
-        ]
-      },
-      "implementation_notes": "Tüm model parametreleri hardcoded olarak değil, bu yapılandırma sınıfları üzerinden erişilmelidir. Her yeni özellik için yeni parametreler önce ilgili yapılandırma sınıfına eklenmelidir.",
-      "related_patterns": ["ConfigurationFactory", "BuilderPattern"],
-      "known_uses": ["src/m3tm/config/model_config.py"],
-      "creation_date": "2024-05-23",
-      "last_modified": "2024-05-23"
+      "description": "Yapılandırma parametrelerini dataclass olarak modelleyerek tip güvenliği, doğrulama ve varsayılan değerler sağlayan örüntü.",
+      "category": "configuration",
+      "examples": [
+        "src/m3tm/config.py",
+        "src/m3tm/research/attention_mechanisms.py",
+        "src/m3tm/research/convolution_mechanisms.py"
+      ],
+      "advantages": [
+        "Statik tip kontrolü",
+        "Otomatik doğrulama",
+        "Okunabilir yapılandırma"
+      ],
+      "creation_date": "2024-05-09",
+      "last_updated": "2024-05-24"
     },
     {
       "pattern_id": "PT-002",
-      "name": "ModelCheckpointManager",
-      "category": "architectural",
-      "description": "Model ağırlıklarını ve yapılandırmasını birlikte saklama ve yükleme örüntüsü. Bu örüntü, eğitilmiş modellerin tam durumunu korumayı ve daha sonra kolayca yeniden kullanmayı sağlar.",
-      "intent": "Model durumunu (ağırlıklar, yapılandırma, meta veriler) düzenli bir şekilde kaydetmek ve geri yükleyebilmek.",
-      "applicability": "Eğitilen modellerin kaydedilmesi ve daha sonra kullanılması gereken durumlarda.",
-      "structure": "- Base model sınıfında `save_pretrained` ve `from_pretrained` sınıf metodları\n- Model ağırlıkları ve yapılandırma bilgilerinin ayrı dosyalara kaydedilmesi\n- Yapılandırma bilgisi önce yüklenerek model başlatılır, sonra ağırlıklar yüklenir",
-      "code_example": "```python\ndef save_pretrained(self, save_dir: str) -> None:\n    os.makedirs(save_dir, exist_ok=True)\n    torch.save(self.state_dict(), os.path.join(save_dir, \"model.pt\"))\n    torch.save(self.config, os.path.join(save_dir, \"config.pt\"))\n\n@classmethod\ndef from_pretrained(cls, load_dir: str) -> \"BaseModel\":\n    config = torch.load(os.path.join(load_dir, \"config.pt\"))\n    model = cls(config)\n    model.load_state_dict(torch.load(os.path.join(load_dir, \"model.pt\")))\n    return model\n```",
-      "consequences": {
-        "benefits": [
-          "Model ve yapılandırmasının tutarlı şekilde kaydedilmesi",
-          "Sınıf metodu kullanarak temiz model yükleme API'si",
-          "Modelin farklı varyasyonlarını kolay yönetme",
-          "Düşük efor ile model paylaşımı ve dağıtımı sağlar"
-        ],
-        "liabilities": [
-          "Yapılandırma sınıfı değişirse geriye dönük uyumluluk sorunları olabilir",
-          "Büyük modeller için disk alanı gereksinimi"
-        ]
-      },
-      "implementation_notes": "Tüm model alt sınıfları BaseModel'dan türetilmeli ve kaydedme/yükleme işlemleri için bu metodları kullanmalıdır. İleri versiyonlarda model versiyonlama mekanizması eklenebilir.",
-      "related_patterns": ["ConfigurationDataclass", "ModelFactory"],
-      "known_uses": ["src/m3tm/core/base_model.py"],
-      "creation_date": "2024-05-23",
-      "last_modified": "2024-05-23"
+      "name": "LayerFactory",
+      "description": "Farklı katman türlerini oluşturmak için fabrika deseninin uygulanması.",
+      "category": "creation",
+      "examples": [],
+      "advantages": [
+        "Katman oluşturma mantığının merkezi yönetimi",
+        "Yeni katman türlerinin kolay entegrasyonu"
+      ],
+      "creation_date": "2024-05-09",
+      "last_updated": "2024-05-09"
     },
     {
       "pattern_id": "PT-003",
-      "name": "MobileModelConverter",
-      "category": "architectural",
-      "description": "PyTorch modellerini mobil platformlar için optimize edilmiş TorchScript formatına dönüştüren bir utility sınıfı deseni. Bu desen, model dönüşümü, optimizasyon ve platform-spesifik ayarlamaları kapsar.",
-      "intent": "PyTorch modellerini mobil cihazlarda verimli çalışacak şekilde dönüştürmek ve optimize etmek.",
-      "applicability": "PyTorch modellerinin mobil cihazlarda (Android, iOS) kullanılacağı tüm durumlarda.",
-      "structure": "- Static metodları olan utility sınıfı\n- Farklı dönüşüm ve optimizasyon stratejilerini kapsülleyen yöntemler\n- Platform-spesifik dönüşüm konfigürasyonları\n- Model kaydetme ve doğrulama fonksiyonları",
-      "code_example": "```python\n@staticmethod\ndef to_torchscript(model, example_inputs, save_path=None, method=\"trace\", optimize=True):\n    if method == \"trace\":\n        traced_model = torch.jit.trace(model, example_inputs)\n        script_model = torch.jit.script(traced_model)\n    else:\n        script_model = torch.jit.script(model)\n    \n    if optimize:\n        script_model = torch.jit.optimize_for_mobile(script_model)\n        \n    if save_path:\n        torch.jit.save(script_model, save_path)\n        \n    return script_model\n```",
-      "consequences": {
-        "benefits": [
-          "Platform bağımsız, ortak bir dönüşüm API'si sağlar",
-          "Farklı optimizasyon seçeneklerini tek bir yerde encapsulate eder",
-          "Her dönüşüm adımını izole ederek hata ayıklamayı kolaylaştırır",
-          "Farklı mobil platformlar için tutarlı dönüşüm işlemi sağlar"
-        ],
-        "liabilities": [
-          "Her model mimarisi için karmaşık dönüşüm durumlarını kapsayamayabilir",
-          "Backend değişiklikleri (PyTorch sürümleri) ile uyumluluk sorunları olabilir",
-          "Büyük modellerde dönüşüm süresi uzun olabilir"
-        ]
-      },
-      "implementation_notes": "TorchScript dönüşümünde 'trace' ve 'script' yöntemlerinin avantaj ve dezavantajlarını değerlendirin. Trace yöntemi daha hızlı ve daha az hataya eğilimlidir, ancak dinamik kontrol akışını yakalayamaz. Script yöntemi daha güçlüdür ancak bazen başlatma sırasında hatalar verebilir.",
-      "related_patterns": ["MobileOptimizationPipeline", "BenchmarkStrategy", "ModelCheckpointManager"],
-      "known_uses": ["src/m3tm/mobile/model_converter.py"],
-      "creation_date": "2024-05-23",
-      "last_modified": "2024-05-23"
+      "name": "ModelComposite",
+      "description": "Alt modülleri birleştiren kompozit model yapısını tanımlayan örüntü.",
+      "category": "structural",
+      "examples": [],
+      "advantages": [
+        "Modüler model mimarisi",
+        "Tekrar kullanılabilir alt modüller",
+        "Esneklik ve genişletilebilirlik"
+      ],
+      "creation_date": "2024-05-09",
+      "last_updated": "2024-05-09"
     },
     {
       "pattern_id": "PT-004",
       "name": "BenchmarkStrategy",
-      "category": "performance",
-      "description": "Farklı modellerin mobil platformlardaki performansını tutarlı bir şekilde ölçen, karşılaştıran ve raporlayan bir strateji deseni. Bu desen, çıkarım zamanı, bellek kullanımı ve model boyutu gibi metriklerin ölçümünü standartlaştırır.",
-      "intent": "Modellerin mobil performansını ölçmek, karşılaştırmak, analiz etmek ve belgelemek.",
-      "applicability": "Performans kritik uygulamalarda, farklı model optimizasyonlarının etkilerini değerlendirmede, mobil cihaz kısıtlamalarının etkisini ölçmede.",
-      "structure": "- Statik metodları olan utility sınıfı\n- Standartlaştırılmış ölçüm metodolojisi\n- Isınma ve tekrarlı ölçüm mekanizması\n- İstatistiksel analiz ve raporlama fonksiyonları",
-      "code_example": "```python\n@staticmethod\ndef benchmark_inference_time(model, example_inputs, num_runs=100, warmup_runs=10):\n    # Isınma turları\n    for _ in range(warmup_runs):\n        model(example_inputs)\n    \n    # Zamanı ölç\n    latencies = []\n    for _ in range(num_runs):\n        start_time = time.time()\n        model(example_inputs)\n        latencies.append((time.time() - start_time) * 1000)  # ms\n        \n    # İstatistikleri hesapla ve döndür\n    return {\n        \"mean_latency_ms\": np.mean(latencies),\n        \"median_latency_ms\": np.median(latencies),\n        \"p95_latency_ms\": np.percentile(latencies, 95),\n        \"min_latency_ms\": np.min(latencies),\n        \"max_latency_ms\": np.max(latencies),\n        \"std_latency_ms\": np.std(latencies)\n    }\n```",
-      "consequences": {
-        "benefits": [
-          "Farklı optimizasyon stratejilerinin etkilerini ölçmek için tutarlı bir yöntem sağlar",
-          "İstatistiksel anlamlı sonuçlar için tekrarlı ölçümler yapar",
-          "Sonuçları okunabilir raporlara dönüştürür",
-          "Performans darboğazlarını tespit etmeye yardımcı olur"
-        ],
-        "liabilities": [
-          "Gerçek mobil cihazlardaki performansı tam olarak simüle edemeyebilir",
-          "Her platform için farklı ölçüm stratejileri gerekebilir",
-          "Benchmark sonuçları, cihazın o anki durumundan etkilenebilir"
-        ]
-      },
-      "implementation_notes": "Benchmark yaparken sistemi kararlı bir duruma getirmek için ısınma turları kullanın. İstatistiksel güvenilirlik için yeterli sayıda tekrar yapın. Gerçekçi test verileri kullanın ve gerçek cihazlarda doğrulama yapın.",
-      "related_patterns": ["MobileModelConverter", "MobileOptimizationPipeline"],
-      "known_uses": ["src/m3tm/mobile/benchmark.py"],
-      "creation_date": "2024-05-23",
-      "last_modified": "2024-05-23"
+      "description": "Farklı performans ölçüm stratejilerini standartlaştıran ve değiştirilebilir kılan strateji örüntüsü.",
+      "category": "evaluation",
+      "examples": [
+        "src/m3tm/research/benchmark.py"
+      ],
+      "advantages": [
+        "Standartlaştırılmış ölçüm metrikleri",
+        "Farklı benchmark stratejilerinin değiştirilebilirliği",
+        "Kapsamlı performans değerlendirmesi"
+      ],
+      "creation_date": "2024-05-09",
+      "last_updated": "2024-05-24"
     },
     {
       "pattern_id": "PT-005",
-      "name": "MobileOptimizationPipeline",
-      "category": "performance",
-      "description": "Mobil modellerini optimize etmek için farklı teknikleri (quantization, pruning, vb.) bir pipeline şeklinde uygulayan bir desendir. Her optimizasyon adımı modüler bir şekilde uygulanır ve birleştirilebilir.",
-      "intent": "Mobil cihazlarda model boyutunu, bellek kullanımını ve çıkarım süresini optimize etmek için farklı teknikleri bir arada kullanmak.",
-      "applicability": "Boyut, hız ve enerji tüketimi kısıtlamalarına sahip mobil cihazlarda kullanılacak karmaşık modellerde.",
-      "structure": "- Statik metodları olan utility sınıfı\n- Farklı optimizasyon teknikleri için modüler metodlar\n- Birden fazla optimizasyon tekniğini zincirleme birleştiren bir pipeline\n- Optimizasyon etkinliğini değerlendiren metrikler",
-      "code_example": "```python\n@staticmethod\ndef compress_model(model, example_inputs, methods=[\"quantize\", \"optimize\"]):\n    optimized_model = model\n    \n    if \"quantize\" in methods:\n        optimized_model = apply_dynamic_quantization(optimized_model)\n        \n    if \"prune\" in methods:\n        optimized_model = apply_pruning(optimized_model, amount=0.2)\n        \n    if \"optimize\" in methods:\n        scripted_model = torch.jit.trace(optimized_model, example_inputs)\n        optimized_model = torch.jit.optimize_for_mobile(scripted_model)\n        \n    return optimized_model\n```",
-      "consequences": {
-        "benefits": [
-          "Farklı optimizasyon tekniklerini birleştirme esnekliği sağlar",
-          "Her tekniğin etkisini izole bir şekilde ölçmeyi mümkün kılar",
-          "Yeni optimizasyon yöntemlerinin eklenmesine olanak tanır",
-          "Model performansını ve boyutunu önemli ölçüde iyileştirebilir"
-        ],
-        "liabilities": [
-          "Optimizasyon adımlarının sırası sonuçları etkileyebilir",
-          "Tüm kombinasyonlar her model mimarisi için uygun olmayabilir",
-          "Aşırı optimizasyon model doğruluğunu düşürebilir"
-        ]
-      },
-      "implementation_notes": "En iyi sonuçlar için farklı optimizasyon kombinasyonlarını deneyerek karşılaştırın. Agresif optimizasyonların model doğruluğu üzerindeki etkisini ölçün. Quantization ve pruning stratejilerinin avantaj ve dezavantajlarını değerlendirin.",
-      "related_patterns": ["MobileModelConverter", "BenchmarkStrategy"],
-      "known_uses": ["src/m3tm/mobile/optimization.py"],
-      "creation_date": "2024-05-23",
-      "last_modified": "2024-05-23"
+      "name": "MultitaskHead",
+      "description": "Birden fazla görevi aynı modele entegre etmek için özel başlık (head) mekanizması.",
+      "category": "functional",
+      "examples": [],
+      "advantages": [
+        "Tek model ile çoklu görev çözümü",
+        "Paylaşılan öznitelik çıkarımı",
+        "Verimli parametre kullanımı"
+      ],
+      "creation_date": "2024-05-09",
+      "last_updated": "2024-05-09"
+    },
+    {
+      "pattern_id": "PT-006",
+      "name": "MobileAdapter",
+      "description": "Büyük modelleri mobil cihazlara adapte etmek için hafif adaptör katmanları.",
+      "category": "optimization",
+      "examples": [],
+      "advantages": [
+        "Düşük parametre eklentisi",
+        "Hızlı adaptasyon",
+        "Mobil performans optimizasyonu"
+      ],
+      "creation_date": "2024-05-09",
+      "last_updated": "2024-05-09"
+    },
+    {
+      "pattern_id": "PT-007",
+      "name": "MechanismRegistry",
+      "description": "Farklı mekanizmaları (dikkat, konvolüsyon vb.) merkezi bir kayıt sisteminde yönetme ve erişim sağlama deseni.",
+      "category": "registration",
+      "examples": [
+        "src/m3tm/research/attention_mechanisms.py",
+        "src/m3tm/research/convolution_mechanisms.py"
+      ],
+      "advantages": [
+        "Merkezi mekanizma yönetimi",
+        "İsme göre dinamik mekanizma erişimi",
+        "Kolay genişletilebilirlik ve mekanizma keşfi"
+      ],
+      "creation_date": "2024-05-24",
+      "last_updated": "2024-05-24"
+    },
+    {
+      "pattern_id": "PT-008",
+      "name": "MetricsCollector",
+      "description": "Performans metriklerini tutarlı bir şekilde toplayan, işleyen ve raporlayan koleksiyon deseni.",
+      "category": "measurement",
+      "examples": [
+        "src/m3tm/research/benchmark.py"
+      ],
+      "advantages": [
+        "Standartlaştırılmış metrik toplama",
+        "Tutarlı raporlama formatı",
+        "Kapsamlı karşılaştırma analizleri"
+      ],
+      "creation_date": "2024-05-24",
+      "last_updated": "2024-05-24"
     }
-  ]
+  ],
+  "last_updated": "2024-05-24"
 } 

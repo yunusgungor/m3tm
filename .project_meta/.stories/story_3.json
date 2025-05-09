@@ -1,0 +1,83 @@
+{
+  "story_id": "story_3",
+  "title": "Mobil dikkat ve konvolüsyon mekanizmaları araştırması",
+  "description": "Mobil cihazlar için optimize edilmiş dikkat (attention) ve konvolüsyon mekanizmalarının araştırılması, prototiplenmesi ve performans değerlendirmesi. Bu hikaye, hafif transformer mimarileri için alternatif yaklaşımları keşfetmeyi amaçlamaktadır.",
+  "acceptance_criteria": [
+    "En az 3 alternatif dikkat mekanizması araştırılmalı ve karşılaştırılmalı",
+    "En az 2 mobil-dostu konvolüsyon varyantı incelenmeli",
+    "Seçilen mekanizmaların prototip implementasyonu yapılmalı",
+    "Mekanizmaların bellek, performans ve doğruluk açısından karşılaştırılması yapılmalı",
+    "Araştırma sonuçları, karşılaştırma tabloları içeren detaylı bir rapor hazırlanmalı",
+    "M³TM modeli için en uygun yaklaşım(lar) önerilmeli"
+  ],
+  "tasks": [
+    {
+      "task_id": "task_3.1",
+      "description": "Alternatif dikkat mekanizmalarının literatür taraması",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.2",
+      "description": "Mobil-dostu konvolüsyon varyantlarının literatür taraması",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.3",
+      "description": "En umut verici yaklaşımların seçilmesi ve prototiplenmesi",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.4",
+      "description": "Performans karşılaştırma deneylerinin tasarlanması",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.5",
+      "description": "Seçilen mekanizmaların PyTorch implementasyonu",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.6",
+      "description": "Performans ve doğruluk değerlendirmesi",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.7",
+      "description": "Araştırma bulgularının raporlanması ve öneriler",
+      "status": "done"
+    },
+    {
+      "task_id": "task_3.8",
+      "description": "Örüntü tespiti ve kataloglama",
+      "status": "done"
+    }
+  ],
+  "modules": ["research", "transformer"],
+  "dependencies": ["story_2"],
+  "patterns_applied": [
+    "PT-001: ConfigurationDataclass - attention_mechanisms.py ve convolution_mechanisms.py içinde tüm mekanizma konfigürasyonları için uygulandı",
+    "PT-004: BenchmarkStrategy - benchmark.py içinde karşılaştırma stratejilerinin uygulanması için kullanıldı"
+  ],
+  "patterns_discovered": [
+    "PT-007: MechanismRegistry - Farklı mekanizmaları merkezi bir kayıt sisteminde toplama desenini tanımlar. Hem attention_mechanisms.py hem de convolution_mechanisms.py içinde kullanıldı",
+    "PT-008: MetricsCollector - Performans ölçümlerini standart bir şekilde toplama ve raporlama deseni. benchmark.py içinde tanımlandı"
+  ],
+  "created_files": [
+    "src/m3tm/research/__init__.py",
+    "src/m3tm/research/attention_mechanisms.py",
+    "src/m3tm/research/convolution_mechanisms.py",
+    "src/m3tm/research/benchmark.py",
+    "src/m3tm/research/run_benchmark.py",
+    "src/m3tm/research/report_generator.py"
+  ],
+  "created_date": "2024-05-24",
+  "completed_date": "2024-05-24",
+  "status": "done",
+  "priority": "high",
+  "assigned_to": "codeflow_agent",
+  "estimated_effort": "high",
+  "related_requirements": ["FR-001", "NFR-001", "NFR-003"],
+  "tags": ["research", "optimization", "transformer", "performance"],
+  "last_updated": "2024-05-24",
+  "notes": "Araştırma sonucunda, mobil transformer mimarileri için lineer karmaşıklık sağlayan mekanizmaların (Linformer, Performer), uzun sekanslar için çok daha verimli olduğu görüldü. Konvolüsyon işlemleri için ise, derinlik yönlü ayrılabilir konvolüsyon ve MobileNetV2 ters darboğaz yapısı en iyi performans-doğruluk dengesini sunmaktadır."
+} 
