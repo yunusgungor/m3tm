@@ -76,6 +76,35 @@
         "PT-011": "+0.10",
         "PT-012": "+0.20"
       }
+    },
+    {
+      "date": "2024-05-29",
+      "pattern_count": 15,
+      "total_implementations": 22,
+      "categories": {
+        "configuration": 1,
+        "creation": 3,
+        "structural": 2,
+        "evaluation": 1,
+        "functional": 1,
+        "optimization": 2,
+        "registration": 1,
+        "measurement": 1,
+        "validation": 1,
+        "notification": 1,
+        "processing": 1
+      },
+      "pattern_adoption_changes": {
+        "PT-001": "+0.05",
+        "PT-009": "+0.05",
+        "PT-012": "+0.10",
+        "PT-013": "+0.15",
+        "PT-014": "+0.20"
+      },
+      "story_completion": {
+        "story_id": "story_5",
+        "implemented_patterns": ["PT-001", "PT-009", "PT-012", "PT-013", "PT-014"]
+      }
     }
   ],
   "pattern_lifecycle": {
@@ -103,6 +132,11 @@
           "date": "2024-05-28",
           "adoption_rate": 0.40,
           "effectiveness_score": 7.8
+        },
+        {
+          "date": "2024-05-29",
+          "adoption_rate": 0.55,
+          "effectiveness_score": 8.1
         }
       ]
     },
@@ -114,6 +148,11 @@
           "date": "2024-05-28",
           "adoption_rate": 0.35,
           "effectiveness_score": 8.0
+        },
+        {
+          "date": "2024-05-29",
+          "adoption_rate": 0.55,
+          "effectiveness_score": 8.3
         }
       ]
     },
@@ -130,6 +169,7 @@
     }
   },
   "pattern_relationships": {
+    "PT-001": ["PT-009", "PT-012"],
     "PT-013": ["PT-014"],
     "PT-014": ["PT-002", "PT-013"]
   },

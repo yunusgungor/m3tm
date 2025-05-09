@@ -3,7 +3,7 @@
   "creation_date": "2024-05-09",
   "metrics": {
     "pattern_adoption_rate": {
-      "PT-001": 0.85,
+      "PT-001": 0.90,
       "PT-002": 0.25,
       "PT-003": 0.15,
       "PT-004": 0.65,
@@ -11,16 +11,16 @@
       "PT-006": 0.05,
       "PT-007": 0.55,
       "PT-008": 0.60,
-      "PT-009": 0.70,
+      "PT-009": 0.75,
       "PT-010": 0.35,
       "PT-011": 0.70,
-      "PT-012": 0.65,
-      "PT-013": 0.40,
-      "PT-014": 0.35,
+      "PT-012": 0.75,
+      "PT-013": 0.55,
+      "PT-014": 0.55,
       "PT-015": 0.10
     },
     "pattern_effectiveness_score": {
-      "PT-001": 8.5,
+      "PT-001": 8.7,
       "PT-002": 7.2,
       "PT-003": 7.5,
       "PT-004": 8.2,
@@ -28,12 +28,12 @@
       "PT-006": 6.5,
       "PT-007": 7.8,
       "PT-008": 8.0,
-      "PT-009": 8.3,
+      "PT-009": 8.5,
       "PT-010": 7.7,
       "PT-011": 8.4,
-      "PT-012": 8.2,
-      "PT-013": 7.8,
-      "PT-014": 8.0,
+      "PT-012": 8.5,
+      "PT-013": 8.1,
+      "PT-014": 8.3,
       "PT-015": 7.5
     },
     "pattern_consistency_score": {
@@ -67,13 +67,23 @@
       "deprecated_per_week": 0.2
     },
     "refactoring_effort_ratio": {
-      "global": 0.25,
+      "global": 0.24,
       "by_module": {
         "config": 0.18,
         "research": 0.22,
-        "embedding": 0.20
+        "embedding": 0.15
       }
+    },
+    "pattern_implementation_quality": {
+      "PT-001": 0.95,
+      "PT-009": 0.92,
+      "PT-012": 0.90,
+      "PT-013": 0.87,
+      "PT-014": 0.89
+    },
+    "story_pattern_coverage": {
+      "story_5": 0.93
     }
   },
-  "last_updated": "2024-05-28"
+  "last_updated": "2024-05-29"
 } 

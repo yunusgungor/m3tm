@@ -12,7 +12,7 @@
     {
       "iteration_id": "iter_2",
       "goal": "Çekirdek Model MVP - Metin Modalitesi",
-      "status": "planned",
+      "status": "in_progress",
       "story_ids": ["story_5", "story_6", "story_7"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "story_id": "story_5",
       "title": "TextEmbedding modülü implementasyonu",
-      "status": "in_progress"
+      "status": "done"
     },
     {
       "story_id": "story_6",
@@ -162,5 +162,6 @@
       "title": "Demo uygulama geliştirme ve baştan sona test",
       "status": "todo"
     }
-  ]
+  ],
+  "last_updated": "2024-05-29"
 } 
