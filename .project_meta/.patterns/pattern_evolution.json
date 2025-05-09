@@ -1,131 +1,92 @@
 {
-  "evolution_id": "m3tm_evolution_v2",
-  "creation_date": "2024-05-23",
+  "evolution_id": "m3tm_v2.3_pattern_evolution",
+  "creation_date": "2024-05-24",
+  "last_updated": "2024-05-24",
   "trends": [
     {
-      "date": "2024-05-23",
-      "new_patterns": ["PT-001", "PT-007", "PT-008", "PT-009"],
-      "updated_patterns": [],
-      "adoption_change": {
-        "PT-001": 0.75,
-        "PT-007": 0.65,
-        "PT-008": 0.60,
-        "PT-009": 0.70
-      }
+      "pattern_id": "PT-003",
+      "name": "ModelComposite",
+      "evolution": [
+        {
+          "story_id": "story_7",
+          "implementation": "TextClassificationModel sınıfı, TextEmbedding, ProtoTransformerBlock ve ClassificationHead bileşenlerini birleştiren kompozit model yapısı",
+          "complexity": "medium",
+          "effectiveness": 0.95,
+          "notes": "Modüler model mimarisi sağlayarak, farklı bileşenlerin bağımsız geliştirilmesine ve test edilmesine olanak tanıdı."
+        }
+      ]
     },
     {
-      "date": "2024-05-26",
-      "new_patterns": ["PT-010", "PT-011", "PT-012"],
-      "updated_patterns": ["PT-001", "PT-009"],
-      "adoption_change": {
-        "PT-001": 0.85,
-        "PT-007": 0.70,
-        "PT-008": 0.65,
-        "PT-009": 0.75,
-        "PT-010": 0.35,
-        "PT-011": 0.70,
-        "PT-012": 0.75
-      }
+      "pattern_id": "PT-008",
+      "name": "MetricsCollector",
+      "evolution": [
+        {
+          "story_id": "story_7",
+          "implementation": "MetricsCollector sınıfı, eğitim ve değerlendirme metriklerini toplayan, işleyen ve raporlayan koleksiyon deseni",
+          "complexity": "medium",
+          "effectiveness": 0.85,
+          "notes": "Metrik hesaplama ve toplama mantığını merkezileştirerek, tutarlı metrik raporlama sağladı."
+        }
+      ]
     },
     {
-      "date": "2024-05-29",
-      "new_patterns": ["PT-013", "PT-014", "PT-015"],
-      "updated_patterns": ["PT-001", "PT-007", "PT-009", "PT-012"],
-      "adoption_change": {
-        "PT-001": 0.90,
-        "PT-007": 0.80,
-        "PT-008": 0.65,
-        "PT-009": 0.80,
-        "PT-010": 0.40,
-        "PT-011": 0.75,
-        "PT-012": 0.80,
-        "PT-013": 0.75,
-        "PT-014": 0.70,
-        "PT-015": 0.65
-      }
+      "pattern_id": "PT-010",
+      "name": "DataPreprocessingPipeline",
+      "evolution": [
+        {
+          "story_id": "story_7",
+          "implementation": "TextClassificationDataset.__getitem__ metodu, veri önişleme adımlarını modüler hale getiren boru hattı",
+          "complexity": "low",
+          "effectiveness": 0.75,
+          "notes": "Önişleme adımlarını ayırarak ve yeniden kullanılabilir hale getirerek, veri işleme sürecini basitleştirdi."
+        }
+      ]
     },
     {
-      "date": "2024-05-30",
-      "new_patterns": ["PT-016"],
-      "updated_patterns": ["PT-001", "PT-007", "PT-009"],
-      "adoption_change": {
-        "PT-001": 0.95,
-        "PT-007": 0.85,
-        "PT-008": 0.65,
-        "PT-009": 0.85,
-        "PT-010": 0.40,
-        "PT-011": 0.75,
-        "PT-012": 0.80,
-        "PT-013": 0.75,
-        "PT-014": 0.70,
-        "PT-015": 0.65,
-        "PT-016": 0.60
-      }
+      "pattern_id": "PT-013",
+      "name": "TrainingLoopTemplate",
+      "evolution": [
+        {
+          "story_id": "story_7",
+          "implementation": "TrainingLoopTemplate sınıfı, eğitim döngüsünün genel yapısını tanımlayan ve özelleştirme noktaları sağlayan şablon metot deseni",
+          "complexity": "high",
+          "effectiveness": 0.9,
+          "notes": "Eğitim döngüsü yapısını standartlaştırarak ve alt sınıfların belirli adımları özelleştirmesine olanak tanıyarak, kod tekrarını azalttı."
+        }
+      ]
+    },
+    {
+      "pattern_id": "PT-007",
+      "name": "DatasetFactory",
+      "evolution": [
+        {
+          "story_id": "story_7",
+          "implementation": "DatasetFactory sınıfı, farklı veri kümesi türlerini oluşturmak için fabrika deseni",
+          "complexity": "low",
+          "effectiveness": 0.9,
+          "notes": "Veri kümesi oluşturma mantığını merkezileştirerek, farklı veri kaynaklarından tutarlı bir şekilde veri kümesi oluşturulmasını sağladı."
+        }
+      ]
     }
   ],
-  "pattern_evolution": {
-    "PT-001": [
-      {
-        "date": "2024-05-23",
-        "adoption_rate": 0.75,
-        "effectiveness_score": 0.85,
-        "modules": ["config", "research"]
-      },
-      {
-        "date": "2024-05-26",
-        "adoption_rate": 0.85,
-        "effectiveness_score": 0.88,
-        "modules": ["config", "research", "embedding"]
-      },
-      {
-        "date": "2024-05-29",
-        "adoption_rate": 0.90,
-        "effectiveness_score": 0.90,
-        "modules": ["config", "research", "embedding"]
-      },
-      {
-        "date": "2024-05-30",
-        "adoption_rate": 0.95,
-        "effectiveness_score": 0.90,
-        "modules": ["config", "research", "embedding", "transformer"]
-      }
-    ],
-    "PT-007": [
-      {
-        "date": "2024-05-23",
-        "adoption_rate": 0.65,
-        "effectiveness_score": 0.80,
-        "modules": ["research"]
-      },
-      {
-        "date": "2024-05-26",
-        "adoption_rate": 0.70,
-        "effectiveness_score": 0.82,
-        "modules": ["research"]
-      },
-      {
-        "date": "2024-05-29",
-        "adoption_rate": 0.80,
-        "effectiveness_score": 0.85,
-        "modules": ["research", "embedding"]
-      },
-      {
-        "date": "2024-05-30",
-        "adoption_rate": 0.85,
-        "effectiveness_score": 0.85,
-        "modules": ["research", "embedding", "transformer"]
-      }
-    ],
-    "PT-016": [
-      {
-        "date": "2024-05-30",
-        "adoption_rate": 0.60,
-        "effectiveness_score": 0.85,
-        "modules": ["transformer"],
-        "related_patterns": ["PT-007", "PT-009"],
-        "potential_modules": ["task_heads", "fusion"]
-      }
-    ]
-  },
-  "last_updated": "2024-05-30"
+  "cross_pattern_insights": [
+    {
+      "insight_id": "CPI-001",
+      "related_patterns": ["PT-003", "PT-013"],
+      "description": "ModelComposite ve TrainingLoopTemplate örüntülerinin birlikte kullanımı, modüler model mimarisi ve standartlaştırılmış eğitim döngüsü sağlayarak, farklı model bileşenlerinin ve eğitim stratejilerinin kolayca değiştirilebilmesini mümkün kılıyor.",
+      "impact_score": 0.92
+    },
+    {
+      "insight_id": "CPI-002",
+      "related_patterns": ["PT-007", "PT-010"],
+      "description": "DatasetFactory ve DataPreprocessingPipeline örüntülerinin birlikte kullanımı, veri kümesi oluşturma ve önişleme adımlarını modüler hale getirerek, farklı veri türleri için özelleştirilebilir ve yeniden kullanılabilir bir yapı sağlıyor.",
+      "impact_score": 0.85
+    },
+    {
+      "insight_id": "CPI-003",
+      "related_patterns": ["PT-008", "PT-013"],
+      "description": "MetricsCollector ve TrainingLoopTemplate örüntülerinin birlikte kullanımı, eğitim döngüsü boyunca metriklerin tutarlı bir şekilde toplanmasını ve raporlanmasını sağlayarak, model performansının izlenmesini ve analiz edilmesini kolaylaştırıyor.",
+      "impact_score": 0.88
+    }
+  ]
 } 

@@ -1,266 +1,163 @@
 {
-  "catalog_id": "initial_v2",
-  "creation_date": "2024-05-09",
+  "catalog_id": "m3tm_v2.3_patterns",
+  "creation_date": "2024-05-23",
   "patterns": [
     {
       "pattern_id": "PT-001",
       "name": "ConfigurationDataclass",
-      "description": "Yapılandırma parametrelerini dataclass olarak modelleyerek tip güvenliği, doğrulama ve varsayılan değerler sağlayan örüntü.",
       "category": "configuration",
+      "description": "Tip güvenliği, doğrulama ve varsayılan değerler sağlayan yapılandırma sınıfları",
+      "benefits": [
+        "Tip güvenliği",
+        "Doğrulama kuralları",
+        "Varsayılan değerler",
+        "Serileştirme/deserileştirme kolaylığı"
+      ],
+      "implementation_notes": "Python dataclass kullanarak, yapılandırma parametrelerini tip bilgileriyle tanımlar. Doğrulama mantığı __post_init__ metodunda uygulanır.",
       "examples": [
-        "src/m3tm/config.py",
-        "src/m3tm/research/attention_mechanisms.py",
-        "src/m3tm/research/convolution_mechanisms.py"
+        "m3tm.config.config_base.ConfigBase",
+        "m3tm.config.model_config.ModelConfig",
+        "m3tm.embedding.config.TextEmbeddingConfig"
       ],
-      "advantages": [
-        "Statik tip kontrolü",
-        "Otomatik doğrulama",
-        "Okunabilir yapılandırma"
-      ],
-      "creation_date": "2024-05-09",
-      "last_updated": "2024-05-24"
+      "related_patterns": ["PT-009"],
+      "last_updated": "2024-05-23"
     },
     {
       "pattern_id": "PT-002",
-      "name": "LayerFactory",
-      "description": "Farklı katman türlerini oluşturmak için fabrika deseninin uygulanması.",
+      "name": "FactoryMethod",
       "category": "creation",
-      "examples": [],
-      "advantages": [
-        "Katman oluşturma mantığının merkezi yönetimi",
-        "Yeni katman türlerinin kolay entegrasyonu"
+      "description": "Nesne oluşturma mantığını alt sınıflara devrederek, hangi sınıfın örnekleneceğine çalışma zamanında karar verir",
+      "benefits": [
+        "Nesne oluşturma kodunu istemci kodundan ayırır",
+        "Yeni ürün türleri eklemek kolaydır",
+        "Gevşek bağlantı sağlar"
       ],
-      "creation_date": "2024-05-09",
-      "last_updated": "2024-05-09"
+      "implementation_notes": "create_* metotları ile farklı nesne türleri oluşturan statik metotlar veya sınıflar kullanılır.",
+      "examples": [
+        "m3tm.embedding.factory.EmbeddingFactory",
+        "m3tm.task_heads.config.TaskHeadFactory"
+      ],
+      "related_patterns": ["PT-007"],
+      "last_updated": "2024-05-23"
     },
     {
       "pattern_id": "PT-003",
       "name": "ModelComposite",
-      "description": "Alt modülleri birleştiren kompozit model yapısını tanımlayan örüntü.",
       "category": "structural",
-      "examples": [],
-      "advantages": [
+      "description": "Farklı model bileşenlerini (embedding, transformer, task head) birleştirerek tek bir model gibi kullanılabilir hale getirir",
+      "benefits": [
         "Modüler model mimarisi",
-        "Tekrar kullanılabilir alt modüller",
-        "Esneklik ve genişletilebilirlik"
+        "Bileşenlerin bağımsız geliştirilmesi",
+        "Farklı bileşen kombinasyonları"
       ],
-      "creation_date": "2024-05-09",
-      "last_updated": "2024-05-09"
-    },
-    {
-      "pattern_id": "PT-004",
-      "name": "BenchmarkStrategy",
-      "description": "Farklı performans ölçüm stratejilerini standartlaştıran ve değiştirilebilir kılan strateji örüntüsü.",
-      "category": "evaluation",
+      "implementation_notes": "PyTorch nn.Module'den türeyen bir sınıf, alt modülleri içerir ve forward metodunda bunları sırayla çağırır.",
       "examples": [
-        "src/m3tm/research/benchmark.py"
+        "m3tm.training.trainer.TextClassificationModel"
       ],
-      "advantages": [
-        "Standartlaştırılmış ölçüm metrikleri",
-        "Farklı benchmark stratejilerinin değiştirilebilirliği",
-        "Kapsamlı performans değerlendirmesi"
-      ],
-      "creation_date": "2024-05-09",
+      "related_patterns": [],
       "last_updated": "2024-05-24"
     },
     {
-      "pattern_id": "PT-005",
-      "name": "MultitaskHead",
-      "description": "Birden fazla görevi aynı modele entegre etmek için özel başlık (head) mekanizması.",
-      "category": "functional",
-      "examples": [],
-      "advantages": [
-        "Tek model ile çoklu görev çözümü",
-        "Paylaşılan öznitelik çıkarımı",
-        "Verimli parametre kullanımı"
-      ],
-      "creation_date": "2024-05-09",
-      "last_updated": "2024-05-09"
-    },
-    {
-      "pattern_id": "PT-006",
-      "name": "MobileAdapter",
-      "description": "Büyük modelleri mobil cihazlara adapte etmek için hafif adaptör katmanları.",
-      "category": "optimization",
-      "examples": [],
-      "advantages": [
-        "Düşük parametre eklentisi",
-        "Hızlı adaptasyon",
-        "Mobil performans optimizasyonu"
-      ],
-      "creation_date": "2024-05-09",
-      "last_updated": "2024-05-09"
-    },
-    {
       "pattern_id": "PT-007",
-      "name": "MechanismRegistry",
-      "description": "Farklı mekanizmaları (dikkat, konvolüsyon vb.) merkezi bir kayıt sisteminde yönetme ve erişim sağlama deseni.",
-      "category": "registration",
+      "name": "DatasetFactory",
+      "category": "creation",
+      "description": "Farklı veri kümesi türlerini oluşturmak için fabrika deseni",
+      "benefits": [
+        "Veri kümesi oluşturma mantığını merkezileştirir",
+        "Farklı veri kaynaklarından tutarlı bir şekilde veri kümesi oluşturur",
+        "Veri kümesi oluşturma detaylarını istemciden gizler"
+      ],
+      "implementation_notes": "Statik metotlar kullanarak farklı veri kümesi türlerini oluşturan bir sınıf.",
       "examples": [
-        "src/m3tm/research/attention_mechanisms.py",
-        "src/m3tm/research/convolution_mechanisms.py"
+        "m3tm.training.dataset.DatasetFactory"
       ],
-      "advantages": [
-        "Merkezi mekanizma yönetimi",
-        "İsme göre dinamik mekanizma erişimi",
-        "Kolay genişletilebilirlik ve mekanizma keşfi"
-      ],
-      "creation_date": "2024-05-24",
+      "related_patterns": ["PT-002"],
       "last_updated": "2024-05-24"
     },
     {
       "pattern_id": "PT-008",
       "name": "MetricsCollector",
-      "description": "Performans metriklerini tutarlı bir şekilde toplayan, işleyen ve raporlayan koleksiyon deseni.",
-      "category": "measurement",
+      "category": "behavioral",
+      "description": "Eğitim ve değerlendirme metriklerini toplayan, işleyen ve raporlayan koleksiyon deseni",
+      "benefits": [
+        "Metrik hesaplama ve toplama mantığını merkezileştirir",
+        "Tutarlı metrik raporlama",
+        "Farklı metrik türlerinin kolay entegrasyonu"
+      ],
+      "implementation_notes": "Metrikleri toplayan, güncelleyen ve raporlayan bir sınıf. TensorBoard entegrasyonu içerebilir.",
       "examples": [
-        "src/m3tm/research/benchmark.py"
+        "m3tm.training.metrics.MetricsCollector"
       ],
-      "advantages": [
-        "Standartlaştırılmış metrik toplama",
-        "Tutarlı raporlama formatı",
-        "Kapsamlı karşılaştırma analizleri"
-      ],
-      "creation_date": "2024-05-24",
+      "related_patterns": [],
       "last_updated": "2024-05-24"
     },
     {
       "pattern_id": "PT-009",
       "name": "ConfigValidationPipeline",
-      "description": "Yapılandırma doğrulama adımlarını bir boru hattında birleştirerek hiyerarşik ve kurallara dayalı doğrulama sağlayan örüntü.",
       "category": "validation",
+      "description": "Yapılandırma doğrulama kurallarını modüler bir şekilde uygulayan boru hattı",
+      "benefits": [
+        "Doğrulama mantığını yapılandırma sınıflarından ayırır",
+        "Doğrulama kurallarını yeniden kullanmayı sağlar",
+        "Karmaşık doğrulama senaryolarını destekler"
+      ],
+      "implementation_notes": "Doğrulama kurallarını uygulayan ve hataları toplayan bir dizi fonksiyon veya sınıf.",
       "examples": [
-        "src/m3tm/config/config_base.py"
+        "m3tm.config.config_base.ConfigBase.validate"
       ],
-      "advantages": [
-        "Modüler doğrulama adımları",
-        "Esnek ve genişletilebilir doğrulama kuralları",
-        "Tutarlı hata raporlama"
-      ],
-      "creation_date": "2024-05-25",
-      "last_updated": "2024-05-25"
+      "related_patterns": ["PT-001"],
+      "last_updated": "2024-05-23"
     },
     {
       "pattern_id": "PT-010",
-      "name": "ConfigurationObserver",
-      "description": "Yapılandırma değişikliklerini izleyip ilgili bileşenlere bildirim yapan gözlemci mekanizması.",
-      "category": "notification",
+      "name": "DataPreprocessingPipeline",
+      "category": "data",
+      "description": "Veri önişleme adımlarını modüler hale getiren boru hattı",
+      "benefits": [
+        "Önişleme adımlarını ayırır ve yeniden kullanılabilir hale getirir",
+        "Farklı veri türleri için özelleştirilebilir",
+        "Önişleme mantığını veri kümesi sınıflarından ayırır"
+      ],
+      "implementation_notes": "Dönüşüm fonksiyonları veya sınıfları dizisi olarak uygulanır.",
       "examples": [
-        "src/m3tm/config/config_manager.py"
+        "m3tm.training.dataset.TextClassificationDataset.__getitem__"
       ],
-      "advantages": [
-        "Gevşek bağlı bileşenler",
-        "Gerçek zamanlı yapılandırma değişikliği bildirimleri",
-        "Bileşenlerin otomatik olarak güncellenen yapılandırma ile senkronize olması"
-      ],
-      "creation_date": "2024-05-25",
-      "last_updated": "2024-05-25"
-    },
-    {
-      "pattern_id": "PT-011",
-      "name": "DefaultConfigFactory",
-      "description": "Farklı kullanım durumları için özelleştirilmiş yapılandırma nesneleri üreten fabrika deseni.",
-      "category": "creation",
-      "examples": [
-        "src/m3tm/config/default_configs.py"
-      ],
-      "advantages": [
-        "Önceden tanımlanmış konfigürasyonlar",
-        "İsme göre dinamik oluşturma",
-        "Tutarlı varsayılan değerler"
-      ],
-      "creation_date": "2024-05-26",
-      "last_updated": "2024-05-26"
+      "related_patterns": [],
+      "last_updated": "2024-05-24"
     },
     {
       "pattern_id": "PT-012",
       "name": "ConfigurationComposite",
-      "description": "Alt yapılandırma bileşenlerini bir araya getiren hiyerarşik yapılandırma organizasyonu sağlayan kompozit deseni.",
-      "category": "structural",
+      "category": "configuration",
+      "description": "Alt yapılandırmaları organize eden bileşik yapılandırma deseni",
+      "benefits": [
+        "Karmaşık yapılandırmaları modüler hale getirir",
+        "Yapılandırma hiyerarşisini yönetir",
+        "Yapılandırma bileşenlerinin yeniden kullanımını sağlar"
+      ],
+      "implementation_notes": "Bir yapılandırma sınıfı, diğer yapılandırma sınıflarını içerir ve bunları yönetir.",
       "examples": [
-        "src/m3tm/config/model_config.py"
+        "m3tm.task_heads.config.ClassificationHeadConfig"
       ],
-      "advantages": [
-        "Hiyerarşik yapılandırma organizasyonu",
-        "Modüler yapılandırma bileşenleri",
-        "İç içe doğrulama imkanı"
-      ],
-      "creation_date": "2024-05-26",
-      "last_updated": "2024-05-26"
+      "related_patterns": ["PT-001"],
+      "last_updated": "2024-05-24"
     },
     {
       "pattern_id": "PT-013",
-      "name": "TokenProcessingStrategy",
-      "description": "Farklı tokenizasyon stratejilerini standart bir arayüz altında sunan ve değiştirilebilir kılan strateji deseni.",
-      "category": "processing",
-      "examples": [
-        "src/m3tm/embedding/tokenizer.py"
-      ],
-      "advantages": [
-        "Farklı tokenizasyon stratejileri arasında kolay geçiş",
-        "Standartlaştırılmış arayüz",
-        "Yeni tokenizasyon yöntemlerinin kolay entegrasyonu",
-        "Modüler ve test edilebilir kod"
-      ],
-      "creation_date": "2024-05-28",
-      "last_updated": "2024-05-28"
-    },
-    {
-      "pattern_id": "PT-014",
-      "name": "EmbeddingFactory",
-      "description": "Farklı tipte ve özellikte embedding modülleri oluşturmak için kullanılan fabrika deseni.",
-      "category": "creation",
-      "examples": [
-        "src/m3tm/embedding/text_embedding.py"
-      ],
-      "advantages": [
-        "Farklı embedding yapılandırmalarının merkezi yönetimi",
-        "Özelleştirilmiş embedding modüllerinin kolay oluşturulması",
-        "Sıkıştırılmış veya optimize edilmiş embeddingler için tutarlı arayüz",
-        "İstemci kodunun embedding oluşturma detaylarından soyutlanması"
-      ],
-      "creation_date": "2024-05-28",
-      "last_updated": "2024-05-28"
-    },
-    {
-      "pattern_id": "PT-015",
-      "name": "CachingDecorator",
-      "description": "Sık kullanılan işlem sonuçlarını önbellekleme için decorator deseni uygulaması.",
-      "category": "optimization",
-      "examples": [
-        "src/m3tm/embedding/tokenizer.py"
-      ],
-      "advantages": [
-        "Tekrarlanan işlemlerin hızlandırılması",
-        "Mobil cihazlarda enerji verimliliği",
-        "Kaynak kullanımının optimize edilmesi",
-        "Mevcut sınıflara müdahale etmeden optimizasyon eklenmesi"
-      ],
-      "implementation_example": "class TokenizerCachingDecorator:\n    def __init__(self, tokenizer, cache_size=1000):\n        self.tokenizer = tokenizer\n        self.cache_size = cache_size\n        self.encode_cache = {}\n        self.decode_cache = {}\n\n    def encode(self, text, add_special_tokens=True):\n        cache_key = (text, add_special_tokens)\n        if cache_key in self.encode_cache:\n            return self.encode_cache[cache_key]\n        result = self.tokenizer.encode(text, add_special_tokens)\n        if len(self.encode_cache) >= self.cache_size:\n            self.encode_cache.pop(next(iter(self.encode_cache)))\n        self.encode_cache[cache_key] = result\n        return result",
-      "potential_implementation": "Token kodlama/çözümleme işlemlerini önbellekleme",
-      "creation_date": "2024-05-28",
-      "last_updated": "2024-05-29"
-    },
-    {
-      "pattern_id": "PT-016",
-      "name": "PluggableComponentStrategy",
-      "description": "Farklı bileşen implementasyonlarının çalışma zamanında değiştirilebilmesini sağlayan strateji deseni uygulaması.",
+      "name": "TrainingLoopTemplate",
       "category": "behavioral",
+      "description": "Eğitim döngüsünün genel yapısını tanımlayan ve özelleştirme noktaları sağlayan şablon metot deseni",
+      "benefits": [
+        "Eğitim döngüsü yapısını standartlaştırır",
+        "Alt sınıfların belirli adımları özelleştirmesine olanak tanır",
+        "Kod tekrarını azaltır"
+      ],
+      "implementation_notes": "Temel sınıf, eğitim döngüsünün iskeletini tanımlar ve alt sınıfların override etmesi gereken soyut metotlar içerir.",
       "examples": [
-        "src/m3tm/transformer/proto_transformer.py",
-        "src/m3tm/transformer/ffn.py"
+        "m3tm.training.trainer.TrainingLoopTemplate"
       ],
-      "advantages": [
-        "Farklı algoritma/implementasyon stratejilerinin çalışma zamanında değiştirilebilmesi",
-        "Yeni stratejilerin mevcut kodu etkilemeden eklenebilmesi",
-        "Bileşenlerin yapılandırma ile dinamik olarak seçilebilmesi",
-        "Gevşek bağlı ve test edilebilir modüler yapı"
-      ],
-      "implementation_example": "class FFNMechanismRegistry:\n    _registry: Dict[str, Type[nn.Module]] = {}\n    \n    @classmethod\n    def register(cls, name: str = None):\n        def decorator(ffn_class: Type[nn.Module]):\n            mechanism_name = name if name else ffn_class.__name__\n            cls._registry[mechanism_name] = ffn_class\n            return ffn_class\n        return decorator\n    \n    @classmethod\n    def get_ffn(cls, config: FeedForwardConfig) -> nn.Module:\n        if config.mechanism_name not in cls._registry:\n            raise ValueError(f\"FFN mechanism '{config.mechanism_name}' not registered\")\n        \n        ffn_class = cls._registry[config.mechanism_name]\n        return ffn_class(config)",
-      "potential_implementation": "Farklı dikkat mekanizmaları, konvolüsyon stratejileri veya aktivasyon fonksiyonları için değiştirilebilir yapı",
-      "creation_date": "2024-05-30", 
-      "last_updated": "2024-05-30"
+      "related_patterns": [],
+      "last_updated": "2024-05-24"
     }
-  ],
-  "last_updated": "2024-05-30"
+  ]
 } 

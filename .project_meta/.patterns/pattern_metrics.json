@@ -1,128 +1,168 @@
 {
-  "metrics_id": "m3tm_metrics_v2",
-  "creation_date": "2024-05-23",
+  "metrics_id": "m3tm_v2.3_pattern_metrics",
+  "creation_date": "2024-05-24",
+  "last_updated": "2024-05-31",
   "metrics": {
-    "pattern_adoption_rate": {
-      "overall": 0.75,
-      "by_category": {
-        "configuration": 0.90,
-        "creation": 0.80,
-        "structural": 0.65,
-        "processing": 0.75,
-        "behavioral": 0.60,
-        "registration": 0.85,
-        "validation": 0.80,
-        "optimization": 0.70
-      },
-      "by_pattern": {
-        "PT-001": 0.95,
-        "PT-007": 0.85,
-        "PT-009": 0.85,
-        "PT-012": 0.80,
-        "PT-013": 0.75,
-        "PT-014": 0.70,
-        "PT-015": 0.65,
-        "PT-016": 0.60
-      }
-    },
-    "pattern_effectiveness_score": {
-      "overall": 0.82,
-      "by_category": {
-        "configuration": 0.88,
-        "creation": 0.80,
-        "structural": 0.75,
-        "processing": 0.82,
-        "behavioral": 0.85,
-        "registration": 0.90,
-        "validation": 0.85,
-        "optimization": 0.78
-      },
-      "by_pattern": {
-        "PT-001": 0.90,
-        "PT-007": 0.85,
-        "PT-009": 0.88,
-        "PT-012": 0.82,
-        "PT-013": 0.85,
-        "PT-014": 0.80,
-        "PT-015": 0.75,
-        "PT-016": 0.85
-      }
-    },
-    "pattern_consistency_score": {
-      "overall": 0.78,
-      "by_category": {
-        "configuration": 0.85,
-        "creation": 0.75,
-        "structural": 0.80,
-        "processing": 0.75,
-        "behavioral": 0.80,
-        "registration": 0.88,
-        "validation": 0.82,
-        "optimization": 0.72
-      },
-      "by_pattern": {
-        "PT-001": 0.92,
-        "PT-007": 0.85,
-        "PT-009": 0.88,
-        "PT-012": 0.85,
-        "PT-013": 0.80,
-        "PT-014": 0.78,
-        "PT-015": 0.75,
-        "PT-016": 0.80
-      }
-    },
-    "anti_pattern_density": {
-      "overall": 0.05,
-      "by_module": {
-        "config": 0.03,
-        "embedding": 0.04,
-        "transformer": 0.05
-      }
-    },
-    "pattern_impact": {
+    "pattern_usage": {
       "PT-001": {
-        "code_reduction": 0.25,
-        "maintainability_improvement": 0.30,
-        "test_coverage_improvement": 0.20
+        "usage_count": 7,
+        "files": [
+          "m3tm/config/config_base.py",
+          "m3tm/config/model_config.py",
+          "m3tm/embedding/config.py",
+          "m3tm/transformer/config.py",
+          "m3tm/task_heads/config.py",
+          "m3tm/training/metrics.py"
+        ],
+        "effectiveness": 0.9
+      },
+      "PT-002": {
+        "usage_count": 2,
+        "files": [
+          "m3tm/embedding/factory.py",
+          "m3tm/task_heads/config.py"
+        ],
+        "effectiveness": 0.85
+      },
+      "PT-003": {
+        "usage_count": 1,
+        "files": [
+          "m3tm/training/trainer.py"
+        ],
+        "effectiveness": 0.95
       },
       "PT-007": {
-        "code_reduction": 0.15,
-        "maintainability_improvement": 0.35,
-        "test_coverage_improvement": 0.25
+        "usage_count": 1,
+        "files": [
+          "m3tm/training/dataset.py"
+        ],
+        "effectiveness": 0.9
+      },
+      "PT-008": {
+        "usage_count": 1,
+        "files": [
+          "m3tm/training/metrics.py"
+        ],
+        "effectiveness": 0.85
       },
       "PT-009": {
-        "code_reduction": 0.20,
-        "maintainability_improvement": 0.30,
-        "test_coverage_improvement": 0.15
+        "usage_count": 3,
+        "files": [
+          "m3tm/config/config_base.py",
+          "m3tm/task_heads/config.py"
+        ],
+        "effectiveness": 0.8
+      },
+      "PT-010": {
+        "usage_count": 1,
+        "files": [
+          "m3tm/training/dataset.py"
+        ],
+        "effectiveness": 0.75
       },
       "PT-012": {
-        "code_reduction": 0.18,
-        "maintainability_improvement": 0.25,
-        "test_coverage_improvement": 0.10
+        "usage_count": 2,
+        "files": [
+          "m3tm/task_heads/config.py",
+          "m3tm/config/model_config.py"
+        ],
+        "effectiveness": 0.85
       },
       "PT-013": {
-        "code_reduction": 0.22,
-        "maintainability_improvement": 0.28,
-        "test_coverage_improvement": 0.15
-      },
-      "PT-014": {
-        "code_reduction": 0.15,
-        "maintainability_improvement": 0.20,
-        "test_coverage_improvement": 0.12
-      },
-      "PT-015": {
-        "code_reduction": 0.08,
-        "maintainability_improvement": 0.15,
-        "test_coverage_improvement": 0.05,
-        "performance_improvement": 0.30
-      },
-      "PT-016": {
-        "code_reduction": 0.22,
-        "maintainability_improvement": 0.35,
-        "test_coverage_improvement": 0.25,
-        "code_flexibility": 0.40
+        "usage_count": 1,
+        "files": [
+          "m3tm/training/trainer.py"
+        ],
+        "effectiveness": 0.9
       }
+    },
+    "pattern_categories": {
+      "configuration": {
+        "patterns": ["PT-001", "PT-012"],
+        "usage_count": 9,
+        "effectiveness": 0.88
+      },
+      "creation": {
+        "patterns": ["PT-002", "PT-007"],
+        "usage_count": 3,
+        "effectiveness": 0.88
+      },
+      "structural": {
+        "patterns": ["PT-003"],
+        "usage_count": 1,
+        "effectiveness": 0.95
+      },
+      "behavioral": {
+        "patterns": ["PT-008", "PT-013"],
+        "usage_count": 2,
+        "effectiveness": 0.88
+      },
+      "validation": {
+        "patterns": ["PT-009"],
+        "usage_count": 3,
+        "effectiveness": 0.8
+      },
+      "data": {
+        "patterns": ["PT-010"],
+        "usage_count": 1,
+        "effectiveness": 0.75
+      }
+    },
+    "code_quality_impact": {
+      "modularity": 0.9,
+      "reusability": 0.85,
+      "maintainability": 0.88,
+      "testability": 0.82,
+      "flexibility": 0.87
+    },
+    "story_metrics": {
+      "story_7": {
+        "patterns_applied": ["PT-003", "PT-008", "PT-010", "PT-012", "PT-013"],
+        "pattern_count": 5,
+        "code_quality_score": 0.88,
+        "implementation_efficiency": 0.85
+      }
+    },
+    "anti_pattern_metrics": {
+      "total_detected": 2,
+      "by_category": {
+        "code_structure": 1,
+        "design": 1
+      },
+      "by_story": {
+        "story_7": {
+          "anti_patterns": ["AP-001", "AP-002"],
+          "severity": "medium", 
+          "refactoring_priority": "medium"
+        }
+      },
+      "trend": {
+        "2024-05-31": {
+          "anti_pattern_density": 0.02,
+          "added": 2,
+          "refactored": 0
+        }
+      }
+    },
+    "pattern_interaction_metrics": {
+      "synergies": [
+        {
+          "patterns": ["PT-003", "PT-013"],
+          "synergy_score": 0.92,
+          "description": "ModelComposite ve TrainingLoopTemplate birlikte kullanıldığında modülerlik ve genişletilebilirlik artıyor"
+        },
+        {
+          "patterns": ["PT-007", "PT-010"],
+          "synergy_score": 0.85,
+          "description": "DatasetFactory ve DataPreprocessingPipeline birlikte veri işleme tutarlılığını artırıyor"
+        },
+        {
+          "patterns": ["PT-008", "PT-013"],
+          "synergy_score": 0.88,
+          "description": "MetricsCollector ve TrainingLoopTemplate birlikte metrik toplama ve raporlamayı standartlaştırıyor"
+        }
+      ],
+      "conflicts": []
     }
-  },
-  "last_updated": "2024-05-30"
+  }
 } 
