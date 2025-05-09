@@ -1,7 +1,7 @@
 {
   "roadmap_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "current_iteration_id": "iter_2",
+  "current_iteration_id": "iter_3",
   "iterations": [
     {
       "iteration_id": "iter_1",
@@ -12,13 +12,13 @@
     {
       "iteration_id": "iter_2",
       "goal": "Çekirdek Model MVP - Metin Modalitesi",
-      "status": "in_progress",
+      "status": "completed",
       "story_ids": ["story_5", "story_6", "story_7"]
     },
     {
       "iteration_id": "iter_3",
       "goal": "Çekirdek Model MVP - Görüntü Modalitesi ve Füzyon",
-      "status": "planned",
+      "status": "in_progress",
       "story_ids": ["story_8", "story_9", "story_10"]
     },
     {
@@ -85,7 +85,7 @@
     {
       "story_id": "story_8",
       "title": "ImagePatchEmbedding modülü implementasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_9",
@@ -163,5 +163,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-05-31"
+  "last_updated": "2024-06-01"
 } 
