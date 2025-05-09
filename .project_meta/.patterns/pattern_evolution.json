@@ -1,92 +1,65 @@
 {
   "evolution_id": "m3tm_v2.3_pattern_evolution",
-  "creation_date": "2024-05-24",
-  "last_updated": "2024-05-24",
+  "creation_date": "2024-05-31",
+  "last_updated": "2024-06-01",
   "trends": [
     {
-      "pattern_id": "PT-003",
-      "name": "ModelComposite",
-      "evolution": [
-        {
-          "story_id": "story_7",
-          "implementation": "TextClassificationModel sınıfı, TextEmbedding, ProtoTransformerBlock ve ClassificationHead bileşenlerini birleştiren kompozit model yapısı",
-          "complexity": "medium",
-          "effectiveness": 0.95,
-          "notes": "Modüler model mimarisi sağlayarak, farklı bileşenlerin bağımsız geliştirilmesine ve test edilmesine olanak tanıdı."
-        }
-      ]
+      "date": "2024-05-23",
+      "patterns_added": ["PT-001", "PT-002", "PT-009"],
+      "patterns_modified": [],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": [],
+      "pattern_count": 3,
+      "anti_pattern_count": 0
     },
     {
-      "pattern_id": "PT-008",
-      "name": "MetricsCollector",
-      "evolution": [
-        {
-          "story_id": "story_7",
-          "implementation": "MetricsCollector sınıfı, eğitim ve değerlendirme metriklerini toplayan, işleyen ve raporlayan koleksiyon deseni",
-          "complexity": "medium",
-          "effectiveness": 0.85,
-          "notes": "Metrik hesaplama ve toplama mantığını merkezileştirerek, tutarlı metrik raporlama sağladı."
-        }
-      ]
+      "date": "2024-05-24",
+      "patterns_added": ["PT-003", "PT-007", "PT-008", "PT-010", "PT-012", "PT-013"],
+      "patterns_modified": ["PT-001"],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": ["AP-001", "AP-002"],
+      "pattern_count": 9,
+      "anti_pattern_count": 2
     },
     {
-      "pattern_id": "PT-010",
-      "name": "DataPreprocessingPipeline",
-      "evolution": [
+      "date": "2024-06-01",
+      "patterns_added": ["PT-014"],
+      "patterns_modified": [],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": [],
+      "pattern_count": 10,
+      "anti_pattern_count": 2,
+      "highlights": [
         {
-          "story_id": "story_7",
-          "implementation": "TextClassificationDataset.__getitem__ metodu, veri önişleme adımlarını modüler hale getiren boru hattı",
-          "complexity": "low",
-          "effectiveness": 0.75,
-          "notes": "Önişleme adımlarını ayırarak ve yeniden kullanılabilir hale getirerek, veri işleme sürecini basitleştirdi."
-        }
-      ]
-    },
-    {
-      "pattern_id": "PT-013",
-      "name": "TrainingLoopTemplate",
-      "evolution": [
+          "type": "new_category_introduced",
+          "description": "Görüntü işleme kategorisi (image_processing) eklendi",
+          "impact": "Görüntü modalitesi için gerekli desenler tanımlanmaya başlandı"
+        },
         {
-          "story_id": "story_7",
-          "implementation": "TrainingLoopTemplate sınıfı, eğitim döngüsünün genel yapısını tanımlayan ve özelleştirme noktaları sağlayan şablon metot deseni",
-          "complexity": "high",
-          "effectiveness": 0.9,
-          "notes": "Eğitim döngüsü yapısını standartlaştırarak ve alt sınıfların belirli adımları özelleştirmesine olanak tanıyarak, kod tekrarını azalttı."
-        }
-      ]
-    },
-    {
-      "pattern_id": "PT-007",
-      "name": "DatasetFactory",
-      "evolution": [
-        {
-          "story_id": "story_7",
-          "implementation": "DatasetFactory sınıfı, farklı veri kümesi türlerini oluşturmak için fabrika deseni",
-          "complexity": "low",
-          "effectiveness": 0.9,
-          "notes": "Veri kümesi oluşturma mantığını merkezileştirerek, farklı veri kaynaklarından tutarlı bir şekilde veri kümesi oluşturulmasını sağladı."
+          "type": "pattern_refinement",
+          "description": "VisionTransformerPatching (PT-014) deseni, ModelComposite (PT-003) desenini temel alarak görüntü işleme için özelleştirildi",
+          "impact": "Çoklu modalite işleme yeteneklerini artıracak, metin ve görüntü modaliteleri için tutarlı bir desen kullanımı sağlayacak"
         }
       ]
     }
   ],
-  "cross_pattern_insights": [
-    {
-      "insight_id": "CPI-001",
-      "related_patterns": ["PT-003", "PT-013"],
-      "description": "ModelComposite ve TrainingLoopTemplate örüntülerinin birlikte kullanımı, modüler model mimarisi ve standartlaştırılmış eğitim döngüsü sağlayarak, farklı model bileşenlerinin ve eğitim stratejilerinin kolayca değiştirilebilmesini mümkün kılıyor.",
-      "impact_score": 0.92
+  "growth_metrics": {
+    "pattern_growth_rate": {
+      "overall": 3.33,
+      "by_category": {
+        "configuration": 0.0,
+        "creation": 0.0,
+        "structural": 0.0,
+        "behavioral": 0.0,
+        "validation": 0.0,
+        "data": 0.0,
+        "image_processing": 1.0
+      }
     },
-    {
-      "insight_id": "CPI-002",
-      "related_patterns": ["PT-007", "PT-010"],
-      "description": "DatasetFactory ve DataPreprocessingPipeline örüntülerinin birlikte kullanımı, veri kümesi oluşturma ve önişleme adımlarını modüler hale getirerek, farklı veri türleri için özelleştirilebilir ve yeniden kullanılabilir bir yapı sağlıyor.",
-      "impact_score": 0.85
-    },
-    {
-      "insight_id": "CPI-003",
-      "related_patterns": ["PT-008", "PT-013"],
-      "description": "MetricsCollector ve TrainingLoopTemplate örüntülerinin birlikte kullanımı, eğitim döngüsü boyunca metriklerin tutarlı bir şekilde toplanmasını ve raporlanmasını sağlayarak, model performansının izlenmesini ve analiz edilmesini kolaylaştırıyor.",
-      "impact_score": 0.88
+    "category_diversity": {
+      "initial": 3,
+      "current": 7,
+      "growth_percentage": 133.33
     }
-  ]
+  }
 } 

@@ -1,168 +1,53 @@
 {
   "metrics_id": "m3tm_v2.3_pattern_metrics",
-  "creation_date": "2024-05-24",
-  "last_updated": "2024-05-31",
+  "creation_date": "2024-05-31",
+  "last_updated": "2024-06-01",
   "metrics": {
-    "pattern_usage": {
-      "PT-001": {
-        "usage_count": 7,
-        "files": [
-          "m3tm/config/config_base.py",
-          "m3tm/config/model_config.py",
-          "m3tm/embedding/config.py",
-          "m3tm/transformer/config.py",
-          "m3tm/task_heads/config.py",
-          "m3tm/training/metrics.py"
-        ],
-        "effectiveness": 0.9
-      },
-      "PT-002": {
-        "usage_count": 2,
-        "files": [
-          "m3tm/embedding/factory.py",
-          "m3tm/task_heads/config.py"
-        ],
-        "effectiveness": 0.85
-      },
-      "PT-003": {
-        "usage_count": 1,
-        "files": [
-          "m3tm/training/trainer.py"
-        ],
-        "effectiveness": 0.95
-      },
-      "PT-007": {
-        "usage_count": 1,
-        "files": [
-          "m3tm/training/dataset.py"
-        ],
-        "effectiveness": 0.9
-      },
-      "PT-008": {
-        "usage_count": 1,
-        "files": [
-          "m3tm/training/metrics.py"
-        ],
-        "effectiveness": 0.85
-      },
-      "PT-009": {
-        "usage_count": 3,
-        "files": [
-          "m3tm/config/config_base.py",
-          "m3tm/task_heads/config.py"
-        ],
-        "effectiveness": 0.8
-      },
-      "PT-010": {
-        "usage_count": 1,
-        "files": [
-          "m3tm/training/dataset.py"
-        ],
-        "effectiveness": 0.75
-      },
-      "PT-012": {
-        "usage_count": 2,
-        "files": [
-          "m3tm/task_heads/config.py",
-          "m3tm/config/model_config.py"
-        ],
-        "effectiveness": 0.85
-      },
-      "PT-013": {
-        "usage_count": 1,
-        "files": [
-          "m3tm/training/trainer.py"
-        ],
-        "effectiveness": 0.9
-      }
-    },
-    "pattern_categories": {
-      "configuration": {
-        "patterns": ["PT-001", "PT-012"],
-        "usage_count": 9,
-        "effectiveness": 0.88
-      },
-      "creation": {
-        "patterns": ["PT-002", "PT-007"],
-        "usage_count": 3,
-        "effectiveness": 0.88
-      },
-      "structural": {
-        "patterns": ["PT-003"],
-        "usage_count": 1,
-        "effectiveness": 0.95
-      },
-      "behavioral": {
-        "patterns": ["PT-008", "PT-013"],
-        "usage_count": 2,
-        "effectiveness": 0.88
-      },
-      "validation": {
-        "patterns": ["PT-009"],
-        "usage_count": 3,
-        "effectiveness": 0.8
-      },
-      "data": {
-        "patterns": ["PT-010"],
-        "usage_count": 1,
-        "effectiveness": 0.75
-      }
-    },
-    "code_quality_impact": {
-      "modularity": 0.9,
-      "reusability": 0.85,
-      "maintainability": 0.88,
-      "testability": 0.82,
-      "flexibility": 0.87
-    },
-    "story_metrics": {
-      "story_7": {
-        "patterns_applied": ["PT-003", "PT-008", "PT-010", "PT-012", "PT-013"],
-        "pattern_count": 5,
-        "code_quality_score": 0.88,
-        "implementation_efficiency": 0.85
-      }
-    },
-    "anti_pattern_metrics": {
-      "total_detected": 2,
+    "pattern_adoption_rate": {
+      "overall": 0.82,
       "by_category": {
-        "code_structure": 1,
-        "design": 1
-      },
-      "by_story": {
-        "story_7": {
-          "anti_patterns": ["AP-001", "AP-002"],
-          "severity": "medium", 
-          "refactoring_priority": "medium"
-        }
-      },
-      "trend": {
-        "2024-05-31": {
-          "anti_pattern_density": 0.02,
-          "added": 2,
-          "refactored": 0
-        }
+        "configuration": 0.95,
+        "creation": 0.75,
+        "structural": 0.85,
+        "behavioral": 0.78,
+        "validation": 0.90,
+        "data": 0.70,
+        "image_processing": 1.0
       }
     },
-    "pattern_interaction_metrics": {
-      "synergies": [
-        {
-          "patterns": ["PT-003", "PT-013"],
-          "synergy_score": 0.92,
-          "description": "ModelComposite ve TrainingLoopTemplate birlikte kullanıldığında modülerlik ve genişletilebilirlik artıyor"
-        },
-        {
-          "patterns": ["PT-007", "PT-010"],
-          "synergy_score": 0.85,
-          "description": "DatasetFactory ve DataPreprocessingPipeline birlikte veri işleme tutarlılığını artırıyor"
-        },
-        {
-          "patterns": ["PT-008", "PT-013"],
-          "synergy_score": 0.88,
-          "description": "MetricsCollector ve TrainingLoopTemplate birlikte metrik toplama ve raporlamayı standartlaştırıyor"
-        }
-      ],
-      "conflicts": []
+    "pattern_effectiveness_score": {
+      "overall": 0.86,
+      "by_pattern_id": {
+        "PT-001": 0.92,
+        "PT-002": 0.88,
+        "PT-003": 0.85,
+        "PT-007": 0.78,
+        "PT-008": 0.81,
+        "PT-009": 0.87,
+        "PT-010": 0.79,
+        "PT-012": 0.86,
+        "PT-013": 0.84,
+        "PT-014": 0.90
+      }
+    },
+    "pattern_consistency_score": {
+      "overall": 0.88,
+      "by_category": {
+        "configuration": 0.93,
+        "creation": 0.85,
+        "structural": 0.91,
+        "behavioral": 0.87,
+        "validation": 0.92,
+        "data": 0.83,
+        "image_processing": 0.90
+      }
+    },
+    "anti_pattern_density": {
+      "overall": 0.047,
+      "by_category": {
+        "code_structure": 0.058,
+        "design": 0.035
+      }
     }
   }
 } 

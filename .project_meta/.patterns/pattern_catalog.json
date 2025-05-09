@@ -158,6 +158,26 @@
       ],
       "related_patterns": [],
       "last_updated": "2024-05-24"
+    },
+    {
+      "pattern_id": "PT-014",
+      "name": "VisionTransformerPatching",
+      "category": "image_processing",
+      "description": "Görüntüleri eşit boyutlu yamalara bölerek transformer modüllerine besleyen desen",
+      "benefits": [
+        "Derin konvolüsyonel ağ kullanmadan görüntü öznitelik çıkarımı",
+        "Düzenli, ızgara benzeri yapısı sayesinde verimli işleme",
+        "2D yapısal bilgiyi koruyarak birleşik uzaya dönüştürme",
+        "Mobil cihazlarda verimli çalışmak için optimize edilebilir"
+      ],
+      "implementation_notes": "Görüntüyü eşit boyutlu yamalara bölme, doğrusal projeksiyon uygulama ve 2D konum kodlaması ekleme süreçlerini içerir. PyTorch ile nn.Conv2d, yamaların verimli bir şekilde gömmelere dönüşmesi için kullanılır.",
+      "examples": [
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding",
+        "m3tm.image.patch.patchify_image",
+        "m3tm.image.patch.get_2d_sincos_pos_embed"
+      ],
+      "related_patterns": ["PT-003"],
+      "last_updated": "2024-06-01"
     }
   ]
 } 
