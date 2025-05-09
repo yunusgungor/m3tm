@@ -46,6 +46,30 @@
           "files_count": 1,
           "adoption_rate": 1.0,
           "implementation_consistency": 1.0
+        },
+        "PT-009": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 0.9
+        },
+        "PT-010": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 0.9
+        },
+        "PT-011": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 0.95
+        },
+        "PT-012": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 0.95
         }
       }
     },
@@ -86,6 +110,26 @@
           "complexity_reduction": 0.7,
           "maintainability_improvement": 0.8,
           "effectiveness_score": 0.75
+        },
+        "PT-009": {
+          "complexity_reduction": 0.7,
+          "maintainability_improvement": 0.8,
+          "effectiveness_score": 0.75
+        },
+        "PT-010": {
+          "complexity_reduction": 0.7,
+          "maintainability_improvement": 0.8,
+          "effectiveness_score": 0.75
+        },
+        "PT-011": {
+          "complexity_reduction": 0.8,
+          "maintainability_improvement": 0.9,
+          "effectiveness_score": 0.85
+        },
+        "PT-012": {
+          "complexity_reduction": 0.8,
+          "maintainability_improvement": 0.85,
+          "effectiveness_score": 0.82
         }
       }
     },
@@ -98,9 +142,13 @@
         "maintainability": 0,
         "registration": 1,
         "measurement": 1,
-        "configuration": 1
+        "configuration": 1,
+        "validation": 1,
+        "notification": 1,
+        "creation": 2,
+        "structural": 2
       }
     }
   },
-  "last_updated": "2024-05-24"
+  "last_updated": "2024-05-26"
 } 

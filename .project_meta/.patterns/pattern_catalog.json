@@ -155,7 +155,39 @@
       ],
       "creation_date": "2024-05-25",
       "last_updated": "2024-05-25"
+    },
+    {
+      "pattern_id": "PT-011",
+      "name": "DefaultConfigFactory",
+      "description": "Farklı kullanım durumları için özelleştirilmiş yapılandırma nesneleri üreten fabrika deseni.",
+      "category": "creation",
+      "examples": [
+        "src/m3tm/config/default_configs.py"
+      ],
+      "advantages": [
+        "Önceden tanımlanmış konfigürasyonlar",
+        "İsme göre dinamik oluşturma",
+        "Tutarlı varsayılan değerler"
+      ],
+      "creation_date": "2024-05-26",
+      "last_updated": "2024-05-26"
+    },
+    {
+      "pattern_id": "PT-012",
+      "name": "ConfigurationComposite",
+      "description": "Alt yapılandırma bileşenlerini bir araya getiren hiyerarşik yapılandırma organizasyonu sağlayan kompozit deseni.",
+      "category": "structural",
+      "examples": [
+        "src/m3tm/config/model_config.py"
+      ],
+      "advantages": [
+        "Hiyerarşik yapılandırma organizasyonu",
+        "Modüler yapılandırma bileşenleri",
+        "İç içe doğrulama imkanı"
+      ],
+      "creation_date": "2024-05-26",
+      "last_updated": "2024-05-26"
     }
   ],
-  "last_updated": "2024-05-25"
+  "last_updated": "2024-05-26"
 } 

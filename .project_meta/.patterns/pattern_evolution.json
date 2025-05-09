@@ -79,7 +79,39 @@
         "configuration": 1
       },
       "notes": "Story 3 (Mobil dikkat ve konvolüsyon mekanizmaları araştırması) tamamlanırken iki yeni örüntü keşfedildi ve kataloglandı: MechanismRegistry ve MetricsCollector. Ayrıca, ConfigurationDataclass ve BenchmarkStrategy örüntüleri güncellendi ve yeni kategoriler tanımlandı: registration, measurement ve configuration. Özellikle MechanismRegistry örüntüsü, hem dikkat hem de konvolüsyon mekanizmalarının tutarlı ve genişletilebilir bir şekilde yönetilmesini sağlayarak kod kalitesini önemli ölçüde artırdı."
+    },
+    {
+      "date": "2024-05-26",
+      "iteration_id": "iter_1",
+      "story_id": "story_4",
+      "new_patterns": ["PT-009", "PT-010", "PT-011", "PT-012"],
+      "updated_patterns": ["PT-001", "PT-007"],
+      "deprecated_patterns": [],
+      "pattern_count": 11,
+      "adoption_metrics": {
+        "average_adoption_rate": 1.0,
+        "average_implementation_consistency": 0.95
+      },
+      "effectiveness_metrics": {
+        "average_complexity_reduction": 0.73,
+        "average_maintainability_improvement": 0.79,
+        "average_effectiveness_score": 0.76
+      },
+      "category_distribution": {
+        "architectural": 3,
+        "performance": 2,
+        "security": 0,
+        "maintainability": 0,
+        "registration": 1,
+        "measurement": 1,
+        "configuration": 1,
+        "validation": 1,
+        "notification": 1,
+        "creation": 2,
+        "structural": 2
+      },
+      "notes": "Story 4 (Yapılandırma formatının belirlenmesi) tamamlanırken dört yeni örüntü tespit edildi ve kataloglandı: ConfigValidationPipeline, ConfigurationObserver, DefaultConfigFactory ve ConfigurationComposite. Özellikle ConfigurationDataclass (PT-001) örüntüsü tam olarak uygulandı ve genişletildi. MechanismRegistry (PT-007) örüntüsü, yapılandırma kaynaklarının merkezi yönetimi için adapte edildi. Eklenen yeni örüntüler yapılandırma sisteminin esnekliğini, doğrulamasını ve gözlemlenebilirliğini büyük ölçüde artırdı. Validation, notification, creation ve structural kategorilerinde yeni örüntüler eklendi."
     }
   ],
-  "last_updated": "2024-05-24"
+  "last_updated": "2024-05-26"
 } 
