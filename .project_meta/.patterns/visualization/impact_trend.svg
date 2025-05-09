@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Başlık -->
+  <text x="400" y="30" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">M³TM Örüntü Etkinlik Trendi</text>
+  <text x="400" y="55" font-family="Arial" font-size="14" text-anchor="middle">Tarih: 2024-05-24</text>
+  
+  <!-- Koordinat sistemi -->
+  <line x1="100" y1="400" x2="700" y2="400" stroke="black" stroke-width="2" />
+  <line x1="100" y1="400" x2="100" y2="100" stroke="black" stroke-width="2" />
+  
+  <!-- X ekseni etiketleri (Storiler) -->
+  <text x="150" y="420" font-family="Arial" font-size="12" text-anchor="middle">Story 1</text>
+  <text x="300" y="420" font-family="Arial" font-size="12" text-anchor="middle">Story 2</text>
+  <text x="450" y="420" font-family="Arial" font-size="12" text-anchor="middle">Story 3</text>
+  <text x="600" y="420" font-family="Arial" font-size="12" text-anchor="middle">Story 4 (Tahmini)</text>
+  <text x="400" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Storiler</text>
+  
+  <!-- Y ekseni etiketleri (Etkinlik Skoru) -->
+  <text x="80" y="400" font-family="Arial" font-size="12" text-anchor="end">0.0</text>
+  <text x="80" y="340" font-family="Arial" font-size="12" text-anchor="end">0.2</text>
+  <text x="80" y="280" font-family="Arial" font-size="12" text-anchor="end">0.4</text>
+  <text x="80" y="220" font-family="Arial" font-size="12" text-anchor="end">0.6</text>
+  <text x="80" y="160" font-family="Arial" font-size="12" text-anchor="end">0.8</text>
+  <text x="80" y="100" font-family="Arial" font-size="12" text-anchor="end">1.0</text>
+  <text x="50" y="250" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" transform="rotate(-90, 50, 250)">Etkinlik Skoru</text>
+  
+  <!-- Izgara çizgileri -->
+  <g stroke="#ddd" stroke-width="1">
+    <line x1="100" y1="340" x2="700" y2="340" />
+    <line x1="100" y1="280" x2="700" y2="280" />
+    <line x1="100" y1="220" x2="700" y2="220" />
+    <line x1="100" y1="160" x2="700" y2="160" />
+    <line x1="100" y1="100" x2="700" y2="100" />
+    
+    <line x1="150" y1="100" x2="150" y2="400" />
+    <line x1="300" y1="100" x2="300" y2="400" />
+    <line x1="450" y1="100" x2="450" y2="400" />
+    <line x1="600" y1="100" x2="600" y2="400" />
+  </g>
+  
+  <!-- Veriler - Ortalama Etkinlik Skoru -->
+  <polyline 
+    points="150,230 300,232 450,208 600,200" 
+    fill="none" 
+    stroke="#4285F4" 
+    stroke-width="3"
+  />
+  <circle cx="150" cy="230" r="5" fill="#4285F4" />
+  <circle cx="300" cy="232" r="5" fill="#4285F4" />
+  <circle cx="450" cy="208" r="5" fill="#4285F4" />
+  <circle cx="600" cy="200" r="5" fill="#4285F4" stroke="#ddd" stroke-dasharray="2" />
+  
+  <!-- Metinler -->
+  <text x="150" y="215" font-family="Arial" font-size="12" text-anchor="middle" fill="#4285F4">0.70</text>
+  <text x="300" y="217" font-family="Arial" font-size="12" text-anchor="middle" fill="#4285F4">0.69</text>
+  <text x="450" y="193" font-family="Arial" font-size="12" text-anchor="middle" fill="#4285F4">0.74</text>
+  <text x="600" y="185" font-family="Arial" font-size="12" text-anchor="middle" fill="#4285F4">0.76?</text>
+  
+  <!-- Karmaşıklık Azaltma Trend -->
+  <polyline 
+    points="150,240 300,232 450,220 600,210" 
+    fill="none" 
+    stroke="#DB4437" 
+    stroke-width="2"
+    stroke-dasharray="5,3"
+  />
+  <circle cx="150" cy="240" r="4" fill="#DB4437" />
+  <circle cx="300" cy="232" r="4" fill="#DB4437" />
+  <circle cx="450" cy="220" r="4" fill="#DB4437" />
+  <circle cx="600" cy="210" r="4" fill="#DB4437" stroke="#ddd" stroke-dasharray="2" />
+  
+  <!-- Bakım İyileştirme Trend -->
+  <polyline 
+    points="150,220 300,228 450,188 600,180" 
+    fill="none" 
+    stroke="#0F9D58" 
+    stroke-width="2"
+    stroke-dasharray="5,3"
+  />
+  <circle cx="150" cy="220" r="4" fill="#0F9D58" />
+  <circle cx="300" cy="228" r="4" fill="#0F9D58" />
+  <circle cx="450" cy="188" r="4" fill="#0F9D58" />
+  <circle cx="600" cy="180" r="4" fill="#0F9D58" stroke="#ddd" stroke-dasharray="2" />
+  
+  <!-- Açıklama -->
+  <rect x="550" y="120" width="20" height="3" fill="#4285F4" />
+  <text x="575" y="125" font-family="Arial" font-size="12">Ortalama Etkinlik Skoru</text>
+  
+  <rect x="550" y="140" width="20" height="3" fill="#DB4437" />
+  <text x="575" y="145" font-family="Arial" font-size="12">Karmaşıklık Azaltma</text>
+  
+  <rect x="550" y="160" width="20" height="3" fill="#0F9D58" />
+  <text x="575" y="165" font-family="Arial" font-size="12">Bakım İyileştirme</text>
+  
+  <!-- Açıklayıcı Notlar -->
+  <text x="400" y="480" font-family="Arial" font-size="12" text-anchor="middle" font-style="italic">
+    Not: Story 4 için değerler tahminidir ve PT-001 ve PT-007 örüntülerinin yaygın kullanımı varsayımına dayanmaktadır.
+  </text>
+</svg> 

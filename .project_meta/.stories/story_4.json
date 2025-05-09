@@ -1,0 +1,68 @@
+{
+  "story_id": "story_4",
+  "title": "Yapılandırma (config) formatının belirlenmesi",
+  "description": "Geliştirme sürecinde kullanılacak yapılandırma formatının belirlenmesi, yapılandırma yükleme/kaydetme mekanizması ve doğrulama sisteminin oluşturulması. Bu hikaye, modelin tüm bileşenlerinin tutarlı bir yapılandırma yönetimi ile entegrasyonunu sağlar.",
+  "acceptance_criteria": [
+    "Yapılandırma formatı belirlenmeli (JSON, YAML veya özel format)",
+    "Yapılandırma doğrulama mekanizması oluşturulmalı",
+    "Model yapılandırması için gerekli alanlar tanımlanmalı",
+    "Yapılandırma dosyalarını yükleme/kaydetme mekanizması oluşturulmalı",
+    "Yapılandırma değişikliklerini izleme mekanizması oluşturulmalı",
+    "Varsayılan yapılandırma değerleri tanımlanmalı"
+  ],
+  "tasks": [
+    {
+      "task_id": "task_4.1",
+      "description": "Farklı yapılandırma formatlarının karşılaştırmalı analizi",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_4.2",
+      "description": "Seçilen formatta örnek yapılandırma şablonu oluşturulması",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_4.3",
+      "description": "Yapılandırma yükleme/okuma/doğrulama sınıfı implementasyonu",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_4.4",
+      "description": "Yapılandırma değişikliklerini izleme mekanizması implementasyonu",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_4.5",
+      "description": "Varsayılan yapılandırma değerlerini tanımlama ve dokümentasyon",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_4.6",
+      "description": "Birim testleri yazılması",
+      "status": "todo"
+    },
+    {
+      "task_id": "task_4.7",
+      "description": "Örüntü tespiti ve kataloglama",
+      "status": "todo"
+    }
+  ],
+  "modules": ["config"],
+  "dependencies": ["story_2", "story_3"],
+  "patterns_to_apply": [
+    "PT-001: ConfigurationDataclass - Yapılandırma parametrelerini dataclass ile modelleyerek tip güvenliği sağlamak için",
+    "PT-007: MechanismRegistry - Farklı yapılandırma kaynaklarını (dosya, ortam değişkenleri, vb.) merkezi bir sistemde yönetmek için"
+  ],
+  "potential_patterns": [
+    "ConfigValidationPipeline: Yapılandırma doğrulama adımlarını bir boru hattında birleştirmek",
+    "ConfigurationObserver: Yapılandırma değişikliklerini izleyip ilgili bileşenlere bildirim yapan gözlemci mekanizması"
+  ],
+  "created_date": "2024-05-24",
+  "status": "todo",
+  "priority": "high",
+  "assigned_to": "codeflow_agent",
+  "estimated_effort": "medium",
+  "related_requirements": ["FR-002", "NFR-002"],
+  "tags": ["configuration", "validation", "infrastructure"],
+  "notes": "ConfigurationDataclass örüntüsü halihazırda var ve bu görev için temel oluşturacak. MechanismRegistry örüntüsü de yapılandırma kaynakları için uyarlanabilir. Story 3'te keşfedilen örüntülerin bu hikayede de uygulanması faydalı olacaktır."
+} 

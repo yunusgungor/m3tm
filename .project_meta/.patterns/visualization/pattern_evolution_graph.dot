@@ -1,0 +1,69 @@
+digraph pattern_evolution {
+  // Grafik özellikleri
+  rankdir=LR;
+  node [shape=box, style=filled, fillcolor=lightblue, fontname="Arial"];
+  edge [fontname="Arial"];
+  
+  // Zaman çizgisi
+  subgraph timeline {
+    rank = same;
+    "2024-05-23_1" [label="Story 1\n2024-05-23", shape=ellipse, fillcolor=lightgrey];
+    "2024-05-23_2" [label="Story 2\n2024-05-23", shape=ellipse, fillcolor=lightgrey];
+    "2024-05-24_3" [label="Story 3\n2024-05-24", shape=ellipse, fillcolor=lightgrey];
+    
+    "2024-05-23_1" -> "2024-05-23_2" [style=dashed, color=grey];
+    "2024-05-23_2" -> "2024-05-24_3" [style=dashed, color=grey];
+  }
+  
+  // Örüntüler
+  "PT-001" [label="PT-001\nConfigurationDataclass", fillcolor="#aed581"];
+  "PT-002" [label="PT-002\nLayerFactory", fillcolor="#e6ee9c"];  
+  "PT-003" [label="PT-003\nModelComposite", fillcolor="#e6ee9c"];
+  "PT-004" [label="PT-004\nBenchmarkStrategy", fillcolor="#ffcc80"];
+  "PT-005" [label="PT-005\nMultitaskHead", fillcolor="#e6ee9c"];
+  "PT-007" [label="PT-007\nMechanismRegistry", fillcolor="#90caf9"];
+  "PT-008" [label="PT-008\nMetricsCollector", fillcolor="#ce93d8"];
+  
+  // Örüntülerin keşfi
+  "2024-05-23_1" -> "PT-001" [label="keşfedildi"];
+  "2024-05-23_1" -> "PT-002" [label="keşfedildi"];
+  
+  "2024-05-23_2" -> "PT-003" [label="keşfedildi"];
+  "2024-05-23_2" -> "PT-004" [label="keşfedildi"];
+  "2024-05-23_2" -> "PT-005" [label="keşfedildi"];
+  
+  "2024-05-24_3" -> "PT-007" [label="keşfedildi"];
+  "2024-05-24_3" -> "PT-008" [label="keşfedildi"];
+  "2024-05-24_3" -> "PT-001" [label="güncellendi", style=dashed, color=blue];
+  "2024-05-24_3" -> "PT-004" [label="güncellendi", style=dashed, color=blue];
+  
+  // Kategoriler
+  subgraph categories {
+    node [shape=hexagon, style=filled, fillcolor=lightyellow];
+    "architectural" [label="Mimari"];
+    "performance" [label="Performans"];
+    "registration" [label="Kayıt"];
+    "measurement" [label="Ölçüm"];
+    "configuration" [label="Yapılandırma"];
+  }
+  
+  // Örüntü - Kategori ilişkileri
+  "PT-001" -> "configuration" [style=dotted, dir=both];
+  "PT-002" -> "architectural" [style=dotted, dir=both];
+  "PT-003" -> "architectural" [style=dotted, dir=both];
+  "PT-004" -> "performance" [style=dotted, dir=both];
+  "PT-005" -> "architectural" [style=dotted, dir=both];
+  "PT-007" -> "registration" [style=dotted, dir=both];
+  "PT-008" -> "measurement" [style=dotted, dir=both];
+  
+  // İlişkiler
+  "PT-007" -> "PT-008" [label="kullanır", style=dashed, dir=forward, color=darkgreen];
+  "PT-001" -> "PT-007" [label="destekler", style=dashed, dir=forward, color=darkgreen];
+  "PT-008" -> "PT-004" [label="genişletir", style=dashed, dir=forward, color=darkgreen];
+  
+  // Etiketler
+  label = "M³TM Projesi Örüntü Evrim Grafiği\nTarih: 2024-05-24";
+  labelloc = "t";
+  fontsize = 18;
+  fontname = "Arial";
+} 
