@@ -1,0 +1,10 @@
+M³TM v2.3 Örüntü Kullanım Heatmap (2024-05-23)
+----------------------------------------------
+
+                       | ConfigurationDataclass | ModelCheckpointManager |
+-----------------------|------------------------|-----------------------|
+config                 | ███████████████████    |                       |
+core                   |                        | ███████████████████   |
+
+Legends:
+  █████ - Kullanım yoğunluğu 

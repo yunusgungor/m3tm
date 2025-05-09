@@ -1,0 +1,71 @@
+{
+  "story_id": "story_1",
+  "title": "Geliştirme ortamı kurulumu",
+  "description": "Projenin Python, PyTorch ve diğer gerekli bağımlılıklarla çalışabilmesi için geliştirme ortamını hazırlama ve temel proje yapısını oluşturma.",
+  "acceptance_criteria": [
+    "Proje dizin yapısı oluşturulmalı",
+    "Python paket yapısı ve gerekli __init__.py dosyaları oluşturulmalı",
+    "setup.py ve requirements.txt dosyaları hazırlanmalı",
+    "Temel model yapılandırma ve bileşenleri için modüller oluşturulmalı",
+    "Birim test altyapısı hazırlanmalı",
+    "Git repo yapılandırması ve .gitignore dosyası hazırlanmalı"
+  ],
+  "tasks": [
+    {
+      "task_id": "task_1.1",
+      "description": "Proje dizin yapısını ve Python paket yapısını oluşturma",
+      "status": "done"
+    },
+    {
+      "task_id": "task_1.2",
+      "description": "Bağımlılık yönetim dosyalarını oluşturma (setup.py, requirements.txt)",
+      "status": "done"
+    },
+    {
+      "task_id": "task_1.3",
+      "description": "Temel model yapılandırma sınıflarını oluşturma",
+      "status": "done"
+    },
+    {
+      "task_id": "task_1.4",
+      "description": "Temel model sınıfını oluşturma",
+      "status": "done"
+    },
+    {
+      "task_id": "task_1.5",
+      "description": "Birim testleri hazırlama",
+      "status": "done"
+    },
+    {
+      "task_id": "task_1.6",
+      "description": "Git repo yapılandırması",
+      "status": "done"
+    },
+    {
+      "task_id": "task_1.7",
+      "description": "Örüntü tespiti ve kataloglama",
+      "status": "done"
+    }
+  ],
+  "modules": ["environment_setup"],
+  "dependencies": [],
+  "patterns_applied": ["PT-001", "PT-002"],
+  "patterns_discovered": ["PT-001", "PT-002"],
+  "created_files": [
+    "src/m3tm/__init__.py",
+    "src/m3tm/core/__init__.py",
+    "src/m3tm/core/base_model.py",
+    "src/m3tm/config/__init__.py",
+    "src/m3tm/config/model_config.py",
+    "setup.py",
+    "requirements.txt",
+    "pyproject.toml",
+    "README.md",
+    ".gitignore",
+    "tests/unit/test_config.py",
+    "tests/unit/test_base_model.py"
+  ],
+  "created_date": "2024-05-23",
+  "completed_date": "2024-05-23",
+  "status": "done"
+} 

@@ -81,6 +81,28 @@
         ]
       },
       "related_requirements": ["6"]
+    },
+    {
+      "adr_id": "ADR-005",
+      "title": "Kod Örüntüleri Standardizasyonu",
+      "status": "accepted",
+      "date": "2024-05-23",
+      "context": "M³TM v2.3 projesi, güvenli ve tutarlı koduyla belirgin bir yazılım olmalıdır. Kod örüntülerinin standardize edilmesi, kodun okunabilirliğini, bakımını ve güvenliğini artırmak için kritik öneme sahiptir.",
+      "decision": "Proje geliştirme sürecinde tanımlanan ve doğrulanan kod örüntüleri, 'pattern_catalog.json' içinde kataloglanacak ve projenin kodlama standartlarına dahil edilecektir. İlk aşamada, ConfigurationDataclass (PT-001) ve ModelCheckpointManager (PT-002) örüntüleri standart uygulama olarak kabul edilmiştir. Tüm geliştirme aşamalarında bu örüntüler tercih edilmeli ve yeni örüntüler belirlendikçe kataloga eklenmelidir.",
+      "consequences": {
+        "positive": [
+          "Tutarlı ve öngörülebilir kod yapısı",
+          "Daha kolay bakım ve genişletme",
+          "Yeni geliştiricilerin daha hızlı uyum sağlaması",
+          "En iyi uygulamaların belgelendirilmesi ve yaygınlaştırılması"
+        ],
+        "negative": [
+          "Örüntü kataloğunun bakım maliyeti",
+          "Bazı özel durumlarda örüntülere sıkı bağlılık, esnekliği sınırlayabilir"
+        ]
+      },
+      "related_patterns": ["PT-001", "PT-002"],
+      "related_requirements": ["12.3"]
     }
   ]
 } 

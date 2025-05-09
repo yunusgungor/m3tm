@@ -1,5 +1,62 @@
 {
   "catalog_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "patterns": []
+  "patterns": [
+    {
+      "pattern_id": "PT-001",
+      "name": "ConfigurationDataclass",
+      "category": "architectural",
+      "description": "Yapılandırma seçenekleri için Python dataclass kullanımı. Bu örüntü, model parametrelerini yapılandırılabilir ve tip-güvenli bir şekilde yönetmeyi sağlar.",
+      "intent": "Model yapılandırma parametrelerini organize etmek, tip kontrolü sağlamak ve default değerler tanımlamak.",
+      "applicability": "Model parametrelerinin yapılandırılması gereken her durumda; özellikle çok sayıda parametre olduğunda ve bunların hiyerarşik bir yapıda düzenlenmesi gerektiğinde.",
+      "structure": "- Yapılandırma parametreleri için `dataclass` dekoratörüyle sınıf tanımlama\n- Alt-yapılandırmalar için ayrı dataclass'lar kullanma\n- Parametre bağımlılıklarını yönetmek için `__post_init__` metodu\n- Önceden tanımlanmış yapılandırmaları üreten yardımcı fonksiyonlar",
+      "code_example": "```python\n@dataclass\nclass TextConfig:\n    vocab_size: int = 4000\n    embed_dim: int = 32\n    max_seq_len: int = 512\n\n@dataclass\nclass M3TMConfig:\n    text_config: TextConfig = TextConfig()\n    \n    def __post_init__(self):\n        # Tutarlılık kontrolü ve güncelleme\n        pass\n```",
+      "consequences": {
+        "benefits": [
+          "Yapılandırma parametrelerinin merkezi yönetimi",
+          "Tip kontrolü sayesinde hataların erken tespiti",
+          "Varsayılan değerlerin açık tanımlanması",
+          "Modül hiyerarşisine uyumlu yapılandırma hiyerarşisi",
+          "Ek serialize/deserialize işlemleri gerektirmeden kaydedilebilir"
+        ],
+        "liabilities": [
+          "Alt yapılandırmalar arasındaki bağımlılıklar __post_init__ ile manuel yönetilmeli",
+          "Çok sayıda iç içe dataclass, yapıyı karmaşıklaştırabilir",
+          "Farklı Python sürümleri arasında dataclass uyumluluğu dikkate alınmalıdır (Python 3.7+ gerekli)"
+        ]
+      },
+      "implementation_notes": "Tüm model parametreleri hardcoded olarak değil, bu yapılandırma sınıfları üzerinden erişilmelidir. Her yeni özellik için yeni parametreler önce ilgili yapılandırma sınıfına eklenmelidir.",
+      "related_patterns": ["ConfigurationFactory", "BuilderPattern"],
+      "known_uses": ["src/m3tm/config/model_config.py"],
+      "creation_date": "2024-05-23",
+      "last_modified": "2024-05-23"
+    },
+    {
+      "pattern_id": "PT-002",
+      "name": "ModelCheckpointManager",
+      "category": "architectural",
+      "description": "Model ağırlıklarını ve yapılandırmasını birlikte saklama ve yükleme örüntüsü. Bu örüntü, eğitilmiş modellerin tam durumunu korumayı ve daha sonra kolayca yeniden kullanmayı sağlar.",
+      "intent": "Model durumunu (ağırlıklar, yapılandırma, meta veriler) düzenli bir şekilde kaydetmek ve geri yükleyebilmek.",
+      "applicability": "Eğitilen modellerin kaydedilmesi ve daha sonra kullanılması gereken durumlarda.",
+      "structure": "- Base model sınıfında `save_pretrained` ve `from_pretrained` sınıf metodları\n- Model ağırlıkları ve yapılandırma bilgilerinin ayrı dosyalara kaydedilmesi\n- Yapılandırma bilgisi önce yüklenerek model başlatılır, sonra ağırlıklar yüklenir",
+      "code_example": "```python\ndef save_pretrained(self, save_dir: str) -> None:\n    os.makedirs(save_dir, exist_ok=True)\n    torch.save(self.state_dict(), os.path.join(save_dir, \"model.pt\"))\n    torch.save(self.config, os.path.join(save_dir, \"config.pt\"))\n\n@classmethod\ndef from_pretrained(cls, load_dir: str) -> \"BaseModel\":\n    config = torch.load(os.path.join(load_dir, \"config.pt\"))\n    model = cls(config)\n    model.load_state_dict(torch.load(os.path.join(load_dir, \"model.pt\")))\n    return model\n```",
+      "consequences": {
+        "benefits": [
+          "Model ve yapılandırmasının tutarlı şekilde kaydedilmesi",
+          "Sınıf metodu kullanarak temiz model yükleme API'si",
+          "Modelin farklı varyasyonlarını kolay yönetme",
+          "Düşük efor ile model paylaşımı ve dağıtımı sağlar"
+        ],
+        "liabilities": [
+          "Yapılandırma sınıfı değişirse geriye dönük uyumluluk sorunları olabilir",
+          "Büyük modeller için disk alanı gereksinimi"
+        ]
+      },
+      "implementation_notes": "Tüm model alt sınıfları BaseModel'dan türetilmeli ve kaydedme/yükleme işlemleri için bu metodları kullanmalıdır. İleri versiyonlarda model versiyonlama mekanizması eklenebilir.",
+      "related_patterns": ["ConfigurationDataclass", "ModelFactory"],
+      "known_uses": ["src/m3tm/core/base_model.py"],
+      "creation_date": "2024-05-23",
+      "last_modified": "2024-05-23"
+    }
+  ]
 } 

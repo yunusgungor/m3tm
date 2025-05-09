@@ -1,0 +1,10 @@
+M³TM v2.3 Örüntü Türleri Dağılımı (2024-05-23)
+----------------------------------------------
+
+architectural   [██] 2
+performance     [ ] 0
+security        [ ] 0
+maintainability [ ] 0
+
+Legends:
+  Bir █ sembolü = 1 örüntü 

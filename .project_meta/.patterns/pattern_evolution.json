@@ -1,5 +1,31 @@
 {
   "evolution_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "trends": []
+  "trends": [
+    {
+      "date": "2024-05-23",
+      "iteration_id": "iter_1",
+      "story_id": "story_1",
+      "new_patterns": ["PT-001", "PT-002"],
+      "updated_patterns": [],
+      "deprecated_patterns": [],
+      "pattern_count": 2,
+      "adoption_metrics": {
+        "average_adoption_rate": 1.0,
+        "average_implementation_consistency": 1.0
+      },
+      "effectiveness_metrics": {
+        "average_complexity_reduction": 0.65,
+        "average_maintainability_improvement": 0.75,
+        "average_effectiveness_score": 0.7
+      },
+      "category_distribution": {
+        "architectural": 2,
+        "performance": 0,
+        "security": 0,
+        "maintainability": 0
+      },
+      "notes": "İlk örüntüler tanımlandı ve kataloglandı. ConfigurationDataclass ve ModelCheckpointManager örüntüleri proje geliştirme ortamı kurulumu sırasında oluşturuldu."
+    }
+  ]
 } 

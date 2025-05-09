@@ -1,7 +1,8 @@
 # M³TM v2.3 Kodlama Standartları
 
-**Versiyon:** 1.0  
-**Oluşturma Tarihi:** 23 Mayıs 2024
+**Versiyon:** 1.1  
+**Oluşturma Tarihi:** 23 Mayıs 2024  
+**Son Güncelleme:** 23 Mayıs 2024
 
 ## 1. Genel Prensipler
 
@@ -20,6 +21,27 @@
 - Tanımlanan kod örüntüleri, `.project_meta/.patterns/pattern_catalog.json` içinde belgelenmelidir.
 - Anti-örüntüler `.project_meta/.patterns/anti_patterns.json` içinde belgelenmeli ve düzeltilmelidir.
 - Yeni örüntüler tespit edildiğinde kataloglanmalı ve mevcut kodla tutarlı kullanılmalıdır.
+- **Uygulama İlkesi:** Katalogdaki örüntüler, ilgili kullanım senaryolarında tutarlı bir şekilde uygulanmalıdır. Aynı problemi çözen birden fazla örüntü varsa, proje içinde tek bir örüntü standardı belirlenmelidir.
+- **Örüntü Referansı:** Karmaşık örüntüleri uygulayan dosyalarda dosya başında örüntü referansı belirtilmelidir.
+
+### 1.4. Onaylanmış Örüntüler
+Aşağıdaki örüntüler, M³TM projesinde standart uygulama olarak kabul edilmiştir:
+
+#### 1.4.1. ConfigurationDataclass (PT-001)
+- **Amaç:** Model parametrelerini yapılandırılabilir ve tip-güvenli bir şekilde yönetmek.
+- **Kullanım:** Tüm yapılandırmalar için Python `dataclass` kullanılmalıdır. Alt yapılandırmalar ayrı sınıflar olarak tanımlanmalı, ana yapılandırma bu sınıfların bir kompozisyonu olmalıdır.
+- **Gereklilikler:**
+  - Varsayılan değerler, her zaman belirtilmelidir.
+  - Yapılandırma tutarlılığını sağlamak için `__post_init__` metodu kullanılmalıdır.
+  - Yaygın kullanım senaryoları için yardımcı factory fonksiyonları sağlanmalıdır (örn: `get_default_config()`).
+
+#### 1.4.2. ModelCheckpointManager (PT-002)
+- **Amaç:** Model durumunu (ağırlıklar, yapılandırma, meta veriler) düzenli bir şekilde kaydetmek ve geri yükleyebilmek.
+- **Kullanım:** Tüm model sınıfları, `BaseModel` sınıfından türetilmeli ve onun `save_pretrained` ve `from_pretrained` metodlarını kullanmalıdır.
+- **Gereklilikler:**
+  - Model ve yapılandırması her zaman birlikte saklanmalıdır.
+  - Sınıf metodları kullanılarak model yükleme sağlanmalıdır.
+  - İleride: Versiyon bilgisi saklanmalıdır.
 
 ## 2. Python ve PyTorch Kodlama Standartları
 

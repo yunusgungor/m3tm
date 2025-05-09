@@ -1,5 +1,47 @@
 {
   "metrics_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "metrics": {}
+  "metrics": {
+    "pattern_adoption": {
+      "description": "Örüntü kullanım yaygınlığı",
+      "data": {
+        "PT-001": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 1.0
+        },
+        "PT-002": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 1.0
+        }
+      }
+    },
+    "pattern_effectiveness": {
+      "description": "Örüntü etkinliği",
+      "data": {
+        "PT-001": {
+          "complexity_reduction": 0.7,
+          "maintainability_improvement": 0.8,
+          "effectiveness_score": 0.75
+        },
+        "PT-002": {
+          "complexity_reduction": 0.6,
+          "maintainability_improvement": 0.7,
+          "effectiveness_score": 0.65
+        }
+      }
+    },
+    "pattern_categories": {
+      "description": "Kategorilere göre örüntü dağılımı",
+      "data": {
+        "architectural": 2,
+        "performance": 0,
+        "security": 0,
+        "maintainability": 0
+      }
+    }
+  }
 } 
