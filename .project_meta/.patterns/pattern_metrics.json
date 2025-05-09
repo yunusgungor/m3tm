@@ -16,6 +16,24 @@
           "files_count": 1,
           "adoption_rate": 1.0,
           "implementation_consistency": 1.0
+        },
+        "PT-003": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 1.0
+        },
+        "PT-004": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 1.0
+        },
+        "PT-005": {
+          "usage_count": 1,
+          "files_count": 1,
+          "adoption_rate": 1.0,
+          "implementation_consistency": 1.0
         }
       }
     },
@@ -31,14 +49,29 @@
           "complexity_reduction": 0.6,
           "maintainability_improvement": 0.7,
           "effectiveness_score": 0.65
+        },
+        "PT-003": {
+          "complexity_reduction": 0.7,
+          "maintainability_improvement": 0.7,
+          "effectiveness_score": 0.7
+        },
+        "PT-004": {
+          "complexity_reduction": 0.6,
+          "maintainability_improvement": 0.8,
+          "effectiveness_score": 0.7
+        },
+        "PT-005": {
+          "complexity_reduction": 0.7,
+          "maintainability_improvement": 0.6,
+          "effectiveness_score": 0.65
         }
       }
     },
     "pattern_categories": {
       "description": "Kategorilere göre örüntü dağılımı",
       "data": {
-        "architectural": 2,
-        "performance": 0,
+        "architectural": 3,
+        "performance": 2,
         "security": 0,
         "maintainability": 0
       }

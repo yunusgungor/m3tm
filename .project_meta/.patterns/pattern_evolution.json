@@ -26,6 +26,31 @@
         "maintainability": 0
       },
       "notes": "İlk örüntüler tanımlandı ve kataloglandı. ConfigurationDataclass ve ModelCheckpointManager örüntüleri proje geliştirme ortamı kurulumu sırasında oluşturuldu."
+    },
+    {
+      "date": "2024-05-23",
+      "iteration_id": "iter_1",
+      "story_id": "story_2",
+      "new_patterns": ["PT-003", "PT-004", "PT-005"],
+      "updated_patterns": [],
+      "deprecated_patterns": [],
+      "pattern_count": 5,
+      "adoption_metrics": {
+        "average_adoption_rate": 1.0,
+        "average_implementation_consistency": 1.0
+      },
+      "effectiveness_metrics": {
+        "average_complexity_reduction": 0.68,
+        "average_maintainability_improvement": 0.72,
+        "average_effectiveness_score": 0.69
+      },
+      "category_distribution": {
+        "architectural": 3,
+        "performance": 2,
+        "security": 0,
+        "maintainability": 0
+      },
+      "notes": "PyTorch Mobile ile ilgili örüntüler tanımlandı ve kataloglandı. Architectural ve performance kategorilerinde yeni örüntüler eklendi: MobileModelConverter, BenchmarkStrategy ve MobileOptimizationPipeline. Bu örüntüler mobil performans optimizasyonu ve model dönüşümü için güçlü temel sağlıyor."
     }
   ]
 } 

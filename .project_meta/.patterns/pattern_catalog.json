@@ -57,6 +57,90 @@
       "known_uses": ["src/m3tm/core/base_model.py"],
       "creation_date": "2024-05-23",
       "last_modified": "2024-05-23"
+    },
+    {
+      "pattern_id": "PT-003",
+      "name": "MobileModelConverter",
+      "category": "architectural",
+      "description": "PyTorch modellerini mobil platformlar için optimize edilmiş TorchScript formatına dönüştüren bir utility sınıfı deseni. Bu desen, model dönüşümü, optimizasyon ve platform-spesifik ayarlamaları kapsar.",
+      "intent": "PyTorch modellerini mobil cihazlarda verimli çalışacak şekilde dönüştürmek ve optimize etmek.",
+      "applicability": "PyTorch modellerinin mobil cihazlarda (Android, iOS) kullanılacağı tüm durumlarda.",
+      "structure": "- Static metodları olan utility sınıfı\n- Farklı dönüşüm ve optimizasyon stratejilerini kapsülleyen yöntemler\n- Platform-spesifik dönüşüm konfigürasyonları\n- Model kaydetme ve doğrulama fonksiyonları",
+      "code_example": "```python\n@staticmethod\ndef to_torchscript(model, example_inputs, save_path=None, method=\"trace\", optimize=True):\n    if method == \"trace\":\n        traced_model = torch.jit.trace(model, example_inputs)\n        script_model = torch.jit.script(traced_model)\n    else:\n        script_model = torch.jit.script(model)\n    \n    if optimize:\n        script_model = torch.jit.optimize_for_mobile(script_model)\n        \n    if save_path:\n        torch.jit.save(script_model, save_path)\n        \n    return script_model\n```",
+      "consequences": {
+        "benefits": [
+          "Platform bağımsız, ortak bir dönüşüm API'si sağlar",
+          "Farklı optimizasyon seçeneklerini tek bir yerde encapsulate eder",
+          "Her dönüşüm adımını izole ederek hata ayıklamayı kolaylaştırır",
+          "Farklı mobil platformlar için tutarlı dönüşüm işlemi sağlar"
+        ],
+        "liabilities": [
+          "Her model mimarisi için karmaşık dönüşüm durumlarını kapsayamayabilir",
+          "Backend değişiklikleri (PyTorch sürümleri) ile uyumluluk sorunları olabilir",
+          "Büyük modellerde dönüşüm süresi uzun olabilir"
+        ]
+      },
+      "implementation_notes": "TorchScript dönüşümünde 'trace' ve 'script' yöntemlerinin avantaj ve dezavantajlarını değerlendirin. Trace yöntemi daha hızlı ve daha az hataya eğilimlidir, ancak dinamik kontrol akışını yakalayamaz. Script yöntemi daha güçlüdür ancak bazen başlatma sırasında hatalar verebilir.",
+      "related_patterns": ["MobileOptimizationPipeline", "BenchmarkStrategy", "ModelCheckpointManager"],
+      "known_uses": ["src/m3tm/mobile/model_converter.py"],
+      "creation_date": "2024-05-23",
+      "last_modified": "2024-05-23"
+    },
+    {
+      "pattern_id": "PT-004",
+      "name": "BenchmarkStrategy",
+      "category": "performance",
+      "description": "Farklı modellerin mobil platformlardaki performansını tutarlı bir şekilde ölçen, karşılaştıran ve raporlayan bir strateji deseni. Bu desen, çıkarım zamanı, bellek kullanımı ve model boyutu gibi metriklerin ölçümünü standartlaştırır.",
+      "intent": "Modellerin mobil performansını ölçmek, karşılaştırmak, analiz etmek ve belgelemek.",
+      "applicability": "Performans kritik uygulamalarda, farklı model optimizasyonlarının etkilerini değerlendirmede, mobil cihaz kısıtlamalarının etkisini ölçmede.",
+      "structure": "- Statik metodları olan utility sınıfı\n- Standartlaştırılmış ölçüm metodolojisi\n- Isınma ve tekrarlı ölçüm mekanizması\n- İstatistiksel analiz ve raporlama fonksiyonları",
+      "code_example": "```python\n@staticmethod\ndef benchmark_inference_time(model, example_inputs, num_runs=100, warmup_runs=10):\n    # Isınma turları\n    for _ in range(warmup_runs):\n        model(example_inputs)\n    \n    # Zamanı ölç\n    latencies = []\n    for _ in range(num_runs):\n        start_time = time.time()\n        model(example_inputs)\n        latencies.append((time.time() - start_time) * 1000)  # ms\n        \n    # İstatistikleri hesapla ve döndür\n    return {\n        \"mean_latency_ms\": np.mean(latencies),\n        \"median_latency_ms\": np.median(latencies),\n        \"p95_latency_ms\": np.percentile(latencies, 95),\n        \"min_latency_ms\": np.min(latencies),\n        \"max_latency_ms\": np.max(latencies),\n        \"std_latency_ms\": np.std(latencies)\n    }\n```",
+      "consequences": {
+        "benefits": [
+          "Farklı optimizasyon stratejilerinin etkilerini ölçmek için tutarlı bir yöntem sağlar",
+          "İstatistiksel anlamlı sonuçlar için tekrarlı ölçümler yapar",
+          "Sonuçları okunabilir raporlara dönüştürür",
+          "Performans darboğazlarını tespit etmeye yardımcı olur"
+        ],
+        "liabilities": [
+          "Gerçek mobil cihazlardaki performansı tam olarak simüle edemeyebilir",
+          "Her platform için farklı ölçüm stratejileri gerekebilir",
+          "Benchmark sonuçları, cihazın o anki durumundan etkilenebilir"
+        ]
+      },
+      "implementation_notes": "Benchmark yaparken sistemi kararlı bir duruma getirmek için ısınma turları kullanın. İstatistiksel güvenilirlik için yeterli sayıda tekrar yapın. Gerçekçi test verileri kullanın ve gerçek cihazlarda doğrulama yapın.",
+      "related_patterns": ["MobileModelConverter", "MobileOptimizationPipeline"],
+      "known_uses": ["src/m3tm/mobile/benchmark.py"],
+      "creation_date": "2024-05-23",
+      "last_modified": "2024-05-23"
+    },
+    {
+      "pattern_id": "PT-005",
+      "name": "MobileOptimizationPipeline",
+      "category": "performance",
+      "description": "Mobil modellerini optimize etmek için farklı teknikleri (quantization, pruning, vb.) bir pipeline şeklinde uygulayan bir desendir. Her optimizasyon adımı modüler bir şekilde uygulanır ve birleştirilebilir.",
+      "intent": "Mobil cihazlarda model boyutunu, bellek kullanımını ve çıkarım süresini optimize etmek için farklı teknikleri bir arada kullanmak.",
+      "applicability": "Boyut, hız ve enerji tüketimi kısıtlamalarına sahip mobil cihazlarda kullanılacak karmaşık modellerde.",
+      "structure": "- Statik metodları olan utility sınıfı\n- Farklı optimizasyon teknikleri için modüler metodlar\n- Birden fazla optimizasyon tekniğini zincirleme birleştiren bir pipeline\n- Optimizasyon etkinliğini değerlendiren metrikler",
+      "code_example": "```python\n@staticmethod\ndef compress_model(model, example_inputs, methods=[\"quantize\", \"optimize\"]):\n    optimized_model = model\n    \n    if \"quantize\" in methods:\n        optimized_model = apply_dynamic_quantization(optimized_model)\n        \n    if \"prune\" in methods:\n        optimized_model = apply_pruning(optimized_model, amount=0.2)\n        \n    if \"optimize\" in methods:\n        scripted_model = torch.jit.trace(optimized_model, example_inputs)\n        optimized_model = torch.jit.optimize_for_mobile(scripted_model)\n        \n    return optimized_model\n```",
+      "consequences": {
+        "benefits": [
+          "Farklı optimizasyon tekniklerini birleştirme esnekliği sağlar",
+          "Her tekniğin etkisini izole bir şekilde ölçmeyi mümkün kılar",
+          "Yeni optimizasyon yöntemlerinin eklenmesine olanak tanır",
+          "Model performansını ve boyutunu önemli ölçüde iyileştirebilir"
+        ],
+        "liabilities": [
+          "Optimizasyon adımlarının sırası sonuçları etkileyebilir",
+          "Tüm kombinasyonlar her model mimarisi için uygun olmayabilir",
+          "Aşırı optimizasyon model doğruluğunu düşürebilir"
+        ]
+      },
+      "implementation_notes": "En iyi sonuçlar için farklı optimizasyon kombinasyonlarını deneyerek karşılaştırın. Agresif optimizasyonların model doğruluğu üzerindeki etkisini ölçün. Quantization ve pruning stratejilerinin avantaj ve dezavantajlarını değerlendirin.",
+      "related_patterns": ["MobileModelConverter", "BenchmarkStrategy"],
+      "known_uses": ["src/m3tm/mobile/optimization.py"],
+      "creation_date": "2024-05-23",
+      "last_modified": "2024-05-23"
     }
   ]
 } 
