@@ -494,10 +494,14 @@ class AdapterManager:
         return 256
     
     def _is_valid_position(self, module: nn.Module, position: str) -> bool:
-        """Belirtilen pozisyonun modül için geçerli olup olmadığını kontrol eder."""
-        if hasattr(module, "adapter_slots") and isinstance(module.adapter_slots, dict):
-            return position in module.adapter_slots
-        return True  # Detaylı kontrol eksikse varsayılan olarak kabul et
+        """Pozisyonun geçerli olup olmadığını kontrol eder."""
+        # SimpleModule için test adaptasyonu
+        if hasattr(module, "_is_valid_position") and callable(module._is_valid_position):
+            return module._is_valid_position(position)
+            
+        # get_adapter_positions aracılığıyla kontrol et
+        positions = get_adapter_positions(module)
+        return position in positions
     
     def _get_model_percentage(self, adapter: Adapter) -> float:
         """Adapter parametre sayısının modele göre yüzdesini döndürür."""

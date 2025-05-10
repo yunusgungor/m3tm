@@ -84,6 +84,9 @@ class AttentionConfig(ConfigBase):
     use_rotary_embeddings: bool = False  # Rotary pozisyon gömme kullanımı
     max_position_embeddings: int = 512  # Maksimum pozisyon gömme sayısı
     use_bias: bool = True  # Projeksiyon katmanında bias kullanımı
+    # Test uyumluluğu için eklenen alanlar
+    mechanism_name: str = "StandardSelfAttention"  # Dikkat mekanizması adı
+    mechanism_params: Dict[str, Any] = field(default_factory=dict)  # Mekanizma parametreleri
     
     def validate(self) -> bool:
         """Dikkat yapılandırma parametrelerini doğrular."""
@@ -101,6 +104,11 @@ class AttentionConfig(ConfigBase):
             self.validation_errors.append(f"attention_type must be one of {valid_attention_types}, got {self.attention_type}")
             is_valid = False
             
+        # Mekanizma ismi kontrolü
+        if not self.mechanism_name:
+            self.validation_errors.append("mechanism_name cannot be empty")
+            is_valid = False
+            
         return is_valid
 
 
@@ -115,6 +123,11 @@ class FeedForwardConfig(ConfigBase):
     dropout: float = 0.1  # FFN dropout oranı
     use_bias: bool = True  # Katmanlarda bias kullanımı
     gated: bool = False  # Gated FFN kullanımı
+    # Test uyumluluğu için eklenen alanlar
+    mechanism_name: str = "StandardFFN"  # FFN mekanizması adı
+    expansion_factor: float = 4.0  # Genişleme faktörü
+    mechanism_params: Dict[str, Any] = field(default_factory=dict)  # Mekanizma parametreleri
+    hidden_act: str = "gelu"  # Aktivasyon fonksiyonu - test uyumluluğu için
     
     def validate(self) -> bool:
         """Feed-forward yapılandırma parametrelerini doğrular."""
@@ -128,6 +141,16 @@ class FeedForwardConfig(ConfigBase):
         valid_activations = ["relu", "gelu", "swish", "silu", "hardswish", "leaky_relu"]
         if self.activation not in valid_activations:
             self.validation_errors.append(f"activation must be one of {valid_activations}, got {self.activation}")
+            is_valid = False
+            
+        # Mekanizma ismi kontrolü
+        if not self.mechanism_name:
+            self.validation_errors.append("mechanism_name cannot be empty")
+            is_valid = False
+            
+        # Genişleme faktörü kontrolü
+        if self.expansion_factor <= 0:
+            self.validation_errors.append(f"expansion_factor must be positive, got {self.expansion_factor}")
             is_valid = False
             
         return is_valid
@@ -150,6 +173,8 @@ class ProtoTransformerConfig(ConfigBase):
     use_flash_attention: bool = False  # Flash Attention kullanımı
     fuse_operations: bool = False  # Operasyonları birleştirme
     layer_norm_eps: float = 1e-12  # LayerNorm epsilon değeri (geriye uyumluluk için)
+    # Test uyumluluğu için eklenen alanlar
+    intermediate_size: Optional[int] = None  # Ara boyut (None ise ffn_config.intermediate_dim kullanılır)
     
     # Alt yapılandırmalar
     attention_config: AttentionConfig = field(default_factory=AttentionConfig)
@@ -167,8 +192,11 @@ class ProtoTransformerConfig(ConfigBase):
             
         if self.attention_config.head_dim is None:
             self.attention_config.head_dim = self.hidden_size // self.attention_config.num_heads
-            
-        if self.ffn_config.intermediate_dim is None:
+        
+        # Ara boyutu ayarla
+        if self.intermediate_size is not None:
+            self.ffn_config.intermediate_dim = self.intermediate_size
+        elif self.ffn_config.intermediate_dim is None:
             self.ffn_config.intermediate_dim = self.hidden_size * 4
             
         # Geriye uyumluluk için layer_norm_epsilon'u layer_norm_eps'e eşitle
