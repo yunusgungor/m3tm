@@ -73,6 +73,7 @@ CodeFlow offers a comprehensive workflow engine that automates project developme
 * **Iterative and cyclical development process automation**
 * **Phased integration and test automation**
 * **Seamless feedback and continuous improvement**
+* **Dynamic, real-time documentation system**
 
 ```xml
 <!-- Example Workflow Configuration (excerpt from codeflow.xml) -->
@@ -209,6 +210,21 @@ CodeFlow is not installed as a software package. The XML files (codeflow.xml and
 
 # To request error analysis
 "[codeflow.xml content] Analyze potential errors in this project."
+
+# To check documentation status
+"[codeflow.xml content] Evaluate the documentation quality and currency of the project."
+
+# To check the completion status of a story
+"[codeflow.xml content] Check the status and dependencies of story 'story_123'."
+
+# To summarize project progress
+"[codeflow.xml content] Present a summary report of the current iteration's progress."
+
+# To plan next steps
+"[codeflow.xml content] Plan and prioritize the next step."
+
+# To support agile process planning meetings
+"[codeflow.xml content] Prioritize story suggestions for the next sprint and analyze their dependencies."
 ```
 
 ### Advanced Usage
@@ -228,6 +244,33 @@ CodeFlow is not installed as a software package. The XML files (codeflow.xml and
 
 # Pattern suggestion
 "[codeflow.xml content] [code content] Suggest appropriate design patterns for this code and explain their applicability."
+
+# Documentation creation and update
+"[codeflow.xml content] [code content] Create automatic API documentation for this code and update existing documentation."
+
+# Complex architectural transformation planning
+"[codeflow.xml content] [code content] [target architecture] Create a phased plan to transform this codebase to the target architecture."
+
+# Technical debt analysis and refactoring plan
+"[codeflow.xml content] [code content] Analyze technical debt in this codebase and provide prioritized refactoring suggestions."
+
+# Security analysis and improvement
+"[codeflow.xml content] [code content] Analyze security vulnerabilities in this codebase and provide improvement suggestions."
+
+# Performance optimization
+"[codeflow.xml content] [code content] [performance requirements] Provide suggestions to optimize this codebase to meet the specified performance requirements."
+
+# Unit tests and test coverage analysis
+"[codeflow.xml content] [code content] Analyze unit test coverage for this codebase and provide test suggestions for missing areas."
+
+# Anti-pattern detection and correction
+"[codeflow.xml content] [code content] Detect anti-patterns in this codebase and provide correction suggestions."
+
+# Dependency optimization
+"[codeflow.xml content] [code content] Analyze dependencies in this codebase and provide optimization suggestions."
+
+# Code consistency and standards validation
+"[codeflow.xml content] [code content] [coding standards] Validate this codebase against the specified coding standards and provide improvement suggestions."
 ```
 
 ## Metrics and Analytics
@@ -254,6 +297,28 @@ These metrics enable the LLM to perform comprehensive analysis of your project's
 "[codeflow.xml content] [code content] Analyze the integration metrics in this project."
 "[codeflow.xml content] [code content] Analyze the roadmap metrics in this project."
 "[codeflow.xml content] [code content] Analyze the error metrics in this project."
+"[codeflow.xml content] [code content] Analyze the documentation metrics in this project."
+
+# Analyze metric trends
+"[codeflow.xml content] [code content] [previous metrics] Analyze metric trends for the last two iterations in this project and identify areas for improvement."
+
+# Metric analysis for specific quality attribute
+"[codeflow.xml content] [code content] Analyze maintainability metrics of this project and provide improvement suggestions."
+"[codeflow.xml content] [code content] Analyze security metrics of this project and provide improvement suggestions."
+"[codeflow.xml content] [code content] Analyze performance metrics of this project and provide optimization suggestions."
+"[codeflow.xml content] [code content] Analyze scalability metrics of this project and identify bottlenecks."
+
+# Component-level metric analysis
+"[codeflow.xml content] [code content] Analyze all metrics for the 'authentication' component and provide improvement suggestions."
+
+# Team performance metrics
+"[codeflow.xml content] [story completion data] Analyze team velocity, prediction accuracy, and delivery quality metrics."
+
+# Documentation quality metrics
+"[codeflow.xml content] [documentation content] Calculate documentation quality score, coverage ratio, and freshness index metrics."
+
+# Integration stability metrics
+"[codeflow.xml content] [integration test results] Analyze integration stability index, test failure rate, and integration coverage metrics."
 ```
 
 ## Visualization Tools
@@ -279,6 +344,37 @@ CodeFlow enables the LLM to explain your project's status with various visualiza
 "[codeflow.xml content] [code content] Explain the inter-component dependencies in this project."
 "[codeflow.xml content] [code content] Analyze the roadmap of this project."
 "[codeflow.xml content] [code content] Analyze the error trends in this project."
+"[codeflow.xml content] [code content] Visualize the documentation quality distribution in this project."
+
+# Complex architecture visualizations
+"[codeflow.xml content] [code content] Explain the component interaction diagram of this project."
+"[codeflow.xml content] [code content] Explain the data flow diagram of this project."
+"[codeflow.xml content] [code content] Explain the deployment architecture diagram of this project."
+
+# Pattern relationship visualizations
+"[codeflow.xml content] [code content] Explain the relationships between patterns in this project as a network diagram."
+"[codeflow.xml content] [code content] Group and explain the most frequently co-occurring patterns in this project."
+
+# Technical debt visualizations
+"[codeflow.xml content] [code content] Explain the technical debt distribution in this project as a heat map."
+"[codeflow.xml content] [code content] Provide a trend analysis showing technical debt accumulation over time in this project."
+
+# Performance visualizations
+"[codeflow.xml content] [code content] [performance test results] Explain an analysis showing performance bottlenecks in this project."
+
+# Risk visualizations
+"[codeflow.xml content] [code content] Position risk factors in this project on an impact and probability matrix."
+
+# Progress visualizations
+"[codeflow.xml content] [story statuses] Present the completion status of this project as a burndown chart explanation."
+"[codeflow.xml content] [story statuses] Provide an analysis showing velocity metrics over time for this project."
+
+# Documentation coverage visualizations
+"[codeflow.xml content] [code content] [documentation content] Explain the heat map showing documentation coverage of the codebase."
+"[codeflow.xml content] [documentation content] Explain the relationships between documentation sections as a network diagram."
+
+# User journey visualizations
+"[codeflow.xml content] [API usage data] Visualize API usage flow and common user journeys."
 ```
 
 ## Frequently Asked Questions
@@ -304,6 +400,136 @@ A: You can add custom pattern definitions and metrics in the codeflow.xml and pr
 
 **Q: How is CodeFlow integrated with LLM APIs?**
 A: You can integrate CodeFlow XML files into the system prompt section of your API calls. You can achieve integration using LLM services such as OpenAI API, Anthropic API, or Hugging Face API.
+
+## Documentation
+
+### 📚 Dynamic Documentation System
+
+CodeFlow offers a real-time, continuously evolving documentation system:
+
+* **Real-time monitoring and documentation of code changes**
+* **Automatic API documentation generation and updates**
+* **Code-documentation synchronization and consistency checking**
+* **Intelligent cross-referencing and semantic connections**
+* **Documentation quality and currency metrics**
+* **Interactive API exploration tools and executable examples**
+
+```xml
+<!-- Example Documentation Analysis Mechanism (from prompt.xml) -->
+<documentation_analysis_mechanism>
+  <process>Monitor code changes in real-time to identify affected documentation sections using semantic analysis.</process>
+  <process>Generate and update documentation automatically based on code structure, comments, and semantic understanding.</process>
+  <process>Create intelligent cross-references between code, documentation, and other artifacts using semantic analysis.</process>
+  <process>Validate documentation for accuracy, completeness, consistency, and adherence to templates.</process>
+  <!-- ... other processes ... -->
+  <feedback_loop>Continuously update documentation quality metrics and usage analytics to drive improvement.</feedback_loop>
+</documentation_analysis_mechanism>
+```
+
+### Documentation Architecture
+
+CodeFlow's documentation system provides an organized structure under the `.project_meta/.docs/` directory:
+
+* **Home Page:** index.md - Documentation portal and main entry point
+* **API Documentation:** api/ directory - Automatically generated API references, endpoints, models
+* **Architecture Documentation:** architecture/ directory - System architecture, components, data flow
+* **User Guides:** guides/ directory - End-user, developer, and deployment guides
+* **Tutorials:** tutorials/ directory - Step-by-step tutorials and executable examples
+* **Maintenance Documents:** maintenance/ directory - Troubleshooting, monitoring, performance tuning guides
+* **Metrics:** metrics/ directory - Documentation quality metrics, coverage reports, usage analytics
+* **Versions:** versions/ directory - Documentation version history and change logs
+* **Interactive Content:** interactive/ directory - Interactive diagrams, API explorer, example code runner
+* **Validation:** validation/ directory - Documentation validation reports, consistency checks
+* **Search:** search/ directory - Documentation search index and semantic search data
+* **Templates:** templates/ directory - Standardized documentation templates
+
+### Advanced Documentation Tools
+
+CodeFlow offers advanced tools for comprehensive documentation creation and management:
+
+* **doc_generator:** Creates automatic documentation by analyzing code changes
+* **doc_watcher:** Evaluates documentation currency by monitoring real-time code changes
+* **doc_validator:** Assesses documentation accuracy, consistency, and completeness
+* **doc_reference_analyzer:** Automatically detects related content and creates connections with semantic understanding
+* **doc_analytics:** Tracks documentation usage and offers improvement suggestions
+
+### Documentation Metrics
+
+Comprehensive metrics to measure and continuously improve documentation quality:
+
+* **Documentation Quality Score:** Measurement of documentation accuracy, completeness, and clarity
+* **Documentation Coverage Ratio:** Percentage of code/features/APIs covered by appropriate documentation
+* **Documentation Freshness Index:** Measure of documentation currency relative to code changes
+* **Cross-reference Integrity:** Percentage of documentation references that are valid and up-to-date
+* **Documentation Usage Ratio:** Distribution of access/usage across documentation sections
+* **Documentation Search Effectiveness:** Success rate of documentation searches returning relevant results
+
+```xml
+<!-- Example Documentation Metrics (from prompt.xml) -->
+<documentation_metrics>
+  <metric name="documentation_quality_score" 
+         description="Composite score measuring documentation accuracy, completeness, and clarity." 
+         target=">85%"/>
+  <metric name="documentation_freshness_index" 
+         description="Measure of documentation currency relative to code changes." 
+         target=">80%"/>
+  <!-- ... other metrics ... -->
+</documentation_metrics>
+```
+
+### Interactive Documentation
+
+CodeFlow's dynamic documentation system offers more than standard documents:
+
+* **Interactive API Explorer:** Test and explore APIs interactively
+* **Executable Code Examples:** Code examples that can be run directly within documentation
+* **Interactive Diagrams:** Architectural diagrams with clickable components and detail expansions
+* **Version Comparison:** Visual difference viewing between documentation versions
+* **Context-Sensitive Search:** Search results customized by role and usage scenarios
+
+### Documentation Continuous Improvement
+
+CodeFlow's documentation system is continuously improved:
+
+* **Quality Metrics Monitoring:** Goal to improve documentation quality score by 5% per iteration
+* **Template and Standard Development:** Based on quality assessments and user feedback
+* **Usage Analysis:** Identifying high-value sections and underutilized documentation
+* **Historical Quality Metrics:** Tracking improvement trends over time
+* **Search and Cross-Referencing:** Improvements based on search analytics and user feedback
+
+### Documentation System Usage
+
+```
+# Documentation quality analysis
+"[codeflow.xml content] [code content] [existing documentation] Analyze documentation quality in this project and identify deficiencies."
+
+# API documentation generation
+"[codeflow.xml content] [code content] Create automatic API documentation for this module."
+
+# Documentation cross-reference analysis
+"[codeflow.xml content] [code content] [existing documentation] Analyze cross-references between code and documentation and identify missing links."
+
+# Documentation currency assessment
+"[codeflow.xml content] [code changes] [existing documentation] Evaluate the currency of documentation based on recent code changes and identify sections that need updates."
+
+# User guide creation
+"[codeflow.xml content] [code content] Create an end-user guide for this module."
+
+# Training material creation
+"[codeflow.xml content] [code content] Create step-by-step training material and code examples for this API."
+
+# Interactive API explorer content creation
+"[codeflow.xml content] [API definitions] Create interactive explorer content for these APIs."
+
+# Architecture documentation creation
+"[codeflow.xml content] [code content] Create comprehensive architecture documentation for this system, including components, connections, and data flow diagrams."
+
+# Documentation template creation
+"[codeflow.xml content] [example documentation] Create documentation templates consistent with this project's style."
+
+# Documentation search index creation
+"[codeflow.xml content] [existing documentation] Create a search index and keyword analysis for this documentation."
+```
 
 ## Contributing
 

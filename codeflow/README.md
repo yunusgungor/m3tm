@@ -73,6 +73,7 @@ CodeFlow, doğrulanmış bir ürün gereksinimleri dokümanı (PRD) temelinde pr
 * **İteratif ve döngüsel geliştirme süreç otomasyonu**
 * **Aşamalı entegrasyon ve test otomasyonu**
 * **Kesintisiz geri bildirim ve sürekli iyileştirme**
+* **Dinamik, gerçek zamanlı dökümantasyon sistemi**
 
 ```xml
 <!-- Örnek İş Akışı Yapılandırması (codeflow.xml'den özet) -->
@@ -198,7 +199,7 @@ CodeFlow, bir yazılım paketi olarak kurulmaz. XML dosyaları (codeflow.xml ve 
 ### Temel Kullanım
 
 ```
-# LLM'e temel iş akış talimatını gönderin
+# LLM'e temel iş akışı talimatını gönderin
 "[codeflow.xml içeriği] Lütfen bu iş akışını başlat ve PRD'yi analiz et."
 
 # Belirli bir adıma odaklanmak için
@@ -209,6 +210,21 @@ CodeFlow, bir yazılım paketi olarak kurulmaz. XML dosyaları (codeflow.xml ve 
 
 # Hata analizi istemek için
 "[codeflow.xml içeriği] Bu projede potansiyel hataları analiz et."
+
+# Dökümantasyon durumunu kontrol etmek için
+"[codeflow.xml içeriği] Projenin dökümantasyon kalitesini ve güncelliğini değerlendir."
+
+# Bir hikayenin tamamlanma durumunu kontrol etmek için
+"[codeflow.xml içeriği] 'story_123' kodlu hikayenin durumunu ve bağımlılıklarını kontrol et."
+
+# Proje ilerlemesini özetlemek için
+"[codeflow.xml içeriği] Mevcut iterasyonun ilerlemesini özet rapor olarak sun."
+
+# Sonraki adımları planlamak için
+"[codeflow.xml içeriği] Bir sonraki adımı planla ve önceliklendir."
+
+# Çevik süreç için planlama toplantısı desteği
+"[codeflow.xml içeriği] Bir sonraki sprint için hikaye önerilerini önceliklendir ve bağımlılıklarını analiz et."
 ```
 
 ### Gelişmiş Kullanım
@@ -228,6 +244,33 @@ CodeFlow, bir yazılım paketi olarak kurulmaz. XML dosyaları (codeflow.xml ve 
 
 # Desen önerisi
 "[codeflow.xml içeriği] [kod içeriği] Bu kod için uygun tasarım desenleri öner ve uygulanabilirliğini açıkla."
+
+# Dökümantasyon oluşturma ve güncelleme
+"[codeflow.xml içeriği] [kod içeriği] Bu kod için otomatik API dökümantasyonu oluştur ve mevcut dökümantasyonu güncelle."
+
+# Karmaşık mimari dönüşüm planlama
+"[codeflow.xml içeriği] [kod içeriği] [hedef mimari] Bu kod tabanını hedef mimariye dönüştürmek için aşamalı bir plan oluştur."
+
+# Teknik borç analizi ve refaktörleme planı
+"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki teknik borcu analiz et ve önceliklendirilmiş refaktörleme önerileri sun."
+
+# Güvenlik analizi ve iyileştirme
+"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki güvenlik açıklarını analiz et ve iyileştirme önerileri sun."
+
+# Performans optimizasyonu
+"[codeflow.xml içeriği] [kod içeriği] [performans gereksinimleri] Bu kod tabanını belirtilen performans gereksinimlerini karşılayacak şekilde optimize etmek için öneriler sun."
+
+# Birim testleri ve test kapsamı analizi
+"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanı için birim test kapsamını analiz et ve eksik alanlar için test önerileri sun."
+
+# Anti-desen tespiti ve düzeltme
+"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki anti-desenleri tespit et ve düzeltme önerileri sun."
+
+# Bağımlılık optimizasyonu
+"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki bağımlılıkları analiz et ve optimizasyon önerileri sun."
+
+# Kod tutarlılığı ve standartlar doğrulama
+"[codeflow.xml içeriği] [kod içeriği] [kodlama standartları] Bu kod tabanını belirtilen kodlama standartlarına göre doğrula ve iyileştirme önerileri sun."
 ```
 
 ## Metrikler ve Analitik
@@ -254,6 +297,28 @@ Bu metrikler, LLM'in projenizin sağlığı ve gelişimi hakkında kapsamlı ana
 "[codeflow.xml içeriği] [kod içeriği] Bu projedeki entegrasyon metriklerini analiz et."
 "[codeflow.xml içeriği] [kod içeriği] Bu projedeki yol haritası metriklerini analiz et."
 "[codeflow.xml içeriği] [kod içeriği] Bu projedeki hata metriklerini analiz et."
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki dökümantasyon metriklerini analiz et."
+
+# Metrik trendlerini analiz etme
+"[codeflow.xml içeriği] [kod içeriği] [önceki metrikler] Bu projedeki metrik trendlerini son iki iterasyon için analiz et ve gelişim alanlarını belirle."
+
+# Belirli bir kalite özelliği için metrik analizi
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin bakım yapılabilirlik metriklerini analiz et ve iyileştirme önerileri sun."
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin güvenlik metriklerini analiz et ve iyileştirme önerileri sun."
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin performans metriklerini analiz et ve optimizasyon önerileri sun."
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin ölçeklenebilirlik metriklerini analiz et ve darboğazları belirle."
+
+# Bileşen seviyesinde metrik analizi
+"[codeflow.xml içeriği] [kod içeriği] 'authentication' bileşeninin tüm metriklerini analiz et ve iyileştirme önerileri sun."
+
+# Ekip performans metrikleri
+"[codeflow.xml içeriği] [hikaye tamamlanma verileri] Ekip hızı, tahmin doğruluğu ve teslim kalitesi metriklerini analiz et."
+
+# Dökümantasyon kalite metrikleri
+"[codeflow.xml içeriği] [dökümantasyon içeriği] Dökümantasyon kalite puanı, kapsam oranı ve güncellik indeksi metriklerini hesapla."
+
+# Entegrasyon kararlılık metrikleri
+"[codeflow.xml içeriği] [entegrasyon test sonuçları] Entegrasyon kararlılık endeksi, başarısız test oranı ve entegrasyon kapsam metriklerini analiz et."
 ```
 
 ## Görselleştirme Araçları
@@ -279,6 +344,37 @@ CodeFlow, LLM'in projenizin durumunu çeşitli görselleştirmelerle açıklamas
 "[codeflow.xml içeriği] [kod içeriği] Bu projedeki bileşenler arası bağımlılıkları açıkla."
 "[codeflow.xml içeriği] [kod içeriği] Bu projedeki yol haritasını analiz et."
 "[codeflow.xml içeriği] [kod içeriği] Bu projedeki hata trendlerini analiz et."
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki dökümantasyon kalite dağılımını görselleştir."
+
+# Karmaşık mimari görselleştirmeler
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin bileşen etkileşim diyagramını açıkla."
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin veri akış diyagramını açıkla."
+"[codeflow.xml içeriği] [kod içeriği] Bu projenin dağıtım mimarisi diyagramını açıkla."
+
+# Desen ilişki görselleştirmeleri
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki desenlerin birbiriyle ilişkilerini ağ diyagramı şeklinde açıkla."
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki desenlerden en sık birlikte kullanılanları gruplayarak açıkla."
+
+# Teknik borç görselleştirmeleri
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki teknik borç dağılımını ısı haritası şeklinde açıkla."
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki teknik borç birikimini zaman içinde gösteren bir trend analizi sağla."
+
+# Performans görselleştirmeleri
+"[codeflow.xml içeriği] [kod içeriği] [performans test sonuçları] Bu projenin performans darboğazlarını gösteren bir analiz açıkla."
+
+# Risk görselleştirmeleri
+"[codeflow.xml içeriği] [kod içeriği] Bu projedeki risk faktörlerini etki ve olasılık matrisinde konumlandır."
+
+# İlerleme görselleştirmeleri
+"[codeflow.xml içeriği] [hikaye durumları] Bu projenin tamamlanma durumunu burndown grafik açıklaması şeklinde sun."
+"[codeflow.xml içeriği] [hikaye durumları] Bu projenin hız metriklerini zaman içinde gösteren bir analiz sağla."
+
+# Dökümantasyon kapsam görselleştirmeleri
+"[codeflow.xml içeriği] [kod içeriği] [dökümantasyon içeriği] Kod tabanının dökümantasyon kapsamını gösteren ısı haritasını açıkla."
+"[codeflow.xml içeriği] [dökümantasyon içeriği] Dökümantasyon bölümleri arasındaki ilişkileri ağ diyagramı olarak açıkla."
+
+# Kullanıcı yolculuğu görselleştirmeleri
+"[codeflow.xml içeriği] [API kullanım verisi] API kullanım akışını ve yaygın kullanıcı yolculuklarını görselleştir."
 ```
 
 ## Sık Sorulan Sorular
@@ -341,3 +437,132 @@ Proje Linki: [https://github.com/kullanici/codeflow](https://github.com/kullanic
   <a href="#katkıda-bulunma">Katkıda Bulunma</a> •
   <a href="#lisans">Lisans</a>
 </p>
+
+## Dökümantasyon
+
+### 📚 Dinamik Dökümantasyon Sistemi
+
+CodeFlow, gerçek zamanlı ve sürekli gelişen bir dökümantasyon sistemi sunar:
+
+* **Kod değişikliklerini gerçek zamanlı izleme ve belgelendirme**
+* **Otomatik API dökümantasyonu oluşturma ve güncelleme**
+* **Kod-dökümantasyon senkronizasyonu ve tutarlılık kontrolü**
+* **Akıllı çapraz referanslama ve semantik bağlantılar**
+* **Dökümantasyon kalitesi ve güncelliği metrikleri**
+* **İnteraktif API keşif araçları ve çalıştırılabilir örnekler**
+
+```xml
+<!-- Örnek Dökümantasyon Analiz Mekanizması (prompt.xml'den) -->
+<documentation_analysis_mechanism>
+  <process>Monitor code changes in real-time to identify affected documentation sections using semantic analysis.</process>
+  <process>Generate and update documentation automatically based on code structure, comments, and semantic understanding.</process>
+  <process>Create intelligent cross-references between code, documentation, and other artifacts using semantic analysis.</process>
+  <process>Validate documentation for accuracy, completeness, consistency, and adherence to templates.</process>
+  <!-- ... diğer süreçler ... -->
+  <feedback_loop>Continuously update documentation quality metrics and usage analytics to drive improvement.</feedback_loop>
+</documentation_analysis_mechanism>
+```
+
+### Dökümantasyon Mimarisi
+
+CodeFlow'un dökümantasyon sistemi, `.project_meta/.docs/` dizini altında organizeli bir yapı sunar:
+
+* **Ana Sayfa:** index.md - Dökümantasyon portali ve ana giriş noktası
+* **API Dökümantasyonu:** api/ dizini - Otomatik oluşturulan API referansları, uç noktalar, modeller
+* **Mimari Dökümantasyonu:** architecture/ dizini - Sistem mimarisi, bileşenler, veri akışı
+* **Kullanım Kılavuzları:** guides/ dizini - Son kullanıcı, geliştirici ve dağıtım kılavuzları
+* **Eğitimler:** tutorials/ dizini - Adım adım öğreticiler ve çalıştırılabilir örnekler
+* **Bakım Belgeleri:** maintenance/ dizini - Sorun giderme, izleme, performans ayarlama kılavuzları
+* **Metrikler:** metrics/ dizini - Dökümantasyon kalite metrikleri, kapsam raporları, kullanım analitiği
+* **Sürümler:** versions/ dizini - Dökümantasyon sürüm geçmişi ve değişiklik günlükleri
+* **İnteraktif İçerik:** interactive/ dizini - İnteraktif diyagramlar, API explorer, örnek kod çalıştırıcı
+* **Doğrulama:** validation/ dizini - Dökümantasyon doğrulama raporları, tutarlılık kontrolü
+* **Arama:** search/ dizini - Dökümantasyon arama indeksi ve anlamsal arama verisi
+* **Şablonlar:** templates/ dizini - Standardize edilmiş dökümantasyon şablonları
+
+### Gelişmiş Dökümantasyon Araçları
+
+CodeFlow, kapsamlı dökümantasyon oluşturma ve yönetimi için gelişmiş araçlar sunar:
+
+* **doc_generator:** Kod değişikliklerini analiz ederek otomatik dökümantasyon oluşturur
+* **doc_watcher:** Gerçek zamanlı kod değişikliklerini izleyerek dökümantasyonun güncelliğini değerlendirir
+* **doc_validator:** Dökümantasyonun doğruluğunu, tutarlılığını ve eksiksizliğini değerlendirir
+* **doc_reference_analyzer:** Semantik anlama ile ilgili içeriği otomatik tespit eder ve bağlantılar oluşturur
+* **doc_analytics:** Dökümantasyon kullanımını izler ve iyileştirme önerileri sunar
+
+### Dökümantasyon Metrikleri
+
+Dökümantasyon kalitesini ölçmek ve sürekli iyileştirmek için kapsamlı metrikler:
+
+* **Dökümantasyon Kalite Puanı:** Dökümantasyonun doğruluk, eksiksizlik ve netlik ölçümü
+* **Dökümantasyon Kapsam Oranı:** Kod/özellik/API'lerin uygun dökümantasyonla kapsanma yüzdesi
+* **Dökümantasyon Güncellik İndeksi:** Dökümantasyonun kod değişikliklerine göre güncellik ölçüsü
+* **Çapraz Referans Bütünlüğü:** Dökümantasyon referanslarının geçerlilik ve güncellik yüzdesi
+* **Dökümantasyon Kullanım Oranı:** Dökümantasyon bölümleri arasındaki erişim/kullanım dağılımı
+* **Dökümantasyon Arama Etkinliği:** İlgili sonuçları döndüren dökümantasyon aramalarının başarı oranı
+
+```xml
+<!-- Örnek Dökümantasyon Metrikleri (prompt.xml'den) -->
+<documentation_metrics>
+  <metric name="documentation_quality_score" 
+         description="Dökümantasyon doğruluğu, eksiksizliği ve netliğini ölçen bileşik puan." 
+         target=">85%"/>
+  <metric name="documentation_freshness_index" 
+         description="Dökümantasyonun kod değişikliklerine göre güncellik ölçüsü." 
+         target=">80%"/>
+  <!-- ... diğer metrikler ... -->
+</documentation_metrics>
+```
+
+### İnteraktif Dökümantasyon
+
+CodeFlow'un dinamik dökümantasyon sistemi, standart belgelerden daha fazlasını sunar:
+
+* **İnteraktif API Keşif Aracı:** API'leri etkileşimli olarak test etme ve keşfetme
+* **Çalıştırılabilir Kod Örnekleri:** Doğrudan dökümantasyon içinde çalıştırılabilen kod örnekleri
+* **İnteraktif Diyagramlar:** Tıklanabilir bileşenler ve detay açılımları olan mimari diyagramlar
+* **Sürüm Karşılaştırma:** Dökümantasyon sürümleri arasında görsel farklılık görüntüleme
+* **Kontekst Duyarlı Arama:** Rol ve kullanım senaryolarına göre özelleştirilmiş arama sonuçları
+
+### Dökümantasyon Sürekli İyileştirme
+
+CodeFlow'un dökümantasyon sistemi sürekli olarak iyileştirilir:
+
+* **Kalite Metrikleri İzleme:** Her iterasyonda dökümantasyon kalite puanını %5 artırma hedefi
+* **Şablon ve Standart Geliştirme:** Kalite değerlendirmeleri ve kullanıcı geri bildirimleri temelli
+* **Kullanım Analizi:** Yüksek değerli bölümleri ve az kullanılan dökümantasyonu tespit etme
+* **Tarihsel Kalite Metrikleri:** Zaman içinde iyileştirme trendlerini izleme
+* **Arama ve Çapraz Referanslama:** Arama analitiği ve kullanıcı geri bildirimi temelli geliştirme
+
+### Dökümantasyon Sistemi Kullanımı
+
+```
+# Dökümantasyon kalite analizi
+"[codeflow.xml içeriği] [kod içeriği] [mevcut dökümantasyon] Bu projede dökümantasyon kalitesini analiz et ve eksiklikleri tespit et."
+
+# API dökümantasyonu oluşturma
+"[codeflow.xml içeriği] [kod içeriği] Bu modül için otomatik API dökümantasyonu oluştur."
+
+# Dökümantasyon çapraz referans analizi
+"[codeflow.xml içeriği] [kod içeriği] [mevcut dökümantasyon] Kod ve dökümantasyon arasındaki çapraz referansları analiz et ve eksik bağlantıları tespit et."
+
+# Dökümantasyon güncellik değerlendirmesi
+"[codeflow.xml içeriği] [kod değişiklikleri] [mevcut dökümantasyon] Son kod değişikliklerine göre dökümantasyonun güncelliğini değerlendir ve güncellenmesi gereken bölümleri belirle."
+
+# Kullanım kılavuzları oluşturma
+"[codeflow.xml içeriği] [kod içeriği] Bu modül için son kullanıcı kılavuzu oluştur."
+
+# Eğitim materyalleri oluşturma
+"[codeflow.xml içeriği] [kod içeriği] Bu API için adım adım eğitim materyali ve kod örnekleri oluştur."
+
+# İnteraktif API keşif aracı içeriği oluşturma
+"[codeflow.xml içeriği] [API tanımları] Bu API'ler için interaktif keşif aracı içeriği oluştur."
+
+# Mimari dökümantasyon oluşturma
+"[codeflow.xml içeriği] [kod içeriği] Bu sistem için kapsamlı mimari dökümantasyon oluştur, bileşenler, bağlantılar ve veri akışı diyagramları dahil."
+
+# Dökümantasyon şablonları oluşturma
+"[codeflow.xml içeriği] [örnek dökümantasyon] Bu projenin stili ile uyumlu dökümantasyon şablonları oluştur."
+
+# Dökümantasyon arama indeksi oluşturma
+"[codeflow.xml içeriği] [mevcut dökümantasyon] Bu dökümantasyon için arama indeksi ve anahtar kelime analizi oluştur."
