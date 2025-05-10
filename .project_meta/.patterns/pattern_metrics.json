@@ -1,10 +1,10 @@
 {
   "metrics_id": "m3tm_v2.3_pattern_metrics",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-01",
+  "last_updated": "2024-06-04",
   "metrics": {
     "pattern_adoption_rate": {
-      "overall": 0.82,
+      "overall": 0.84,
       "by_category": {
         "configuration": 0.95,
         "creation": 0.75,
@@ -12,16 +12,18 @@
         "behavioral": 0.78,
         "validation": 0.90,
         "data": 0.70,
-        "image_processing": 1.0
+        "image_processing": 1.0,
+        "embedding": 1.0
       }
     },
     "pattern_effectiveness_score": {
-      "overall": 0.86,
+      "overall": 0.87,
       "by_pattern_id": {
         "PT-001": 0.92,
         "PT-002": 0.88,
         "PT-003": 0.85,
-        "PT-007": 0.78,
+        "PT-006": 0.78,
+        "PT-007": 0.89,
         "PT-008": 0.81,
         "PT-009": 0.87,
         "PT-010": 0.79,
@@ -31,7 +33,7 @@
       }
     },
     "pattern_consistency_score": {
-      "overall": 0.88,
+      "overall": 0.89,
       "by_category": {
         "configuration": 0.93,
         "creation": 0.85,
@@ -39,14 +41,15 @@
         "behavioral": 0.87,
         "validation": 0.92,
         "data": 0.83,
-        "image_processing": 0.90
+        "image_processing": 0.90,
+        "embedding": 0.91
       }
     },
     "anti_pattern_density": {
-      "overall": 0.047,
+      "overall": 0.045,
       "by_category": {
-        "code_structure": 0.058,
-        "design": 0.035
+        "code_structure": 0.056,
+        "design": 0.034
       }
     }
   }

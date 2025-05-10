@@ -35,10 +35,11 @@
       "implementation_notes": "create_* metotları ile farklı nesne türleri oluşturan statik metotlar veya sınıflar kullanılır.",
       "examples": [
         "m3tm.embedding.factory.EmbeddingFactory",
-        "m3tm.task_heads.config.TaskHeadFactory"
+        "m3tm.task_heads.config.TaskHeadFactory",
+        "m3tm.search.SearchProjectionFactory"
       ],
-      "related_patterns": ["PT-007"],
-      "last_updated": "2024-05-23"
+      "related_patterns": ["PT-006"],
+      "last_updated": "2024-06-04"
     },
     {
       "pattern_id": "PT-003",
@@ -58,7 +59,7 @@
       "last_updated": "2024-05-24"
     },
     {
-      "pattern_id": "PT-007",
+      "pattern_id": "PT-006",
       "name": "DatasetFactory",
       "category": "creation",
       "description": "Farklı veri kümesi türlerini oluşturmak için fabrika deseni",
@@ -73,6 +74,24 @@
       ],
       "related_patterns": ["PT-002"],
       "last_updated": "2024-05-24"
+    },
+    {
+      "pattern_id": "PT-007",
+      "name": "EmbeddingNormalizer",
+      "category": "embedding",
+      "description": "Gömme vektörlerini normalize ederek benzerlik karşılaştırmaları için uygun hale getiren desen",
+      "benefits": [
+        "Gömme vektörlerinin boyutu ve ölçeği normalleştirilir",
+        "Kosinüs benzerliği hesaplamaları için birim vektörler sağlar",
+        "Arama algoritmalarının performansını artırır",
+        "Farklı modalitelerden gelen gömmeleri karşılaştırılabilir hale getirir"
+      ],
+      "implementation_notes": "PyTorch nn.Linear ile boyut dönüşümü ve F.normalize ile L2 normalizasyonu kullanarak birim vektörler oluşturur. Dropout ve Layer Normalization ile düzenlileştirme sağlanabilir.",
+      "examples": [
+        "m3tm.search.M3TMSearchProjection"
+      ],
+      "related_patterns": ["PT-002"],
+      "last_updated": "2024-06-04"
     },
     {
       "pattern_id": "PT-008",

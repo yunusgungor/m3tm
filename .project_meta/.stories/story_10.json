@@ -1,0 +1,59 @@
+{
+  "story_id": "story_10",
+  "title": "Arama Gömme Projeksiyonu implementasyonu",
+  "description": "Model çıktılarını semantik arama için normalize edilmiş bir gömme uzayına projekte eden modülün tasarlanması ve implementasyonu. Bu modül, farklı modalitelerden (metin, görüntü) gelen temsilleri arama için optimize edilmiş bir uzaya dönüştürecek ve benzerlik aramaları için kullanılabilir hale getirecektir.",
+  "acceptance_criteria": [
+    "M3TMSearchProjection sınıfı implementasyonu tamamlanmalı",
+    "Model çıktılarını normalize edilmiş bir arama gömme uzayına projekte edebilmeli",
+    "L2 normalizasyonu ile birim vektörler üretebilmeli",
+    "Ayarlanabilir bir gömme boyutu desteklemeli (varsayılan: 128)",
+    "Hem tekli modalite hem de füzyon temsillerini işleyebilmeli",
+    "PyTorch JIT ile ileri modda izlenebilir (traceable) olmalı",
+    "Temiz docstring'ler ve tipler içermeli",
+    "Temel birim testleri yazılmalı"
+  ],
+  "module_mapping": ["search"],
+  "technical_details": {
+    "component": "src/m3tm/search/projection.py",
+    "dependencies": [
+      "src/m3tm/embedding/__init__.py",
+      "src/m3tm/fusion/fusion_layer.py"
+    ],
+    "estimated_complexity": "Orta",
+    "implementation_notes": [
+      "torch.nn.Linear kullanarak gömme projeksiyonu gerçekleştir",
+      "torch.nn.functional.normalize kullanarak L2 normalizasyonu uygula (p=2, dim=1)",
+      "Pytorch JIT compability sağlamak için ilgili kuralları takip et",
+      "Yüksek boyutlu girdileri daha küçük arama uzayına indirgeme stratejisi seç",
+      "Eğitim ve çıkarım modları arasında tutarlı davranış sağla"
+    ]
+  },
+  "business_value": "Kullanıcıların kişisel verileri üzerinde semantik arama yapabilmesi için temel bileşen. Bu modül, aramanın doğruluğunu ve verimliliğini doğrudan etkileyecektir.",
+  "architectural_impact": "Arama altyapısı için temel yapı taşı. Model çıktıları ile arama indeksi arasındaki bağlantıyı sağlar.",
+  "status": "done",
+  "assignee": "AI-Developer",
+  "priority": "Yüksek",
+  "tags": ["core", "search", "embedding"],
+  "completion_date": "2024-06-04",
+  "implementation_details": {
+    "components_created": [
+      "src/m3tm/search/projection.py",
+      "tests/search/test_projection.py",
+      "src/m3tm/examples/search_projection_example.py",
+      "src/m3tm/search/__init__.py (güncellendi)"
+    ],
+    "patterns_used": [
+      {
+        "pattern_id": "PT-007",
+        "name": "EmbeddingNormalizer",
+        "description": "Gömme vektörlerini birim vektörlere normalleştirerek benzerlik hesaplamalarını optimize eden desen"
+      },
+      {
+        "pattern_id": "PT-002",
+        "name": "FactoryMethod",
+        "description": "SearchProjectionFactory ile arama gömme modüllerini oluşturan fabrika deseni"
+      }
+    ],
+    "tests_created": ["tests/search/test_projection.py"]
+  }
+} 

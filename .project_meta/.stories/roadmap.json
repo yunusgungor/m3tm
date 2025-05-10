@@ -1,7 +1,7 @@
 {
   "roadmap_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "current_iteration_id": "iter_3",
+  "current_iteration_id": "iter_4",
   "iterations": [
     {
       "iteration_id": "iter_1",
@@ -18,13 +18,13 @@
     {
       "iteration_id": "iter_3",
       "goal": "Çekirdek Model MVP - Görüntü Modalitesi ve Füzyon",
-      "status": "in_progress",
+      "status": "completed",
       "story_ids": ["story_8", "story_9", "story_10"]
     },
     {
       "iteration_id": "iter_4",
       "goal": "Büyüme Modülleri ve Görev Başlıkları",
-      "status": "planned",
+      "status": "in_progress",
       "story_ids": ["story_11", "story_12", "story_13", "story_14"]
     },
     {
@@ -95,7 +95,7 @@
     {
       "story_id": "story_10",
       "title": "Arama Gömme Projeksiyonu implementasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_11",
@@ -163,5 +163,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-06-03"
+  "last_updated": "2024-06-04"
 } 

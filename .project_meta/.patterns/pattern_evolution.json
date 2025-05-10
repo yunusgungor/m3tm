@@ -1,7 +1,7 @@
 {
   "evolution_id": "m3tm_v2.3_pattern_evolution",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-01",
+  "last_updated": "2024-06-04",
   "trends": [
     {
       "date": "2024-05-23",
@@ -14,7 +14,7 @@
     },
     {
       "date": "2024-05-24",
-      "patterns_added": ["PT-003", "PT-007", "PT-008", "PT-010", "PT-012", "PT-013"],
+      "patterns_added": ["PT-003", "PT-006", "PT-008", "PT-010", "PT-012", "PT-013"],
       "patterns_modified": ["PT-001"],
       "patterns_deprecated": [],
       "anti_patterns_detected": ["AP-001", "AP-002"],
@@ -41,11 +41,37 @@
           "impact": "Çoklu modalite işleme yeteneklerini artıracak, metin ve görüntü modaliteleri için tutarlı bir desen kullanımı sağlayacak"
         }
       ]
+    },
+    {
+      "date": "2024-06-04",
+      "patterns_added": ["PT-007"],
+      "patterns_modified": ["PT-002", "PT-006"],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": [],
+      "pattern_count": 11,
+      "anti_pattern_count": 2,
+      "highlights": [
+        {
+          "type": "new_category_introduced",
+          "description": "Gömme kategorisi (embedding) eklendi",
+          "impact": "Gömme vektörlerinin işlenmesi ve normalize edilmesi için özel desenler tanımlanmaya başlandı"
+        },
+        {
+          "type": "id_change",
+          "description": "DatasetFactory deseni PT-007'den PT-006'ya değiştirildi ve EmbeddingNormalizer PT-007 olarak eklendi",
+          "impact": "Desen kataloğu organizasyonu iyileştirildi, arama ile ilgili desenler doğru ID'lerle tanımlandı"
+        },
+        {
+          "type": "pattern_integration",
+          "description": "EmbeddingNormalizer (PT-007) deseni arama işlevlerini geliştirmek için eklendi",
+          "impact": "Arama özelliklerinin etkinliğini artıracak, farklı modalitelerden gelen gömmelerin daha tutarlı şekilde karşılaştırılmasını sağlayacak"
+        }
+      ]
     }
   ],
   "growth_metrics": {
     "pattern_growth_rate": {
-      "overall": 3.33,
+      "overall": 3.67,
       "by_category": {
         "configuration": 0.0,
         "creation": 0.0,
@@ -53,13 +79,14 @@
         "behavioral": 0.0,
         "validation": 0.0,
         "data": 0.0,
-        "image_processing": 1.0
+        "image_processing": 1.0,
+        "embedding": 1.0
       }
     },
     "category_diversity": {
       "initial": 3,
-      "current": 7,
-      "growth_percentage": 133.33
+      "current": 8,
+      "growth_percentage": 166.67
     }
   }
 } 
