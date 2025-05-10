@@ -197,6 +197,45 @@
       ],
       "related_patterns": ["PT-003"],
       "last_updated": "2024-06-01"
+    },
+    {
+      "pattern_id": "PT-014",
+      "name": "CompositeAdapter",
+      "category": "structural",
+      "description": "Birden fazla adaptörü sıralı olarak uygulayan ve yöneten desen. Çekirdek modeli değiştirmeden özelleştirme olanağı sağlar.",
+      "benefits": [
+        "Çekirdek model yapısını değiştirmeden genişletilebilirlik sağlar",
+        "Adaptörler arasında isimli bir kayıt sistemi sunar",
+        "Birden fazla adaptörün kombinasyonunu destekler",
+        "Eğitim ve çıkarım modları arasında dinamik geçiş imkanı sunar",
+        "Minimal hesaplama ek yükü ekler"
+      ],
+      "implementation_notes": "PyTorch nn.ModuleList kullanarak birden fazla adaptörü depolar. Adaptörler isimle referans edilebilir ve dinamik olarak eklenip çıkarılabilir. İleri geçiş sırasında girdiye sıralı olarak uygulanırlar.",
+      "examples": [
+        "m3tm.transformer.adapter.AdapterSlot",
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock._apply_adapters"
+      ],
+      "related_patterns": ["PT-003", "PT-015"],
+      "last_updated": "2024-06-07"
+    },
+    {
+      "pattern_id": "PT-015",
+      "name": "PluggableComponentStrategy",
+      "category": "structural",
+      "description": "Model bileşenlerinin (dikkat, feed-forward ağ, adaptörler) çalışma zamanında değiştirilebilmesini sağlayan strateji deseni.",
+      "benefits": [
+        "Çekirdek model yapısının bileşenlerini çalışma zamanında değiştirilebilir kılar",
+        "Farklı model varyantlarını tek bir yapı üzerinden oluşturmayı sağlar",
+        "Yeni bileşen türlerinin kolay entegrasyonuna olanak tanır",
+        "Değiştirilebilir bileşenler sayesinde modeli farklı görevlere adapte etmeyi kolaylaştırır"
+      ],
+      "implementation_notes": "Ana model bileşenlerini konuma göre organize eden ve dinamik olarak değiştirilebilen bir yapı sunar. Bileşenler için standartlaştırılmış arayüzler ve bileşen registrasyonu için metotlar içerir.",
+      "examples": [
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock",
+        "m3tm.transformer.adapter.create_adapter_slots"
+      ],
+      "related_patterns": ["PT-003", "PT-014"],
+      "last_updated": "2024-06-07"
     }
   ]
 } 

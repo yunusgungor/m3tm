@@ -1,14 +1,14 @@
 {
   "metrics_id": "m3tm_v2.3_pattern_metrics",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-04",
+  "last_updated": "2024-06-07",
   "metrics": {
     "pattern_adoption_rate": {
-      "overall": 0.84,
+      "overall": 0.86,
       "by_category": {
         "configuration": 0.95,
         "creation": 0.75,
-        "structural": 0.85,
+        "structural": 0.90,
         "behavioral": 0.78,
         "validation": 0.90,
         "data": 0.70,
@@ -17,7 +17,7 @@
       }
     },
     "pattern_effectiveness_score": {
-      "overall": 0.87,
+      "overall": 0.88,
       "by_pattern_id": {
         "PT-001": 0.92,
         "PT-002": 0.88,
@@ -29,7 +29,8 @@
         "PT-010": 0.79,
         "PT-012": 0.86,
         "PT-013": 0.84,
-        "PT-014": 0.90
+        "PT-014": 0.93,
+        "PT-015": 0.90
       }
     },
     "pattern_consistency_score": {
@@ -37,7 +38,7 @@
       "by_category": {
         "configuration": 0.93,
         "creation": 0.85,
-        "structural": 0.91,
+        "structural": 0.93,
         "behavioral": 0.87,
         "validation": 0.92,
         "data": 0.83,
@@ -46,7 +47,7 @@
       }
     },
     "anti_pattern_density": {
-      "overall": 0.045,
+      "overall": 0.040,
       "by_category": {
         "code_structure": 0.056,
         "design": 0.034

@@ -1,7 +1,7 @@
 {
   "evolution_id": "m3tm_v2.3_pattern_evolution",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-04",
+  "last_updated": "2024-06-07",
   "trends": [
     {
       "date": "2024-05-23",
@@ -67,15 +67,41 @@
           "impact": "Arama özelliklerinin etkinliğini artıracak, farklı modalitelerden gelen gömmelerin daha tutarlı şekilde karşılaştırılmasını sağlayacak"
         }
       ]
+    },
+    {
+      "date": "2024-06-07",
+      "patterns_added": ["PT-014", "PT-015"],
+      "patterns_modified": [],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": [],
+      "pattern_count": 13,
+      "anti_pattern_count": 2,
+      "highlights": [
+        {
+          "type": "pattern_integration",
+          "description": "CompositeAdapter (PT-014) deseni AdapterSlot mekanizmasının ProtoTransformerBlock entegrasyonu ile tespit edildi",
+          "impact": "Adaptör tabanlı modüler büyüme stratejisini daha resmi bir desen haline getirerek kişiselleştirilmiş model varyantlarını destekleyecek"
+        },
+        {
+          "type": "pattern_effectiveness",
+          "description": "CompositeAdapter deseni, minimal hesaplama maliyeti ile maksimum esneklik sağlayan yapısıyla yüksek etkinlik puanı (0.93) aldı",
+          "impact": "Bu desen, özellikle mobil cihazlarda verimli çalışan kişiselleştirilmiş modeller için rehber olacak"
+        },
+        {
+          "type": "pattern_synergy",
+          "description": "AdapterSlot entegrasyonunda ayrıca PluggableComponentStrategy (PT-015) deseni de tespit edildi",
+          "impact": "Bu desen, CompositeAdapter ile birlikte kullanıldığında, her konumda farklı adaptörlerin kullanılabildiği esnek bir mimari sağlar"
+        }
+      ]
     }
   ],
   "growth_metrics": {
     "pattern_growth_rate": {
-      "overall": 3.67,
+      "overall": 4.33,
       "by_category": {
         "configuration": 0.0,
         "creation": 0.0,
-        "structural": 0.0,
+        "structural": 2.0,
         "behavioral": 0.0,
         "validation": 0.0,
         "data": 0.0,
