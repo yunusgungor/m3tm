@@ -421,7 +421,7 @@ Bu proje MIT Lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 
 Proje Ekibi - [proje@codeflow.io](mailto:proje@codeflow.io)
 
-Proje Linki: [https://github.com/kullanici/codeflow](https://github.com/kullanici/codeflow)
+Proje Linki: [https://github.com/yunusgungor/codeflow](https://github.com/yunusgungor/codeflow)
 
 ---
 

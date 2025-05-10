@@ -551,7 +551,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 Project Team - [project@codeflow.io](mailto:project@codeflow.io)
 
-Project Link: [https://github.com/username/codeflow](https://github.com/username/codeflow)
+Project Link: [https://github.com/yunusgungor/codeflow](https://github.com/yunusgungor/codeflow)
 
 ---
 
