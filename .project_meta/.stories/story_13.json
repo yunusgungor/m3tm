@@ -1,0 +1,31 @@
+{
+  "story_id": "story_13",
+  "title": "Dinamik görev başlıkları implementasyonu",
+  "description": "Çeşitli yapay zeka görevlerini gerçekleştirebilecek, çekirdek modelin çıktısına bağlanabilen dinamik görev başlıklarının tasarımı ve implementasyonu. Bu başlıklar, sınıflandırma, regresyon gibi farklı görevler için özelleştirilebilir ve çekirdek model değiştirilmeden eklenip çıkarılabilir olmalıdır.",
+  "acceptance_criteria": [
+    "Temel bir TaskHead arayüzü/soyut sınıfı tanımlanmalıdır.",
+    "En az üç farklı görev başlığı implementasyonu yapılmalıdır: ClassificationHead, RegressionHead ve MultiLabelHead.",
+    "Görev başlıkları, model çıktısının boyutlarını dinamik olarak ele alabilmelidir.",
+    "Her başlık ilgili görev için uygun kayıp fonksiyonunu tanımlamalıdır.",
+    "Görev başlıkları cihaz üzerinde eğitilebilir olmalıdır.",
+    "Başlıkların ağırlıkları kaydedilebilir ve yüklenebilir olmalıdır.",
+    "Görev başlıkları, modelin fused_representation çıktısına veya adapter çıktılarına bağlanabilmelidir."
+  ],
+  "module_mapping": "task_heads_module",
+  "status": "todo",
+  "priority": "high",
+  "estimated_effort": "medium",
+  "technical_complexity": "medium",
+  "business_value": "high",
+  "architectural_impact": "medium",
+  "tags": [
+    "core_architecture",
+    "modular_design",
+    "adaptability"
+  ],
+  "dependencies": [
+    "story_7",
+    "story_10"
+  ],
+  "notes": "Görev başlıkları, çekirdek modelin farklı uygulamalarda kullanılabilmesini sağlayan önemli bir bileşendir. Başlıkların hafif ve verimli olması, mobil cihazlarda iyi performans göstermesi için kritiktir."
+} 

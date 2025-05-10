@@ -27,6 +27,7 @@ class AdapterConfig(ConfigBase):
     bottleneck_dim: int = 16  # Darboğaz boyutu
     use_layer_norm: bool = True  # Layer normalization kullanımı
     adapter_type: str = "bottleneck"  # Adapter türü
+    initial_adapter_type: Optional[str] = None  # Başlangıçta oluşturulacak adapter türü (None ise başlangıçta adapter oluşturulmaz)
     init_scale: float = 1e-3  # Başlangıç ölçeği
     activation: str = "gelu"  # Aktivasyon fonksiyonu
     dropout: float = 0.0  # Dropout oranı
@@ -53,6 +54,11 @@ class AdapterConfig(ConfigBase):
             valid_types = ["bottleneck", "parallel", "series", "scaled", "prefix"]
             if self.adapter_type not in valid_types:
                 self.validation_errors.append(f"adapter_type must be one of {valid_types}, got {self.adapter_type}")
+                is_valid = False
+            
+            # Initial adapter türü kontrol et
+            if self.initial_adapter_type is not None and self.initial_adapter_type not in valid_types:
+                self.validation_errors.append(f"initial_adapter_type must be one of {valid_types}, got {self.initial_adapter_type}")
                 is_valid = False
                 
             # Pozisyonları kontrol et

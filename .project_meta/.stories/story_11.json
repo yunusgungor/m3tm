@@ -1,0 +1,29 @@
+{
+  "story_id": "story_11",
+  "title": "Adapter sınıfı implementasyonu",
+  "description": "Çekirdek modelle entegre olacak ve modelin kişiselleştirilmesini sağlayacak Adapter sınıfının tasarımı ve implementasyonu.",
+  "acceptance_criteria": [
+    "Adapter sınıfı, daraltıcı bir Linear katmanı, bir aktivasyon fonksiyonu ve genişletici bir Linear katmanı içermelidir.",
+    "Adapter'lar, çekirdek model katmanlarına artık bağlantı ile eklenebilmelidir.",
+    "Adapter'lar hafif olmalı ve minimal parametre sayısı içermelidir (<5% çekirdek model).",
+    "Adapter sınıfı, farklı boyut konfigürasyonları ile başlatılabilmelidir.",
+    "Adapter'ların eğitim için açılıp kapanabilmesi için mekanizma bulunmalıdır."
+  ],
+  "module_mapping": "adapter_module",
+  "status": "done",
+  "priority": "high",
+  "estimated_effort": "medium",
+  "technical_complexity": "medium",
+  "business_value": "high",
+  "architectural_impact": "medium",
+  "tags": [
+    "core_architecture",
+    "performance_critical",
+    "modular_design"
+  ],
+  "dependencies": [
+    "story_6"
+  ],
+  "notes": "Adapter tasarımı, çekirdek modelin büyümesini sağlayacak temel mekanizmadır. Adapter'ların başlangıçta neredeyse nötr davranması için uygun şekilde başlatılması gerekiyor (yukarı projeksiyon için sıfıra yakın başlatma).",
+  "completion_date": "2024-06-05"
+} 

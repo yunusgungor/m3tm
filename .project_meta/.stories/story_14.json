@@ -1,0 +1,32 @@
+{
+  "story_id": "story_14",
+  "title": "Adapter'lar ve görev başlıklarını eğitme mekanizması",
+  "description": "Çekirdek model dondurulduğunda, sadece Adapter'ları ve görev başlıklarını eğitebilecek mekanizmaların tasarımı ve implementasyonu. Bu mekanizma, kişiselleştirme için gereken mobil cihaz üzerinde eğitim sürecini verimli hale getirir.",
+  "acceptance_criteria": [
+    "Çekirdek modeli dondurarak sadece belirlenen Adapter'ları ve görev başlıklarını eğitebilen bir TrainingManager sınıfı implementasyonu.",
+    "Eğitilecek modüllerin seçimini ve konfigürasyonunu yapabilecek esnek bir arayüz.",
+    "Eğitim döngüsünün ilerlemesini takip edebilecek callback mekanizması.",
+    "Hafıza kullanımını optimize eden gradient hesaplama ve backpropagation akışı.",
+    "Eğitim sırasında düzenli checkpointler oluşturma ve kaydetme yeteneği.",
+    "Eğitim metriklerini toplama ve raporlama mekanizması.",
+    "Erken durdurma ve öğrenme oranı ayarlama gibi eğitim optimizasyonları."
+  ],
+  "module_mapping": "training_module",
+  "status": "todo",
+  "priority": "high",
+  "estimated_effort": "large",
+  "technical_complexity": "high",
+  "business_value": "critical",
+  "architectural_impact": "high",
+  "tags": [
+    "core_architecture",
+    "performance_critical",
+    "on_device_training"
+  ],
+  "dependencies": [
+    "story_11",
+    "story_12",
+    "story_13"
+  ],
+  "notes": "Bu hikaye, M³TM modelinin en önemli farklılaştırıcı özelliğini, yani cihaz üzerinde kişiselleştirilmiş eğitim kabiliyetini gerçekleştirir. Modelin hafif kalması ve verimli eğitim yapabilmesi için optimize edilmiş backpropagation algoritmaları ve bellek yönetimi stratejileri araştırılmalıdır."
+} 

@@ -1,0 +1,31 @@
+{
+  "story_id": "story_12",
+  "title": "AdapterSlot mekanizmasının ProtoTransformerBlock entegrasyonu",
+  "description": "ProtoTransformerBlock içerisinde Adapter modüllerinin eklenebileceği AdapterSlot mekanizmasının tasarımı ve implementasyonu. Bu mekanizma, çekirdek model değiştirilmeden Adapter'ların dinamik olarak eklenip çıkarılabilmesini sağlar.",
+  "acceptance_criteria": [
+    "ProtoTransformerBlock sınıfı, Adapter'ların eklenebileceği açık bir yuva (slot) sunmalıdır.",
+    "AdapterSlot sınıfı, Adapter modüllerini ekleme ve çıkarma işlevlerini desteklemelidir.",
+    "AdapterSlot, Adapter olmadığında kimlik (identity) fonksiyonu olarak davranmalıdır.",
+    "AdapterSlot, birden fazla Adapter eklendiğinde bunları sıralı olarak uygulayabilmelidir.",
+    "Adapter entegrasyonu, çekirdek modelin performansını önemli ölçüde etkilememelidir.",
+    "AdapterSlot, eğitim ve çıkarım modları arasında geçiş yapabilmelidir."
+  ],
+  "module_mapping": "proto_transformer_module",
+  "status": "done",
+  "priority": "high",
+  "estimated_effort": "medium",
+  "technical_complexity": "high",
+  "business_value": "high",
+  "architectural_impact": "high",
+  "tags": [
+    "core_architecture",
+    "performance_critical",
+    "modular_design"
+  ],
+  "dependencies": [
+    "story_6",
+    "story_11"
+  ],
+  "notes": "Bu hikaye, modüler büyüme ve kişiselleştirme stratejisinin temel yapı taşıdır. AdapterSlot mekanizması, modele eklentilerin dinamik olarak eklenebilmesini sağlar ve M³TM'nin adaptif öğrenme yeteneğinin merkezindedir.",
+  "completion_date": "2024-06-06"
+} 

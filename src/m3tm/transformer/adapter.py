@@ -8,9 +8,10 @@ modeli özelleştirmeye olanak tanır.
 Örüntüler:
 - ConfigurationDataclass (PT-001): Yapılandırma parametrelerini dataclass olarak modelleme
 - ModelComposite (PT-003): Ana modelin içine küçük ve özelleştirilmiş modül ekleme
+- CompositeAdapter (PT-014): Birden fazla adaptörü sıralı olarak uygulama
 """
 
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Union, Any
 
 import torch
 import torch.nn as nn
@@ -21,13 +22,15 @@ from m3tm.transformer.config import AdapterConfig
 
 class AdapterSlot(nn.Module):
     """
-    Temel adaptör yuva sınıfı.
+    Gelişmiş adaptör yuva sınıfı.
     
     Bu sınıf, adaptörleri takıp çıkarmaya olanak sağlayan bir yuva mekanizması sunar.
-    Adaptör yoksa, girdiyi doğrudan çıktıya iletir.
+    Adaptör yoksa, girdiyi doğrudan çıktıya iletir. Birden fazla adaptör eklendiğinde,
+    bunları sıralı olarak uygular. Ayrıca eğitim ve çıkarım modları arasında geçiş yapabilir.
     
     Örüntüler:
     - ModelComposite (PT-003): Ana modelin içine küçük ve özelleştirilmiş modül ekleme
+    - CompositeAdapter (PT-014): Birden fazla adaptörü sıralı olarak uygulama
     """
     
     def __init__(self, config: AdapterConfig, hidden_size: int):
@@ -41,19 +44,35 @@ class AdapterSlot(nn.Module):
         self.hidden_size = hidden_size
         self.bottleneck_dim = config.bottleneck_dim
         
-        self.adapter = None
-        if config.enabled:
-            self.adapter = self._create_adapter()
+        # Birden fazla adaptörü desteklemek için liste kullanılıyor
+        self.adapters = nn.ModuleList([])
+        self.adapter_names = []
+        
+        # Eğitim modu bayrağı
+        self.training_mode = True
+        
+        if config.enabled and config.initial_adapter_type is not None:
+            adapter = self._create_adapter(config.initial_adapter_type)
+            if adapter:
+                self.adapters.append(adapter)
+                self.adapter_names.append("default")
     
-    def _create_adapter(self):
-        """Adaptör yapılandırmasına göre uygun adaptör oluşturur."""
-        if self.config.adapter_type == "bottleneck":
+    def _create_adapter(self, adapter_type: str) -> Optional[nn.Module]:
+        """Adaptör türüne göre uygun adaptör oluşturur.
+        
+        Args:
+            adapter_type: Adaptör türü
+            
+        Returns:
+            Oluşturulan adaptör modülü
+        """
+        if adapter_type == "bottleneck":
             return Adapter(self.hidden_size, self.bottleneck_dim, 
                            use_layer_norm=self.config.use_layer_norm,
                            activation=self.config.activation,
                            dropout=self.config.dropout,
                            init_scale=self.config.init_scale)
-        elif self.config.adapter_type == "parallel":
+        elif adapter_type == "parallel":
             return ParallelAdapter(self.hidden_size, self.bottleneck_dim,
                                    scale=self.config.alpha,
                                    use_layer_norm=self.config.use_layer_norm,
@@ -61,7 +80,7 @@ class AdapterSlot(nn.Module):
                                    dropout=self.config.dropout,
                                    init_scale=self.config.init_scale)
         else:
-            raise ValueError(f"Geçersiz adapter türü: {self.config.adapter_type}")
+            return None
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -71,21 +90,121 @@ class AdapterSlot(nn.Module):
         Returns:
             Adaptör çıktısı, şekil (batch_size, seq_len, hidden_size)
         """
-        if self.adapter is not None:
-            return self.adapter(x)
-        return x
+        # Performans için hızlı kontrol: Eğer adaptör yoksa veya eğitim modu kapalıysa ve çıkarım modundaysak
+        # doğrudan girdiyi döndür
+        if not self.adapters or (not self.training_mode and not self.training):
+            return x
+        
+        # Adaptörleri sıralı olarak uygula
+        output = x
+        for adapter in self.adapters:
+            output = adapter(output)
+        
+        return output
     
-    def register_adapter(self, adapter: nn.Module) -> None:
-        """Yeni bir adaptör kaydeder."""
-        self.adapter = adapter
+    def register_adapter(self, adapter: nn.Module, name: str = None) -> bool:
+        """Yeni bir adaptör kaydeder.
+        
+        Args:
+            adapter: Kaydedilecek adaptör
+            name: Adaptör adı (None ise otomatik oluşturulur)
+            
+        Returns:
+            Kayıt başarılı ise True, değilse False
+        """
+        if name is None:
+            name = f"adapter_{len(self.adapters)}"
+        
+        # Aynı isimde adaptör var mı kontrol et
+        if name in self.adapter_names:
+            return False
+        
+        self.adapters.append(adapter)
+        self.adapter_names.append(name)
+        return True
     
-    def remove_adapter(self) -> None:
-        """Mevcut adaptörü kaldırır."""
-        self.adapter = None
+    def remove_adapter(self, name: str = None) -> bool:
+        """Belirli bir adaptörü kaldırır.
+        
+        Args:
+            name: Kaldırılacak adaptör adı (None ise son eklenen adaptör kaldırılır)
+            
+        Returns:
+            Kaldırma başarılı ise True, değilse False
+        """
+        if len(self.adapters) == 0:
+            return False
+        
+        if name is None:
+            # Son adaptörü kaldır
+            self.adapters.pop()
+            self.adapter_names.pop()
+            return True
+        
+        # İsme göre adaptörü bul ve kaldır
+        if name in self.adapter_names:
+            idx = self.adapter_names.index(name)
+            self.adapter_names.pop(idx)
+            # ModuleList'ten doğrudan öğe kaldırmak için yeni liste oluştur
+            new_adapters = nn.ModuleList()
+            for i, adapter in enumerate(self.adapters):
+                if i != idx:
+                    new_adapters.append(adapter)
+            self.adapters = new_adapters
+            return True
+        
+        return False
     
-    def has_adapter(self) -> bool:
-        """Bir adaptör takılı olup olmadığını kontrol eder."""
-        return self.adapter is not None
+    def get_adapter(self, name: str = None) -> Optional[nn.Module]:
+        """İsimle bir adaptörü alır.
+        
+        Args:
+            name: Adaptör adı (None ise son eklenen adaptör döndürülür)
+            
+        Returns:
+            Adaptör modülü veya None
+        """
+        if len(self.adapters) == 0:
+            return None
+        
+        if name is None:
+            return self.adapters[-1]
+        
+        if name in self.adapter_names:
+            idx = self.adapter_names.index(name)
+            return self.adapters[idx]
+        
+        return None
+    
+    def has_adapter(self, name: str = None) -> bool:
+        """Belirli bir adaptörün olup olmadığını kontrol eder.
+        
+        Args:
+            name: Kontrol edilecek adaptör adı (None ise herhangi bir adaptör olup olmadığı)
+            
+        Returns:
+            Adaptör varsa True, yoksa False
+        """
+        if name is None:
+            return len(self.adapters) > 0
+        return name in self.adapter_names
+    
+    def get_adapter_names(self) -> List[str]:
+        """Kayıtlı adaptör isimlerini döndürür."""
+        return self.adapter_names.copy()
+    
+    def set_training_mode(self, mode: bool) -> None:
+        """Eğitim modunu ayarlar.
+        
+        Args:
+            mode: True ise eğitim modu, False ise çıkarım modu
+        """
+        self.training_mode = mode
+
+    def count_parameters(self) -> int:
+        """Tüm adaptörlerdeki toplam eğitilebilir parametre sayısını hesaplar."""
+        return sum(sum(p.numel() for p in adapter.parameters() if p.requires_grad) 
+                  for adapter in self.adapters)
 
 
 class Adapter(nn.Module):
@@ -282,16 +401,17 @@ class ParallelAdapter(nn.Module):
 
 
 def create_adapter_slots(config: AdapterConfig, hidden_size: int, positions: List[str]) -> Dict[str, AdapterSlot]:
-    """
-    Belirtilen pozisyonlar için adaptör yuvaları oluşturur.
+    """Belirtilen pozisyonlarda adaptör yuvaları oluşturur.
     
     Args:
         config: Adaptör yapılandırması
-        hidden_size: Gizli durum boyutu 
-        positions: Desteklenen adapter pozisyonları
+        hidden_size: Gizli durum boyutu
+        positions: Adaptör yuvası pozisyonları
         
     Returns:
-        Pozisyon -> AdapterSlot eşleştirmesi içeren sözlük
+        Pozisyon-AdapterSlot sözlüğü
     """
-    # Sadece adapter_positions'ta belirtilen pozisyonlar için slot oluştur
-    return {pos: AdapterSlot(config, hidden_size) for pos in positions if pos in config.adapter_positions} 
+    slots = {}
+    for pos in positions:
+        slots[pos] = AdapterSlot(config, hidden_size)
+    return slots 
