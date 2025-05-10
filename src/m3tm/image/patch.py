@@ -78,42 +78,30 @@ def patchify_image(
 def unpatchify_image(
     patches: torch.Tensor,
     patch_size: int,
-    image_size: Optional[Tuple[int, int]] = None
+    image_size: Optional[Union[Tuple[int, int], int]] = None
 ) -> torch.Tensor:
     """
-    Yama tensörünü orijinal görüntü formuna geri dönüştürür.
+    Yamalardan görüntüyü yeniden oluşturur.
     
     Args:
-        patches: Yama tensörü, şekli aşağıdakilerden biri:
-            - [batch_size, num_patches, patch_size*patch_size*channels] (flatten=True durumu)
-            - [batch_size, num_patches, channels, patch_size, patch_size] (flatten=False durumu)
-        patch_size: Kare yama boyutu (pixeller)
-        image_size: İsteğe bağlı görüntü boyutu (yükseklik, genişlik).
-                   Belirtilmezse, kare görüntü varsayılır.
-        
-    Returns:
-        torch.Tensor: [batch_size, channels, height, width] şeklinde yeniden oluşturulmuş görüntü tensörü
-    """
-    batch_size = patches.shape[0]
-    num_patches = patches.shape[1]
+        patches: Görüntü yamaları. Şekil:
+            - flatten=True ise: [B, num_patches, channels*patch_size*patch_size]
+            - flatten=False ise: [B, num_patches, channels, patch_size, patch_size]
+        patch_size: Yama boyutu
+        image_size: Orijinal görüntü boyutu (yükseklik, genişlik) veya
+                   kare görüntü için tek bir değer olarak boyut.
+                   None ise, kare görüntü varsayılır.
     
-    # Patch boyutlarını ve kanal sayısını belirle
-    if patches.dim() == 3:  # patches has shape [B, N, P*P*C]
-        # Kanal sayısını tahmin etmek için yaygın değerleri kontrol et
-        for c in [3, 1, 4]:  # RGB, Gri, RGBA
-            if patches.shape[2] % (patch_size * patch_size) == 0 and patches.shape[2] // (patch_size * patch_size) == c:
-                channels = c
-                break
-        else:
-            raise ValueError(
-                f"Kanal sayısı belirlenemedi. patches.shape[2]={patches.shape[2]}, "
-                f"patch_size={patch_size}"
-            )
-        
-        # [B, N, P*P*C] -> [B, N, C, P, P]
+    Returns:
+        torch.Tensor: Yeniden oluşturulmuş görüntü [B, channels, H, W]
+    """
+    if patches.dim() == 3:
+        # [B, num_patches, channels*patch_size*patch_size] -> [B, num_patches, channels, patch_size, patch_size]
+        batch_size, num_patches, flattened_dim = patches.shape
+        channels = flattened_dim // (patch_size ** 2)
         patches = patches.view(batch_size, num_patches, channels, patch_size, patch_size)
-    else:  # patches has shape [B, N, C, P, P]
-        channels = patches.shape[2]
+    
+    batch_size, num_patches, channels, patch_size, patch_size = patches.shape
     
     # Görüntü boyutunu belirle
     if image_size is None:
@@ -126,7 +114,13 @@ def unpatchify_image(
             )
         image_h = image_w = num_patches_per_side * patch_size
     else:
-        image_h, image_w = image_size
+        # Eğer image_size bir int ise, kare görüntü olarak düşün
+        if isinstance(image_size, int):
+            image_h = image_w = image_size
+        else:
+            # Tuple olarak görüntü boyutu
+            image_h, image_w = image_size
+            
         # Tutarlılık kontrolü
         if (image_h // patch_size) * (image_w // patch_size) != num_patches:
             raise ValueError(
@@ -182,7 +176,7 @@ def get_2d_sincos_pos_embed(
         raise ValueError(f"embed_dim {embed_dim} çift sayı olmalıdır")
     
     # Konum için kullanılacak boyut sayısı
-    omega = torch.arange(embed_dim // 2, dtype=dtype, device=device) / (embed_dim // 2)
+    omega = torch.arange(embed_dim // 4, dtype=dtype, device=device) / (embed_dim // 4)
     omega = 1. / (10000 ** omega)
     
     # Her iki eksen için pozisyonlar oluştur

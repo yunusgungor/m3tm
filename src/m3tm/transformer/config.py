@@ -173,6 +173,8 @@ class ProtoTransformerConfig(ConfigBase):
             
         # Geriye uyumluluk için layer_norm_epsilon'u layer_norm_eps'e eşitle
         self.layer_norm_eps = self.layer_norm_epsilon
+        
+        super().__post_init__()
     
     def validate(self) -> bool:
         """Tüm yapılandırma parametrelerini doğrular."""

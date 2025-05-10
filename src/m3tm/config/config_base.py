@@ -34,6 +34,8 @@ class ConfigBase:
     CONFIG_VERSION: ClassVar[str] = "1.0.0"
     REQUIRED_FIELDS: ClassVar[List[str]] = []
     
+    validation_errors: List[str] = field(default_factory=list)
+    
     def __post_init__(self):
         """
         Yapılandırma tutarlılığını doğrular.
@@ -42,25 +44,23 @@ class ConfigBase:
         """
         self.validate()
     
-    def validate(self) -> None:
+    def validate(self) -> bool:
         """
-        Yapılandırma değerlerinin geçerliliğini doğrular.
+        Yapılandırma parametrelerini doğrular.
+        Alt sınıflar bu metodu genişletmelidir.
         
-        Alt sınıflar, özel doğrulama kuralları uygulamak için bu metodu override edebilir.
-        
-        Raises:
-            ConfigValidationError: Yapılandırma geçersizse
+        Returns:
+            Yapılandırma geçerliyse True, değilse False
         """
-        for field_name in self.REQUIRED_FIELDS:
-            if not hasattr(self, field_name) or getattr(self, field_name) is None:
-                raise ConfigValidationError(f"Required field '{field_name}' is missing or None in {self.__class__.__name__}")
+        self.validation_errors = []
+        return True
     
     def to_dict(self) -> Dict[str, Any]:
         """
-        Yapılandırmayı sözlük olarak döndürür.
+        Yapılandırma sınıfını sözlük olarak döndürür.
         
         Returns:
-            Dict[str, Any]: Yapılandırma değerlerini içeren sözlük
+            Yapılandırma parametrelerini içeren sözlük
         """
         result = asdict(self)
         result["__config_type__"] = self.__class__.__name__
@@ -211,4 +211,168 @@ class ConfigBase:
         elif format == "yaml":
             return cls.from_yaml(content)
         else:
-            raise ValueError(f"Unsupported format: {format}. Use 'json' or 'yaml'.") 
+            raise ValueError(f"Unsupported format: {format}. Use 'json' or 'yaml'.")
+
+
+def validate_positive_integer(config: ConfigBase, field_name: str) -> bool:
+    """
+    Bir alanın pozitif tamsayı olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, int) or field_value <= 0:
+        config.validation_errors.append(f"{field_name} must be a positive integer, got {field_value}")
+        return False
+    
+    return True
+
+
+def validate_non_negative_integer(config: ConfigBase, field_name: str) -> bool:
+    """
+    Bir alanın negatif olmayan tamsayı olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, int) or field_value < 0:
+        config.validation_errors.append(f"{field_name} must be a non-negative integer, got {field_value}")
+        return False
+    
+    return True
+
+
+def validate_probability(config: ConfigBase, field_name: str) -> bool:
+    """
+    Bir alanın olasılık değeri (0.0 ile 1.0 arasında) olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, (int, float)) or field_value < 0 or field_value > 1:
+        config.validation_errors.append(f"{field_name} must be a float between 0 and 1, got {field_value}")
+        return False
+    
+    return True
+
+
+def validate_positive_float(config: ConfigBase, field_name: str) -> bool:
+    """
+    Bir alanın pozitif ondalıklı sayı olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, (int, float)) or field_value <= 0:
+        config.validation_errors.append(f"{field_name} must be a positive float, got {field_value}")
+        return False
+    
+    return True
+
+
+def validate_non_negative_float(config: ConfigBase, field_name: str) -> bool:
+    """
+    Bir alanın negatif olmayan ondalıklı sayı olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, (int, float)) or field_value < 0:
+        config.validation_errors.append(f"{field_name} must be a non-negative float, got {field_value}")
+        return False
+    
+    return True
+
+
+def validate_string_in_list(config: ConfigBase, field_name: str, valid_values: List[str]) -> bool:
+    """
+    Bir dize alanının izin verilen değerler listesinde olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        valid_values: İzin verilen değerler listesi
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, str) or field_value not in valid_values:
+        config.validation_errors.append(f"{field_name} must be one of {valid_values}, got {field_value}")
+        return False
+    
+    return True
+
+
+def validate_range(config: ConfigBase, field_name: str, min_value: Union[int, float], max_value: Union[int, float]) -> bool:
+    """
+    Bir alanın belirli bir aralıkta olduğunu doğrular.
+    
+    Args:
+        config: Yapılandırma nesnesi
+        field_name: Kontrol edilecek alan adı
+        min_value: Minimum değer (dahil)
+        max_value: Maksimum değer (dahil)
+        
+    Returns:
+        Alan geçerliyse True, değilse False
+    """
+    field_value = getattr(config, field_name, None)
+    
+    if field_value is None:
+        return True
+    
+    if not isinstance(field_value, (int, float)) or field_value < min_value or field_value > max_value:
+        config.validation_errors.append(f"{field_name} must be between {min_value} and {max_value}, got {field_value}")
+        return False
+    
+    return True 

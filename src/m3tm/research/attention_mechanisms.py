@@ -93,12 +93,34 @@ class AttentionMechanismRegistry:
     }
     
     @classmethod
-    def register(cls, attention_class: nn.Module, config_class):
+    def register(cls, attention_class=None, config_class=None):
         """Yeni bir dikkat mekanizmasını kaydeder."""
-        name = config_class().name
-        cls._registry["models"][name] = attention_class
-        cls._registry["configs"][name] = config_class
-        return attention_class
+        # İç içe fonksiyon kullanarak hem dekoratör hem de doğrudan çağrı olarak kullanım sağlar
+        def decorator(attention_cls):
+            # config_class argümanı iç veya dış fonksiyonda verilebilir
+            nonlocal config_class
+            if config_class is None:
+                # Sınıf adından config sınıfını tahmin etmeye çalış
+                config_name = f"{attention_cls.__name__}Config"
+                # Mevcut modülde bu isimde bir sınıf ara
+                import sys
+                current_module = sys.modules[attention_cls.__module__]
+                if hasattr(current_module, config_name):
+                    config_class = getattr(current_module, config_name)
+                else:
+                    raise ValueError(f"config_class not provided and couldn't find {config_name} in module")
+            
+            name = config_class().name
+            cls._registry["models"][name] = attention_cls
+            cls._registry["configs"][name] = config_class
+            return attention_cls
+        
+        # Doğrudan sınıf geçilmişse dekoratörü hemen uygula
+        if attention_class is not None:
+            return decorator(attention_class)
+        
+        # Aksi takdirde dekoratörü döndür
+        return decorator
     
     @classmethod
     def get_attention(cls, name: str, **kwargs):
