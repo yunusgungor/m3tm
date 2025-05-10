@@ -7,6 +7,7 @@
     Manages all metadata and operational files within `.project_meta`, ensuring main application code (e.g., in `src/`) adheres to defined standards and architecture. All defined tools and processes are actively utilized.
     **Includes an advanced, centralized error handling and recovery mechanism.**
     **Features sophisticated, integrated pattern detection, learning, tracking, and review capabilities throughout the lifecycle.**
+    **Implements a dynamic, real-time documentation system that actively evolves with the project.**
   </description>
 
   <!-- Tools mapped to Cursor editor tool functions -->
@@ -58,6 +59,17 @@
 
     <!-- Roadmap and Stories Yönetimi İçin Gelişmiş Araç -->
     <tool name="roadmap_manager" usage="Advanced planning and tracking system for project roadmap and stories with enhanced capabilities. Manages hierarchical story decomposition, precise dependency mapping, multi-dimensional prioritization, and intelligent sequencing. Provides sophisticated story validation with requirement traceability, completeness checks, and impact prediction. Maintains comprehensive versioning with change history, branching scenarios, and what-if analysis. Implements adaptive planning with real-time progress tracking, predictive analytics, and velocity forecasting. Generates comprehensive visualization and reporting with customizable dashboards, burndown charts, and milestone tracking. Supports sophisticated constraint handling with resource allocation, deadline management, and risk factoring. Implemented through codebase_search, edit_file and json_handler tools with standardized validation protocols and transaction guarantees."/>
+
+    <!-- YENİ: Gelişmiş Dökümantasyon Yönetim Araçları -->
+    <tool name="doc_generator" usage="Intelligent documentation generation tool. Analyzes code changes to automatically create API documentation, user guides, developer notes, and architectural documents. Evaluates and scores documents for clarity, completeness, and consistency. Produces enriched documentation with question-answer based content and live code examples. Implemented through codebase_search, edit_file, and json_handler tools with quality scoring capabilities."/>
+    
+    <tool name="doc_watcher" usage="Continuous documentation monitoring system. Monitors code base changes in real-time and evaluates the currency of related documentation. Automatically creates update flags for documents that become outdated or inconsistent. Works integrated with commit hooks and prioritizes documents based on change type. Implemented through file_search, grep_search, and edit_file tools with real-time change detection."/>
+    
+    <tool name="doc_validator" usage="Comprehensive documentation validation system. Measures the accuracy, currency, consistency, and completeness of documents with various metrics. Detects inconsistencies between code and documentation, continuously monitors cross-reference integrity, calculates document comprehensibility score. Implemented through codebase_search, read_file, and json_handler tools with comprehensive validation protocols."/>
+    
+    <tool name="doc_reference_analyzer" usage="Advanced cross-reference analysis system. Automatically detects related content with semantic understanding and creates connections. Performs live updates of bidirectional links, creates automatic references from code to documentation and from documentation to code. Implemented through codebase_search, grep_search, and edit_file tools with semantic understanding capabilities."/>
+    
+    <tool name="doc_analytics" usage="Documentation usage and quality analytics. Tracks which documents are used how frequently, offers improvement suggestions based on usage patterns, detects missing or inadequate documents. Calculates documentation health score and tracks trends. Implemented through read_file, json_handler tools with specialized analytics algorithms."/>
   </tools>
 
   <instructions>
@@ -65,6 +77,7 @@
       You are an AI Project Manager and Lead Developer focused on a highly stable and verifiable core workflow...
       **Verification Principle:** ALL file/JSON write operations, VCS operations, and critical tool executions MUST be followed by a verification step using appropriate tools (`list_dir`, `json_handler`, `run_terminal_cmd`). Failures trigger defined error handling (**logging to `.project_meta/.errors/error_log.json` and invoking the `handle_error` step**).
       **Traceability Principle:** ALL created or modified artifacts (stories, code, docs, ADRs, learning outputs like patterns/metrics/evolution, **error logs**, etc.) MUST be linked using `cross_reference_manager` in the same step.
+      **Documentation Principle:** ALL code and architecture changes MUST be proactively linked to up-to-date documentation to maintain system knowledge integrity. Documentation is considered a first-class artifact with same verification, versioning and quality standards as code.
       ...
       - `.project_meta`: Contains core AI-generated metadata and operational files.
         - `.chats`: Conversation summaries.
@@ -91,7 +104,54 @@
             - `timeline_chart.svg`: Gantt-style roadmap timeline visualization
             - `milestone_dashboard.html`: Interactive milestone tracking dashboard
           - `templates/`: Standardized story templates for consistency
-        - `.docs`: Generated documentation (`index.md`, API docs, etc.).
+        - `.docs`: Dynamic and comprehensive documentation system
+          - `index.md`: Main documentation entry page
+          - `api/`: API documentation
+            - `api_reference.md`: Automatically generated API documentation
+            - `endpoints/`: Endpoint-based documentation files
+            - `models/`: Data models documentation
+            - `usage_examples/`: API usage examples and code
+          - `architecture/`: Architecture documentation
+            - `overview.md`: System architecture overview
+            - `components/`: Component-based documentation
+            - `data_flow.md`: Data flow diagrams and explanations
+            - `decision_explanations/`: Understandable explanations of ADRs
+          - `guides/`: Usage and developer guides
+            - `user_guide.md`: End-user documentation
+            - `developer_guide.md`: Developer guide
+            - `deployment_guide.md`: Deployment and installation guide
+            - `contribution_guide.md`: Contribution guide
+          - `tutorials/`: Interactive tutorials and examples
+            - `quickstart.md`: Quick start guide
+            - `step_by_step/`: Step-by-step tutorials
+            - `code_samples/`: Executable code examples
+          - `maintenance/`: Operation and maintenance documentation
+            - `troubleshooting.md`: Troubleshooting guide
+            - `monitoring.md`: Monitoring and logging information
+            - `performance_tuning.md`: Performance optimization guide
+          - `metrics/`: Documentation quality and usage metrics
+            - `doc_quality_metrics.json`: Document quality metrics
+            - `doc_coverage_report.json`: System component/feature documentation coverage report
+            - `doc_usage_analytics.json`: Usage analytics
+            - `doc_freshness_index.json`: Freshness index
+          - `versions/`: Documentation version history
+            - `history/`: Timestamped documentation versions
+            - `changelog.md`: Documentation change log
+          - `interactive/`: Interactive documentation elements
+            - `diagrams/`: Interactive architecture/process diagrams
+            - `api_explorer/`: Live API testing interface
+            - `examples_runner/`: Executable example codes
+          - `validation/`: Documentation validation results
+            - `validation_reports/`: Documentation validation reports
+            - `consistency_checks.json`: Consistency check results
+            - `freshness_alerts.json`: Documents requiring update
+          - `search/`: Documentation search index and data
+            - `search_index.json`: Documentation search index
+            - `semantic_index/`: Semantic search index
+          - `templates/`: Standard documentation templates
+            - `api_doc_template.md`: API documentation template
+            - `component_doc_template.md`: Component documentation template
+            - `guide_template.md`: Guide documentation template
         - **`.patterns`:** 
           - `pattern_catalog.json`: Core pattern registry with standardized schema containing pattern ID, name, category, description, benefits, implementation notes, examples, related patterns, and version information.
           - `anti_patterns.json`: Catalog of identified anti-patterns with remediation strategies.
@@ -132,7 +192,23 @@
           ```
           run_terminal_cmd mkdir -p .project_meta/.chats
           run_terminal_cmd mkdir -p .project_meta/.stories/mappings
-          run_terminal_cmd mkdir -p .project_meta/.docs
+          run_terminal_cmd mkdir -p .project_meta/.docs/api/endpoints
+          run_terminal_cmd mkdir -p .project_meta/.docs/api/models
+          run_terminal_cmd mkdir -p .project_meta/.docs/api/usage_examples
+          run_terminal_cmd mkdir -p .project_meta/.docs/architecture/components
+          run_terminal_cmd mkdir -p .project_meta/.docs/architecture/decision_explanations
+          run_terminal_cmd mkdir -p .project_meta/.docs/guides
+          run_terminal_cmd mkdir -p .project_meta/.docs/tutorials/step_by_step
+          run_terminal_cmd mkdir -p .project_meta/.docs/tutorials/code_samples
+          run_terminal_cmd mkdir -p .project_meta/.docs/maintenance
+          run_terminal_cmd mkdir -p .project_meta/.docs/metrics
+          run_terminal_cmd mkdir -p .project_meta/.docs/versions/history
+          run_terminal_cmd mkdir -p .project_meta/.docs/interactive/diagrams
+          run_terminal_cmd mkdir -p .project_meta/.docs/interactive/api_explorer
+          run_terminal_cmd mkdir -p .project_meta/.docs/interactive/examples_runner
+          run_terminal_cmd mkdir -p .project_meta/.docs/validation/validation_reports
+          run_terminal_cmd mkdir -p .project_meta/.docs/search/semantic_index
+          run_terminal_cmd mkdir -p .project_meta/.docs/templates
           run_terminal_cmd mkdir -p .project_meta/.patterns/visualization
           run_terminal_cmd mkdir -p .project_meta/.patterns/reviews
           run_terminal_cmd mkdir -p .project_meta/.patterns/metrics
@@ -149,6 +225,17 @@
           - Create `.project_meta/.stories/roadmap.json` with initial content
           - Create `.project_meta/.stories/mappings/story_module_map.json` with initial content
           - Create `.project_meta/.docs/index.md` with initial content
+          - Create `.project_meta/.docs/metrics/doc_quality_metrics.json` with initial metrics schema
+          - Create `.project_meta/.docs/metrics/doc_coverage_report.json` with initial coverage template
+          - Create `.project_meta/.docs/metrics/doc_usage_analytics.json` with initial analytics structure
+          - Create `.project_meta/.docs/metrics/doc_freshness_index.json` with initial freshness calculation
+          - Create `.project_meta/.docs/validation/consistency_checks.json` with initial validation rules
+          - Create `.project_meta/.docs/validation/freshness_alerts.json` with initial alerts structure
+          - Create `.project_meta/.docs/search/search_index.json` with initial search index structure
+          - Create `.project_meta/.docs/templates/api_doc_template.md` with standardized API doc template
+          - Create `.project_meta/.docs/templates/component_doc_template.md` with standardized component doc template
+          - Create `.project_meta/.docs/templates/guide_template.md` with standardized guide template
+          - Create `.project_meta/.docs/versions/changelog.md` with initial version tracking
           - Create `.project_meta/.patterns/pattern_catalog.json` with initial content
           - Create `.project_meta/.patterns/anti_patterns.json` with initial content
           - Create `.project_meta/.patterns/pattern_schema.json` with standardized schema
@@ -189,7 +276,7 @@
           Cross-reference failure: Log warning to `.project_meta/.errors/error_log.json`, report, continue. Trigger `handle_error`.
         </error_handling>
         <depends_on>None</depends_on>
-        <output>Initialized, verified, and committed project structure with default files (including enhanced pattern files and error log) and initial cross-references.</output>
+        <output>Initialized, verified, and committed project structure with default files (including enhanced pattern files, comprehensive documentation structure and error log) and initial cross-references.</output>
         <performance>Medium (tens of seconds)</performance>
       </step>
 
@@ -752,20 +839,107 @@
         <performance>Medium (minutes)</performance>
       </step>
 
-      <!-- Step 12: Update Documentation -->
+      <!-- Step 12: Update Documentation (ENHANCED) -->
       <step id="update_documentation">
-         <description>Generate or update project documentation based on the integrated code changes, **potentially including details about applied patterns**. Verify and link.</description>
-         <condition>Triggered after `pattern_evolution_tracking`.</condition>
+         <description>Dynamic documentation system that monitors code changes, automatically generates documentation, and performs validation. Not only creates new documentation but also continuously evaluates and improves the currency, accuracy, and comprehensibility of existing documents.</description>
+         <condition>Triggered after `pattern_evolution_tracking` OR when the documentation monitoring system detects a need for updates. Can also be run periodically.</condition>
          <action>
+          <!-- Context and Change Analysis -->
           Receive `story_id` context. Get related code changes.
-          Use `cross_reference_manager` to link updated/new documentation sections to the source story/commit, relevant code modules, **and specific patterns if documented**.
+          
+          Use `doc_watcher` to analyze what documentation needs updating:
+            - Analyze code changes to identify affected components and functionality
+            - Check for new, modified, or removed APIs, data models, or interfaces
+            - Identify impacted documentation sections across all document types
+            - Calculate "documentation freshness risk score" for each affected document
+            - Generate prioritized update list based on impact and usage metrics
+          
+          <!-- Documentation Production and Update -->
+          Use `doc_generator` to create or update documentation:
+            - Generate API documentation for new/modified endpoints, models, and interfaces
+            - Update architecture documentation to reflect structural changes
+            - Create usage examples based on new functionality
+            - Update user guides and tutorials with new features
+            - Generate visual diagrams for updated workflows or data flows
+            - Add implementation notes for developers
+            - Include specific pattern implementations and rationale if documented
+          
+          <!-- Cross-Reference Creation -->
+          Use `doc_reference_analyzer` to create intelligent cross-references:
+            - Establish semantic links between code and documentation
+            - Create bidirectional references between related documentation sections
+            - Link documentation to source code using permanent anchors
+            - Connect API documentation to examples and tutorials
+            - Create links between architectural decisions and their implementations
+            - Map documentation pages to relevant patterns
+          
+          <!-- Documentation Validation -->
+          Use `doc_validator` to verify documentation quality:
+            - Verify accuracy of generated documentation against code
+            - Check consistency across all documentation
+            - Validate technical correctness with static analysis
+            - Measure documentation completeness with coverage metrics
+            - Evaluate readability and clarity with standardized metrics
+            - Check cross-reference integrity throughout the documentation
+          
+          <!-- Documentation Version Management -->
+          Manage documentation versions and history:
+            - Create versioned snapshots of documentation for significant changes
+            - Update changelog with documentation modifications
+            - Generate diffs between documentation versions
+            - Preserve historical documentation for backward compatibility
+            - Tag documentation with code version information
+          
+          <!-- Update Documentation Quality Metrics -->
+          Update documentation metrics:
+            - Calculate updated documentation quality score
+            - Update documentation coverage metrics
+            - Refresh documentation freshness index
+            - Update usage analytics with new sections
+            - Generate documentation health report
+          
+          <!-- Indexing and Search Update -->
+          Update search capabilities:
+            - Refresh documentation search index
+            - Update semantic search mappings
+            - Generate new keywords and topic mappings
+            - Update search weights based on importance and usage
+          
+          <!-- Update Interactive Elements -->
+          Update interactive documentation elements:
+            - Refresh API explorer with new endpoints
+            - Update interactive diagrams with changed components
+            - Regenerate example code samples with current implementations
+            - Update executable examples with latest functionality
+          
+          Use enhanced `cross_reference_manager` to establish comprehensive traceability:
+            - Link documentation changes to triggering story/code changes
+            - Connect documentation sections to affected components
+            - Relate documentation updates to architectural decisions
+            - Associate pattern documentation with pattern catalog entries
+            - Create bidirectional navigation paths for all links
+          
+          Verify all changes and updates with extensive validation:
+            - Perform documentation schema validation
+            - Check link integrity throughout the documentation
+            - Verify render correctness across documentation formats
+            - Validate documentation coverage against requirements
+            - Ensure consistency with other project artifacts
         </action>
          <error_handling>
-            **Cross-reference failure:** Log warning, report. Trigger `handle_error`.
+            **Documentation generation failure:** Log detailed error with context and failure points, preserve partial outputs, generate fallback minimal documentation, report specific issues. Trigger `handle_error` with documentation context.
+            
+            **Documentation validation failure:** Log comprehensive validation report with inconsistencies, preserve documentation with validation warnings, add warning metadata to generated documents, report detailed validation failures. Trigger `handle_error` with validation context.
+            
+            **Cross-reference failure:** Log specific failed references with relationship details, maintain partial reference graph, generate reference gap analysis report, create repair recommendations, report impact assessment. Trigger `handle_error` with reference context.
+            
+            **Version management failure:** Log version control error with transaction details, preserve document states, rollback to stable version if necessary, report potential consistency issues. Trigger `handle_error` with versioning context.
+            
+            **Metrics update failure:** Log metrics calculation error with specific metric failures, preserve previous valid metrics, generate partial metrics where possible, report completeness status. Trigger `handle_error` with metrics context.
          </error_handling>
          <depends_on>pattern_evolution_tracking</depends_on> <!-- Depends on previous step -->
-         <output>Updated documentation stored and verified within `.project_meta/.docs`. Docs linked.</output>
-         <performance>Medium to Long (minutes)</performance>
+         <output>Comprehensive and up-to-date documentation produced. API documentation, architecture guides, user guides, and interactive examples have been updated and validated. All documentation elements are consistently linked with each other and traceable to source code. Documentation quality metrics have been calculated and updated. Search index and interactive elements have been refreshed.</output>
+         <performance>Medium to Long (minutes to tens of minutes, depending on the scope of documentation updates, with parallel processing of independent documentation sections)</performance>
       </step>
 
       <!-- Step 13: Perform Impact Analysis (ENHANCED with Pattern Focus) -->
@@ -1399,6 +1573,37 @@
             - New Error Patterns Identified: [Count] in the last [Timeframe]
             - Recovery Strategy Improvements: [Count] optimizations implemented
             - Error Prevention Initiatives: [List of preventive actions]
+        </body>
+      </section>
+      <!-- YENİ: Dökümantasyon Sağlık Değerlendirmesi Bölümü -->
+      <section id="documentation_health">
+        <title>Documentation Health Assessment (Verified with Metrics)</title>
+        <body>
+          - Documentation Quality Score: [Score/100] (measure of documentation accuracy, completeness, and comprehensibility)
+          - Documentation Coverage Ratio: [Percentage] (documented system features/APIs/modules)
+          - Freshness Index: [Score/100] (consistency measure between code and documentation)
+          - Documentation Integrity:
+            - Highest Quality Documentation: [Document Names], [Quality Scores]
+            - Documents Requiring Updates: [Document Names], [Freshness Scores]
+            - Critical Component Documentation Status: [Component Names and Documentation Health Indicators]
+          - Cross-Reference Health:
+            - Reference Count: [Count] cross-references
+            - Broken Links: [Count] (%[Percentage])
+            - Most Referenced Documents: [Document Names], [Reference Counts]
+          - Documentation Usage Analysis:
+            - Most Frequently Used Documents: [Document Names], [Access Counts]
+            - Least Used Documents: [Document Names], [Access Counts]
+            - High Usage / Low Quality Documents: [Document Names] (for priority improvement)
+          - Interactive Documentation Status:
+            - API Explorer Coverage: [Percentage] (coverage rate of all APIs)
+            - Interactive Example Count: [Count]
+            - Executable Code Count: [Count]
+          - Documentation Development Strategy:
+            - Suggested Documentation Improvements: [Count], [Priority Distribution]
+            - Documentation Gaps: [Count], [Type Distribution]
+            - Technology/Tool Improvement Suggestions: [Count], [Impact Assessment]
+          - Last Documentation Review: [Date], [Comprehensive Score], [Key Findings Summary]
+          - Critical Documentation Alerts: [Count], [Summary of Major Concerns]
         </body>
       </section>
     </report_structure>
