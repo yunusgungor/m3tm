@@ -90,7 +90,7 @@
     {
       "story_id": "story_9",
       "title": "Temel Füzyon mekanizması implementasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_10",
@@ -163,5 +163,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-06-01"
+  "last_updated": "2024-06-03"
 } 
