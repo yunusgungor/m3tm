@@ -312,14 +312,15 @@
         "Önceden tanımlanmış görev başlıklarını kolayca ekleyip çıkarma",
         "Yapılandırma, kayıp hesaplama ve kayıt işlemlerini standartlaştırma"
       ],
-      "implementation_notes": "Soyut bir TaskHead temel sınıfı üzerinden farklı görev başlıkları (ClassificationHead, RegressionHead, MultiLabelHead) tanımlanır. Her başlık kendi özel kayıp fonksiyonunu ve çıktı formatını belirler ancak ortak bir arayüzü paylaşır. TaskHeadFactory, farklı başlık türlerini oluşturmak için kullanılır.",
+      "implementation_notes": "Soyut bir TaskHead temel sınıfı üzerinden farklı görev başlıkları (ClassificationHead, RegressionHead, MultiLabelHead) tanımlanır. Her başlık kendi özel kayıp fonksiyonunu ve çıktı formatını belirler ancak ortak bir arayüzü paylaşır. TaskHeadFactory, farklı başlık türlerini oluşturmak için kullanılır. Strateji deseni olarak, TaskHead soyut sınıfı temel algoritmayı tanımlar ve somut alt sınıflar belirli adımları değiştirir. Bunda:  \n\n1. Temel algoritmalar (predict, save_pretrained, count_parameters) base sınıfında tanımlanır\n2. Değişen davranışlar (forward, compute_loss) alt sınıflarda uygulanır\n3. Alt sınıflar kendi özel fonksiyonlarını (_apply_pooling, get_top_k_predictions gibi) ekleyebilir\n4. Nesne oluşturma factory sınıfı üzerinden standartlaştırılır\n5. Yapılandırma parametreleri dataclass örüntüsü ile doğrulanır ve yönetilir",
       "examples": [
         "m3tm.task_heads.base.TaskHead",
         "m3tm.task_heads.classification.ClassificationHead",
         "m3tm.task_heads.regression.RegressionHead",
-        "m3tm.task_heads.multi_label.MultiLabelHead"
+        "m3tm.task_heads.multi_label.MultiLabelHead",
+        "m3tm.task_heads.config.TaskHeadFactory"
       ],
-      "related_patterns": ["PT-015", "PT-003", "PT-002"],
+      "related_patterns": ["PT-015", "PT-003", "PT-002", "PT-001"],
       "last_updated": "2024-06-10"
     }
   ]

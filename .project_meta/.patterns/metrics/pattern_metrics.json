@@ -1,0 +1,87 @@
+{
+  "timestamp": "2024-06-10T15:30:00Z",
+  "metrics_version": "1.0.0",
+  "pattern_metrics": [
+    {
+      "pattern_id": "PT-001",
+      "metrics": {
+        "adoption_rate": 0.85,
+        "implementation_consistency": 0.92,
+        "complexity_reduction": 0.75,
+        "maintainability_improvement": 0.80,
+        "usage_count": 14,
+        "test_coverage": 0.78
+      }
+    },
+    {
+      "pattern_id": "PT-002",
+      "metrics": {
+        "adoption_rate": 0.72,
+        "implementation_consistency": 0.85,
+        "complexity_reduction": 0.68,
+        "maintainability_improvement": 0.75,
+        "usage_count": 10,
+        "test_coverage": 0.70
+      }
+    },
+    {
+      "pattern_id": "PT-003",
+      "metrics": {
+        "adoption_rate": 0.90,
+        "implementation_consistency": 0.89,
+        "complexity_reduction": 0.82,
+        "maintainability_improvement": 0.85,
+        "usage_count": 12,
+        "test_coverage": 0.74
+      }
+    },
+    {
+      "pattern_id": "PT-007",
+      "metrics": {
+        "adoption_rate": 0.65,
+        "implementation_consistency": 0.80,
+        "complexity_reduction": 0.70,
+        "maintainability_improvement": 0.72,
+        "usage_count": 8,
+        "test_coverage": 0.68
+      }
+    },
+    {
+      "pattern_id": "PT-015",
+      "metrics": {
+        "adoption_rate": 0.80,
+        "implementation_consistency": 0.88,
+        "complexity_reduction": 0.78,
+        "maintainability_improvement": 0.82,
+        "usage_count": 9,
+        "test_coverage": 0.72
+      }
+    },
+    {
+      "pattern_id": "PT-020",
+      "metrics": {
+        "adoption_rate": 0.25,
+        "implementation_consistency": 0.95,
+        "complexity_reduction": 0.85,
+        "maintainability_improvement": 0.88,
+        "usage_count": 4,
+        "test_coverage": 0.60
+      },
+      "notes": "Yeni tanımlanan TaskHeadStrategy örüntüsü. İmplementasyon tutarlılığı yüksek ancak henüz projede yaygınlaşmamış. Teknik borç azaltma ve bakım kolaylığı sağlama potansiyeli yüksek."
+    }
+  ],
+  "global_metrics": {
+    "pattern_adoption_average": 0.70,
+    "pattern_consistency_average": 0.85,
+    "pattern_effectiveness_score": 0.78,
+    "anti_pattern_reduction": 0.65,
+    "test_coverage_average": 0.71
+  },
+  "recommendations": [
+    {
+      "pattern_id": "PT-020",
+      "recommendation": "TaskHeadStrategy örüntüsünün diğer benzer senaryolara (ör. dikkat mekanizmaları, veri dönüştürücüler) da uygulanması ve test kapsamının artırılması önerilir. Adaptör mekanizmasıyla entegrasyonu güçlendirilebilir.",
+      "priority": "medium"
+    }
+  ]
+} 
