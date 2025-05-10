@@ -9,6 +9,7 @@ ve adapter yuvaları içerir.
 Örüntüler:
 - PluggableComponentStrategy: Değiştirilebilir dikkat ve FFN mekanizmaları
 - ConfigurationComposite (PT-012): Hiyerarşik yapılandırma organizasyonu
+- ModelComposite (PT-003): Ana modelin içine küçük ve özelleştirilmiş modül ekleme
 """
 
 from typing import Dict, Tuple, Optional, List, Union, Any
@@ -31,6 +32,9 @@ class ProtoTransformerBlock(nn.Module):
     Bu sınıf, çeşitli dikkat ve feed-forward ağ mekanizmalarını destekler,
     mobil cihazlarda verimli çalışacak şekilde tasarlanmıştır, ve
     adapter yuvaları ile kişiselleştirilebilir.
+    
+    Örüntüler:
+    - ModelComposite (PT-003): Ana modelin içine küçük ve özelleştirilmiş modül ekleme
     """
     
     def __init__(self, config: ProtoTransformerConfig):
@@ -190,6 +194,10 @@ class ProtoTransformerBlock(nn.Module):
             self.adapter_slots[position].remove_adapter()
             return True
         return False
+    
+    def get_adapter_positions(self) -> List[str]:
+        """Desteklenen adapter pozisyonlarını döndürür."""
+        return list(self.adapter_slots.keys())
     
     def count_parameters(self) -> int:
         """Modülün eğitilebilir parametre sayısını hesaplar."""
