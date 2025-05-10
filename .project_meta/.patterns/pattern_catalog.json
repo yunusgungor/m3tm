@@ -36,10 +36,11 @@
       "examples": [
         "m3tm.embedding.factory.EmbeddingFactory",
         "m3tm.task_heads.config.TaskHeadFactory",
-        "m3tm.search.SearchProjectionFactory"
+        "m3tm.search.SearchProjectionFactory",
+        "m3tm.adapters.adapter_manager.create_adapter"
       ],
-      "related_patterns": ["PT-006"],
-      "last_updated": "2024-06-04"
+      "related_patterns": ["PT-006", "PT-016"],
+      "last_updated": "2024-06-09"
     },
     {
       "pattern_id": "PT-003",
@@ -53,10 +54,12 @@
       ],
       "implementation_notes": "PyTorch nn.Module'den türeyen bir sınıf, alt modülleri içerir ve forward metodunda bunları sırayla çağırır.",
       "examples": [
-        "m3tm.training.trainer.TextClassificationModel"
+        "m3tm.training.trainer.TextClassificationModel",
+        "m3tm.transformer.adapter.AdapterSlot",
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock"
       ],
-      "related_patterns": [],
-      "last_updated": "2024-05-24"
+      "related_patterns": ["PT-014", "PT-015"],
+      "last_updated": "2024-06-09"
     },
     {
       "pattern_id": "PT-006",
@@ -77,21 +80,23 @@
     },
     {
       "pattern_id": "PT-007",
-      "name": "EmbeddingNormalizer",
-      "category": "embedding",
-      "description": "Gömme vektörlerini normalize ederek benzerlik karşılaştırmaları için uygun hale getiren desen",
+      "name": "MechanismRegistry",
+      "category": "registration",
+      "description": "Farklı mekanizmaları (dikkat, FFN, vb.) merkezi bir kayıt sisteminde tutarak, isim temelinde erişim sağlayan desen",
       "benefits": [
-        "Gömme vektörlerinin boyutu ve ölçeği normalleştirilir",
-        "Kosinüs benzerliği hesaplamaları için birim vektörler sağlar",
-        "Arama algoritmalarının performansını artırır",
-        "Farklı modalitelerden gelen gömmeleri karşılaştırılabilir hale getirir"
+        "Mekanizma ekleme ve erişim işlemlerini standartlaştırır",
+        "Dinamik, isim temelli mekanizma seçimine olanak tanır",
+        "Yeni mekanizmaların sisteme entegrasyonunu kolaylaştırır",
+        "Gevşek bağlantı sağlar"
       ],
-      "implementation_notes": "PyTorch nn.Linear ile boyut dönüşümü ve F.normalize ile L2 normalizasyonu kullanarak birim vektörler oluşturur. Dropout ve Layer Normalization ile düzenlileştirme sağlanabilir.",
+      "implementation_notes": "Sınıf değişkeni olarak bir sözlük içinde mekanizma sınıflarını depolar. @ClassRegistry.register dekoratörü kullanılarak yeni mekanizmalar kaydedilir.",
       "examples": [
-        "m3tm.search.M3TMSearchProjection"
+        "m3tm.transformer.ffn.FFNMechanismRegistry",
+        "m3tm.research.attention_mechanisms.AttentionMechanismRegistry",
+        "m3tm.config.config_manager.ConfigRegistry"
       ],
-      "related_patterns": ["PT-002"],
-      "last_updated": "2024-06-04"
+      "related_patterns": ["PT-016", "PT-002", "PT-015"],
+      "last_updated": "2024-06-09"
     },
     {
       "pattern_id": "PT-008",
@@ -156,10 +161,11 @@
       ],
       "implementation_notes": "Bir yapılandırma sınıfı, diğer yapılandırma sınıflarını içerir ve bunları yönetir.",
       "examples": [
-        "m3tm.task_heads.config.ClassificationHeadConfig"
+        "m3tm.task_heads.config.ClassificationHeadConfig",
+        "m3tm.transformer.proto_transformer.ProtoTransformerConfig"
       ],
       "related_patterns": ["PT-001"],
-      "last_updated": "2024-05-24"
+      "last_updated": "2024-06-09"
     },
     {
       "pattern_id": "PT-013",
@@ -179,7 +185,7 @@
       "last_updated": "2024-05-24"
     },
     {
-      "pattern_id": "PT-014",
+      "pattern_id": "PT-016",
       "name": "VisionTransformerPatching",
       "category": "image_processing",
       "description": "Görüntüleri eşit boyutlu yamalara bölerek transformer modüllerine besleyen desen",
@@ -196,7 +202,7 @@
         "m3tm.image.patch.get_2d_sincos_pos_embed"
       ],
       "related_patterns": ["PT-003"],
-      "last_updated": "2024-06-01"
+      "last_updated": "2024-06-09"
     },
     {
       "pattern_id": "PT-014",
@@ -232,10 +238,67 @@
       "implementation_notes": "Ana model bileşenlerini konuma göre organize eden ve dinamik olarak değiştirilebilen bir yapı sunar. Bileşenler için standartlaştırılmış arayüzler ve bileşen registrasyonu için metotlar içerir.",
       "examples": [
         "m3tm.transformer.proto_transformer.ProtoTransformerBlock",
-        "m3tm.transformer.adapter.create_adapter_slots"
+        "m3tm.transformer.adapter.create_adapter_slots",
+        "m3tm.transformer.ffn.get_ffn_mechanism",
+        "m3tm.research.attention_mechanisms.get_attention_mechanism_by_name"
       ],
-      "related_patterns": ["PT-003", "PT-014"],
-      "last_updated": "2024-06-07"
+      "related_patterns": ["PT-003", "PT-014", "PT-007"],
+      "last_updated": "2024-06-09"
+    },
+    {
+      "pattern_id": "PT-017",
+      "name": "DecoratorPattern",
+      "category": "structural",
+      "description": "Sınıflara dinamik olarak davranış ekleyen bir sarmalama deseni. Özellikle kayıt işlemlerinde ve fonksiyonalite eklemede kullanılır.",
+      "benefits": [
+        "Çalışma zamanında dinamik olarak davranış ekleme",
+        "Sınıf kapalılık prensibini bozmadan işlevsellik genişletme",
+        "Kaygıları ayırma ve temiz kod yapısı sağlama",
+        "Önceden tanımlanmış sınıfları modifiye etmeden kullanma esnekliği"
+      ],
+      "implementation_notes": "Python dekoratörleri (@decorator sözdizimi) kullanılarak uygulanır. Özellikle kayıt işlemleri için registry deseninde yaygın kullanılır.",
+      "examples": [
+        "m3tm.transformer.ffn.FFNMechanismRegistry.register",
+        "m3tm.research.attention_mechanisms.AttentionMechanismRegistry.register"
+      ],
+      "related_patterns": ["PT-007"],
+      "last_updated": "2024-06-09"
+    },
+    {
+      "pattern_id": "PT-018",
+      "name": "BuilderPattern",
+      "category": "creation",
+      "description": "Karmaşık nesnelerin yapımını temsillerinden ayıran bir oluşturma deseni. Karmaşık yapılandırmaları adım adım oluşturur.",
+      "benefits": [
+        "Karmaşık nesnelerin adım adım inşası",
+        "Çoklu adımlı yapılandırma sürecini düzenleme",
+        "Farklı nesne varyasyonlarını aynı inşa süreciyle oluşturma",
+        "Karmaşık oluşturma süreçlerini istemciden gizleme"
+      ],
+      "implementation_notes": "Yapılandırma parametrelerini aşamalı olarak toplayan ve en sonunda hedef nesneyi oluşturan bir yapı sağlar. Genellikle modelin farklı bileşenleri için uygun yapılandırmaların oluşturulmasında kullanılır.",
+      "examples": [
+        "m3tm.config.config_manager.ModelConfigBuilder"
+      ],
+      "related_patterns": ["PT-002", "PT-012"],
+      "last_updated": "2024-06-09"
+    },
+    {
+      "pattern_id": "PT-019",
+      "name": "ObserverPattern",
+      "category": "behavioral",
+      "description": "Nesneler arasında bir-çok (one-to-many) bağımlılık ilişkisi tanımlayan, bir nesne değiştiğinde bağımlı nesnelerin otomatik olarak bilgilendirilmesini sağlayan desen.",
+      "benefits": [
+        "Değişiklik bildirimi için standart bir arayüz",
+        "Gevşek bağlantılı tasarım sağlama",
+        "Dinamik abonelik sistemi",
+        "Değişim yayılımını soyutlama"
+      ],
+      "implementation_notes": "Konu (subject) ve gözlemciler (observers) arasında organize bir ilişki kurar. Yapılandırma değişiklikleri gibi olayları takip etmek için kullanılır.",
+      "examples": [
+        "m3tm.config.config_manager.ConfigurationObserver"
+      ],
+      "related_patterns": ["PT-007"],
+      "last_updated": "2024-06-09"
     }
   ]
 } 

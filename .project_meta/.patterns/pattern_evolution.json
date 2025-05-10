@@ -1,7 +1,7 @@
 {
   "evolution_id": "m3tm_v2.3_pattern_evolution",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-07",
+  "last_updated": "2024-06-09",
   "trends": [
     {
       "date": "2024-05-23",
@@ -23,7 +23,7 @@
     },
     {
       "date": "2024-06-01",
-      "patterns_added": ["PT-014"],
+      "patterns_added": ["PT-016"],
       "patterns_modified": [],
       "patterns_deprecated": [],
       "anti_patterns_detected": [],
@@ -37,7 +37,7 @@
         },
         {
           "type": "pattern_refinement",
-          "description": "VisionTransformerPatching (PT-014) deseni, ModelComposite (PT-003) desenini temel alarak görüntü işleme için özelleştirildi",
+          "description": "VisionTransformerPatching (PT-016) deseni, ModelComposite (PT-003) desenini temel alarak görüntü işleme için özelleştirildi",
           "impact": "Çoklu modalite işleme yeteneklerini artıracak, metin ve görüntü modaliteleri için tutarlı bir desen kullanımı sağlayacak"
         }
       ]
@@ -93,26 +93,79 @@
           "impact": "Bu desen, CompositeAdapter ile birlikte kullanıldığında, her konumda farklı adaptörlerin kullanılabildiği esnek bir mimari sağlar"
         }
       ]
+    },
+    {
+      "date": "2024-06-09",
+      "patterns_added": ["PT-017", "PT-018", "PT-019"],
+      "patterns_modified": ["PT-002", "PT-003", "PT-007", "PT-012", "PT-015", "PT-016"],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": [],
+      "pattern_count": 16,
+      "anti_pattern_count": 2,
+      "highlights": [
+        {
+          "type": "pattern_reclassification",
+          "description": "PT-007 ID'si EmbeddingNormalizer'dan MechanismRegistry'ye yeniden atandı ve yeni bir kategori (registration) oluşturuldu",
+          "impact": "Desen kataloğunu modelin gerçek mimari yapısıyla daha uyumlu hale getirecek"
+        },
+        {
+          "type": "id_correction",
+          "description": "VisionTransformerPatching deseni PT-014'ten PT-016'ya taşındı, PT-014 ID'si CompositeAdapter deseni için kullanıldı",
+          "impact": "Desen ID'leri arasındaki çakışma giderildi ve katalog daha tutarlı hale getirildi"
+        },
+        {
+          "type": "new_patterns_added",
+          "description": "DecoratorPattern, BuilderPattern ve ObserverPattern desenleri sırasıyla PT-017, PT-018 ve PT-019 ID'leri ile tanımlandı",
+          "impact": "Kod tabanında tespit edilen önemli mimari desenler resmi olarak belgelendi"
+        },
+        {
+          "type": "pattern_synergy_discovery",
+          "description": "MechanismRegistry (PT-007) ve DecoratorPattern (PT-017) arasında güçlü bir sinerji tespit edildi",
+          "impact": "Bu kombinasyon, genişletilebilir mekanizma kayıt sistemi için temel oluşturuyor"
+        },
+        {
+          "type": "architectural_insight",
+          "description": "Analiz, DecoratorPattern'in birçok diğer desenin etkin uygulanmasında kilit rol oynadığını gösterdi",
+          "impact": "Python'un dekoratör yeteneklerinin mimari desenleri uygulamada sağladığı avantajlar açıkça görüldü"
+        }
+      ]
     }
   ],
   "growth_metrics": {
     "pattern_growth_rate": {
-      "overall": 4.33,
+      "overall": 5.33,
       "by_category": {
         "configuration": 0.0,
-        "creation": 0.0,
-        "structural": 2.0,
-        "behavioral": 0.0,
+        "creation": 1.0,
+        "structural": 3.0,
+        "behavioral": 1.0,
         "validation": 0.0,
         "data": 0.0,
         "image_processing": 1.0,
-        "embedding": 1.0
+        "embedding": 0.0,
+        "registration": 1.0
       }
     },
     "category_diversity": {
       "initial": 3,
-      "current": 8,
-      "growth_percentage": 166.67
+      "current": 9,
+      "growth_percentage": 200.0
     }
+  },
+  "pattern_relationships": {
+    "strong_synergies": [
+      {
+        "primary_pattern": "PT-007",
+        "synergy_patterns": ["PT-015", "PT-017"],
+        "synergy_score": 0.94,
+        "description": "MechanismRegistry, Decorator ve PluggableComponentStrategy desenleri birlikte çalışarak güçlü bir genişletilebilirlik altyapısı oluşturuyor"
+      },
+      {
+        "primary_pattern": "PT-014",
+        "synergy_patterns": ["PT-003", "PT-015"],
+        "synergy_score": 0.92,
+        "description": "CompositeAdapter, ModelComposite ve PluggableComponentStrategy desenleri birlikte çalışarak modüler ve ölçeklenebilir bir model mimarisi sağlıyor"
+      }
+    ]
   }
 } 

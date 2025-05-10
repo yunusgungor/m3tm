@@ -1,40 +1,45 @@
 {
   "metrics_id": "m3tm_v2.3_pattern_metrics",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-07",
+  "last_updated": "2024-06-09",
   "metrics": {
     "pattern_adoption_rate": {
-      "overall": 0.86,
+      "overall": 0.88,
       "by_category": {
         "configuration": 0.95,
-        "creation": 0.75,
-        "structural": 0.90,
-        "behavioral": 0.78,
+        "creation": 0.82,
+        "structural": 0.92,
+        "behavioral": 0.80,
         "validation": 0.90,
         "data": 0.70,
         "image_processing": 1.0,
+        "registration": 0.95,
         "embedding": 1.0
       }
     },
     "pattern_effectiveness_score": {
-      "overall": 0.88,
+      "overall": 0.89,
       "by_pattern_id": {
         "PT-001": 0.92,
         "PT-002": 0.88,
         "PT-003": 0.85,
         "PT-006": 0.78,
-        "PT-007": 0.89,
+        "PT-007": 0.91,
         "PT-008": 0.81,
         "PT-009": 0.87,
         "PT-010": 0.79,
         "PT-012": 0.86,
         "PT-013": 0.84,
         "PT-014": 0.93,
-        "PT-015": 0.90
+        "PT-015": 0.90,
+        "PT-016": 0.92,
+        "PT-017": 0.86,
+        "PT-018": 0.83,
+        "PT-019": 0.85
       }
     },
     "pattern_consistency_score": {
-      "overall": 0.89,
+      "overall": 0.90,
       "by_category": {
         "configuration": 0.93,
         "creation": 0.85,
@@ -43,14 +48,35 @@
         "validation": 0.92,
         "data": 0.83,
         "image_processing": 0.90,
+        "registration": 0.94,
         "embedding": 0.91
       }
     },
     "anti_pattern_density": {
-      "overall": 0.040,
+      "overall": 0.038,
       "by_category": {
-        "code_structure": 0.056,
+        "code_structure": 0.052,
         "design": 0.034
+      }
+    },
+    "pattern_impact": {
+      "performance": {
+        "CompositeAdapter": {
+          "parameter_increase": "1-5%",
+          "computation_overhead": "2-3%"
+        },
+        "PluggableComponentStrategy": {
+          "parameter_increase": "0%",
+          "computation_overhead": "~1%"
+        },
+        "MechanismRegistry": {
+          "parameter_increase": "0%",
+          "computation_overhead": "<1%"
+        }
+      },
+      "maintainability": {
+        "overall_improvement": 0.23,
+        "top_contributors": ["PT-007", "PT-014", "PT-015", "PT-017"]
       }
     }
   }
