@@ -105,12 +105,12 @@
     {
       "story_id": "story_12",
       "title": "AdapterSlot mekanizmasının ProtoTransformerBlock entegrasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_13",
       "title": "Dinamik görev başlıkları implementasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_14",

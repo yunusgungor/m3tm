@@ -14,11 +14,14 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Union, Any, Set
 import os
 import json
+import uuid
+import time
 
 import torch
 import torch.nn as nn
 
 from m3tm.adapters.adapter import AdapterConfig, Adapter, create_adapter
+from m3tm.adapters.adapter_utils import get_adapter_positions
 
 
 @dataclass

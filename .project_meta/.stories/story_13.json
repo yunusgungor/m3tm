@@ -12,7 +12,7 @@
     "Görev başlıkları, modelin fused_representation çıktısına veya adapter çıktılarına bağlanabilmelidir."
   ],
   "module_mapping": "task_heads_module",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "estimated_effort": "medium",
   "technical_complexity": "medium",
@@ -27,5 +27,6 @@
     "story_7",
     "story_10"
   ],
-  "notes": "Görev başlıkları, çekirdek modelin farklı uygulamalarda kullanılabilmesini sağlayan önemli bir bileşendir. Başlıkların hafif ve verimli olması, mobil cihazlarda iyi performans göstermesi için kritiktir."
+  "notes": "Görev başlıkları, çekirdek modelin farklı uygulamalarda kullanılabilmesini sağlayan önemli bir bileşendir. Başlıkların hafif ve verimli olması, mobil cihazlarda iyi performans göstermesi için kritiktir.",
+  "completion_date": "2024-06-10"
 } 

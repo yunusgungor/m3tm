@@ -47,6 +47,10 @@ def get_adapter_positions(module: nn.Module) -> List[str]:
     # Klasik Transformer pozisyonları
     if hasattr(module, "attention") and hasattr(module, "feed_forward"):
         return ["pre_attention", "post_attention", "pre_ffn", "post_ffn"]
+        
+    # ProtoTransformerBlock için pozisyonlar
+    if module.__class__.__name__ == "ProtoTransformerBlock":
+        return ["pre_attention", "post_attention", "pre_ffn", "post_ffn"]
     
     # Adaptör destekli değil
     return []
@@ -181,7 +185,15 @@ def count_adapter_parameters(model: nn.Module) -> Dict[str, int]:
                         # Manuel sayım
                         result[adapter_name] = sum(p.numel() for p in slot.adapter.parameters() if p.requires_grad)
         
-        # Diğer adaptör tipleri için ek kontroller yapılabilir
+        # Çoklu adaptör desteği (adapters listesi)
+        if hasattr(module, 'adapters') and isinstance(module.adapters, nn.ModuleList) and len(module.adapters) > 0:
+            adapter_name = f"{name}.adapters"
+            # Tüm adaptörlerin parametre sayısını topla
+            param_count = sum(
+                sum(p.numel() for p in adapter.parameters() if p.requires_grad)
+                for adapter in module.adapters
+            )
+            result[adapter_name] = param_count
     
     return result
 
@@ -198,20 +210,22 @@ def get_trainable_adapter_parameters(model: nn.Module) -> List[torch.nn.Paramete
     Returns:
         Eğitilebilir adaptör parametreleri listesi
     """
-    adapter_params = []
+    trainable_params = []
     
     # Tüm modülleri dolaş
     for name, module in model.named_modules():
         # AdapterSlot sözlüğüne sahip modüller
         if hasattr(module, 'adapter_slots') and isinstance(module.adapter_slots, dict):
-            for slot in module.adapter_slots.values():
+            for pos, slot in module.adapter_slots.items():
                 if hasattr(slot, 'adapter') and slot.adapter is not None:
-                    # Adaptör parametrelerini ekle
-                    for param in slot.adapter.parameters():
-                        if param.requires_grad:
-                            adapter_params.append(param)
+                    trainable_params.extend([p for p in slot.adapter.parameters() if p.requires_grad])
+
+        # Çoklu adaptör desteği (adapters listesi)
+        if hasattr(module, 'adapters') and isinstance(module.adapters, nn.ModuleList) and len(module.adapters) > 0:
+            for adapter in module.adapters:
+                trainable_params.extend([p for p in adapter.parameters() if p.requires_grad])
     
-    return adapter_params
+    return trainable_params
 
 
 def freeze_model_except_adapters(model: nn.Module) -> None:
@@ -237,40 +251,48 @@ def freeze_model_except_adapters(model: nn.Module) -> None:
 
 def get_adapter_summary(model: nn.Module) -> Dict[str, Any]:
     """
-    Model adaptör durumunun özet bilgilerini döndürür.
+    Model içindeki adaptörlerin özet bilgilerini döndürür.
     
     Args:
         model: Model
     
     Returns:
-        Adaptör özet bilgileri
+        Özet bilgileri içeren sözlük
     """
-    # Adaptör modülleri bul
-    modules = find_adapter_modules(model)
+    # Adaptör içeren modülleri bul
+    adapter_modules = find_adapter_modules(model)
     
-    # Pozisyonları topla
-    all_positions = []
-    for positions in modules.values():
-        all_positions.extend(positions)
-    unique_positions = list(set(all_positions))
+    # Adaptör pozisyonlarını topla
+    positions = set()
+    for pos_list in adapter_modules.values():
+        positions.update(pos_list)
     
-    # Aktif adaptör sayısını hesapla
+    # Aktif adaptörleri say
     active_adapters = 0
+    # Adapter slots kontrol et
+    for name, module in model.named_modules():
+        if hasattr(module, 'adapter_slots') and isinstance(module.adapter_slots, dict):
+            active_adapters += len(module.adapter_slots)
+        
+        # Çoklu adaptör desteği (adapters listesi)
+        if hasattr(module, 'adapters') and isinstance(module.adapters, nn.ModuleList):
+            active_adapters += len(module.adapters)
+    
+    # Adaptör parametrelerini sayı
     adapter_params = count_adapter_parameters(model)
-    for params in adapter_params.values():
-        if params > 0:
-            active_adapters += 1
+    total_adapter_params = sum(adapter_params.values())
     
-    # Toplam parametre sayısını hesapla
-    adapter_parameters = sum(adapter_params.values())
-    model_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    # Model toplam parametre sayısı
+    total_model_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     
-    # Özeti döndür
+    # Adaptör yüzdesi
+    adapter_percentage = (total_adapter_params / total_model_params * 100) if total_model_params > 0 else 0.0
+    
     return {
-        "adapter_modules": len(modules),
-        "adapter_positions": unique_positions,
+        "adapter_modules": len(adapter_modules),
+        "adapter_positions": list(positions),
         "active_adapters": active_adapters,
-        "total_adapter_parameters": adapter_parameters,
-        "total_model_parameters": model_parameters,
-        "adapter_percentage": round(adapter_parameters / model_parameters * 100, 2) if model_parameters > 0 else 0
+        "total_adapter_parameters": total_adapter_params,
+        "total_model_parameters": total_model_params,
+        "adapter_percentage": adapter_percentage
     } 
