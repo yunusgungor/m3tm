@@ -523,28 +523,48 @@ class AdapterManager:
         Adapter yöneticisinin özet bilgilerini döndürür.
         
         Returns:
-            Özet bilgileri içeren sözlük
+            Dict[str, Any]: Özet bilgiler
         """
-        active_adapters = [aid for aid in self.registered_adapters if self.registered_adapters[aid].is_active]
+        active_adapters = self.list_adapters(active_only=True)
+        all_adapters = self.list_adapters(active_only=False)
         
-        # Adapter parametreleri
-        total_adapter_params = sum(
-            adapter.count_parameters() for adapter in self.adapter_instances.values()
-            if self.registered_adapters[list(self.adapter_instances.keys())[list(self.adapter_instances.values()).index(adapter)]].is_active
-        )
-        
-        # Model toplam parametre sayısı
-        model_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+        adapter_info = []
+        for adapter_id in all_adapters:
+            info = self.get_adapter_info(adapter_id)
+            if info:
+                adapter_info.append(info)
         
         return {
-            "total_adapters": len(self.registered_adapters),
-            "active_adapters": len(active_adapters),
-            "total_adapter_parameters": total_adapter_params,
-            "model_parameters": model_params,
-            "adapter_percentage": (total_adapter_params / model_params * 100) if model_params > 0 else 0.0,
-            "modules_with_adapters": list(self.module_registry.keys()),
-            "adapter_types": {
-                adapter_id: self.registered_adapters[adapter_id].adapter_config.adapter_type
-                for adapter_id in self.registered_adapters
-            }
-        } 
+            "active_adapter_count": len(active_adapters),
+            "total_adapter_count": len(all_adapters),
+            "adapters": adapter_info,
+            "module_count": len(self.module_registry)
+        }
+    
+    def set_adapters_trainable(self, adapter_names: Optional[List[str]] = None) -> None:
+        """
+        Belirtilen adapter'ların parametrelerini eğitilebilir yapar.
+        
+        Args:
+            adapter_names: Eğitilebilir yapılacak adapter isimleri.
+                None ise tüm adapter'lar eğitilebilir yapılır.
+        """
+        # Tüm adapter'ların parametrelerini dondur
+        for adapter_id, adapter in self.adapter_instances.items():
+            for param in adapter.parameters():
+                param.requires_grad = False
+        
+        # İstenen adapter'ları eğitilebilir yap
+        if adapter_names is None:
+            # Tüm adapter'ları eğitilebilir yap
+            for adapter_id, adapter in self.adapter_instances.items():
+                for param in adapter.parameters():
+                    param.requires_grad = True
+        else:
+            # Sadece belirtilen isimleri içeren adapter'ları eğitilebilir yap
+            for name in adapter_names:
+                for adapter_id in self.get_adapters_by_name(name):
+                    adapter = self.adapter_instances.get(adapter_id)
+                    if adapter is not None:
+                        for param in adapter.parameters():
+                            param.requires_grad = True 

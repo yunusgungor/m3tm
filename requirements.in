@@ -16,3 +16,5 @@ mypy
 # Documentation
 sphinx
 sphinx-rtd-theme
+
+tensorboard

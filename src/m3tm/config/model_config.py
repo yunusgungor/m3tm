@@ -367,6 +367,43 @@ class TrainingConfig(ConfigBase):
             )
 
 
+@dataclass
+class DataConfig(ConfigBase):
+    """
+    Veri yapılandırması.
+    """
+    max_seq_length: int = 128  # Maksimum sekans uzunluğu
+    train_batch_size: int = 32  # Eğitim batch boyutu
+    eval_batch_size: int = 64  # Değerlendirme batch boyutu
+    num_workers: int = 4  # DataLoader işçi sayısı
+    tokenizer_name: str = "default"  # Kullanılacak tokenizer adı
+    dataset_name: Optional[str] = None  # Veri kümesi adı
+    dataset_path: Optional[str] = None  # Veri kümesi yolu
+    train_file: Optional[str] = None  # Eğitim dosyası
+    eval_file: Optional[str] = None  # Değerlendirme dosyası
+    test_file: Optional[str] = None  # Test dosyası
+    preprocessing_config: Dict[str, Any] = field(default_factory=dict)  # Önişleme yapılandırması
+    augmentation_config: Dict[str, Any] = field(default_factory=dict)  # Veri artırma yapılandırması
+    
+    REQUIRED_FIELDS: ClassVar[List[str]] = []
+    
+    def validate(self) -> None:
+        """Yapılandırma değerlerini doğrular."""
+        super().validate()
+        
+        if self.max_seq_length <= 0:
+            raise ConfigValidationError(f"max_seq_length must be positive, got {self.max_seq_length}")
+        
+        if self.train_batch_size <= 0:
+            raise ConfigValidationError(f"train_batch_size must be positive, got {self.train_batch_size}")
+        
+        if self.eval_batch_size <= 0:
+            raise ConfigValidationError(f"eval_batch_size must be positive, got {self.eval_batch_size}")
+        
+        if self.num_workers < 0:
+            raise ConfigValidationError(f"num_workers must be non-negative, got {self.num_workers}")
+
+
 # Test uyumluluğu için takma isimler
 TextConfig = TextEmbeddingConfig
 ImageConfig = ImagePatchEmbeddingConfig
