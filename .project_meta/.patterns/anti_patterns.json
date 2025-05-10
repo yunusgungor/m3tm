@@ -1,69 +1,69 @@
 {
   "catalog_id": "m3tm_v2.3_anti_patterns",
-  "creation_date": "2024-05-31",
+  "creation_date": "2024-06-17",
   "anti_patterns": [
     {
       "pattern_id": "AP-001",
-      "name": "LongMethodAntiPattern",
-      "category": "code_structure",
-      "description": "Tek bir metot içinde birden fazla sorumluluğu ele alan uzun metodlar. Tek Sorumluluk İlkesi'ne (SRP) aykırı",
-      "concerns": [
-        "Bakım zorluğu",
-        "Hata ayıklama güçlüğü",
-        "Test edilebilirlik sorunları",
-        "Kod okunabilirliğinin azalması"
+      "name": "MonolithicTraining",
+      "category": "architectural",
+      "description": "Modelin tüm parametrelerini her zaman eğitmeye çalışan, dondurma veya seçici eğitim stratejileri kullanmayan yaklaşım",
+      "symptoms": [
+        "Gereksiz yere uzun eğitim süreleri",
+        "Aşırı bellek kullanımı",
+        "Mobil cihazlarda eğitim başarısızlıkları",
+        "Aşırı parametre kullanımı"
       ],
-      "detection_indicators": [
-        "30+ satır uzunluğundaki metodlar",
-        "Birden fazla mantıksal bölüm içeren metodlar",
-        "Çok sayıda koşul yapısı olan metodlar",
-        "Farklı soyutlama seviyelerinde işlemler yapan metodlar"
+      "negative_consequences": [
+        "Kaynak israfı",
+        "Eğitim süresi uzaması",
+        "Aşırı uyum riski",
+        "Sınırlı kaynaklı cihazlarda çalışamama"
       ],
-      "refactoring_strategies": [
-        "Metodu işlevsel olarak ayrı parçalara böl",
-        "Extract Method tekniğini uygula",
-        "Yardımcı sınıflar ve metodlar kullan",
-        "Strateji deseni uygula"
-      ],
-      "examples": [
-        {
-          "description": "text_classification.py içindeki main() fonksiyonu",
-          "source": "src/m3tm/examples/text_classification.py",
-          "notes": "50+ satırdan oluşan ve argüman ayrıştırma, model oluşturma, veri yükleme ve eğitim gibi birden fazla sorumluluğu karıştıran bir metot"
-        }
-      ],
-      "related_patterns": ["PT-013"],
-      "last_updated": "2024-05-31"
+      "remediation": "FrozenBackboneTraining (PT-018) desenini uygulayarak, sadece gerekli modül bileşenlerini (adapter'lar ve görev başlıkları) eğitin. requires_grad=False ayarını çekirdek modele uygulayarak gradientleri kapatın.",
+      "related_good_patterns": ["PT-018", "PT-020"],
+      "last_updated": "2024-06-17"
     },
     {
       "pattern_id": "AP-002",
-      "name": "IncompleteAbstractionAntiPattern",
-      "category": "design",
-      "description": "Genişletme gereksinimlerini öngörmeyen eksik soyutlama. Gelecekteki genişletmeler için gereksiz değişiklikler gerektirir.",
-      "concerns": [
-        "Kod tekrarı",
-        "Genişletilebilirlik sorunları",
-        "Değişim ilkesinin ihlali"
+      "name": "CallbackHell",
+      "category": "behavioral",
+      "description": "Çok sayıda, birbirine bağımlı ve iş mantığı karışmış callback'lerin yarattığı karmaşık kod yapıları",
+      "symptoms": [
+        "Callback'ler arasında aşırı bağımlılık",
+        "Karmaşık durum yönetimi",
+        "Takip edilmesi zor iş akışı",
+        "Hata ayıklaması zor kod"
       ],
-      "detection_indicators": [
-        "Yeni türler eklemek için mevcut sınıf/metot değişikliği gereksinimi",
-        "Factory metotlarda switch/if-else yapılarının çoğalması",
-        "Soyut taban sınıf/arayüz eksikliği"
+      "negative_consequences": [
+        "Bakım zorluğu",
+        "Hataların yaygınlaşması",
+        "Test edilebilirliğin azalması",
+        "Yeni özelliklerin eklenmesinde zorluk"
       ],
-      "refactoring_strategies": [
-        "Soyut arayüzler ve taban sınıflar ekle",
-        "Strateji veya Fabrika desenleri uygula",
-        "İnterface Segregation İlkesi'ni (ISP) uygula"
+      "remediation": "TrainingCallbackHook (PT-019) desenini düzgün şekilde uygulayın. Callback'leri özel görevlere odaklayın, durumlarını sınırlı tutun ve birbirleriyle iletişimlerini minimuma indirgeyin.",
+      "related_good_patterns": ["PT-019"],
+      "last_updated": "2024-06-17"
+    },
+    {
+      "pattern_id": "AP-003",
+      "name": "DeepAdapterStack",
+      "category": "architectural",
+      "description": "Çok sayıda adapter'ı üst üste ekleyerek verimlilik avantajlarını kaybeden, aşırı karmaşık adapter konfigürasyonları",
+      "symptoms": [
+        "Aşırı sayıda adapter (genellikle 3'ten fazla)",
+        "Gereksiz yüksek parametre sayısı",
+        "Yavaş çıkarım süresi",
+        "Artık iyileşmeyen performans"
       ],
-      "examples": [
-        {
-          "description": "DatasetFactory'de eksik soyutlama",
-          "source": "src/m3tm/training/dataset.py",
-          "notes": "Sadece metin sınıflandırma veri kümeleri için özelleştirilmiş, görüntü veya çoklu modalite veri kümeleri için genişletilebilirlik sınırlı"
-        }
+      "negative_consequences": [
+        "Eğitim ve çıkarım yavaşlaması",
+        "Adapter avantajlarının kaybedilmesi",
+        "Mobil cihazlarda pratik olmayan yapılar",
+        "Gereksiz karmaşıklık"
       ],
-      "related_patterns": ["PT-007"],
-      "last_updated": "2024-05-31"
+      "remediation": "Adapter sayısını sınırlı tutun (genellikle 1-2 adapter). Daha büyük bir adapter kullanmak birkaç küçük adapter yerine genellikle daha iyidir. Farklı konumlarda (örn. 'post_attention', 'post_ffn') adapter'ları stratejik olarak yerleştirin.",
+      "related_good_patterns": ["PT-014", "PT-018"],
+      "last_updated": "2024-06-17"
     }
   ]
 } 

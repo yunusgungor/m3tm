@@ -58,16 +58,64 @@
       }
     },
     {
-      "pattern_id": "PT-020",
-      "metrics": {
-        "adoption_rate": 0.25,
-        "implementation_consistency": 0.95,
-        "complexity_reduction": 0.85,
-        "maintainability_improvement": 0.88,
-        "usage_count": 4,
-        "test_coverage": 0.60
+      "pattern_id": "PT-018",
+      "name": "FrozenBackboneTraining",
+      "adoption_rate": 0.95,
+      "implementation_consistency": 0.92,
+      "code_metrics": {
+        "parameter_efficiency": 0.98,
+        "training_speedup": 0.85,
+        "memory_reduction": 0.76
       },
-      "notes": "Yeni tanımlanan TaskHeadStrategy örüntüsü. İmplementasyon tutarlılığı yüksek ancak henüz projede yaygınlaşmamış. Teknik borç azaltma ve bakım kolaylığı sağlama potansiyeli yüksek."
+      "quality_impact": {
+        "maintainability": 0.88,
+        "testability": 0.85,
+        "adaptability": 0.92
+      },
+      "usage_context": {
+        "dominant_modules": ["training", "adapters"],
+        "implementation_variants": 3
+      }
+    },
+    {
+      "pattern_id": "PT-019",
+      "name": "TrainingCallbackHook",
+      "adoption_rate": 0.88,
+      "implementation_consistency": 0.85,
+      "code_metrics": {
+        "complexity_reduction": 0.72,
+        "reuse_level": 0.85,
+        "extension_points": 6
+      },
+      "quality_impact": {
+        "maintainability": 0.82,
+        "testability": 0.90,
+        "adaptability": 0.88
+      },
+      "usage_context": {
+        "dominant_modules": ["training"],
+        "implementation_variants": 5
+      }
+    },
+    {
+      "pattern_id": "PT-020",
+      "name": "MemoryOptimization",
+      "adoption_rate": 0.75,
+      "implementation_consistency": 0.78,
+      "code_metrics": {
+        "memory_efficiency": 0.92,
+        "complexity_impact": 0.45,
+        "performance_overhead": 0.12
+      },
+      "quality_impact": {
+        "maintainability": 0.70,
+        "testability": 0.65,
+        "adaptability": 0.75
+      },
+      "usage_context": {
+        "dominant_modules": ["training", "adapters"],
+        "implementation_variants": 2
+      }
     }
   ],
   "global_metrics": {
@@ -82,6 +130,60 @@
       "pattern_id": "PT-020",
       "recommendation": "TaskHeadStrategy örüntüsünün diğer benzer senaryolara (ör. dikkat mekanizmaları, veri dönüştürücüler) da uygulanması ve test kapsamının artırılması önerilir. Adaptör mekanizmasıyla entegrasyonu güçlendirilebilir.",
       "priority": "medium"
+    }
+  ],
+  "metrics_id": "m3tm_v2.3_pattern_metrics",
+  "collected_date": "2024-06-17",
+  "anti_pattern_metrics": [
+    {
+      "pattern_id": "AP-001",
+      "name": "MonolithicTraining",
+      "occurrence_rate": 0.15,
+      "remediation_success": 0.92,
+      "impact_severity": 0.75,
+      "affected_modules": ["training", "examples"]
+    },
+    {
+      "pattern_id": "AP-002",
+      "name": "CallbackHell",
+      "occurrence_rate": 0.22,
+      "remediation_success": 0.85,
+      "impact_severity": 0.65,
+      "affected_modules": ["training"]
+    },
+    {
+      "pattern_id": "AP-003",
+      "name": "DeepAdapterStack",
+      "occurrence_rate": 0.18,
+      "remediation_success": 0.78,
+      "impact_severity": 0.60,
+      "affected_modules": ["adapters", "examples"]
+    }
+  ],
+  "pattern_relationships": [
+    {
+      "source": "PT-018",
+      "target": "PT-019",
+      "relationship_type": "uses",
+      "strength": 0.85
+    },
+    {
+      "source": "PT-018",
+      "target": "PT-020",
+      "relationship_type": "uses",
+      "strength": 0.75
+    },
+    {
+      "source": "PT-019",
+      "target": "PT-013",
+      "relationship_type": "specializes",
+      "strength": 0.70
+    },
+    {
+      "source": "PT-018",
+      "target": "PT-014",
+      "relationship_type": "incorporates",
+      "strength": 0.80
     }
   ]
 } 

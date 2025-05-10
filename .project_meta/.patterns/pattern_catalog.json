@@ -322,6 +322,71 @@
       ],
       "related_patterns": ["PT-015", "PT-003", "PT-002", "PT-001"],
       "last_updated": "2024-06-10"
+    },
+    {
+      "pattern_id": "PT-018",
+      "name": "FrozenBackboneTraining",
+      "category": "training",
+      "description": "Çekirdek modeli dondurup sadece belirli bileşenleri (adapter'lar ve görev başlıkları) eğiten parametre-verimli eğitim deseni",
+      "benefits": [
+        "Eğitim süresini önemli ölçüde azaltır",
+        "Çok daha az eğitilebilir parametre içerir (genellikle toplam modelin %1-5'i)",
+        "Aşırı uyumu azaltır ve daha genellenebilir modeller oluşturur",
+        "Sınırlı veri veya hesaplama kaynağı olan senaryolarda kullanışlıdır",
+        "Mobil cihazlarda on-device fine-tuning'i mümkün kılar",
+        "Büyük ön-eğitimli modellerin verimli adaptasyonunu sağlar"
+      ],
+      "implementation_notes": "Eğitim öncesinde çekirdek modelin gradientleri kapatılır (requires_grad=False), sadece adapter'lar ve görev başlıkları eğitilebilir kalır. Callback-tabanlı eğitim döngüsü, checkpoint yönetimi ve erken durdurma mekanizmaları içerir.",
+      "examples": [
+        "m3tm.training.adapter_training.AdapterTrainingManager.prepare_model_for_training",
+        "m3tm.training.adapter_training.AdapterTrainingConfig",
+        "m3tm.training.adapter_training.EarlyStoppingCallback"
+      ],
+      "related_patterns": ["PT-014", "PT-013", "PT-003"],
+      "last_updated": "2024-06-17"
+    },
+    {
+      "pattern_id": "PT-019",
+      "name": "TrainingCallbackHook",
+      "category": "behavioral",
+      "description": "Eğitim sürecinin çeşitli aşamalarında çağrılan, özelleştirilebilir işlem kancaları sağlayan davranışsal desen",
+      "benefits": [
+        "Temel eğitim sürecini değiştirmeden özelleştirme olanağı sağlar",
+        "Eğitim sürecinin farklı aşamalarında (başlangıç, batch, epoch vb.) müdahale imkanı sunar",
+        "Ekstra işlevselliği (loglama, erken durdurma, öğrenme oranı ayarlama) modüler şekilde ekler",
+        "Test edilebilirliği artırır ve iş mantığını ayrıştırır",
+        "Farklı callback'lerin bileşimini destekler"
+      ],
+      "implementation_notes": "TrainingCallback temel sınıfı, eğitim sürecinin farklı aşamalarında (on_training_start, on_epoch_start, on_batch_end, vb.) çağrılan metotları tanımlar. Özel callback'ler (EarlyStoppingCallback, LearningRateSchedulerCallback) bu temel sınıftan türetilir ve ilgili metotları geçersiz kılar.",
+      "examples": [
+        "m3tm.training.adapter_training.TrainingCallback",
+        "m3tm.training.adapter_training.EarlyStoppingCallback",
+        "m3tm.training.adapter_training.LearningRateSchedulerCallback",
+        "m3tm.training.adapter_training_utils.ModelStatisticsCallback"
+      ],
+      "related_patterns": ["PT-013", "PT-018", "PT-008"],
+      "last_updated": "2024-06-17"
+    },
+    {
+      "pattern_id": "PT-020",
+      "name": "MemoryOptimization",
+      "category": "performance",
+      "description": "Mobil cihazlarda eğitim sırasında bellek kullanımını azaltan optimizasyon tekniklerini uygulayan desen",
+      "benefits": [
+        "Sınırlı bellek kaynağına sahip cihazlarda eğitimi mümkün kılar",
+        "Bellek taşmalarını önler",
+        "Daha büyük batch boyutlarına izin verebilir",
+        "Eğitim sürecinin stabiitesini artırır",
+        "Farklı seviyelerle kademeli optimizasyon sağlar"
+      ],
+      "implementation_notes": "Çeşitli optimizasyon seviyelerini destekler (low, moderate, aggressive). Optimizasyonlar arasında gradient hesaplama ayarları, model tamponu serbest bırakma, belirli tensor hesaplamalarında 16-bit hassasiyet kullanımı ve batch bellek yönetimi bulunur.",
+      "examples": [
+        "m3tm.training.adapter_training.AdapterTrainingManager._optimize_memory",
+        "m3tm.training.adapter_training.AdapterTrainingConfig.memory_optimization_level",
+        "m3tm.training.adapter_training_utils.MemoryTrackingCallback"
+      ],
+      "related_patterns": ["PT-018", "PT-019"],
+      "last_updated": "2024-06-17"
     }
   ]
 } 
