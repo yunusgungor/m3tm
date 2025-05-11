@@ -1,7 +1,7 @@
 {
   "roadmap_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "current_iteration_id": "iter_4",
+  "current_iteration_id": "iter_6",
   "iterations": [
     {
       "iteration_id": "iter_1",
@@ -24,19 +24,19 @@
     {
       "iteration_id": "iter_4",
       "goal": "Büyüme Modülleri ve Görev Başlıkları",
-      "status": "in_progress",
+      "status": "completed",
       "story_ids": ["story_11", "story_12", "story_13", "story_14"]
     },
     {
       "iteration_id": "iter_5",
       "goal": "Semantik Arama ve Veri İndirme",
-      "status": "planned",
+      "status": "completed",
       "story_ids": ["story_15", "story_16", "story_17"]
     },
     {
       "iteration_id": "iter_6",
       "goal": "SDK Geliştirme",
-      "status": "planned",
+      "status": "in_progress",
       "story_ids": ["story_18", "story_19", "story_20"]
     },
     {
@@ -120,17 +120,17 @@
     {
       "story_id": "story_15",
       "title": "Arama İndeksleme Modülü implementasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_16",
       "title": "Arama Servisi API implementasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_17",
-      "title": "Veri İndirme Modülü ve API implementasyonu",
-      "status": "todo"
+      "title": "Veri İndirme Modülü implementasyonu",
+      "status": "done"
     },
     {
       "story_id": "story_18",
@@ -163,5 +163,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-06-04"
+  "last_updated": "2024-06-11"
 } 
