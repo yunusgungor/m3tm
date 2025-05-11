@@ -1,0 +1,38 @@
+{
+  "story_id": "story_15",
+  "title": "Arama İndeksleme Modülü implementasyonu",
+  "description": "Kullanıcı verilerini indeksleyerek semantik arama yapabilmek için bir arama indeksleme modülü implementasyonu.",
+  "acceptance_criteria": [
+    "Metinler için FAISS veya benzer bir vektör veritabanı entegrasyonu yapılmalı",
+    "Görüntüler için öznitelik vektörlerini indeksleme yeteneği olmalı",
+    "Çekirdek model tarafından üretilen search_embedding vektörlerini alıp verimli bir şekilde indekslemeli",
+    "KNN arama yapabilmeli ve sorgu sonuçlarını ilgililik skoru ile döndürebilmeli",
+    "Mobil cihazlarda düşük bellek ayak izine sahip olmalı",
+    "İndekslenen bellek gerektiğinde kalıcı depolamaya kaydedilmeli ve yüklenebilmeli",
+    "İndeksleme işlemi arka planda çalışabilmeli",
+    "İndeksleme işleminin ilerlemesi takip edilebilmeli"
+  ],
+  "module_mapping": [
+    "m3tm.search.index"
+  ],
+  "status": "in_progress",
+  "priority_factors": {
+    "business_value": "high",
+    "technical_risk": "medium",
+    "effort_estimate": "medium"
+  },
+  "estimated_effort": "3 days",
+  "technical_risk": {
+    "level": "medium",
+    "description": "FAISS kütüphanesinin mobil ortamlarda performansı ve bellek kullanımı, özellikle büyük indeksler için risk oluşturabilir."
+  },
+  "business_value": {
+    "description": "Semantik arama yeteneği, ürünün en temel ayırt edici özelliklerinden biri olduğu için yüksek iş değerine sahip."
+  },
+  "dependencies": {
+    "required_stories": ["story_10", "story_14"],
+    "required_technical_components": ["PyTorch", "FAISS library"]
+  },
+  "created_at": "2024-06-09",
+  "updated_at": "2024-06-09"
+} 

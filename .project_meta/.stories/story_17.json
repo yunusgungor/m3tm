@@ -1,0 +1,40 @@
+{
+  "story_id": "story_17",
+  "title": "Veri İndirme Modülü implementasyonu",
+  "description": "Mobil cihazda verimli, kesintiye dayanıklı ve yönetilebilir veri indirme yeteneği sağlayan bir indirme modülü implementasyonu.",
+  "acceptance_criteria": [
+    "Kesintiye dayanıklı indirme mekanizması sağlanmalı (bağlantı kesildiğinde devam edebilmeli)",
+    "Parçalı indirme desteği ile büyük dosyaları verimli şekilde indirebilmeli",
+    "İndirme ilerlemesini izleyebilme ve raporlayabilme yeteneği olmalı",
+    "Asenkron indirme operasyonları desteklenmeli",
+    "İndirme işlemleri için öncelik mekanizması uygulanmalı",
+    "Bant genişliği kısıtlaması ve indirme hız limitleri ayarlanabilmeli",
+    "İndirilen dosyalar için bütünlük doğrulaması yapabilmeli (checksum kontrolü)",
+    "İndirme başarısız olduğunda yeniden deneme stratejisi uygulanmalı",
+    "Arka planda çalışabilmeli ve sistem kaynakları açısından verimli olmalı",
+    "İndirme kuyruğu yönetimi ve durdurulan indirmeleri sürdürebilme yeteneği olmalı"
+  ],
+  "module_mapping": [
+    "m3tm.download"
+  ],
+  "status": "in_progress",
+  "priority_factors": {
+    "business_value": "high",
+    "technical_risk": "medium",
+    "effort_estimate": "medium"
+  },
+  "estimated_effort": "3 days",
+  "technical_risk": {
+    "level": "medium",
+    "description": "Farklı ağ koşullarında kesintiye dayanıklılık sağlamak ve çeşitli hata durumlarını yönetmek karmaşık olabilir."
+  },
+  "business_value": {
+    "description": "Model ve veri dosyalarının verimli bir şekilde indirilmesi, mobil cihazlarda model kullanımı için kritik bir özelliktir."
+  },
+  "dependencies": {
+    "required_stories": ["story_15", "story_16"],
+    "required_technical_components": ["asyncio", "aiohttp"]
+  },
+  "created_at": "2024-06-09",
+  "updated_at": "2024-06-10"
+} 

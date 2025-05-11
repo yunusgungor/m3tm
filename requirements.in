@@ -1,9 +1,10 @@
 torch
 torchvision
-numpy
+numpy==1.25.2
 pillow
 tqdm
 sentencepiece
+faiss-cpu
 
 # Development dependencies
 pytest
@@ -18,3 +19,5 @@ sphinx
 sphinx-rtd-theme
 
 tensorboard
+
+aiohttp>=3.8.0

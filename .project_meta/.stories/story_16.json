@@ -1,0 +1,39 @@
+{
+  "story_id": "story_16",
+  "title": "Arama Servisi API implementasyonu",
+  "description": "Kullanıcıların semantik arama yapabilmesi için kullanıcı dostu bir API implementasyonu. Bu API, arama indeksleme modülünü kullanarak metin ve görüntü sorguları için semantik arama yapabilecek.",
+  "acceptance_criteria": [
+    "Metin sorguları için arama fonksiyonu sağlanmalı",
+    "Görüntü sorguları için arama fonksiyonu sağlanmalı",
+    "Çok modlu (metin + görüntü) sorgular için arama fonksiyonu sağlanmalı",
+    "Arama sonuçları için filtreleme seçenekleri sunulmalı (metadata temelli)",
+    "Arama sonuçları benzerlik skorlarına göre sıralanmalı",
+    "Arama sonuçları için sayfalama desteği olmalı",
+    "Asenkron arama işlemleri için destek sağlanmalı",
+    "API, hem SDK hem de doğrudan kullanım için uygun olmalı",
+    "Arama sonuçları için zengin metadata dönüşü sağlanmalı"
+  ],
+  "module_mapping": [
+    "m3tm.search.api"
+  ],
+  "status": "in_progress",
+  "priority_factors": {
+    "business_value": "high",
+    "technical_risk": "low",
+    "effort_estimate": "medium"
+  },
+  "estimated_effort": "2 days",
+  "technical_risk": {
+    "level": "low",
+    "description": "Arama indeksleme modülü tamamlandığından, API'nin oluşturulması nispeten düşük risk taşır."
+  },
+  "business_value": {
+    "description": "Kullanıcıların ve geliştiricilerin semantik arama yeteneklerine kolay erişim sağlaması açısından yüksek iş değerine sahip."
+  },
+  "dependencies": {
+    "required_stories": ["story_15"],
+    "required_technical_components": ["SearchIndex", "SearchProjection"]
+  },
+  "created_at": "2024-06-09",
+  "updated_at": "2024-06-09"
+} 
