@@ -267,241 +267,83 @@
     },
     {
       "pattern_id": "PT-018",
-      "name": "BuilderPattern",
-      "category": "creation",
-      "description": "Karmaşık nesnelerin yapımını temsillerinden ayıran bir oluşturma deseni. Karmaşık yapılandırmaları adım adım oluşturur.",
+      "name": "AndroidBridge",
+      "category": "structural",
+      "description": "PyTorch tabanlı modelleri Android uygulamalarında kullanılabilir hale getirmek için Java (Android) ve C++ (PyTorch/native) dünyaları arasında köprü oluşturan örüntü. JNI (Java Native Interface) kullanarak, PyTorch'un C++ API'si ile Java API'si arasında çift yönlü iletişim sağlar.",
       "benefits": [
-        "Karmaşık nesnelerin adım adım inşası",
-        "Çoklu adımlı yapılandırma sürecini düzenleme",
-        "Farklı nesne varyasyonlarını aynı inşa süreciyle oluşturma",
-        "Karmaşık oluşturma süreçlerini istemciden gizleme"
+        "Python'da eğitilen modellerin Android'de kullanılmasını sağlar",
+        "Tür güvenli veri dönüşümleri sağlar",
+        "Kaynak yönetimini otomatikleştirir",
+        "Kompleks model işlemlerini basit API'ler ardında saklar"
       ],
-      "implementation_notes": "Yapılandırma parametrelerini aşamalı olarak toplayan ve en sonunda hedef nesneyi oluşturan bir yapı sağlar. Genellikle modelin farklı bileşenleri için uygun yapılandırmaların oluşturulmasında kullanılır.",
+      "implementation_notes": "JNI üzerinden veri dönüşümleri için yardımcı fonksiyonlar kullanan, Java tarafında native işaretçileri yöneten sarmalayıcı sınıflar ve C++ tarafında Java nesnelerine erişim için yardımcı fonksiyonlar içeren bir yapı oluşturulur. Finalize metodları ile kaynak serbest bırakma garantilenir.",
       "examples": [
-        "m3tm.config.config_manager.ModelConfigBuilder"
+        "android/src/main/jni/m3tm_jni.cpp",
+        "android/src/main/java/com/m3tm/sdk/M3TMModel",
+        "android/src/main/java/com/m3tm/sdk/M3TMModelManager",
+        "src/m3tm/mobile/android/native/jni_helpers.py"
       ],
-      "related_patterns": ["PT-002", "PT-012"],
-      "last_updated": "2024-06-09"
+      "related_patterns": ["PT-002", "PT-007"],
+      "last_updated": "2023-11-11"
     },
     {
       "pattern_id": "PT-019",
-      "name": "ObserverPattern",
-      "category": "behavioral",
-      "description": "Nesneler arasında bir-çok (one-to-many) bağımlılık ilişkisi tanımlayan, bir nesne değiştiğinde bağımlı nesnelerin otomatik olarak bilgilendirilmesini sağlayan desen.",
+      "name": "iOSBridge",
+      "category": "platform_integration",
+      "description": "iOS platformu için C++ ve Swift/Objective-C arasında köprü kurma deseni",
       "benefits": [
-        "Değişiklik bildirimi için standart bir arayüz",
-        "Gevşek bağlantılı tasarım sağlama",
-        "Dinamik abonelik sistemi",
-        "Değişim yayılımını soyutlama"
+        "PyTorch C++ kütüphanesinin iOS uygulamalarında kullanılabilmesini sağlar",
+        "Platform spesifik kodları soyutlayarak temiz bir API sunar",
+        "Objective-C++ ve Swift arasındaki geçişleri kolaylaştırır",
+        "ARC (Automatic Reference Counting) ile uyumlu bellek yönetimi sağlar"
       ],
-      "implementation_notes": "Konu (subject) ve gözlemciler (observers) arasında organize bir ilişki kurar. Yapılandırma değişiklikleri gibi olayları takip etmek için kullanılır.",
+      "implementation_notes": "Objective-C++ (.mm) dosyaları kullanılarak C++ ve Objective-C arasında köprü oluşturulur. Swift'e erişim için Objective-C kabuğu (wrapper) sınıfları tanımlanır. Bellek yönetimi ARC ile uyumlu olacak şekilde tasarlanır.",
       "examples": [
-        "m3tm.config.config_manager.ConfigurationObserver"
+        "m3tm.mobile.ios.M3TMWrapper",
+        "m3tm.mobile.ios.ModelBridge.mm",
+        "m3tm.mobile.ios.M3TMSwift"
       ],
-      "related_patterns": ["PT-007"],
-      "last_updated": "2024-06-09"
+      "related_patterns": ["PT-002", "PT-007", "PT-018"],
+      "last_updated": "2024-06-11"
     },
     {
       "pattern_id": "PT-020",
-      "name": "TaskHeadStrategy",
-      "category": "behavioral",
-      "description": "Farklı görev başlıklarının ortak bir arayüz üzerinden değiştirilebilir olmasını sağlayan strateji deseni. Çekirdek modele farklı görevler için çıktı katmanları ekleyebilmeyi sağlar.",
+      "name": "DocTemplateSystem",
+      "category": "documentation",
+      "description": "Tutarlı dokümantasyon üretimi için standart şablonlar ve araçlar sağlayan desen",
       "benefits": [
-        "Farklı görev türleri için modüler ve tutarlı bir arayüz",
-        "Çekirdek model değiştirilmeden farklı görevleri destekleme",
-        "Cihaz üzerinde farklı görevlere uyum sağlama yeteneği",
-        "Önceden tanımlanmış görev başlıklarını kolayca ekleyip çıkarma",
-        "Yapılandırma, kayıp hesaplama ve kayıt işlemlerini standartlaştırma"
+        "Farklı platformlar arasında tutarlı dokümantasyon formatı sağlar",
+        "Dokümantasyon sürecini otomatize eder",
+        "Standartları uygular ve kalite kontrolünü kolaylaştırır",
+        "Dokümantasyonun güncelliğini ve bütünlüğünü kontrol etmeyi sağlar"
       ],
-      "implementation_notes": "Soyut bir TaskHead temel sınıfı üzerinden farklı görev başlıkları (ClassificationHead, RegressionHead, MultiLabelHead) tanımlanır. Her başlık kendi özel kayıp fonksiyonunu ve çıktı formatını belirler ancak ortak bir arayüzü paylaşır. TaskHeadFactory, farklı başlık türlerini oluşturmak için kullanılır. Strateji deseni olarak, TaskHead soyut sınıfı temel algoritmayı tanımlar ve somut alt sınıflar belirli adımları değiştirir. Bunda:  \n\n1. Temel algoritmalar (predict, save_pretrained, count_parameters) base sınıfında tanımlanır\n2. Değişen davranışlar (forward, compute_loss) alt sınıflarda uygulanır\n3. Alt sınıflar kendi özel fonksiyonlarını (_apply_pooling, get_top_k_predictions gibi) ekleyebilir\n4. Nesne oluşturma factory sınıfı üzerinden standartlaştırılır\n5. Yapılandırma parametreleri dataclass örüntüsü ile doğrulanır ve yönetilir",
+      "implementation_notes": "Sphinx, Javadoc ve Swift Documentation Tool gibi araçları entegre eden bir şablon sistemi. Ortak API dokümantasyon formatı tanımlanır ve platform spesifik üretim için dönüşüm mekanizmaları sağlanır.",
       "examples": [
-        "m3tm.task_heads.base.TaskHead",
-        "m3tm.task_heads.classification.ClassificationHead",
-        "m3tm.task_heads.regression.RegressionHead",
-        "m3tm.task_heads.multi_label.MultiLabelHead",
-        "m3tm.task_heads.config.TaskHeadFactory"
+        "m3tm.sdk.documentation.DocGenerator",
+        "m3tm.sdk.documentation.templates.APIRefTemplate",
+        "m3tm.sdk.documentation.templates.TutorialTemplate"
       ],
-      "related_patterns": ["PT-015", "PT-003", "PT-002", "PT-001"],
-      "last_updated": "2024-06-10"
-    },
-    {
-      "pattern_id": "PT-018",
-      "name": "FrozenBackboneTraining",
-      "category": "training",
-      "description": "Çekirdek modeli dondurup sadece belirli bileşenleri (adapter'lar ve görev başlıkları) eğiten parametre-verimli eğitim deseni",
-      "benefits": [
-        "Eğitim süresini önemli ölçüde azaltır",
-        "Çok daha az eğitilebilir parametre içerir (genellikle toplam modelin %1-5'i)",
-        "Aşırı uyumu azaltır ve daha genellenebilir modeller oluşturur",
-        "Sınırlı veri veya hesaplama kaynağı olan senaryolarda kullanışlıdır",
-        "Mobil cihazlarda on-device fine-tuning'i mümkün kılar",
-        "Büyük ön-eğitimli modellerin verimli adaptasyonunu sağlar"
-      ],
-      "implementation_notes": "Eğitim öncesinde çekirdek modelin gradientleri kapatılır (requires_grad=False), sadece adapter'lar ve görev başlıkları eğitilebilir kalır. Callback-tabanlı eğitim döngüsü, checkpoint yönetimi ve erken durdurma mekanizmaları içerir.",
-      "examples": [
-        "m3tm.training.adapter_training.AdapterTrainingManager.prepare_model_for_training",
-        "m3tm.training.adapter_training.AdapterTrainingConfig",
-        "m3tm.training.adapter_training.EarlyStoppingCallback"
-      ],
-      "related_patterns": ["PT-014", "PT-013", "PT-003"],
-      "last_updated": "2024-06-17"
-    },
-    {
-      "pattern_id": "PT-019",
-      "name": "TrainingCallbackHook",
-      "category": "behavioral",
-      "description": "Eğitim sürecinin çeşitli aşamalarında çağrılan, özelleştirilebilir işlem kancaları sağlayan davranışsal desen",
-      "benefits": [
-        "Temel eğitim sürecini değiştirmeden özelleştirme olanağı sağlar",
-        "Eğitim sürecinin farklı aşamalarında (başlangıç, batch, epoch vb.) müdahale imkanı sunar",
-        "Ekstra işlevselliği (loglama, erken durdurma, öğrenme oranı ayarlama) modüler şekilde ekler",
-        "Test edilebilirliği artırır ve iş mantığını ayrıştırır",
-        "Farklı callback'lerin bileşimini destekler"
-      ],
-      "implementation_notes": "TrainingCallback temel sınıfı, eğitim sürecinin farklı aşamalarında (on_training_start, on_epoch_start, on_batch_end, vb.) çağrılan metotları tanımlar. Özel callback'ler (EarlyStoppingCallback, LearningRateSchedulerCallback) bu temel sınıftan türetilir ve ilgili metotları geçersiz kılar.",
-      "examples": [
-        "m3tm.training.adapter_training.TrainingCallback",
-        "m3tm.training.adapter_training.EarlyStoppingCallback",
-        "m3tm.training.adapter_training.LearningRateSchedulerCallback",
-        "m3tm.training.adapter_training_utils.ModelStatisticsCallback"
-      ],
-      "related_patterns": ["PT-013", "PT-018", "PT-008"],
-      "last_updated": "2024-06-17"
-    },
-    {
-      "pattern_id": "PT-020",
-      "name": "MemoryOptimization",
-      "category": "performance",
-      "description": "Mobil cihazlarda eğitim sırasında bellek kullanımını azaltan optimizasyon tekniklerini uygulayan desen",
-      "benefits": [
-        "Sınırlı bellek kaynağına sahip cihazlarda eğitimi mümkün kılar",
-        "Bellek taşmalarını önler",
-        "Daha büyük batch boyutlarına izin verebilir",
-        "Eğitim sürecinin stabiitesini artırır",
-        "Farklı seviyelerle kademeli optimizasyon sağlar"
-      ],
-      "implementation_notes": "Çeşitli optimizasyon seviyelerini destekler (low, moderate, aggressive). Optimizasyonlar arasında gradient hesaplama ayarları, model tamponu serbest bırakma, belirli tensor hesaplamalarında 16-bit hassasiyet kullanımı ve batch bellek yönetimi bulunur.",
-      "examples": [
-        "m3tm.training.adapter_training.AdapterTrainingManager._optimize_memory",
-        "m3tm.training.adapter_training.AdapterTrainingConfig.memory_optimization_level",
-        "m3tm.training.adapter_training_utils.MemoryTrackingCallback"
-      ],
-      "related_patterns": ["PT-018", "PT-019"],
-      "last_updated": "2024-06-17"
+      "related_patterns": ["PT-021"],
+      "last_updated": "2024-06-11"
     },
     {
       "pattern_id": "PT-021",
-      "name": "TaskStateManagement",
-      "category": "concurrency",
-      "description": "Asenkron veya uzun süren görevlerin durumunu yöneten, izleyen ve raporlayan desen",
+      "name": "LiveCodeExamples",
+      "category": "documentation",
+      "description": "SDK dokümantasyonunda çalıştırılabilir ve test edilebilir kod örnekleri sağlayan desen",
       "benefits": [
-        "Görev durumlarını tutarlı bir şekilde izleme",
-        "Kesintiye dayanıklılık ve kurtarma mekanizmaları",
-        "İlerleme raporlama ve geri bildirimi",
-        "Görev önceliklendirme ve kuyruk yönetimi",
-        "Eşzamanlı görev sınırlama"
+        "Dokümantasyon ve kodun senkronize kalmasını sağlar",
+        "Örneklerin sürekli test edilmesine olanak tanır",
+        "SDK değişikliklerini hızlı bir şekilde tespit etmeyi sağlar",
+        "Geliştiricilere doğrudan deneyebilecekleri örnekler sunar"
       ],
-      "implementation_notes": "Görevleri (Task) ve durumlarını (Enum) temsil eden veri sınıfları, görev kuyruğu yönetim mekanizması, durum kaydetme ve geri yükleme işlevleri, ilerleme izleme ve özelleştirilebilir geri çağırma mekanizmaları içerir. Genellikle Factory ve ConfigurationDataclass desenleriyle birlikte kullanılır.",
+      "implementation_notes": "Dokümantasyondaki kod örnekleri gerçek test dosyalarından alınır. Özel işaretleyiciler kullanılarak test kodundan dokümantasyona kod parçaları aktarılır. SDK'nın test sürecinde bu örneklerin güncel ve çalışır durumda olup olmadığı doğrulanır.",
       "examples": [
-        "m3tm.download.downloader.DownloadManager",
-        "m3tm.download.downloader.DownloadTask"
+        "m3tm.sdk.documentation.examples.AndroidExampleGenerator",
+        "m3tm.sdk.documentation.examples.iOSExampleGenerator",
+        "m3tm.sdk.documentation.examples.CodeExtractor"
       ],
-      "related_patterns": ["PT-001", "PT-002"],
-      "last_updated": "2024-06-11"
-    },
-    {
-      "pattern_id": "PT-022",
-      "name": "MobileModelConverter",
-      "category": "mobile",
-      "description": "PyTorch modellerini mobil platformlar için optimize edilmiş TorchScript formatına dönüştüren bir utility sınıfı deseni",
-      "benefits": [
-        "Platform bağımsız, ortak bir dönüşüm API'si sağlar",
-        "Farklı optimizasyon seçeneklerini tek bir yerde encapsulate eder",
-        "Her dönüşüm adımını izole ederek hata ayıklamayı kolaylaştırır",
-        "Mobil platform özgü özelleştirmeleri destekler"
-      ],
-      "implementation_notes": "Statik metotlar kullanarak çeşitli dönüşüm ve optimizasyon işlemlerini gerçekleştirir. TorchScript ve optimize_for_mobile kullanımını kolaylaştırır.",
-      "examples": [
-        "m3tm.mobile.model_converter.ModelConverter"
-      ],
-      "related_patterns": ["PT-023", "PT-024"],
-      "last_updated": "2024-06-11"
-    },
-    {
-      "pattern_id": "PT-023",
-      "name": "BenchmarkStrategy",
-      "category": "performance",
-      "description": "Farklı modellerin mobil platformlardaki performansını tutarlı bir şekilde ölçen, karşılaştıran ve raporlayan strateji deseni",
-      "benefits": [
-        "Farklı optimizasyon stratejilerinin etkilerini ölçmek için tutarlı bir yöntem sağlar",
-        "İstatistiksel anlamlı sonuçlar için tekrarlı ölçümler yapar",
-        "Sonuçları okunabilir raporlara dönüştürür",
-        "Bellek kullanımı ve çıkarım süresi gibi farklı metrikleri standartlaştırır"
-      ],
-      "implementation_notes": "Statik metotlar kullanarak modellerin performans metriklerini ölçer ve karşılaştırır. Zaman ölçümleri ve bellek kullanımı gibi metrikleri standart formatta raporlar.",
-      "examples": [
-        "m3tm.mobile.benchmark.MobileBenchmark"
-      ],
-      "related_patterns": ["PT-022", "PT-024"],
-      "last_updated": "2024-06-11"
-    },
-    {
-      "pattern_id": "PT-024",
-      "name": "MobileOptimizationPipeline",
-      "category": "performance",
-      "description": "Mobil modellerini optimize etmek için farklı teknikleri (quantization, pruning, vb.) bir pipeline şeklinde uygulayan bir desen",
-      "benefits": [
-        "Farklı optimizasyon tekniklerini birleştirme esnekliği sağlar",
-        "Her tekniğin etkisini izole bir şekilde ölçmeyi mümkün kılar",
-        "Yeni optimizasyon yöntemlerinin eklenmesine olanak tanır",
-        "Modelin bellek kullanımını ve çalışma hızını optimize eder"
-      ],
-      "implementation_notes": "Her optimizasyon adımı modüler bir şekilde uygulanır ve birleştirilebilir. Statik metotlar kullanarak dinamik quantization, statik quantization, quantization aware training ve pruning gibi teknikleri uygular.",
-      "examples": [
-        "m3tm.mobile.optimization.MobileOptimizer"
-      ],
-      "related_patterns": ["PT-022", "PT-023"],
-      "last_updated": "2024-06-11"
-    },
-    {
-      "pattern_id": "PT-025",
-      "name": "ModalityFusionStrategy",
-      "category": "multimodal",
-      "description": "Farklı modalitelerden (metin, görüntü) gelen gömmeleri çeşitli stratejilerle birleştiren strateji deseni",
-      "benefits": [
-        "Farklı füzyon stratejilerini ortak bir arayüzle sunar",
-        "Stratejiler arasında geçiş yapmayı kolaylaştırır",
-        "Tek ve çoklu modalite durumlarını tutarlı şekilde ele alır",
-        "Yeni füzyon stratejilerinin eklenmesini destekler"
-      ],
-      "implementation_notes": "Soyut bir temel sınıf (BaseFusion) tanımlayarak farklı füzyon stratejilerini (ConcatenationFusion, WeightedSumFusion, GatedFusion) standardize eder. Stratejiler bir fabrika üzerinden oluşturulur.",
-      "examples": [
-        "m3tm.fusion.base_fusion.BaseFusion",
-        "m3tm.fusion.fusion_strategies.ConcatenationFusion",
-        "m3tm.fusion.fusion_strategies.WeightedSumFusion",
-        "m3tm.fusion.fusion_strategies.GatedFusion"
-      ],
-      "related_patterns": ["PT-003", "PT-002", "PT-015"],
-      "last_updated": "2024-06-11"
-    },
-    {
-      "pattern_id": "PT-026",
-      "name": "TrainingCallbackSystem",
-      "category": "training",
-      "description": "Eğitim sürecinin çeşitli aşamalarında özelleştirilebilir işlemler gerçekleştirmek için callback tabanlı bir sistem",
-      "benefits": [
-        "Eğitim sürecinin davranışını değiştirmeden genişletmeyi sağlar",
-        "Farklı callback'lerin bir arada kullanılmasına olanak tanır",
-        "Modüler ve test edilebilir kod yapısı oluşturur",
-        "Gelişmiş eğitim özellikleri (erken durdurma, öğrenme oranı planlama vb.) ekler"
-      ],
-      "implementation_notes": "Bir temel callback sınıfı (TrainingCallback) tanımlayarak eğitim sürecinin farklı aşamalarında (başlangıç, epoch başı/sonu, batch başı/sonu) çağrılabilecek metotlar sunar. Özel callback sınıfları bu temel sınıfı genişleterek belirli işlevler ekler.",
-      "examples": [
-        "m3tm.training.adapter_training.TrainingCallback",
-        "m3tm.training.adapter_training.EarlyStoppingCallback",
-        "m3tm.training.adapter_training.LearningRateSchedulerCallback"
-      ],
-      "related_patterns": ["PT-013", "PT-017", "PT-008"],
+      "related_patterns": ["PT-020"],
       "last_updated": "2024-06-11"
     }
   ],

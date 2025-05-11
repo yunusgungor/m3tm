@@ -1,171 +1,35 @@
 {
-  "status_id": "m3tm_v2.3_integration_status",
-  "creation_date": "2024-05-29",
-  "modules": {
-    "config": {
+  "integration_id": "integration_007",
+  "timestamp": "2023-11-11T15:45:00Z",
+  "status": "success",
+  "components": [
+    {
+      "component_id": "mobile_android_sdk",
       "status": "integrated",
-      "last_integration_date": "2024-05-26",
-      "integration_reports": ["report_story_4_config.json"],
-      "test_coverage": 0.92,
-      "issues": []
+      "version": "1.0.0",
+      "tests_status": "passed",
+      "dependencies": ["mobile_core", "python_api"],
+      "integration_notes": "Android SDK sarmalayıcısı başarıyla entegre edildi. Java API ve JNI köprüsü test edildi."
     },
-    "embedding": {
-      "status": "integrated",
-      "last_integration_date": "2024-05-29",
-      "integration_reports": ["report_story_5_embedding.json"],
-      "test_coverage": 0.95,
-      "patterns_verified": ["PT-001", "PT-009", "PT-012", "PT-013", "PT-014"],
-      "issues": []
+    {
+      "component_id": "mobile_core",
+      "status": "stable",
+      "version": "2.3.1",
+      "tests_status": "passed",
+      "dependencies": [],
+      "integration_notes": "Mobil çekirdeği kararlı durumda"
     },
-    "transformer": {
-      "status": "integrated",
-      "last_integration_date": "2024-05-30",
-      "integration_reports": ["report_story_6_transformer.json"],
-      "test_coverage": 0.90,
-      "patterns_verified": ["PT-001", "PT-007", "PT-009", "PT-012", "PluggableComponentStrategy"],
-      "issues": []
-    },
-    "search": {
-      "status": "integrated",
-      "last_integration_date": "2024-06-10",
-      "integration_reports": ["report_story_15_search_indexing.json", "report_story_16_search_api.json"],
-      "test_coverage": 0.88,
-      "patterns_verified": ["PT-001", "PT-003", "PT-005", "PT-010"],
-      "issues": []
-    },
-    "download": {
-      "status": "integrated",
-      "last_integration_date": "2024-06-11",
-      "integration_reports": ["report_story_17_download.json"],
-      "test_coverage": 0.91,
-      "patterns_verified": ["PT-001", "PT-002", "PT-021"],
-      "issues": []
+    {
+      "component_id": "python_api",
+      "status": "stable",
+      "version": "2.3.1",
+      "tests_status": "passed",
+      "dependencies": [],
+      "integration_notes": "Python API kararlı durumda"
     }
-  },
-  "stories": {
-    "story_1": {
-      "status": "integrated",
-      "integration_date": "2024-05-23",
-      "issues": []
-    },
-    "story_2": {
-      "status": "integrated",
-      "integration_date": "2024-05-23",
-      "issues": []
-    },
-    "story_3": {
-      "status": "integrated",
-      "integration_date": "2024-05-24",
-      "issues": []
-    },
-    "story_4": {
-      "status": "integrated",
-      "integration_date": "2024-05-26",
-      "issues": []
-    },
-    "story_5": {
-      "status": "integrated",
-      "integration_date": "2024-05-29",
-      "patterns_verified": ["PT-001", "PT-009", "PT-012", "PT-013", "PT-014"],
-      "test_coverage": 0.95,
-      "performance_metrics": {
-        "memory_usage": {
-          "base_model": "25MB",
-          "compressed_model": "13MB"
-        },
-        "inference_time": {
-          "tokenization": "5ms",
-          "embedding": "8ms"
-        }
-      },
-      "issues": []
-    },
-    "story_6": {
-      "status": "integrated",
-      "integration_date": "2024-05-30",
-      "patterns_verified": ["PT-001", "PT-007", "PT-009", "PT-012", "PluggableComponentStrategy"],
-      "test_coverage": 0.90,
-      "performance_metrics": {
-        "memory_usage": {
-          "transformer_block": "85KB",
-          "with_adapters": "102KB"
-        },
-        "inference_time": {
-          "standard_attention": "12ms",
-          "mobile_attention": "5ms",
-          "standard_ffn": "6ms",
-          "mobile_ffn": "4ms"
-        },
-        "flops": {
-          "total": "2.5M",
-          "attention": "1.4M",
-          "ffn": "1.1M"
-        }
-      },
-      "issues": []
-    },
-    "story_15": {
-      "status": "integrated",
-      "integration_date": "2024-06-09",
-      "patterns_verified": ["PT-001", "PT-003", "PT-005"],
-      "test_coverage": 0.88,
-      "performance_metrics": {
-        "memory_usage": {
-          "index_size": "50MB",
-          "index_load_time": "200ms"
-        },
-        "search_time": {
-          "text_search": "15ms",
-          "image_search": "25ms",
-          "multimodal_search": "35ms"
-        }
-      },
-      "issues": []
-    },
-    "story_16": {
-      "status": "integrated",
-      "integration_date": "2024-06-10",
-      "patterns_verified": ["PT-001", "PT-010"],
-      "test_coverage": 0.89,
-      "performance_metrics": {
-        "api_response_time": {
-          "text_search": "20ms",
-          "image_search": "35ms",
-          "multimodal_search": "45ms"
-        },
-        "concurrent_requests": {
-          "throughput": "100 req/s",
-          "average_latency": "50ms"
-        }
-      },
-      "issues": []
-    },
-    "story_17": {
-      "status": "integrated",
-      "integration_date": "2024-06-11",
-      "patterns_verified": ["PT-001", "PT-002", "PT-021"],
-      "test_coverage": 0.91,
-      "performance_metrics": {
-        "download_speed": {
-          "small_file": "5MB/s",
-          "large_file": "3.8MB/s"
-        },
-        "memory_usage": {
-          "peak": "5MB",
-          "average": "2MB"
-        },
-        "concurrent_downloads": {
-          "throughput": "15MB/s",
-          "cpu_usage": "5%"
-        },
-        "resume_performance": {
-          "detection_time": "10ms",
-          "overhead": "minimal"
-        }
-      },
-      "issues": []
-    }
-  },
-  "overall_status": "on_track",
-  "last_updated": "2024-06-11"
+  ],
+  "completed_stories": ["story_15", "story_16", "story_17", "story_18"],
+  "integration_notes": "Android SDK sarmalayıcısı entegrasyonu tamamlandı. JNI köprüsü ve temel API işlevleri başarıyla test edildi.",
+  "issues": [],
+  "next_steps": "iOS SDK sarmalayıcısının (story_19) entegrasyonuna başlanacak."
 }

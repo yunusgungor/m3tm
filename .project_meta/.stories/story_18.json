@@ -1,0 +1,22 @@
+{
+  "story_id": "story_18",
+  "title": "Android SDK Sarmalayıcı İmplementasyonu",
+  "description": "M3TM modelinin Android uygulamalarında kullanılabilmesi için Java API sarmalayıcısı ve JNI köprüsü oluşturulmalıdır. Bu sarmalayıcı, modelin yüklenmesi, çıkarım işlemleri ve eğitim işlevlerini Java API'si üzerinden erişilebilir hale getirmelidir.",
+  "acceptance_criteria": [
+    "Java tarafında model yükleme ve yönetme API'si oluşturulmalıdır",
+    "JNI üzerinden model çıkarım işlemleri yapılabilmelidir (metin, görüntü, çoklu-modalite)",
+    "JNI üzerinden model eğitimi için API sağlanmalıdır",
+    "Örnek kullanım kodları eklenmelidir",
+    "Hata yönetimi ve kaynak kullanımı optimize edilmelidir"
+  ],
+  "priority": "high",
+  "iteration": 6,
+  "status": "done",
+  "assigned_to": "mobile_dev_2",
+  "estimated_effort": "medium",
+  "tags": ["mobile", "android", "jni", "java"],
+  "dependencies": ["story_15"],
+  "module_mapping": ["mobile"],
+  "created_at": "2023-11-10T09:00:00Z",
+  "updated_at": "2023-11-11T15:30:00Z"
+} 
