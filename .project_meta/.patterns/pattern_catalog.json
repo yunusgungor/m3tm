@@ -408,6 +408,101 @@
       ],
       "related_patterns": ["PT-001", "PT-002"],
       "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-022",
+      "name": "MobileModelConverter",
+      "category": "mobile",
+      "description": "PyTorch modellerini mobil platformlar için optimize edilmiş TorchScript formatına dönüştüren bir utility sınıfı deseni",
+      "benefits": [
+        "Platform bağımsız, ortak bir dönüşüm API'si sağlar",
+        "Farklı optimizasyon seçeneklerini tek bir yerde encapsulate eder",
+        "Her dönüşüm adımını izole ederek hata ayıklamayı kolaylaştırır",
+        "Mobil platform özgü özelleştirmeleri destekler"
+      ],
+      "implementation_notes": "Statik metotlar kullanarak çeşitli dönüşüm ve optimizasyon işlemlerini gerçekleştirir. TorchScript ve optimize_for_mobile kullanımını kolaylaştırır.",
+      "examples": [
+        "m3tm.mobile.model_converter.ModelConverter"
+      ],
+      "related_patterns": ["PT-023", "PT-024"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-023",
+      "name": "BenchmarkStrategy",
+      "category": "performance",
+      "description": "Farklı modellerin mobil platformlardaki performansını tutarlı bir şekilde ölçen, karşılaştıran ve raporlayan strateji deseni",
+      "benefits": [
+        "Farklı optimizasyon stratejilerinin etkilerini ölçmek için tutarlı bir yöntem sağlar",
+        "İstatistiksel anlamlı sonuçlar için tekrarlı ölçümler yapar",
+        "Sonuçları okunabilir raporlara dönüştürür",
+        "Bellek kullanımı ve çıkarım süresi gibi farklı metrikleri standartlaştırır"
+      ],
+      "implementation_notes": "Statik metotlar kullanarak modellerin performans metriklerini ölçer ve karşılaştırır. Zaman ölçümleri ve bellek kullanımı gibi metrikleri standart formatta raporlar.",
+      "examples": [
+        "m3tm.mobile.benchmark.MobileBenchmark"
+      ],
+      "related_patterns": ["PT-022", "PT-024"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-024",
+      "name": "MobileOptimizationPipeline",
+      "category": "performance",
+      "description": "Mobil modellerini optimize etmek için farklı teknikleri (quantization, pruning, vb.) bir pipeline şeklinde uygulayan bir desen",
+      "benefits": [
+        "Farklı optimizasyon tekniklerini birleştirme esnekliği sağlar",
+        "Her tekniğin etkisini izole bir şekilde ölçmeyi mümkün kılar",
+        "Yeni optimizasyon yöntemlerinin eklenmesine olanak tanır",
+        "Modelin bellek kullanımını ve çalışma hızını optimize eder"
+      ],
+      "implementation_notes": "Her optimizasyon adımı modüler bir şekilde uygulanır ve birleştirilebilir. Statik metotlar kullanarak dinamik quantization, statik quantization, quantization aware training ve pruning gibi teknikleri uygular.",
+      "examples": [
+        "m3tm.mobile.optimization.MobileOptimizer"
+      ],
+      "related_patterns": ["PT-022", "PT-023"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-025",
+      "name": "ModalityFusionStrategy",
+      "category": "multimodal",
+      "description": "Farklı modalitelerden (metin, görüntü) gelen gömmeleri çeşitli stratejilerle birleştiren strateji deseni",
+      "benefits": [
+        "Farklı füzyon stratejilerini ortak bir arayüzle sunar",
+        "Stratejiler arasında geçiş yapmayı kolaylaştırır",
+        "Tek ve çoklu modalite durumlarını tutarlı şekilde ele alır",
+        "Yeni füzyon stratejilerinin eklenmesini destekler"
+      ],
+      "implementation_notes": "Soyut bir temel sınıf (BaseFusion) tanımlayarak farklı füzyon stratejilerini (ConcatenationFusion, WeightedSumFusion, GatedFusion) standardize eder. Stratejiler bir fabrika üzerinden oluşturulur.",
+      "examples": [
+        "m3tm.fusion.base_fusion.BaseFusion",
+        "m3tm.fusion.fusion_strategies.ConcatenationFusion",
+        "m3tm.fusion.fusion_strategies.WeightedSumFusion",
+        "m3tm.fusion.fusion_strategies.GatedFusion"
+      ],
+      "related_patterns": ["PT-003", "PT-002", "PT-015"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-026",
+      "name": "TrainingCallbackSystem",
+      "category": "training",
+      "description": "Eğitim sürecinin çeşitli aşamalarında özelleştirilebilir işlemler gerçekleştirmek için callback tabanlı bir sistem",
+      "benefits": [
+        "Eğitim sürecinin davranışını değiştirmeden genişletmeyi sağlar",
+        "Farklı callback'lerin bir arada kullanılmasına olanak tanır",
+        "Modüler ve test edilebilir kod yapısı oluşturur",
+        "Gelişmiş eğitim özellikleri (erken durdurma, öğrenme oranı planlama vb.) ekler"
+      ],
+      "implementation_notes": "Bir temel callback sınıfı (TrainingCallback) tanımlayarak eğitim sürecinin farklı aşamalarında (başlangıç, epoch başı/sonu, batch başı/sonu) çağrılabilecek metotlar sunar. Özel callback sınıfları bu temel sınıfı genişleterek belirli işlevler ekler.",
+      "examples": [
+        "m3tm.training.adapter_training.TrainingCallback",
+        "m3tm.training.adapter_training.EarlyStoppingCallback",
+        "m3tm.training.adapter_training.LearningRateSchedulerCallback"
+      ],
+      "related_patterns": ["PT-013", "PT-017", "PT-008"],
+      "last_updated": "2024-06-11"
     }
   ],
   "last_updated": "2024-06-11"

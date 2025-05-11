@@ -142,20 +142,167 @@
         "dominant_modules": ["download"],
         "implementation_variants": 1
       }
+    },
+    {
+      "pattern_id": "PT-022",
+      "name": "MobileModelConverter",
+      "metrics": {
+        "adoption_rate": 0.90,
+        "implementation_consistency": 0.87,
+        "complexity_reduction": 0.82,
+        "maintainability_improvement": 0.85,
+        "usage_count": 4,
+        "test_coverage": 0.76
+      },
+      "code_metrics": {
+        "reusability": 0.92,
+        "platform_coverage": 0.85,
+        "conversion_success_rate": 0.95
+      },
+      "quality_impact": {
+        "maintainability": 0.85,
+        "testability": 0.80,
+        "adaptability": 0.88
+      },
+      "usage_context": {
+        "dominant_modules": ["mobile"],
+        "implementation_variants": 1
+      }
+    },
+    {
+      "pattern_id": "PT-023",
+      "name": "BenchmarkStrategy",
+      "metrics": {
+        "adoption_rate": 0.85,
+        "implementation_consistency": 0.90,
+        "complexity_reduction": 0.78,
+        "maintainability_improvement": 0.82,
+        "usage_count": 3,
+        "test_coverage": 0.80
+      },
+      "code_metrics": {
+        "measurement_precision": 0.94,
+        "reporting_completeness": 0.87,
+        "statistical_validity": 0.92
+      },
+      "quality_impact": {
+        "maintainability": 0.82,
+        "testability": 0.90,
+        "adaptability": 0.83
+      },
+      "usage_context": {
+        "dominant_modules": ["mobile", "performance"],
+        "implementation_variants": 1
+      }
+    },
+    {
+      "pattern_id": "PT-024",
+      "name": "MobileOptimizationPipeline",
+      "metrics": {
+        "adoption_rate": 0.88,
+        "implementation_consistency": 0.83,
+        "complexity_reduction": 0.85,
+        "maintainability_improvement": 0.80,
+        "usage_count": 4,
+        "test_coverage": 0.75
+      },
+      "code_metrics": {
+        "optimization_effectiveness": 0.90,
+        "pipeline_flexibility": 0.88,
+        "technique_isolation": 0.92
+      },
+      "quality_impact": {
+        "maintainability": 0.80,
+        "testability": 0.78,
+        "adaptability": 0.90
+      },
+      "usage_context": {
+        "dominant_modules": ["mobile", "optimization"],
+        "implementation_variants": 1
+      }
+    },
+    {
+      "pattern_id": "PT-025",
+      "name": "ModalityFusionStrategy",
+      "metrics": {
+        "adoption_rate": 0.92,
+        "implementation_consistency": 0.88,
+        "complexity_reduction": 0.80,
+        "maintainability_improvement": 0.85,
+        "usage_count": 6,
+        "test_coverage": 0.82
+      },
+      "code_metrics": {
+        "strategy_flexibility": 0.95,
+        "modality_handling": 0.90,
+        "edge_case_robustness": 0.85
+      },
+      "quality_impact": {
+        "maintainability": 0.85,
+        "testability": 0.82,
+        "adaptability": 0.92
+      },
+      "usage_context": {
+        "dominant_modules": ["fusion", "multimodal"],
+        "implementation_variants": 3
+      }
+    },
+    {
+      "pattern_id": "PT-026",
+      "name": "TrainingCallbackSystem",
+      "metrics": {
+        "adoption_rate": 0.95,
+        "implementation_consistency": 0.90,
+        "complexity_reduction": 0.87,
+        "maintainability_improvement": 0.90,
+        "usage_count": 8,
+        "test_coverage": 0.85
+      },
+      "code_metrics": {
+        "extension_points": 0.95,
+        "cohesion": 0.88,
+        "customization_flexibility": 0.93
+      },
+      "quality_impact": {
+        "maintainability": 0.90,
+        "testability": 0.92,
+        "adaptability": 0.95
+      },
+      "usage_context": {
+        "dominant_modules": ["training", "adapter_training"],
+        "implementation_variants": 4
+      }
     }
   ],
   "global_metrics": {
-    "pattern_adoption_average": 0.72,
-    "pattern_consistency_average": 0.86,
-    "pattern_effectiveness_score": 0.80,
-    "anti_pattern_reduction": 0.65,
-    "test_coverage_average": 0.73
+    "pattern_adoption_average": 0.85,
+    "pattern_consistency_average": 0.88,
+    "pattern_effectiveness_score": 0.86,
+    "anti_pattern_reduction": 0.70,
+    "test_coverage_average": 0.80,
+    "category_effectiveness": {
+      "mobile": 0.88,
+      "performance": 0.87,
+      "multimodal": 0.90,
+      "training": 0.92,
+      "concurrency": 0.89
+    }
   },
   "recommendations": [
     {
       "pattern_id": "PT-020",
       "recommendation": "TaskHeadStrategy örüntüsünün diğer benzer senaryolara (ör. dikkat mekanizmaları, veri dönüştürücüler) da uygulanması ve test kapsamının artırılması önerilir. Adaptör mekanizmasıyla entegrasyonu güçlendirilebilir.",
       "priority": "medium"
+    },
+    {
+      "pattern_id": "PT-025",
+      "recommendation": "ModalityFusionStrategy örüntüsünün diğer veri kombinasyonları (örn. ses, sensör verileri) için de genişletilmesi önerilir.",
+      "priority": "medium"
+    },
+    {
+      "pattern_id": "PT-022",
+      "recommendation": "MobileModelConverter örüntüsünün diğer platformlara (Web, Edge cihazlar) destek sağlayacak şekilde genişletilmesi önerilir.",
+      "priority": "low"
     }
   ],
   "metrics_id": "m3tm_v2.3_pattern_metrics",
@@ -210,6 +357,30 @@
       "target": "PT-014",
       "relationship_type": "incorporates",
       "strength": 0.80
+    },
+    {
+      "source": "PT-022",
+      "target": "PT-024",
+      "relationship_type": "uses",
+      "strength": 0.92
+    },
+    {
+      "source": "PT-023",
+      "target": "PT-022",
+      "relationship_type": "measures",
+      "strength": 0.88
+    },
+    {
+      "source": "PT-025",
+      "target": "PT-003",
+      "relationship_type": "specializes",
+      "strength": 0.85
+    },
+    {
+      "source": "PT-026",
+      "target": "PT-017",
+      "relationship_type": "uses",
+      "strength": 0.90
     }
   ]
 } 
