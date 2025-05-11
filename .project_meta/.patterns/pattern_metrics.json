@@ -79,5 +79,163 @@
         "top_contributors": ["PT-007", "PT-014", "PT-015", "PT-017"]
       }
     }
+  },
+  "metrics_timestamp": "2024-06-11",
+  "pattern_usage": {
+    "PT-001": {
+      "occurrence_count": 15,
+      "adoption_rate": 0.75,
+      "effectiveness_score": 0.85,
+      "implementation_consistency": 0.92
+    },
+    "PT-002": {
+      "occurrence_count": 12,
+      "adoption_rate": 0.80,
+      "effectiveness_score": 0.88,
+      "implementation_consistency": 0.90
+    },
+    "PT-003": {
+      "occurrence_count": 8,
+      "adoption_rate": 0.65,
+      "effectiveness_score": 0.78,
+      "implementation_consistency": 0.85
+    },
+    "PT-006": {
+      "occurrence_count": 6,
+      "adoption_rate": 0.70,
+      "effectiveness_score": 0.82,
+      "implementation_consistency": 0.88
+    },
+    "PT-007": {
+      "occurrence_count": 9,
+      "adoption_rate": 0.75,
+      "effectiveness_score": 0.84,
+      "implementation_consistency": 0.87
+    },
+    "PT-008": {
+      "occurrence_count": 4,
+      "adoption_rate": 0.60,
+      "effectiveness_score": 0.75,
+      "implementation_consistency": 0.78
+    },
+    "PT-009": {
+      "occurrence_count": 7,
+      "adoption_rate": 0.68,
+      "effectiveness_score": 0.80,
+      "implementation_consistency": 0.83
+    },
+    "PT-010": {
+      "occurrence_count": 5,
+      "adoption_rate": 0.62,
+      "effectiveness_score": 0.76,
+      "implementation_consistency": 0.80
+    },
+    "PT-012": {
+      "occurrence_count": 10,
+      "adoption_rate": 0.78,
+      "effectiveness_score": 0.85,
+      "implementation_consistency": 0.88
+    },
+    "PT-013": {
+      "occurrence_count": 3,
+      "adoption_rate": 0.55,
+      "effectiveness_score": 0.72,
+      "implementation_consistency": 0.75
+    },
+    "PT-016": {
+      "occurrence_count": 6,
+      "adoption_rate": 0.65,
+      "effectiveness_score": 0.78,
+      "implementation_consistency": 0.82
+    },
+    "PT-014": {
+      "occurrence_count": 8,
+      "adoption_rate": 0.70,
+      "effectiveness_score": 0.82,
+      "implementation_consistency": 0.85
+    },
+    "PT-015": {
+      "occurrence_count": 7,
+      "adoption_rate": 0.68,
+      "effectiveness_score": 0.80,
+      "implementation_consistency": 0.83
+    },
+    "PT-100": {
+      "occurrence_count": 1,
+      "adoption_rate": 1.0,
+      "effectiveness_score": 0.95,
+      "implementation_consistency": 0.98
+    },
+    "PT-101": {
+      "occurrence_count": 2,
+      "adoption_rate": 0.95,
+      "effectiveness_score": 0.92,
+      "implementation_consistency": 0.95
+    },
+    "PT-102": {
+      "occurrence_count": 8,
+      "adoption_rate": 0.98,
+      "effectiveness_score": 0.94,
+      "implementation_consistency": 0.96
+    },
+    "PT-103": {
+      "occurrence_count": 1,
+      "adoption_rate": 1.0,
+      "effectiveness_score": 0.95,
+      "implementation_consistency": 0.97
+    },
+    "PT-104": {
+      "occurrence_count": 1,
+      "adoption_rate": 1.0,
+      "effectiveness_score": 0.90,
+      "implementation_consistency": 0.95
+    },
+    "PT-105": {
+      "occurrence_count": 4,
+      "adoption_rate": 0.98,
+      "effectiveness_score": 0.93,
+      "implementation_consistency": 0.94
+    },
+    "PT-106": {
+      "occurrence_count": 3,
+      "adoption_rate": 0.97,
+      "effectiveness_score": 0.92,
+      "implementation_consistency": 0.93
+    }
+  },
+  "pattern_combinations": {
+    "PT-100_PT-103": {
+      "co_occurrence_count": 1,
+      "synergy_score": 0.92,
+      "conflict_score": 0.05
+    },
+    "PT-101_PT-105": {
+      "co_occurrence_count": 2,
+      "synergy_score": 0.88,
+      "conflict_score": 0.08
+    },
+    "PT-102_PT-106": {
+      "co_occurrence_count": 3,
+      "synergy_score": 0.85,
+      "conflict_score": 0.12
+    },
+    "PT-100_PT-101": {
+      "co_occurrence_count": 1,
+      "synergy_score": 0.90,
+      "conflict_score": 0.07
+    },
+    "PT-104_PT-105": {
+      "co_occurrence_count": 1,
+      "synergy_score": 0.87,
+      "conflict_score": 0.10
+    }
+  },
+  "overall_metrics": {
+    "total_patterns": 20,
+    "android_patterns": 7,
+    "avg_adoption_rate": 0.82,
+    "avg_effectiveness_score": 0.85,
+    "avg_implementation_consistency": 0.89,
+    "pattern_density_per_file": 2.3
   }
 } 

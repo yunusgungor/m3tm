@@ -1,0 +1,84 @@
+{
+  "story_id": "story_19",
+  "title": "iOS SDK sarmalayıcı implementasyonu",
+  "description": "iOS platformu için M³TM modelinin yeteneklerini kapsayan bir SDK sarmalayıcısı geliştirmek. Bu sarmalayıcı, Swift/Objective-C dillerinde yazılmış iOS uygulamalarının modeli kolayca kullanabilmesini sağlayacaktır.",
+  "acceptance_criteria": [
+    "Swift/Objective-C dillerinde temiz bir API sağlanmalıdır",
+    "Model yükleme, çıkarım, eğitim ve arama işlevleri desteklenmeli",
+    "C++ köprüsü üzerinden iOS entegrasyonu sağlanmalıdır",
+    "iOS cihaz üzerinde PyTorch Mobile ile entegrasyon sağlanmalıdır",
+    "Asenkron ve senkron işlemler için uygun arayüzler tanımlanmalıdır",
+    "Örnek kullanım kodları içermelidir",
+    "Hata yönetimi ve istisna yakalama mekanizmaları uygulanmalıdır",
+    "Temel performans optimizasyonları yapılmalıdır",
+    "Xcode ile test edilmelidir"
+  ],
+  "technical_details": {
+    "module_mapping": ["sdk", "ios", "api"],
+    "dependencies": [
+      "PyTorch Mobile iOS",
+      "C++ köprüsü",
+      "Xcode"
+    ],
+    "estimated_effort": "Yüksek",
+    "technical_risks": [
+      "C++ ve Swift/Objective-C arasındaki köprü karmaşık olabilir",
+      "iOS cihaz çeşitliliği farklı hatalar ortaya çıkarabilir",
+      "PyTorch Mobile özelliklerinin tümü iOS'ta desteklenmeyebilir",
+      "iOS'ta model boyutu kısıtlamaları olabilir",
+      "AppStore kurallarına uyumluluk gerekir"
+    ]
+  },
+  "tasks": [
+    "SDK yapısını ve iOS-spesifik gereksinimleri analiz et",
+    "C++ köprüsünü tasarla ve uygula",
+    "Temel API sınıflarını/arayüzlerini tanımla",
+    "Model yükleme ve çıkarım işlevlerini uygula",
+    "Eğitim ve ince ayar işlevlerini uygula",
+    "Arama işlevlerini uygula",
+    "Batarya ve bellekle ilgili optimizasyonları uygula",
+    "Hata yönetimi mekanizmalarını ekle",
+    "Unit testleri yaz",
+    "iOS cihaz üzerinde entegrasyon testi yap",
+    "API kullanımı için örnek kodları hazırla"
+  ],
+  "patterns": [
+    {
+      "pattern_id": "PT-002",
+      "name": "FactoryMethod",
+      "usage_context": "SDK'da yapılandırılabilir bileşenler oluşturmak için"
+    },
+    {
+      "pattern_id": "PT-007",
+      "name": "MechanismRegistry",
+      "usage_context": "SDK içinde desteklenen farklı işlevlerin kaydedilmesi ve erişimi için"
+    },
+    {
+      "pattern_id": "PT-019",
+      "name": "iOSBridge",
+      "usage_context": "C++ kodlarını Swift/Objective-C API'sine bağlamak için"
+    },
+    {
+      "pattern_id": "PT-003",
+      "name": "ModelComposite",
+      "usage_context": "iOS yapılandırmaları için modüler model bileşenlerini organize etmek için"
+    }
+  ],
+  "requirements_mapping": [
+    {
+      "prd_section": "2.5.4",
+      "prd_requirement": "Geliştiriciler için temel SDK fonksiyonları"
+    },
+    {
+      "prd_section": "4.2",
+      "prd_requirement": "Geliştirici Olarak Kullanıcı Hikayeleri"
+    },
+    {
+      "prd_section": "5.8",
+      "prd_requirement": "SDK Sarmalayıcıları"
+    }
+  ],
+  "status": "todo",
+  "creation_date": "2024-06-11",
+  "last_updated": "2024-06-11"
+} 

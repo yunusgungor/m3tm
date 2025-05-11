@@ -8,7 +8,7 @@ import java.util.Map;
  * Bu arabirim, eğitim işlemi sırasında ilerleme bildirimleri
  * almak için kullanılır.
  */
-public interface TrainingCallback {
+public interface M3TMTrainingCallback {
     
     /**
      * Her batch işlemi tamamlandığında çağrılır.

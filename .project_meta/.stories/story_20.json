@@ -1,0 +1,79 @@
+{
+  "story_id": "story_20",
+  "title": "SDK API dokümantasyonu",
+  "description": "M³TM SDK'sı için kapsamlı API dokümantasyonu oluşturmak. Bu dokümantasyon, Android ve iOS platformlarında SDK'nın nasıl kullanılacağına dair detaylı bilgileri, örnek kodları ve en iyi uygulamaları içerecektir.",
+  "acceptance_criteria": [
+    "Tüm public API fonksiyonları ve sınıfları dokümante edilmelidir",
+    "Her iki platform (Android ve iOS) için detaylı kılavuzlar oluşturulmalıdır",
+    "Temel kullanım senaryoları için kapsamlı örnekler içermelidir",
+    "Hata durumları ve bunların nasıl ele alınacağı belgelenmelidir",
+    "Sphinx, Javadoc ve Swift Dokümantasyonu gibi standart dokümantasyon araçları kullanılmalıdır",
+    "API referans sayfaları oluşturulmalıdır",
+    "Kurulum ve başlangıç kılavuzu içermelidir",
+    "Performans ipuçları ve en iyi uygulamalar belgelenmelidir",
+    "SDK geliştiricileri için teknik dokümantasyon sağlanmalıdır"
+  ],
+  "technical_details": {
+    "module_mapping": ["sdk", "documentation", "api"],
+    "dependencies": [
+      "story_18 (Android SDK sarmalayıcı implementasyonu)",
+      "story_19 (iOS SDK sarmalayıcı implementasyonu)",
+      "Sphinx",
+      "Javadoc",
+      "Swift Documentation"
+    ],
+    "estimated_effort": "Orta",
+    "technical_risks": [
+      "API'lerde yapılacak değişiklikler dokümantasyonun eskimesine neden olabilir",
+      "İki platform arasında tutarlılığı sağlamak zor olabilir",
+      "Örneklerin tüm kullanım senaryolarını kapsaması gerekir"
+    ]
+  },
+  "tasks": [
+    "Dokümantasyon formatını ve araçlarını belirle",
+    "Dokümantasyon yapısını tasarla",
+    "API referans sayfaları için şablonları hazırla",
+    "Android API dokümantasyonunu oluştur",
+    "iOS API dokümantasyonunu oluştur",
+    "Kurulum ve başlangıç kılavuzunu hazırla",
+    "Temel kullanım senaryoları için örnekler oluştur",
+    "Hata durumları ve çözümleri belgele",
+    "Performans ipuçları ve en iyi uygulamaları belgelendir",
+    "Teknik dokümantasyonu SDK geliştiricileri için güncelle",
+    "Dokümantasyonu gözden geçir ve düzelt",
+    "Dokümantasyonu yayınlanabilir hale getir"
+  ],
+  "patterns": [
+    {
+      "pattern_id": "PT-020",
+      "name": "DocTemplateSystem",
+      "usage_context": "Tutarlı dokümantasyon formatı sağlamak için"
+    },
+    {
+      "pattern_id": "PT-021",
+      "name": "LiveCodeExamples",
+      "usage_context": "Test edilebilir örnek kodların dokümantasyona dahil edilmesi için"
+    }
+  ],
+  "requirements_mapping": [
+    {
+      "prd_section": "2.5.4",
+      "prd_requirement": "Geliştiriciler için temel SDK fonksiyonları"
+    },
+    {
+      "prd_section": "4.2",
+      "prd_requirement": "Geliştirici Olarak Kullanıcı Hikayeleri"
+    },
+    {
+      "prd_section": "5.8",
+      "prd_requirement": "SDK Sarmalayıcıları"
+    },
+    {
+      "prd_section": "3.2",
+      "prd_requirement": "Geliştiriciler (SDK Kullanıcıları)"
+    }
+  ],
+  "status": "todo",
+  "creation_date": "2024-06-11",
+  "last_updated": "2024-06-11"
+} 

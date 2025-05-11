@@ -236,5 +236,171 @@
         "description": "ModalityFusionStrategy, ModelComposite ve PluggableComponentStrategy desenleri ile birlikte güçlü bir çoklu modalite mimarisi oluşturuyor"
       }
     ]
+  },
+  "pattern_evolution": [
+    {
+      "pattern_id": "PT-100",
+      "name": "SingletonPattern",
+      "lifecycle_stage": "stable",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Singleton deseni belgelenmiştir. M3TM sınıfında thread-safe olarak uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "stable",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.95
+        }
+      ],
+      "future_recommendations": "Singleton deseninin test edilebilirlik açısından iyileştirilmesi değerlendirilebilir, ancak mevcut implementasyon thread-safety açısından güçlüdür."
+    },
+    {
+      "pattern_id": "PT-101",
+      "name": "FactoryMethodAndroid",
+      "lifecycle_stage": "stable",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Factory Method deseni M3TMModelManager ve M3TMTrainingManager sınıflarında uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "increasing",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.92
+        }
+      ],
+      "future_recommendations": "Factory Method deseninin daha fazla model türü ve görev için genişletilmesi düşünülebilir."
+    },
+    {
+      "pattern_id": "PT-102",
+      "name": "BridgePatternAndroid",
+      "lifecycle_stage": "stable",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Bridge deseni, Java API ve native C++ kodu arasında köprü kurmak için JNI mekanizmasıyla uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "stable",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.94
+        }
+      ],
+      "future_recommendations": "Native tarafta oluşan hataların Java tarafına doğru bir şekilde çevrilmesi konusunda iyileştirmeler yapılabilir."
+    },
+    {
+      "pattern_id": "PT-103",
+      "name": "FacadePatternAndroid",
+      "lifecycle_stage": "stable",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Facade deseni, M3TM ana sınıfında alt sistemlere basitleştirilmiş erişim sağlamak için uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "stable",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.95
+        }
+      ],
+      "future_recommendations": "Facade deseninin dökümantasyonu iyileştirilebilir ve yeni yetenekler eklenebilir."
+    },
+    {
+      "pattern_id": "PT-104",
+      "name": "CallbackPatternAndroid",
+      "lifecycle_stage": "evolving",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Callback deseni, TrainingCallback arayüzünde eğitim ilerlemesini bildirmek için uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "increasing",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.90
+        }
+      ],
+      "future_recommendations": "Daha granüler callback'ler eklenerek eğitim sürecinde daha detaylı bildirimler sağlanabilir."
+    },
+    {
+      "pattern_id": "PT-105",
+      "name": "ResourceManagementAndroid",
+      "lifecycle_stage": "stable",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Resource Management deseni, close() ve finalize() metotlarında native kaynakları yönetmek için uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "stable",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.93
+        }
+      ],
+      "future_recommendations": "Java 7+ için AutoCloseable arayüzü eklenerek try-with-resources desteği sağlanabilir."
+    },
+    {
+      "pattern_id": "PT-106",
+      "name": "ErrorHandlingAndroid",
+      "lifecycle_stage": "stable",
+      "first_detected": "2024-06-11",
+      "first_documented": "2024-06-11",
+      "evolution_history": [
+        {
+          "date": "2024-06-11",
+          "event": "initial_documentation",
+          "description": "Android SDK'da Error Handling deseni, M3TMException sınıfında kategorize edilmiş hata kodları ile uygulanmıştır."
+        }
+      ],
+      "adoption_trend": "stable",
+      "usage_trend": [
+        {
+          "date": "2024-06-11",
+          "usage_score": 0.92
+        }
+      ],
+      "future_recommendations": "Hata mesajlarında dil desteği genişletilebilir ve internationalization (i18n) eklenebilir."
+    }
+  ],
+  "overall_evolution_metrics": {
+    "assessment_date": "2024-06-11",
+    "emerging_patterns_count": 0,
+    "stable_patterns_count": 6,
+    "evolving_patterns_count": 1,
+    "declining_patterns_count": 0,
+    "average_lifecycle_stage_duration": 0,
+    "pattern_turnover_rate": 0,
+    "pattern_refinement_frequency": 0
   }
 } 

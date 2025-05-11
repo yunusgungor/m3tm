@@ -1,0 +1,29 @@
+{
+  "map_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-06-11",
+  "dependencies": {
+    "story_1": [],
+    "story_2": ["story_1"],
+    "story_3": ["story_1"],
+    "story_4": ["story_1"],
+    "story_5": ["story_4"],
+    "story_6": ["story_4"],
+    "story_7": ["story_5", "story_6"],
+    "story_8": ["story_4"],
+    "story_9": ["story_5", "story_8"],
+    "story_10": ["story_9"],
+    "story_11": ["story_6"],
+    "story_12": ["story_6", "story_11"],
+    "story_13": ["story_7"],
+    "story_14": ["story_11", "story_13"],
+    "story_15": ["story_10"],
+    "story_16": ["story_15"],
+    "story_17": ["story_10"],
+    "story_18": ["story_14", "story_16", "story_17"],
+    "story_19": ["story_14", "story_16", "story_17"],
+    "story_20": ["story_18", "story_19"],
+    "story_21": ["story_18", "story_19", "story_20"],
+    "story_22": ["story_18", "story_19"],
+    "story_23": ["story_18", "story_19", "story_21", "story_22"]
+  }
+} 

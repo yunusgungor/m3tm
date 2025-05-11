@@ -1,0 +1,68 @@
+{
+  "metric_id": "m3tm_v2.3_velocity",
+  "creation_date": "2024-06-11",
+  "last_updated": "2024-06-11",
+  "iterations": {
+    "iter_1": {
+      "planned_stories": 4,
+      "completed_stories": 4,
+      "story_points": 10,
+      "duration_days": 7,
+      "story_completion_rate": 100,
+      "velocity": 1.43
+    },
+    "iter_2": {
+      "planned_stories": 3,
+      "completed_stories": 3,
+      "story_points": 12,
+      "duration_days": 8,
+      "story_completion_rate": 100,
+      "velocity": 1.5
+    },
+    "iter_3": {
+      "planned_stories": 3,
+      "completed_stories": 3,
+      "story_points": 14,
+      "duration_days": 10,
+      "story_completion_rate": 100,
+      "velocity": 1.4
+    },
+    "iter_4": {
+      "planned_stories": 4,
+      "completed_stories": 4,
+      "story_points": 16,
+      "duration_days": 12,
+      "story_completion_rate": 100,
+      "velocity": 1.33
+    },
+    "iter_5": {
+      "planned_stories": 3,
+      "completed_stories": 3,
+      "story_points": 12,
+      "duration_days": 9,
+      "story_completion_rate": 100,
+      "velocity": 1.33
+    },
+    "iter_6": {
+      "planned_stories": 3,
+      "completed_stories": 0,
+      "story_points": 15,
+      "duration_days": 0,
+      "story_completion_rate": 0,
+      "velocity": 0
+    }
+  },
+  "trends": {
+    "avg_velocity": 1.4,
+    "velocity_trend": "stable",
+    "completion_rate_trend": "stable",
+    "story_point_trend": "increasing",
+    "duration_trend": "increasing"
+  },
+  "forecasts": {
+    "iter_6_predicted_days": 11,
+    "iter_7_story_points": 18,
+    "iter_7_predicted_days": 13,
+    "estimated_completion_date": "2024-07-30"
+  }
+} 

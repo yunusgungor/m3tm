@@ -1,0 +1,117 @@
+{
+  "metric_id": "m3tm_v2.3_dependency_health",
+  "creation_date": "2024-06-11",
+  "last_updated": "2024-06-11",
+  "dependency_metrics": {
+    "total_dependencies": 41,
+    "direct_dependencies": 25,
+    "transitive_dependencies": 16,
+    "bottleneck_analysis": {
+      "critical_dependencies": [
+        {
+          "id": "story_6",
+          "dependents_count": 5,
+          "bottleneck_score": 0.85,
+          "recommendations": "Proto-Transformer bloğunu modülerleştir"
+        },
+        {
+          "id": "story_11",
+          "dependents_count": 4,
+          "bottleneck_score": 0.75,
+          "recommendations": "Adapter arayüzünü stabil tut"
+        },
+        {
+          "id": "story_14",
+          "dependents_count": 3,
+          "bottleneck_score": 0.65,
+          "recommendations": "Eğitim mekanizmasını platform bağımsız hale getir"
+        }
+      ],
+      "bottleneck_index": 0.42,
+      "bottleneck_trend": "stable"
+    },
+    "dependency_distribution": {
+      "max_dependencies": 3,
+      "avg_dependencies": 1.78,
+      "min_dependencies": 0,
+      "std_dev": 0.92
+    },
+    "cycle_analysis": {
+      "cycles_detected": 0,
+      "near_cycles": 0,
+      "cycle_risk": "low"
+    },
+    "dependency_types": {
+      "configuration": 7,
+      "infrastructure": 5,
+      "core_functionality": 17,
+      "utilities": 4,
+      "testing": 8
+    }
+  },
+  "module_dependencies": {
+    "total_module_dependencies": 28,
+    "direct_module_dependencies": 22,
+    "transitive_module_dependencies": 6,
+    "module_dependency_health": {
+      "sdk": {
+        "dependency_count": 6,
+        "coupling_score": 0.45,
+        "cohesion_score": 0.85,
+        "health_index": 0.75
+      },
+      "model_core": {
+        "dependency_count": 5,
+        "coupling_score": 0.35,
+        "cohesion_score": 0.92,
+        "health_index": 0.85
+      },
+      "model_growth": {
+        "dependency_count": 3,
+        "coupling_score": 0.3,
+        "cohesion_score": 0.88,
+        "health_index": 0.82
+      },
+      "search": {
+        "dependency_count": 4,
+        "coupling_score": 0.4,
+        "cohesion_score": 0.8,
+        "health_index": 0.72
+      },
+      "data_export": {
+        "dependency_count": 2,
+        "coupling_score": 0.25,
+        "cohesion_score": 0.9,
+        "health_index": 0.85
+      }
+    }
+  },
+  "risk_metrics": {
+    "overall_dependency_health": 0.78,
+    "overall_health_trend": "improving",
+    "highest_risk_areas": [
+      {
+        "area": "Mobile SDK Integration",
+        "risk_score": 0.65,
+        "risk_factors": [
+          "Platform-spesifik kod ve PyTorch Mobile entegrasyonu",
+          "Android ve iOS için benzer ancak farklı implementasyonlar"
+        ]
+      },
+      {
+        "area": "Eğitim Mekanizması",
+        "risk_score": 0.55,
+        "risk_factors": [
+          "Cihaz üzerinde eğitimin performans kısıtlamaları",
+          "Farklı mobil cihazlar için optimizasyon gereksinimleri"
+        ]
+      }
+    ],
+    "recommendations": [
+      "SDK sarmalayıcılarında platform-bağımsız bir çekirdek katmanı oluştur",
+      "Cihaz üzerinde eğitim için feature flag mekanizması ekle",
+      "Kompleks bağımlılıkları basitleştirmek için facade deseni uygula",
+      "İkiden fazla seviyeye sahip transitif bağımlılıklardan kaçın"
+    ]
+  }
+} 

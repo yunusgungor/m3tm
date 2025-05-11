@@ -1,0 +1,165 @@
+{
+  "metric_id": "m3tm_v2.3_estimation",
+  "creation_date": "2024-06-11",
+  "last_updated": "2024-06-11",
+  "story_estimations": {
+    "story_1": {
+      "estimated_points": 2,
+      "actual_points": 2,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_2": {
+      "estimated_points": 3,
+      "actual_points": 2,
+      "accuracy_ratio": 1.5,
+      "notes": "PyTorch Mobile kurulumu beklenenden kolay oldu"
+    },
+    "story_3": {
+      "estimated_points": 3,
+      "actual_points": 4,
+      "accuracy_ratio": 0.75,
+      "notes": "Mobil dikkat mekanizmaları beklenenden daha karmaşık çıktı"
+    },
+    "story_4": {
+      "estimated_points": 2,
+      "actual_points": 2,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_5": {
+      "estimated_points": 3,
+      "actual_points": 4,
+      "accuracy_ratio": 0.75,
+      "notes": "Tokenizer entegrasyonu beklenenden uzun sürdü"
+    },
+    "story_6": {
+      "estimated_points": 5,
+      "actual_points": 4,
+      "accuracy_ratio": 1.25,
+      "notes": "Mevcut araştırma sayesinde daha hızlı tamamlandı"
+    },
+    "story_7": {
+      "estimated_points": 4,
+      "actual_points": 4,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_8": {
+      "estimated_points": 4,
+      "actual_points": 5,
+      "accuracy_ratio": 0.8,
+      "notes": "Görüntü işleme optimizasyonları beklenenden zor oldu"
+    },
+    "story_9": {
+      "estimated_points": 5,
+      "actual_points": 4,
+      "accuracy_ratio": 1.25,
+      "notes": "Füzyon mekanizması beklenenden daha basit tutuldu"
+    },
+    "story_10": {
+      "estimated_points": 5,
+      "actual_points": 5,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_11": {
+      "estimated_points": 3,
+      "actual_points": 4,
+      "accuracy_ratio": 0.75,
+      "notes": "Adapter optimizasyonu beklenenden zor oldu"
+    },
+    "story_12": {
+      "estimated_points": 4,
+      "actual_points": 4,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_13": {
+      "estimated_points": 4,
+      "actual_points": 3,
+      "accuracy_ratio": 1.33,
+      "notes": "Önceki deneyimler sayesinde daha hızlı tamamlandı"
+    },
+    "story_14": {
+      "estimated_points": 5,
+      "actual_points": 5,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_15": {
+      "estimated_points": 4,
+      "actual_points": 4,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_16": {
+      "estimated_points": 3,
+      "actual_points": 4,
+      "accuracy_ratio": 0.75,
+      "notes": "Arama API'sinin test edilmesi beklenenden uzun sürdü"
+    },
+    "story_17": {
+      "estimated_points": 4,
+      "actual_points": 4,
+      "accuracy_ratio": 1.0,
+      "notes": "Doğru tahmin edildi"
+    },
+    "story_18": {
+      "estimated_points": 5,
+      "actual_points": null,
+      "accuracy_ratio": null,
+      "notes": "Henüz tamamlanmadı"
+    },
+    "story_19": {
+      "estimated_points": 5,
+      "actual_points": null,
+      "accuracy_ratio": null,
+      "notes": "Henüz tamamlanmadı"
+    },
+    "story_20": {
+      "estimated_points": 5,
+      "actual_points": null,
+      "accuracy_ratio": null,
+      "notes": "Henüz tamamlanmadı"
+    },
+    "story_21": {
+      "estimated_points": 6,
+      "actual_points": null,
+      "accuracy_ratio": null,
+      "notes": "Henüz tamamlanmadı"
+    },
+    "story_22": {
+      "estimated_points": 6,
+      "actual_points": null,
+      "accuracy_ratio": null,
+      "notes": "Henüz tamamlanmadı"
+    },
+    "story_23": {
+      "estimated_points": 6,
+      "actual_points": null,
+      "accuracy_ratio": null,
+      "notes": "Henüz tamamlanmadı"
+    }
+  },
+  "metrics": {
+    "overall_accuracy": {
+      "avg_ratio": 0.97,
+      "within_10_percent": 35.3,
+      "over_estimated": 23.5,
+      "under_estimated": 41.2
+    },
+    "trends": {
+      "accuracy_trend": "improving",
+      "over_estimation_trend": "decreasing",
+      "under_estimation_trend": "decreasing",
+      "complexity_correlation": 0.65
+    },
+    "recommendations": [
+      "Kompleks görüntü işleme görevleri için tahminleri %20 artır",
+      "API geliştirme görevleri için test süresini daha iyi hesaba kat",
+      "Adapter optimizasyonları için ek süre planla",
+      "SDK geliştirme için platform başına en az 5 puan ayır"
+    ]
+  }
+} 

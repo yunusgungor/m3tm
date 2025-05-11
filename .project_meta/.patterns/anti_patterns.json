@@ -64,6 +64,90 @@
       "remediation": "Adapter sayısını sınırlı tutun (genellikle 1-2 adapter). Daha büyük bir adapter kullanmak birkaç küçük adapter yerine genellikle daha iyidir. Farklı konumlarda (örn. 'post_attention', 'post_ffn') adapter'ları stratejik olarak yerleştirin.",
       "related_good_patterns": ["PT-014", "PT-018"],
       "last_updated": "2024-06-17"
+    },
+    {
+      "id": "AP-015",
+      "name": "FailedResourceCleanup",
+      "category": "resource_management",
+      "description": "Native kaynakların close() çağrısından önce temizlenmemesi",
+      "symptoms": [
+        "Bellek sızıntıları",
+        "Uygulama çökmesi",
+        "Performans düşüşü"
+      ],
+      "causes": [
+        "Açık kaynak yönetimi yerine finalize() metoduna güvenme",
+        "Try-catch bloklarında kaynak temizleme işleminin yapılmaması",
+        "Native kaynakların izlenmemesi"
+      ],
+      "examples": [
+        "public void onDestroy() {\n    // close() çağrılmıyor\n    super.onDestroy();\n}"
+      ],
+      "remediation_strategy": "Explicit resource management (try-finally veya try-with-resources) kullanın ve tüm native kaynakları açıkça serbest bırakın",
+      "detection_approaches": [
+        "Statik kod analizi",
+        "Resource leak detectors",
+        "Memory profiling"
+      ],
+      "severity": "High",
+      "prevalence": "Medium",
+      "last_updated": "2024-06-11"
+    },
+    {
+      "id": "AP-016",
+      "name": "ExcessiveJNICalls",
+      "category": "performance",
+      "description": "JNI bridge üzerinden çok fazla küçük çağrı yapılması, bu da performans sorunlarına yol açabilir",
+      "symptoms": [
+        "Yavaş çıkarım performansı",
+        "Batarya tüketiminde artış",
+        "Kullanıcı arayüzü gecikmesi"
+      ],
+      "causes": [
+        "Her küçük işlem için ayrı JNI çağrıları",
+        "Veri dönüşümlerinin sık yapılması",
+        "Coarse-grained API tasarımı eksikliği"
+      ],
+      "examples": [
+        "// Birçok küçük JNI çağrısı\nfor (int i = 0; i < tokens.length; i++) {\n    nativeProcessToken(handle, tokens[i]);\n}"
+      ],
+      "remediation_strategy": "Batch işleme işlevleri tasarlayın ve JNI çağrılarını en aza indirgemek için veri toplu işlemesi yapın",
+      "detection_approaches": [
+        "Profiling tools",
+        "JNI çağrı sayılarının sayılması",
+        "Performans testi"
+      ],
+      "severity": "Medium",
+      "prevalence": "Low",
+      "last_updated": "2024-06-11"
+    },
+    {
+      "id": "AP-017",
+      "name": "UnsynchronizedSingletonAccess",
+      "category": "concurrency",
+      "description": "Singleton erişiminde yetersiz senkronizasyon, çoklu threaded ortamlarda sorunlara yol açabilir",
+      "symptoms": [
+        "Yarış koşulları",
+        "Singleton çoğaltması",
+        "Tutarsız uygulama durumu"
+      ],
+      "causes": [
+        "synchronized anahtar kelimesinin kullanılmaması",
+        "Double-checked locking kalıbının yanlış uygulanması",
+        "volatile anahtar kelimesinin eksikliği"
+      ],
+      "examples": [
+        "public static M3TM getInstance(Context context) {\n    if (instance == null) { // synchronized olmadan\n        instance = new M3TM(context);\n    }\n    return instance;\n}"
+      ],
+      "remediation_strategy": "Singleton desenini uygularken Thread-safe kalıplar kullanın (synchronized metot, volatile değişken veya Enum singleton)",
+      "detection_approaches": [
+        "Statik kod analizi",
+        "Code review",
+        "Thread-safety analiz araçları"
+      ],
+      "severity": "High",
+      "prevalence": "Low",
+      "last_updated": "2024-06-11"
     }
   ]
 } 

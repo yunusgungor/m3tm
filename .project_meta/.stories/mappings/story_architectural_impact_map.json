@@ -1,0 +1,121 @@
+{
+  "map_id": "m3tm_v2.3_initial",
+  "creation_date": "2024-06-11",
+  "impact_mappings": {
+    "story_1": {
+      "impact_level": "low",
+      "affected_principles": ["1.4"],
+      "notes": "Geliştirme ortamı kurulumu, adaptif öğrenme mimarisinin temelini hazırlar."
+    },
+    "story_2": {
+      "impact_level": "medium",
+      "affected_principles": ["1.1", "1.3", "4.3"],
+      "notes": "PyTorch Mobile deneyleri, ultra-hafif tasarım ve batarya kısıtlamalarını göz önünde bulundurmayı gerektirir."
+    },
+    "story_3": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "2.1", "4.1", "4.2"],
+      "notes": "Dikkat ve konvolüsyon mekanizmaları araştırması, çekirdek model katmanının performans kısıtlamaları ve bellek kullanımını doğrudan etkiler."
+    },
+    "story_4": {
+      "impact_level": "medium",
+      "affected_principles": ["1.2", "4.4"],
+      "notes": "Yapılandırma formatı, modülerlik ve ölçeklenebilirliği doğrudan etkiler."
+    },
+    "story_5": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "2.1", "4.1", "4.2"],
+      "notes": "Metin işleme modülü, çekirdek model katmanının ana bileşenidir."
+    },
+    "story_6": {
+      "impact_level": "critical",
+      "affected_principles": ["1.1", "1.2", "1.4", "2.1", "4.1", "4.2"],
+      "notes": "Proto-Transformer blokları, mimarinin omurgasını oluşturan kritik bir bileşendir."
+    },
+    "story_7": {
+      "impact_level": "medium",
+      "affected_principles": ["1.2", "1.4", "2.2"],
+      "notes": "ClassificationHead, adaptif öğrenme mimarisini ve görev modülleme yeteneğini etkiler."
+    },
+    "story_8": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "2.1", "4.1", "4.2"],
+      "notes": "Görüntü işleme modülü, çekirdek model katmanının ana bileşenidir ve bellek kullanımını ciddi şekilde etkiler."
+    },
+    "story_9": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "2.1", "4.1"],
+      "notes": "Füzyon mekanizması, modaliteler arası etkileşimi belirler ve model performansını etkiler."
+    },
+    "story_10": {
+      "impact_level": "medium",
+      "affected_principles": ["2.1", "3.3"],
+      "notes": "Arama gömme projeksiyonu, semantik arama veri akışını etkiler."
+    },
+    "story_11": {
+      "impact_level": "critical",
+      "affected_principles": ["1.2", "1.4", "2.2", "4.4"],
+      "notes": "Adapter sınıfı, adaptif öğrenme mimarisinin temel taşıdır ve ölçeklenebilirliği doğrudan etkiler."
+    },
+    "story_12": {
+      "impact_level": "critical",
+      "affected_principles": ["1.2", "1.4", "2.1", "2.2"],
+      "notes": "AdapterSlot mekanizması, çekirdek model ile büyüme modülleri arasındaki entegrasyonu sağlar."
+    },
+    "story_13": {
+      "impact_level": "high",
+      "affected_principles": ["1.4", "2.2", "4.4"],
+      "notes": "Dinamik görev başlıkları, adaptif öğrenme mimarisinin önemli bir parçasıdır."
+    },
+    "story_14": {
+      "impact_level": "high",
+      "affected_principles": ["1.3", "1.4", "2.2", "3.1"],
+      "notes": "Eğitim mekanizması, gizlilik öncelikli tasarımı ve cihaz üzerinde eğitimi etkiler."
+    },
+    "story_15": {
+      "impact_level": "medium",
+      "affected_principles": ["1.1", "3.3", "4.1", "4.2"],
+      "notes": "Arama indeksleme, performans ve bellek kısıtlamalarını etkiler."
+    },
+    "story_16": {
+      "impact_level": "medium",
+      "affected_principles": ["1.3", "3.3", "4.1"],
+      "notes": "Arama API'si, gizlilik odaklı veri akışını ve performansı etkiler."
+    },
+    "story_17": {
+      "impact_level": "medium",
+      "affected_principles": ["1.3", "3.4"],
+      "notes": "Veri indirme modülü, gizlilik öncelikli tasarımı ve veri indirme akışını etkiler."
+    },
+    "story_18": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "1.3", "2.4", "4.3", "4.6"],
+      "notes": "Android SDK, uygulama katmanını gerçekleştirir ve batarya/güvenlik kısıtlamalarını doğrudan etkiler."
+    },
+    "story_19": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "1.3", "2.4", "4.3", "4.6"],
+      "notes": "iOS SDK, uygulama katmanını gerçekleştirir ve batarya/güvenlik kısıtlamalarını doğrudan etkiler."
+    },
+    "story_20": {
+      "impact_level": "low",
+      "affected_principles": ["2.4", "4.5"],
+      "notes": "SDK dokümantasyonu, test edilebilirliği ve uygulama katmanı kullanımını etkiler."
+    },
+    "story_21": {
+      "impact_level": "medium",
+      "affected_principles": ["1.1", "1.2", "4.5", "4.6"],
+      "notes": "Test, mimarinin doğrulanmasını ve tüm kısıtlamaların sağlanmasını etkiler."
+    },
+    "story_22": {
+      "impact_level": "critical",
+      "affected_principles": ["1.1", "4.1", "4.2", "4.3"],
+      "notes": "Model optimizasyonu, performans, bellek ve batarya kısıtlamalarının karşılanmasını doğrudan etkiler."
+    },
+    "story_23": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "1.3", "2.4", "4.1", "4.3", "4.6"],
+      "notes": "Demo uygulama, tüm mimari prensiplerin gerçek dünya senaryosunda test edilmesini sağlar."
+    }
+  }
+} 

@@ -345,6 +345,307 @@
       ],
       "related_patterns": ["PT-020"],
       "last_updated": "2024-06-11"
+    },
+    {
+      "id": "singleton",
+      "name": "Singleton Deseni",
+      "category": "Yaratıcı",
+      "description": "Bir sınıfın tek bir örneğinin olmasını sağlayan ve bu örneğe global erişim noktası sunan desen.",
+      "benefits": [
+        "Global erişim sağlar",
+        "Tek bir örnek oluşturulmasını garanti eder",
+        "Lazy initialization (geç başlatma) destekler"
+      ],
+      "implementation_notes": "M3TM sınıfında volatile statik değişken, synchronized getInstance metodu ve özel yapıcı ile uygulanır.",
+      "examples": [
+        {
+          "class": "M3TM",
+          "code_snippet": "private static volatile M3TM instance;\n\npublic static synchronized M3TM getInstance(Context context) {\n    if (instance == null) {\n        instance = new M3TM(context.getApplicationContext());\n    }\n    return instance;\n}",
+          "note": "Thread-safe implementasyon ile volatile keyword kullanılarak"
+        }
+      ],
+      "related_patterns": ["factory"],
+      "version": "1.0"
+    },
+    {
+      "id": "factory",
+      "name": "Factory Deseni",
+      "category": "Yaratıcı",
+      "description": "Nesne yaratma işlemini bir fabrika sınıfına devreden desen.",
+      "benefits": [
+        "Nesne yaratımını soyutlar",
+        "İstemciden karmaşık yaratma mantığını gizler",
+        "Kod tekrarını önler"
+      ],
+      "implementation_notes": "ModelManager ve TrainingManager sınıflarında model yükleme ve eğitim oturumu oluşturma işlemleri için kullanılır.",
+      "examples": [
+        {
+          "class": "M3TMModelManager",
+          "code_snippet": "public synchronized M3TMModel loadModel(String modelId, String version) throws ModelException {\n    // ... Mevcut kod ...\n    long modelHandle = nativeLoadModel(nativeHandle, modelId, version);\n    // ... Mevcut kod ...\n    ModelInfo modelInfo = getModelInfo(modelId);\n    M3TMModel model = new M3TMModel(modelHandle, modelId, modelInfo);\n    return model;\n}",
+          "note": "loadModel metodu, karmaşık model yaratma mantığını gizleyerek M3TMModel nesnelerini oluşturur"
+        }
+      ],
+      "related_patterns": ["singleton"],
+      "version": "1.0"
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge Deseni",
+      "category": "Yapısal",
+      "description": "Soyutlamayı uygulamadan ayıran, her ikisinin de bağımsız olarak değişmesine izin veren desen.",
+      "benefits": [
+        "Platform bağımsız kod yazmayı sağlar",
+        "Uygulama detaylarını gizler",
+        "Çalışma zamanında uygulama değiştirmeye olanak tanır"
+      ],
+      "implementation_notes": "Java sınıfları ve native JNI C++ implementasyonu arasında köprü kurularak kullanılır.",
+      "examples": [
+        {
+          "class": "M3TMModel",
+          "code_snippet": "private native Map<String, Object> nativeProcessText(long handle, String text, String task, Map<String, Object> options);\n\npublic Map<String, Object> processText(String text, String task, Map<String, Object> options) throws InferenceException {\n    // ... Mevcut kod ...\n    return nativeProcessText(nativeHandle, text, task, optionsMap);\n}",
+          "note": "Java API ile native C++ kodu arasında köprü kurulması"
+        }
+      ],
+      "related_patterns": ["adapter", "facade"],
+      "version": "1.0"
+    },
+    {
+      "id": "facade",
+      "name": "Facade Deseni",
+      "category": "Yapısal",
+      "description": "Karmaşık bir sisteme basitleştirilmiş bir arayüz sağlayan desen.",
+      "benefits": [
+        "Karmaşık alt sistemleri gizler",
+        "Kullanım kolaylığı sağlar",
+        "Alt sistem bağımlılıklarını azaltır"
+      ],
+      "implementation_notes": "M3TM sınıfı, model yönetimi ve eğitim işlemleri için basitleştirilmiş bir arayüz sunar.",
+      "examples": [
+        {
+          "class": "M3TM",
+          "code_snippet": "public M3TMModelManager getModelManager() {\n    checkInitialized();\n    return modelManager;\n}\n\npublic M3TMTrainingManager getTrainingManager() {\n    checkInitialized();\n    return trainingManager;\n}",
+          "note": "M3TM ana sınıfı, alt sistemlere (ModelManager, TrainingManager) basitleştirilmiş erişim sağlar"
+        }
+      ],
+      "related_patterns": ["singleton", "bridge"],
+      "version": "1.0"
+    },
+    {
+      "id": "callback",
+      "name": "Callback Deseni",
+      "category": "Davranışsal",
+      "description": "Bir işlem tamamlandığında veya belirli olaylarda geribildirim almak için kullanılan desen.",
+      "benefits": [
+        "Asenkron işlemlerde sonuç bildirme",
+        "Gevşek bağlantı (loose coupling) sağlar",
+        "Dinamik olay işleme sağlar"
+      ],
+      "implementation_notes": "TrainingCallback arayüzü üzerinden eğitim sürecindeki gelişmeleri rapor etmek için kullanılır.",
+      "examples": [
+        {
+          "class": "TrainingCallback",
+          "code_snippet": "public interface TrainingCallback {\n    void onBatchComplete(int batch, Map<String, Object> metrics);\n    void onEpochComplete(int epoch, Map<String, Object> metrics);\n    void onTrainingComplete(Map<String, Object> metrics);\n}",
+          "note": "Eğitim sırasındaki önemli olaylarda geri bildirim sağlayan callback arayüzü"
+        }
+      ],
+      "related_patterns": ["observer"],
+      "version": "1.0"
+    },
+    {
+      "id": "resource_management",
+      "name": "Resource Management Deseni",
+      "category": "Davranışsal",
+      "description": "Kaynakları otomatik olarak temizleme ve serbest bırakma deseni.",
+      "benefits": [
+        "Kaynak sızıntılarını önler",
+        "Otomatik kaynak temizlemeyi sağlar",
+        "Hata durumlarında bile kaynakların güvenli şekilde serbest bırakılmasını garanti eder"
+      ],
+      "implementation_notes": "finalize yöntemi override edilerek ve close() metodu ile kaynaklar serbest bırakılır.",
+      "examples": [
+        {
+          "class": "M3TMModelManager",
+          "code_snippet": "public synchronized void close() {\n    if (nativeHandle != 0) {\n        // Tüm yüklü modelleri kapat\n        for (M3TMModel model : loadedModels.values()) {\n            if (!model.isClosed()) {\n                model.close();\n            }\n        }\n        loadedModels.clear();\n        \n        // Native ModelManager'ı kapat\n        nativeClose(nativeHandle);\n        nativeHandle = 0;\n    }\n}\n\n@Override\nprotected void finalize() throws Throwable {\n    try {\n        close();\n    } finally {\n        super.finalize();\n    }\n}",
+          "note": "Kaynakların düzgün şekilde serbest bırakılması sağlanır"
+        }
+      ],
+      "related_patterns": ["singleton"],
+      "version": "1.0"
+    },
+    {
+      "id": "error_handling",
+      "name": "Hata Yönetimi Deseni",
+      "category": "Davranışsal",
+      "description": "Hataların tutarlı ve yapılandırılmış bir şekilde yönetilmesini sağlayan desen.",
+      "benefits": [
+        "Hata izleme ve raporlamayı kolaylaştırır",
+        "Hata türlerini sınıflandırır",
+        "Tutarlı hata yönetimi sağlar"
+      ],
+      "implementation_notes": "M3TMException sınıfı ve ErrorCode enumerasyonu ile yapılandırılmış hata yönetimi sağlanır.",
+      "examples": [
+        {
+          "class": "M3TMException",
+          "code_snippet": "public class M3TMException extends RuntimeException {\n    private final ErrorCode errorCode;\n    \n    public enum ErrorCode {\n        GENERAL_ERROR(1000, \"Genel hata\"),\n        INITIALIZATION_ERROR(1001, \"Başlatma hatası\"),\n        // ... Diğer hata kodları ...\n    }\n    \n    public M3TMException(ErrorCode errorCode, String message) {\n        super(message);\n        this.errorCode = errorCode;\n    }\n}",
+          "note": "Kategorize edilmiş hata kodları ve açıklamaları ile hata yönetimi"
+        }
+      ],
+      "related_patterns": [],
+      "version": "1.0"
+    },
+    {
+      "pattern_id": "PT-100",
+      "name": "SingletonPattern",
+      "category": "creation",
+      "description": "Bir sınıfın tek bir örneğinin olmasını sağlayan ve bu örneğe global erişim noktası sunan desen.",
+      "benefits": [
+        "Global erişim sağlar",
+        "Tek bir örnek oluşturulmasını garanti eder",
+        "Lazy initialization (geç başlatma) destekler",
+        "Kaynakları verimli şekilde kullanır"
+      ],
+      "implementation_notes": "Android SDK'da M3TM sınıfında volatile statik değişken, synchronized getInstance metodu ve özel yapıcı ile uygulanır.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.M3TM",
+          "code_snippet": "private static volatile M3TM instance;\n\npublic static synchronized M3TM getInstance(Context context) {\n    if (instance == null) {\n        instance = new M3TM(context.getApplicationContext());\n    }\n    return instance;\n}",
+          "note": "Thread-safe implementasyon ile volatile keyword kullanılarak"
+        }
+      ],
+      "related_patterns": ["PT-101"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-101",
+      "name": "FactoryMethodAndroid",
+      "category": "creation",
+      "description": "Nesne yaratma işlemini bir fabrika sınıfına devreden desen.",
+      "benefits": [
+        "Nesne yaratımını soyutlar",
+        "İstemciden karmaşık yaratma mantığını gizler",
+        "Kod tekrarını önler",
+        "JNI ve native işlemleri soyutlar"
+      ],
+      "implementation_notes": "Android SDK'da ModelManager ve TrainingManager sınıflarında model yükleme ve eğitim oturumu oluşturma işlemleri için kullanılır.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.M3TMModelManager",
+          "code_snippet": "public synchronized M3TMModel loadModel(String modelId, String version) throws ModelException {\n    // ... Mevcut kod ...\n    long modelHandle = nativeLoadModel(nativeHandle, modelId, version);\n    // ... Mevcut kod ...\n    ModelInfo modelInfo = getModelInfo(modelId);\n    M3TMModel model = new M3TMModel(modelHandle, modelId, modelInfo);\n    return model;\n}",
+          "note": "loadModel metodu, karmaşık model yaratma mantığını gizleyerek M3TMModel nesnelerini oluşturur"
+        }
+      ],
+      "related_patterns": ["PT-100", "PT-002"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-102",
+      "name": "BridgePatternAndroid",
+      "category": "structural",
+      "description": "Soyutlamayı uygulamadan ayıran, her ikisinin de bağımsız olarak değişmesine izin veren desen.",
+      "benefits": [
+        "Platform bağımsız kod yazmayı sağlar",
+        "Uygulama detaylarını gizler",
+        "Çalışma zamanında uygulama değiştirmeye olanak tanır",
+        "Java ve C++/Python kodlarının temiz bir şekilde ayrılmasını sağlar"
+      ],
+      "implementation_notes": "Android SDK'da Java sınıfları ve native JNI C++ implementasyonu arasında köprü kurularak kullanılır.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.M3TMModel",
+          "code_snippet": "private native Map<String, Object> nativeProcessText(long handle, String text, String task, Map<String, Object> options);\n\npublic Map<String, Object> processText(String text, String task, Map<String, Object> options) throws InferenceException {\n    // ... Mevcut kod ...\n    return nativeProcessText(nativeHandle, text, task, optionsMap);\n}",
+          "note": "Java API ile native C++ kodu arasında köprü kurulması"
+        }
+      ],
+      "related_patterns": ["PT-103", "PT-104"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-103",
+      "name": "FacadePatternAndroid",
+      "category": "structural",
+      "description": "Karmaşık bir sisteme basitleştirilmiş bir arayüz sağlayan desen.",
+      "benefits": [
+        "Karmaşık alt sistemleri gizler",
+        "Kullanım kolaylığı sağlar",
+        "Alt sistem bağımlılıklarını azaltır",
+        "Mobil uygulamalara basit entegrasyon imkanı sunar"
+      ],
+      "implementation_notes": "Android SDK'da M3TM sınıfı, model yönetimi ve eğitim işlemleri için basitleştirilmiş bir arayüz sunar.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.M3TM",
+          "code_snippet": "public M3TMModelManager getModelManager() {\n    checkInitialized();\n    return modelManager;\n}\n\npublic M3TMTrainingManager getTrainingManager() {\n    checkInitialized();\n    return trainingManager;\n}",
+          "note": "M3TM ana sınıfı, alt sistemlere (ModelManager, TrainingManager) basitleştirilmiş erişim sağlar"
+        }
+      ],
+      "related_patterns": ["PT-100", "PT-102"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-104",
+      "name": "CallbackPatternAndroid",
+      "category": "behavioral",
+      "description": "Bir işlem tamamlandığında veya belirli olaylarda geribildirim almak için kullanılan desen.",
+      "benefits": [
+        "Asenkron işlemlerde sonuç bildirme",
+        "Gevşek bağlantı (loose coupling) sağlar",
+        "Dinamik olay işleme sağlar",
+        "UI thread güvenliği için uygun yapı sunar"
+      ],
+      "implementation_notes": "Android SDK'da TrainingCallback arayüzü üzerinden eğitim sürecindeki gelişmeleri rapor etmek için kullanılır.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.TrainingCallback",
+          "code_snippet": "public interface TrainingCallback {\n    void onBatchComplete(int batch, Map<String, Object> metrics);\n    void onEpochComplete(int epoch, Map<String, Object> metrics);\n    void onTrainingComplete(Map<String, Object> metrics);\n}",
+          "note": "Eğitim sırasındaki önemli olaylarda geri bildirim sağlayan callback arayüzü"
+        }
+      ],
+      "related_patterns": ["PT-008"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-105",
+      "name": "ResourceManagementAndroid",
+      "category": "behavioral",
+      "description": "Kaynakları otomatik olarak temizleme ve serbest bırakma deseni.",
+      "benefits": [
+        "Kaynak sızıntılarını önler",
+        "Otomatik kaynak temizlemeyi sağlar",
+        "Hata durumlarında bile kaynakların güvenli şekilde serbest bırakılmasını garanti eder",
+        "Mobil cihazlarda bellek ve performans optimizasyonu sağlar"
+      ],
+      "implementation_notes": "Android SDK'da finalize yöntemi override edilerek ve close() metodu ile kaynaklar serbest bırakılır.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.M3TMModelManager",
+          "code_snippet": "public synchronized void close() {\n    if (nativeHandle != 0) {\n        // Tüm yüklü modelleri kapat\n        for (M3TMModel model : loadedModels.values()) {\n            if (!model.isClosed()) {\n                model.close();\n            }\n        }\n        loadedModels.clear();\n        \n        // Native ModelManager'ı kapat\n        nativeClose(nativeHandle);\n        nativeHandle = 0;\n    }\n}\n\n@Override\nprotected void finalize() throws Throwable {\n    try {\n        close();\n    } finally {\n        super.finalize();\n    }\n}",
+          "note": "Kaynakların düzgün şekilde serbest bırakılması sağlanır"
+        }
+      ],
+      "related_patterns": ["PT-100"],
+      "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-106",
+      "name": "ErrorHandlingAndroid",
+      "category": "error",
+      "description": "Hataların tutarlı ve yapılandırılmış bir şekilde yönetilmesini sağlayan desen.",
+      "benefits": [
+        "Hata izleme ve raporlamayı kolaylaştırır",
+        "Hata türlerini sınıflandırır",
+        "Tutarlı hata yönetimi sağlar",
+        "Mobile uygulama hatalarının kolay teşhisini destekler"
+      ],
+      "implementation_notes": "Android SDK'da M3TMException sınıfı ve ErrorCode enumerasyonu ile yapılandırılmış hata yönetimi sağlanır.",
+      "examples": [
+        {
+          "class": "com.m3tm.sdk.M3TMException",
+          "code_snippet": "public class M3TMException extends RuntimeException {\n    private final ErrorCode errorCode;\n    \n    public enum ErrorCode {\n        GENERAL_ERROR(1000, \"Genel hata\"),\n        INITIALIZATION_ERROR(1001, \"Başlatma hatası\"),\n        // ... Diğer hata kodları ...\n    }\n    \n    public M3TMException(ErrorCode errorCode, String message) {\n        super(message);\n        this.errorCode = errorCode;\n    }\n}",
+          "note": "Kategorize edilmiş hata kodları ve açıklamaları ile hata yönetimi"
+        }
+      ],
+      "related_patterns": [],
+      "last_updated": "2024-06-11"
     }
   ],
   "last_updated": "2024-06-11"
