@@ -244,3 +244,28 @@ class MobileOptimizer:
                 "param_count": param_count,
                 "estimated_size_mb": model_size_mb
             } 
+
+def optimize_model_for_mobile(
+    model: Union[nn.Module, BaseModel],
+    optimization_methods: List[str] = ["quantize", "optimize"],
+    example_inputs: Optional[Any] = None,
+    save_path: Optional[str] = None
+) -> Union[nn.Module, torch.jit.ScriptModule]:
+    """
+    Modeli mobil platformlar için optimize eder.
+    
+    Args:
+        model: Optimize edilecek model
+        optimization_methods: Uygulanacak optimizasyon tekniklerinin listesi
+        example_inputs: Örnek girdiler (JIT için gerekli)
+        save_path: Optimize edilmiş modelin kaydedileceği dosya yolu
+        
+    Returns:
+        Optimize edilmiş model
+    """
+    return MobileOptimizer.compress_model(
+        model=model,
+        example_inputs=example_inputs,
+        methods=optimization_methods,
+        save_path=save_path
+    ) 
