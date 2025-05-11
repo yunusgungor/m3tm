@@ -84,10 +84,11 @@
     }
   },
   "test_results": {
-    "coverage": 0.88,
-    "unit_tests": "passed",
-    "integration_tests": "passed",
-    "performance_tests": "passed"
+    "coverage": 0.33,
+    "unit_tests": "partial",
+    "integration_tests": "partial",
+    "performance_tests": "not_run",
+    "notes": "Testler ANDROID_HOME ortam değişkeni olmadığı için kısmen çalıştırılabildi. Dosya yapısı doğrulandı, ancak JNI ve API metotları test edilemedi."
   },
   "status": "done",
   "assignee": "mobile_dev_2",

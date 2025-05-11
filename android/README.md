@@ -192,3 +192,65 @@ Bu SDK, M³TM modeli için özel lisans altında dağıtılmaktadır. Detaylı b
 Herhangi bir soru veya destek ihtiyacınız için: 
 - E-posta: support@m3tm.com
 - Web: https://m3tm.com 
+
+## Test Etme
+
+Android SDK sarmalayıcısını test etmek için aşağıdaki adımları izleyebilirsiniz:
+
+### Gereksinimler
+
+- Android SDK (ANDROID_HOME ortam değişkeni tanımlanmış olmalı)
+- Android NDK (ANDROID_NDK_HOME ortam değişkeni tanımlanmış olmalı veya ANDROID_HOME/ndk dizini mevcut olmalı)
+- Java Development Kit (JDK)
+- Gradle (gradle wrapper kullanılabilir)
+
+### Testleri Çalıştırma
+
+Projede hazır test scripti kullanarak testleri çalıştırabilirsiniz:
+
+```bash
+# Proje kök dizininden
+tests/integration/run_android_tests.py
+```
+
+Veya manuel olarak testleri çalıştırmak için:
+
+```bash
+# Proje kök dizininden
+cd android
+./gradlew clean assembleDebug
+
+# Testleri çalıştır
+cd ..
+python -m unittest tests/integration/test_android_sdk.py
+```
+
+### Test Kapsamı
+
+Android SDK testleri şunları doğrular:
+
+1. **SDK Yapısı Testleri**
+   - SDK AAR paketinin başarıyla oluşturulup oluşturulmadığı
+   - Gerekli Java sınıflarının varlığı
+   - JNI bağlantılarının doğru şekilde tanımlanması
+
+2. **API İşlevselliği Testleri**
+   - Model yükleme API'sinin kontrolü
+   - Metin işleme metotlarının varlığı
+   - Görüntü işleme metotlarının varlığı
+   - Çoklu-modalite işleme metotlarının varlığı
+   - Eğitim API'sinin kontrolü
+
+3. **Hata Yönetimi Testleri**
+   - Exception sınıflarının varlığı ve hiyerarşisi
+   - Hata işleme mekanizmalarının kontrolü
+
+### Test Sonuçları
+
+Test sonuçları `test_results/android_sdk_test_results.json` dosyasına kaydedilir ve aşağıdaki bilgileri içerir:
+
+- Toplam test sayısı
+- Başarısız test sayısı
+- Hata sayısı
+- Atlanan test sayısı
+- Genel başarı durumu 

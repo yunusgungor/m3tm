@@ -1,0 +1,52 @@
+{
+  "execution_date": "2024-06-12T14:30:00",
+  "tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 4,
+  "success": true,
+  "details": [
+    {
+      "name": "test_android_sdk_files_exist",
+      "status": "pass",
+      "message": "Android SDK temel dosyalarının varlığı doğrulandı"
+    },
+    {
+      "name": "test_story_status",
+      "status": "pass",
+      "message": "Story 18 bilgileri doğrulandı, mevcut durum: 'todo'"
+    },
+    {
+      "name": "test_jni_methods_existence",
+      "status": "skip",
+      "message": "ANDROID_HOME ortam değişkeni tanımlanmamış"
+    },
+    {
+      "name": "test_android_java_api_structure",
+      "status": "skip",
+      "message": "ANDROID_HOME ortam değişkeni tanımlanmamış"
+    },
+    {
+      "name": "test_android_interface_methods",
+      "status": "skip",
+      "message": "ANDROID_HOME ortam değişkeni tanımlanmamış"
+    },
+    {
+      "name": "test_error_handling",
+      "status": "skip",
+      "message": "ANDROID_HOME ortam değişkeni tanımlanmamış"
+    }
+  ],
+  "environment": {
+    "os": "macOS",
+    "python_version": "3.10.12",
+    "test_framework": "unittest"
+  },
+  "story_id": "story_18",
+  "story_status": "todo",
+  "recommendations": [
+    "Android SDK geliştirmesi tamamlanmış görünüyor ancak testler ANDROID_HOME ortam değişkeni olmadan tam olarak çalıştırılamadı",
+    "Tüm testleri çalıştırmak için ANDROID_HOME ve ANDROID_NDK_HOME ortam değişkenlerinin tanımlanması gerekiyor",
+    "Test edilebilen dosya yapısı beklenen şekilde ve doğru"
+  ]
+}

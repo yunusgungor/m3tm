@@ -44,6 +44,57 @@ black src tests
 isort src tests
 ```
 
+## Android SDK Testleri
+
+Android SDK sarmalayıcısının test edilmesi için aşağıdaki adımları izleyin:
+
+1. Gereksinimleri kontrol edin:
+
+```bash
+tests/integration/android_sdk_test_requirements.sh
+```
+
+2. Testleri çalıştırın:
+
+```bash
+tests/integration/run_android_tests.py
+```
+
+Özel parametreler:
+
+- `--skip-requirements`: Gereksinim kontrolünü atlar
+- `--skip-build`: Android SDK derlemeyi atlar
+- `--filter=PATTERN`: Belirli testleri çalıştırmak için filtre uygular
+- `-v, --verbose`: Ayrıntılı çıktı gösterir
+
+Örnek kullanım:
+
+```bash
+# Tüm gereksinimleri kontrol et ve testleri çalıştır
+tests/integration/run_android_tests.py
+
+# Belirli testleri çalıştır
+tests/integration/run_android_tests.py --filter=jni
+
+# Gereksinim kontrolünü atlayarak ayrıntılı çıktı ile testleri çalıştır
+tests/integration/run_android_tests.py --skip-requirements -v
+```
+
+Test sonuçları `test_results/android_sdk_test_results.json` dosyasına kaydedilir.
+
+## Test Sonuçları
+
+Android SDK testlerinin son çalıştırma sonuçları:
+
+- Toplam test sayısı: 6
+- Başarılı: 2
+- Atlanan: 4
+- Başarısız/Hatalı: 0
+
+Testler kısmen çalıştırılabildi çünkü ANDROID_HOME ortam değişkeni tanımlanmamıştı. Sadece dosya yapısı ve story durumu doğrulanabildi.
+
+Ayrıntılı test sonuçları `test_results/android_sdk_test_results.json` dosyasında bulunabilir.
+
 ## Lisans
 
 © 2024 M³TM Team. Tüm hakları saklıdır. 
