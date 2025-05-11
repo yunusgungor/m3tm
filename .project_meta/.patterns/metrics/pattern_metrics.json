@@ -382,5 +382,155 @@
       "relationship_type": "uses",
       "strength": 0.90
     }
-  ]
+  ],
+  "pattern_metrics_version": "1.0.0",
+  "update_timestamp": "2024-06-13",
+  "patterns": {
+    "PT-001": {
+      "adoption_rate": 0.85,
+      "implementation_consistency": 0.92,
+      "effectiveness": {
+        "complexity_reduction": 0.75,
+        "maintainability_improvement": 0.82,
+        "performance_impact": 0.67
+      },
+      "occurrences": 12,
+      "modules_using": ["core", "embedding", "transformer", "search", "download"],
+      "trends": {
+        "adoption": "increasing",
+        "consistency": "stable",
+        "effectiveness": "increasing"
+      },
+      "recommended_for_promotion": true,
+      "lifecycle_stage": "stable"
+    },
+    "PT-002": {
+      "adoption_rate": 0.78,
+      "implementation_consistency": 0.85,
+      "effectiveness": {
+        "complexity_reduction": 0.70,
+        "maintainability_improvement": 0.75,
+        "performance_impact": 0.60
+      },
+      "occurrences": 10,
+      "modules_using": ["core", "download", "mobile_android", "mobile_ios"],
+      "trends": {
+        "adoption": "increasing",
+        "consistency": "stable",
+        "effectiveness": "stable"
+      },
+      "recommended_for_promotion": true,
+      "lifecycle_stage": "stable"
+    },
+    "PT-003": {
+      "adoption_rate": 0.65,
+      "implementation_consistency": 0.78,
+      "effectiveness": {
+        "complexity_reduction": 0.68,
+        "maintainability_improvement": 0.72,
+        "performance_impact": 0.55
+      },
+      "occurrences": 7,
+      "modules_using": ["core", "search"],
+      "trends": {
+        "adoption": "stable",
+        "consistency": "increasing",
+        "effectiveness": "stable"
+      },
+      "recommended_for_promotion": false,
+      "lifecycle_stage": "stable"
+    },
+    "PT-007": {
+      "adoption_rate": 0.72,
+      "implementation_consistency": 0.83,
+      "effectiveness": {
+        "complexity_reduction": 0.71,
+        "maintainability_improvement": 0.76,
+        "performance_impact": 0.62
+      },
+      "occurrences": 9,
+      "modules_using": ["transformer", "mobile_ios"],
+      "trends": {
+        "adoption": "increasing",
+        "consistency": "increasing",
+        "effectiveness": "increasing"
+      },
+      "recommended_for_promotion": true,
+      "lifecycle_stage": "stable"
+    },
+    "PT-018": {
+      "adoption_rate": 0.45,
+      "implementation_consistency": 0.80,
+      "effectiveness": {
+        "complexity_reduction": 0.65,
+        "maintainability_improvement": 0.70,
+        "performance_impact": 0.75
+      },
+      "occurrences": 4,
+      "modules_using": ["mobile_android"],
+      "trends": {
+        "adoption": "emerging",
+        "consistency": "increasing",
+        "effectiveness": "stable"
+      },
+      "recommended_for_promotion": false,
+      "lifecycle_stage": "emerging"
+    },
+    "PT-019": {
+      "adoption_rate": 0.48,
+      "implementation_consistency": 0.83,
+      "effectiveness": {
+        "complexity_reduction": 0.68,
+        "maintainability_improvement": 0.72,
+        "performance_impact": 0.78
+      },
+      "occurrences": 5,
+      "modules_using": ["mobile_ios"],
+      "trends": {
+        "adoption": "emerging",
+        "consistency": "increasing",
+        "effectiveness": "stable"
+      },
+      "recommended_for_promotion": false,
+      "lifecycle_stage": "emerging",
+      "language_specific_metrics": {
+        "swift_interoperability": 0.92,
+        "objc_compatibility": 0.95,
+        "memory_management": 0.88,
+        "error_handling": 0.90
+      }
+    }
+  },
+  "aggregate_metrics": {
+    "overall_adoption_rate": 0.71,
+    "overall_implementation_consistency": 0.83,
+    "overall_effectiveness": 0.73,
+    "pattern_distribution": {
+      "by_category": {
+        "structural": 0.45,
+        "behavioral": 0.35,
+        "creational": 0.20
+      },
+      "by_lifecycle": {
+        "emerging": 0.15,
+        "stable": 0.70,
+        "declining": 0.05,
+        "deprecated": 0.10
+      },
+      "by_module": {
+        "core": 0.25,
+        "embedding": 0.15,
+        "transformer": 0.15,
+        "search": 0.15,
+        "download": 0.10,
+        "mobile_android": 0.10,
+        "mobile_ios": 0.10
+      }
+    },
+    "trends": {
+      "adoption_trend": "increasing",
+      "consistency_trend": "increasing",
+      "pattern_diversity": "increasing"
+    }
+  }
 } 

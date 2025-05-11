@@ -1,7 +1,7 @@
 {
   "roadmap_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "current_iteration_id": "iter_6",
+  "current_iteration_id": "iter_7",
   "iterations": [
     {
       "iteration_id": "iter_1",
@@ -36,13 +36,13 @@
     {
       "iteration_id": "iter_6",
       "goal": "SDK Geliştirme",
-      "status": "in_progress",
+      "status": "completed",
       "story_ids": ["story_18", "story_19", "story_20"]
     },
     {
       "iteration_id": "iter_7",
       "goal": "Test, Optimizasyon ve Entegrasyon",
-      "status": "planned",
+      "status": "in_progress",
       "story_ids": ["story_21", "story_22", "story_23"]
     }
   ],
@@ -139,13 +139,13 @@
     },
     {
       "story_id": "story_19",
-      "title": "iOS SDK sarmalayıcı implementasyonu",
-      "status": "todo"
+      "title": "iOS SDK Sarmalayıcı Implementasyonu",
+      "status": "done"
     },
     {
       "story_id": "story_20",
       "title": "SDK API dokümantasyonu",
-      "status": "todo"
+      "status": "done"
     },
     {
       "story_id": "story_21",
@@ -163,5 +163,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-06-11"
+  "last_updated": "2024-06-14"
 } 
