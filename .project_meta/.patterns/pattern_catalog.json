@@ -248,21 +248,22 @@
     {
       "pattern_id": "PT-017",
       "name": "DecoratorPattern",
-      "category": "structural",
-      "description": "Sınıflara dinamik olarak davranış ekleyen bir sarmalama deseni. Özellikle kayıt işlemlerinde ve fonksiyonalite eklemede kullanılır.",
+      "category": "behavioral",
+      "description": "Nesne davranışlarını dinamik olarak değiştiren veya genişleten bir tasarım deseni",
       "benefits": [
-        "Çalışma zamanında dinamik olarak davranış ekleme",
-        "Sınıf kapalılık prensibini bozmadan işlevsellik genişletme",
-        "Kaygıları ayırma ve temiz kod yapısı sağlama",
-        "Önceden tanımlanmış sınıfları modifiye etmeden kullanma esnekliği"
+        "Mevcut sınıfları değiştirmeden işlevsellik ekleme",
+        "İşlevsellikler arasında kombinasyonlar oluşturabilme",
+        "Tek Sorumluluk İlkesi'ne (SRP) uyum",
+        "Sınıf hiyerarşisine alternatif olarak kullanım"
       ],
-      "implementation_notes": "Python dekoratörleri (@decorator sözdizimi) kullanılarak uygulanır. Özellikle kayıt işlemleri için registry deseninde yaygın kullanılır.",
+      "implementation_notes": "Bir bileşeni sarmalayan ve aynı arayüzü sunarken ek işlevsellik sağlayan sınıflar oluşturur. TrainingCallback sınıfı ve türevleri, eğitim sürecini genişleten decorator görevi görür.",
       "examples": [
-        "m3tm.transformer.ffn.FFNMechanismRegistry.register",
-        "m3tm.research.attention_mechanisms.AttentionMechanismRegistry.register"
+        "m3tm.training.adapter_training.TrainingCallback",
+        "m3tm.training.adapter_training_utils.ModelStatisticsCallback",
+        "m3tm.training.adapter_training_utils.GradientCheckCallback"
       ],
-      "related_patterns": ["PT-007"],
-      "last_updated": "2024-06-09"
+      "related_patterns": ["PT-003", "PT-008"],
+      "last_updated": "2024-06-11"
     },
     {
       "pattern_id": "PT-018",
@@ -388,5 +389,6 @@
       "related_patterns": ["PT-018", "PT-019"],
       "last_updated": "2024-06-17"
     }
-  ]
+  ],
+  "last_updated": "2024-06-11"
 } 

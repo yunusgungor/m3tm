@@ -43,6 +43,10 @@ from m3tm.training.adapter_training_utils import (
     find_task_heads_and_adapters
 )
 
+from m3tm.training.training_manager import (
+    TrainingManager
+)
+
 __all__ = [
     # Metrics
     'MetricsCollector',
@@ -71,5 +75,8 @@ __all__ = [
     'LearningRateMonitorCallback',
     'create_adapter_training_callbacks',
     'create_adapter_criterion',
-    'find_task_heads_and_adapters'
+    'find_task_heads_and_adapters',
+    
+    # Training Manager
+    'TrainingManager'
 ]
