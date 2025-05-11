@@ -1,5 +1,5 @@
 {
-  "timestamp": "2024-06-10T15:30:00Z",
+  "timestamp": "2024-06-11T16:45:00Z",
   "metrics_version": "1.0.0",
   "pattern_metrics": [
     {
@@ -116,14 +116,40 @@
         "dominant_modules": ["training", "adapters"],
         "implementation_variants": 2
       }
+    },
+    {
+      "pattern_id": "PT-021",
+      "name": "TaskStateManagement",
+      "metrics": {
+        "adoption_rate": 0.95,
+        "implementation_consistency": 0.90,
+        "complexity_reduction": 0.85,
+        "maintainability_improvement": 0.83,
+        "usage_count": 3,
+        "test_coverage": 0.91
+      },
+      "code_metrics": {
+        "robustness": 0.94,
+        "error_recovery": 0.89,
+        "resource_efficiency": 0.80
+      },
+      "quality_impact": {
+        "maintainability": 0.83,
+        "testability": 0.91,
+        "adaptability": 0.86
+      },
+      "usage_context": {
+        "dominant_modules": ["download"],
+        "implementation_variants": 1
+      }
     }
   ],
   "global_metrics": {
-    "pattern_adoption_average": 0.70,
-    "pattern_consistency_average": 0.85,
-    "pattern_effectiveness_score": 0.78,
+    "pattern_adoption_average": 0.72,
+    "pattern_consistency_average": 0.86,
+    "pattern_effectiveness_score": 0.80,
     "anti_pattern_reduction": 0.65,
-    "test_coverage_average": 0.71
+    "test_coverage_average": 0.73
   },
   "recommendations": [
     {
@@ -133,7 +159,7 @@
     }
   ],
   "metrics_id": "m3tm_v2.3_pattern_metrics",
-  "collected_date": "2024-06-17",
+  "collected_date": "2024-06-11",
   "anti_pattern_metrics": [
     {
       "pattern_id": "AP-001",

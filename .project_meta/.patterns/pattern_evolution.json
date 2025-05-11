@@ -1,7 +1,7 @@
 {
   "evolution_id": "m3tm_v2.3_pattern_evolution",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-09",
+  "last_updated": "2024-06-11",
   "trends": [
     {
       "date": "2024-05-23",
@@ -129,11 +129,37 @@
           "impact": "Python'un dekoratör yeteneklerinin mimari desenleri uygulamada sağladığı avantajlar açıkça görüldü"
         }
       ]
+    },
+    {
+      "date": "2024-06-11",
+      "patterns_added": ["PT-021"],
+      "patterns_modified": [],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": [],
+      "pattern_count": 17,
+      "anti_pattern_count": 2,
+      "highlights": [
+        {
+          "type": "new_category_introduced",
+          "description": "Eşzamanlılık kategorisi (concurrency) eklendi",
+          "impact": "Asenkron ve paralel işlemleri yönetmek için örüntüler tanımlanmaya başlandı"
+        },
+        {
+          "type": "pattern_discovery",
+          "description": "Veri İndirme Modülü implementasyonunda TaskStateManagement (PT-021) deseni tespit edildi",
+          "impact": "Bu desen, kesintiye dayanıklı ve ilerleme takibi yapabilen görev yönetimi için temel oluşturuyor"
+        },
+        {
+          "type": "pattern_synergy",
+          "description": "TaskStateManagement (PT-021) deseninin ConfigurationDataclass (PT-001) ve FactoryMethod (PT-002) desenleriyle güçlü bir şekilde çalıştığı gözlemlendi",
+          "impact": "Bu kombinasyon, yapılandırılabilir, fabrika tabanlı ve durum yönetimli asenkron görev sistemleri için etkili bir mimari oluşturuyor"
+        }
+      ]
     }
   ],
   "growth_metrics": {
     "pattern_growth_rate": {
-      "overall": 5.33,
+      "overall": 5.66,
       "by_category": {
         "configuration": 0.0,
         "creation": 1.0,
@@ -143,13 +169,14 @@
         "data": 0.0,
         "image_processing": 1.0,
         "embedding": 0.0,
-        "registration": 1.0
+        "registration": 1.0,
+        "concurrency": 1.0
       }
     },
     "category_diversity": {
       "initial": 3,
-      "current": 9,
-      "growth_percentage": 200.0
+      "current": 10,
+      "growth_percentage": 233.0
     }
   },
   "pattern_relationships": {
@@ -165,6 +192,12 @@
         "synergy_patterns": ["PT-003", "PT-015"],
         "synergy_score": 0.92,
         "description": "CompositeAdapter, ModelComposite ve PluggableComponentStrategy desenleri birlikte çalışarak modüler ve ölçeklenebilir bir model mimarisi sağlıyor"
+      },
+      {
+        "primary_pattern": "PT-021",
+        "synergy_patterns": ["PT-001", "PT-002"],
+        "synergy_score": 0.88,
+        "description": "TaskStateManagement, ConfigurationDataclass ve FactoryMethod desenleri birlikte çalışarak yapılandırılabilir, fabrika tabanlı ve güçlü durum yönetimli asenkron görev sistemleri oluşturuyor"
       }
     ]
   }

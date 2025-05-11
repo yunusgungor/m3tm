@@ -388,6 +388,26 @@
       ],
       "related_patterns": ["PT-018", "PT-019"],
       "last_updated": "2024-06-17"
+    },
+    {
+      "pattern_id": "PT-021",
+      "name": "TaskStateManagement",
+      "category": "concurrency",
+      "description": "Asenkron veya uzun süren görevlerin durumunu yöneten, izleyen ve raporlayan desen",
+      "benefits": [
+        "Görev durumlarını tutarlı bir şekilde izleme",
+        "Kesintiye dayanıklılık ve kurtarma mekanizmaları",
+        "İlerleme raporlama ve geri bildirimi",
+        "Görev önceliklendirme ve kuyruk yönetimi",
+        "Eşzamanlı görev sınırlama"
+      ],
+      "implementation_notes": "Görevleri (Task) ve durumlarını (Enum) temsil eden veri sınıfları, görev kuyruğu yönetim mekanizması, durum kaydetme ve geri yükleme işlevleri, ilerleme izleme ve özelleştirilebilir geri çağırma mekanizmaları içerir. Genellikle Factory ve ConfigurationDataclass desenleriyle birlikte kullanılır.",
+      "examples": [
+        "m3tm.download.downloader.DownloadManager",
+        "m3tm.download.downloader.DownloadTask"
+      ],
+      "related_patterns": ["PT-001", "PT-002"],
+      "last_updated": "2024-06-11"
     }
   ],
   "last_updated": "2024-06-11"
