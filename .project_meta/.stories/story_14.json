@@ -1,32 +1,79 @@
 {
-  "story_id": "story_14",
+  "story_id": "14",
   "title": "Adapter'lar ve görev başlıklarını eğitme mekanizması",
-  "description": "Çekirdek model dondurulduğunda, sadece Adapter'ları ve görev başlıklarını eğitebilecek mekanizmaların tasarımı ve implementasyonu. Bu mekanizma, kişiselleştirme için gereken mobil cihaz üzerinde eğitim sürecini verimli hale getirir.",
+  "description": "Çekirdek model dondurulduğunda, sadece Adapter'ları ve görev başlıklarını eğitebilecek mekanizmaların tasarımı ve implementasyonu. Bu çalışma, cihaz üzerinde eğitim sürecini verimli hale getirmeyi amaçlamaktadır.",
   "acceptance_criteria": [
-    "Çekirdek modeli dondurarak sadece belirlenen Adapter'ları ve görev başlıklarını eğitebilen bir TrainingManager sınıfı implementasyonu.",
-    "Eğitilecek modüllerin seçimini ve konfigürasyonunu yapabilecek esnek bir arayüz.",
-    "Eğitim döngüsünün ilerlemesini takip edebilecek callback mekanizması.",
-    "Hafıza kullanımını optimize eden gradient hesaplama ve backpropagation akışı.",
-    "Eğitim sırasında düzenli checkpointler oluşturma ve kaydetme yeteneği.",
-    "Eğitim metriklerini toplama ve raporlama mekanizması.",
-    "Erken durdurma ve öğrenme oranı ayarlama gibi eğitim optimizasyonları."
+    "TrainingManager sınıfı, çekirdek modeli dondurarak eğitim yapabilmeli",
+    "Belirli veya tüm adapter'ları eğitebilme esnekliği sağlanmalı",
+    "Görev başlıklarını seçerek eğitebilme imkanı sağlanmalı",
+    "Eğitim süreci için callback mekanizması sağlanmalı",
+    "Bellek kullanımını optimize edecek stratejiler uygulanmalı",
+    "Eğitim metriklerini toplama ve raporlama yapılmalı",
+    "Düzenli checkpoint oluşturma ve yükleme imkanı sağlanmalı"
   ],
-  "module_mapping": "training_module",
-  "status": "todo",
   "priority": "high",
-  "estimated_effort": "large",
-  "technical_complexity": "high",
-  "business_value": "critical",
-  "architectural_impact": "high",
-  "tags": [
-    "core_architecture",
-    "performance_critical",
-    "on_device_training"
-  ],
+  "status": "done",
+  "assigned_to": "team_member_2",
+  "module_id": "training",
+  "estimated_effort": "medium",
   "dependencies": [
-    "story_11",
-    "story_12",
-    "story_13"
+    "12",
+    "13"
   ],
-  "notes": "Bu hikaye, M³TM modelinin en önemli farklılaştırıcı özelliğini, yani cihaz üzerinde kişiselleştirilmiş eğitim kabiliyetini gerçekleştirir. Modelin hafif kalması ve verimli eğitim yapabilmesi için optimize edilmiş backpropagation algoritmaları ve bellek yönetimi stratejileri araştırılmalıdır."
+  "related_patterns": [
+    "PT-002",
+    "PT-003",
+    "PT-008",
+    "PT-013",
+    "PT-017"
+  ],
+  "implementation_details": {
+    "files": [
+      "src/m3tm/training/training_manager.py",
+      "src/m3tm/training/__init__.py",
+      "src/m3tm/training/example.py"
+    ],
+    "patterns_used": [
+      {
+        "pattern_id": "PT-002",
+        "name": "FactoryMethod",
+        "usage": "TrainingManager.create metodu ile yapılandırılmış eğitim yöneticisi oluşturma"
+      },
+      {
+        "pattern_id": "PT-003",
+        "name": "ModelComposite",
+        "usage": "Modüler model mimarisi üzerinde çalışma ve parçaları ayrı ayrı eğitme"
+      },
+      {
+        "pattern_id": "PT-008",
+        "name": "MetricsCollector",
+        "usage": "Eğitim metriklerini toplama ve raporlama"
+      },
+      {
+        "pattern_id": "PT-013",
+        "name": "TrainingLoopTemplate",
+        "usage": "Eğitim döngüsü şablonu"
+      },
+      {
+        "pattern_id": "PT-017",
+        "name": "DecoratorPattern",
+        "usage": "Callback sınıfları ile eğitim işlevselliğini dinamik olarak genişletme"
+      }
+    ]
+  },
+  "technical_notes": {
+    "optimization_strategies": [
+      "Çekirdek modeli dondurmak",
+      "Gradient biriktirme (gradient accumulation)",
+      "Mixed precision eğitim",
+      "Gradient checkpointing",
+      "Bellek optimizasyonu için çeşitli stratejiler"
+    ],
+    "challenges": [
+      "Mobil cihazlarda bellek sınırlamaları",
+      "Eğitim performansını korurken bellek kullanımını azaltma",
+      "Farklı eğitim konfigürasyonlarını destekleme"
+    ]
+  },
+  "completion_date": "2024-06-11"
 } 
