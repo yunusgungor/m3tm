@@ -1,0 +1,326 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM modeli için test kapsama metrikleri",
+  "last_updated": "2023-06-15T10:30:00Z",
+  "overall_metrics": {
+    "scenario_coverage": {
+      "current": 0.65,
+      "target": 0.95,
+      "description": "Test senaryolarının model fonksiyonel özelliklerini kapsama oranı"
+    },
+    "edge_case_coverage": {
+      "current": 0.45,
+      "target": 0.90,
+      "description": "Tanımlanmış uç durumların kapsanma oranı"
+    },
+    "performance_boundary_coverage": {
+      "current": 0.35,
+      "target": 0.85,
+      "description": "Performans sınırları test kapsamı"
+    },
+    "component_coverage": {
+      "current": 0.75,
+      "target": 0.98,
+      "description": "Model bileşenlerinin test kapsamı"
+    },
+    "configuration_coverage": {
+      "current": 0.60,
+      "target": 0.90,
+      "description": "Model konfigürasyonlarının test kapsamı"
+    },
+    "device_coverage": {
+      "current": 0.40,
+      "target": 0.80,
+      "description": "Hedef cihaz çeşitliliğinin test kapsamı"
+    },
+    "pattern_implementation_coverage": {
+      "current": 0.55,
+      "target": 0.90,
+      "description": "Tanımlanmış test kalıplarının uygulanma oranı"
+    }
+  },
+  "component_metrics": {
+    "adapter": {
+      "unit_test_coverage": 0.80,
+      "integration_test_coverage": 0.70,
+      "edge_case_coverage": 0.50,
+      "performance_test_coverage": 0.40,
+      "critical_paths_covered": 0.85
+    },
+    "on_device_trainer": {
+      "unit_test_coverage": 0.75,
+      "integration_test_coverage": 0.65,
+      "edge_case_coverage": 0.45,
+      "performance_test_coverage": 0.35,
+      "critical_paths_covered": 0.80
+    },
+    "embedding": {
+      "unit_test_coverage": 0.85,
+      "integration_test_coverage": 0.75,
+      "edge_case_coverage": 0.55,
+      "performance_test_coverage": 0.45,
+      "critical_paths_covered": 0.90
+    },
+    "task_heads": {
+      "unit_test_coverage": 0.70,
+      "integration_test_coverage": 0.60,
+      "edge_case_coverage": 0.40,
+      "performance_test_coverage": 0.30,
+      "critical_paths_covered": 0.75
+    },
+    "search": {
+      "unit_test_coverage": 0.65,
+      "integration_test_coverage": 0.60,
+      "edge_case_coverage": 0.35,
+      "performance_test_coverage": 0.25,
+      "critical_paths_covered": 0.70
+    },
+    "data_preprocessing": {
+      "unit_test_coverage": 0.60,
+      "integration_test_coverage": 0.50,
+      "edge_case_coverage": 0.30,
+      "performance_test_coverage": 0.20,
+      "critical_paths_covered": 0.65
+    }
+  },
+  "scenario_metrics": {
+    "basic_adapter_training": {
+      "test_cases_defined": 8,
+      "test_cases_implemented": 7,
+      "edge_cases_covered": 4,
+      "performance_boundaries_tested": 3,
+      "device_configurations_tested": 2
+    },
+    "personalized_learning": {
+      "test_cases_defined": 10,
+      "test_cases_implemented": 6,
+      "edge_cases_covered": 3,
+      "performance_boundaries_tested": 2,
+      "device_configurations_tested": 1
+    },
+    "text_embedding": {
+      "test_cases_defined": 12,
+      "test_cases_implemented": 9,
+      "edge_cases_covered": 5,
+      "performance_boundaries_tested": 4,
+      "device_configurations_tested": 2
+    },
+    "image_embedding": {
+      "test_cases_defined": 8,
+      "test_cases_implemented": 5,
+      "edge_cases_covered": 3,
+      "performance_boundaries_tested": 2,
+      "device_configurations_tested": 1
+    },
+    "multimodal_embedding": {
+      "test_cases_defined": 15,
+      "test_cases_implemented": 8,
+      "edge_cases_covered": 4,
+      "performance_boundaries_tested": 3,
+      "device_configurations_tested": 2
+    },
+    "model_quantization": {
+      "test_cases_defined": 6,
+      "test_cases_implemented": 3,
+      "edge_cases_covered": 1,
+      "performance_boundaries_tested": 2,
+      "device_configurations_tested": 2
+    },
+    "search_indexing": {
+      "test_cases_defined": 7,
+      "test_cases_implemented": 4,
+      "edge_cases_covered": 2,
+      "performance_boundaries_tested": 2,
+      "device_configurations_tested": 1
+    },
+    "search_retrieval": {
+      "test_cases_defined": 9,
+      "test_cases_implemented": 5,
+      "edge_cases_covered": 3,
+      "performance_boundaries_tested": 2,
+      "device_configurations_tested": 1
+    }
+  },
+  "pattern_implementation_metrics": {
+    "setup_teardown": {
+      "implementation_coverage": 0.85,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads", "search"],
+      "components_implemented": ["adapter", "on_device_trainer", "embedding", "task_heads"]
+    },
+    "isolated_component_test": {
+      "implementation_coverage": 0.70,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads", "search", "data_preprocessing"],
+      "components_implemented": ["adapter", "embedding", "task_heads", "search"]
+    },
+    "parametrized_test": {
+      "implementation_coverage": 0.60,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads", "search", "data_preprocessing"],
+      "components_implemented": ["adapter", "embedding", "task_heads"]
+    },
+    "golden_master_test": {
+      "implementation_coverage": 0.50,
+      "applicable_components": ["adapter", "embedding", "task_heads", "search"],
+      "components_implemented": ["adapter", "embedding"]
+    },
+    "performance_profile": {
+      "implementation_coverage": 0.40,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads", "search"],
+      "components_implemented": ["adapter", "embedding"]
+    },
+    "boundary_test": {
+      "implementation_coverage": 0.50,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads", "search", "data_preprocessing"],
+      "components_implemented": ["adapter", "embedding", "search"]
+    },
+    "integration_cascade": {
+      "implementation_coverage": 0.45,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads", "search"],
+      "components_implemented": ["adapter", "embedding"]
+    },
+    "simulated_environment": {
+      "implementation_coverage": 0.35,
+      "applicable_components": ["adapter", "on_device_trainer", "search"],
+      "components_implemented": ["adapter"]
+    },
+    "property_based_test": {
+      "implementation_coverage": 0.30,
+      "applicable_components": ["adapter", "embedding", "search"],
+      "components_implemented": ["embedding"]
+    },
+    "comparative_test": {
+      "implementation_coverage": 0.45,
+      "applicable_components": ["adapter", "on_device_trainer", "embedding", "task_heads"],
+      "components_implemented": ["adapter", "embedding"]
+    },
+    "reproducibility_test": {
+      "implementation_coverage": 0.40,
+      "applicable_components": ["adapter", "on_device_trainer"],
+      "components_implemented": ["adapter"]
+    },
+    "progression_test": {
+      "implementation_coverage": 0.55,
+      "applicable_components": ["adapter", "on_device_trainer"],
+      "components_implemented": ["adapter"]
+    },
+    "data_integrity_test": {
+      "implementation_coverage": 0.30,
+      "applicable_components": ["data_preprocessing", "search"],
+      "components_implemented": ["data_preprocessing"]
+    }
+  },
+  "improvement_targets": {
+    "immediate_priorities": [
+      {
+        "component": "on_device_trainer",
+        "scenario": "personalized_learning",
+        "patterns_to_apply": ["performance_profile", "boundary_test", "reproducibility_test"],
+        "edge_cases_to_cover": ["low_memory", "interrupted_training", "very_small_dataset"],
+        "expected_coverage_increase": 0.15
+      },
+      {
+        "component": "search",
+        "scenario": "search_indexing",
+        "patterns_to_apply": ["performance_profile", "boundary_test", "data_integrity_test"],
+        "edge_cases_to_cover": ["large_index", "duplicate_entries", "corrupted_index"],
+        "expected_coverage_increase": 0.20
+      },
+      {
+        "component": "task_heads",
+        "scenario": "multimodal_embedding",
+        "patterns_to_apply": ["isolated_component_test", "golden_master_test", "comparative_test"],
+        "edge_cases_to_cover": ["missing_modality", "imbalanced_modalities", "gradient_exploding"],
+        "expected_coverage_increase": 0.18
+      }
+    ],
+    "medium_term_goals": [
+      {
+        "focus_area": "Performans testi kapsamını artırma",
+        "target_components": ["all"],
+        "patterns_to_apply": ["performance_profile", "simulated_environment"],
+        "target_coverage_increase": 0.25,
+        "completion_timeframe": "1 ay"
+      },
+      {
+        "focus_area": "Uç durum testi kapsamını geliştirme",
+        "target_components": ["adapter", "on_device_trainer", "search"],
+        "patterns_to_apply": ["boundary_test", "property_based_test"],
+        "target_coverage_increase": 0.30,
+        "completion_timeframe": "6 hafta"
+      },
+      {
+        "focus_area": "Entegrasyon test derinliğini artırma",
+        "target_components": ["all"],
+        "patterns_to_apply": ["integration_cascade", "comparative_test"],
+        "target_coverage_increase": 0.20,
+        "completion_timeframe": "2 ay"
+      }
+    ],
+    "long_term_vision": {
+      "complete_test_automation": {
+        "description": "Tüm test süreçlerinin otomatikleştirilmesi ve CI/CD süreçlerine entegrasyonu",
+        "coverage_goal": 0.95,
+        "completion_timeframe": "6 ay"
+      },
+      "comprehensive_edge_case_library": {
+        "description": "Tüm model davranış uç durumlarını kapsayan kapsamlı bir test kütüphanesi",
+        "coverage_goal": 0.90,
+        "completion_timeframe": "8 ay"
+      },
+      "real_world_performance_simulation": {
+        "description": "Gerçek dünya koşullarını tam olarak simüle eden performans test ortamı",
+        "coverage_goal": 0.85,
+        "completion_timeframe": "1 yıl"
+      }
+    }
+  },
+  "history": [
+    {
+      "date": "2023-05-15T00:00:00Z",
+      "overall_coverage": 0.45,
+      "components_focus": ["adapter", "embedding"],
+      "major_improvements": ["Temel adaptör testi kapsama", "Metin gömme testleri eklendi"]
+    },
+    {
+      "date": "2023-05-30T00:00:00Z",
+      "overall_coverage": 0.55,
+      "components_focus": ["on_device_trainer", "task_heads"],
+      "major_improvements": ["Eğitim performans testleri", "Task kafaları izolasyon testleri"]
+    },
+    {
+      "date": "2023-06-15T00:00:00Z",
+      "overall_coverage": 0.65,
+      "components_focus": ["search", "data_preprocessing"],
+      "major_improvements": ["Arama işlemi testleri", "Veri önişleme testleri"]
+    }
+  ],
+  "test_environment_metrics": {
+    "ci_integration": {
+      "current_status": "partial",
+      "target_status": "complete",
+      "integrated_components": ["adapter", "embedding"],
+      "pending_components": ["on_device_trainer", "task_heads", "search", "data_preprocessing"]
+    },
+    "test_execution_time": {
+      "complete_suite": "45 minutes",
+      "unit_tests": "12 minutes",
+      "integration_tests": "18 minutes",
+      "performance_tests": "15 minutes",
+      "target_optimization": "30% reduction"
+    },
+    "test_reliability": {
+      "flaky_test_percentage": 0.08,
+      "stability_index": 0.92,
+      "target_stability_index": 0.98
+    },
+    "test_maintainability": {
+      "code_duplication": 0.15,
+      "pattern_adherence": 0.75,
+      "documentation_coverage": 0.65,
+      "target_improvements": {
+        "code_duplication": 0.05,
+        "pattern_adherence": 0.90,
+        "documentation_coverage": 0.95
+      }
+    }
+  }
+}

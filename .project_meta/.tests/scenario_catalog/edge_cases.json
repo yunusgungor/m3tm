@@ -1,0 +1,316 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM modeli için uç durum test senaryoları kataloğu",
+  "categories": {
+    "input_validation": {
+      "description": "Girdi değerlerinin uç durumlarını test eden senaryolar",
+      "edge_cases": {
+        "empty_text": {
+          "description": "Boş metin girişi",
+          "test_strategy": "Boş metin dizisini modele girdi olarak verme",
+          "expected_behavior": "Uygun hata mesajı veya boş/nötr bir gömme vektörü üretme",
+          "risk_level": "medium"
+        },
+        "very_long_text": {
+          "description": "Çok uzun metin girişi",
+          "test_strategy": "Maksimum belirtilen uzunluğun çok üzerinde metin dizisini girdi olarak verme",
+          "expected_behavior": "Metni uygun şekilde kırpma veya hata döndürme",
+          "risk_level": "medium"
+        },
+        "rare_tokens": {
+          "description": "Nadir veya az görülen token içeren metin girişi",
+          "test_strategy": "Veri setinde çok az görülen tokenlar içeren metin girişleri verme",
+          "expected_behavior": "Nadir tokenları uygun şekilde işleme veya OOV tokenları ile değiştirme",
+          "risk_level": "medium"
+        },
+        "out_of_vocabulary": {
+          "description": "Kelime dağarcığı dışında tokenlar içeren metin girişi",
+          "test_strategy": "Dağarcıkta olmayan kelimeler, özel karakterler veya semboller içeren metin girişi verme",
+          "expected_behavior": "OOV tokenları ile uygun şekilde işleme veya karakter tabanlı tokenizasyon kullanma",
+          "risk_level": "high"
+        },
+        "special_tokens": {
+          "description": "Özel tokenlar içeren metin girişi",
+          "test_strategy": "Modelin özel tokenlarını (PAD, CLS, SEP, MASK vb.) içeren metin girişleri verme",
+          "expected_behavior": "Özel tokenları uygun şekilde işleme veya escape etme",
+          "risk_level": "medium"
+        },
+        "token_sequence_length": {
+          "description": "Çok kısa veya çok uzun token dizileri",
+          "test_strategy": "Çok kısa (1-2 token) veya çok uzun (max_len+) token dizileri verme",
+          "expected_behavior": "Kısa dizileri uygun şekilde işleme ve uzun dizileri kırpma/hata verme",
+          "risk_level": "medium"
+        },
+        "very_small_image": {
+          "description": "Çok küçük boyutlu görüntü girişi",
+          "test_strategy": "Minimum patch boyutundan daha küçük görüntüler verme",
+          "expected_behavior": "Uygun hata mesajı veya görüntüyü işleyebilecek şekilde yeniden boyutlandırma",
+          "risk_level": "medium"
+        },
+        "high_resolution_image": {
+          "description": "Çok yüksek çözünürlüklü görüntü girişi",
+          "test_strategy": "Çok yüksek çözünürlüklü görüntüler (örn. 4K+) verme",
+          "expected_behavior": "Uygun şekilde küçültme veya aşırı bellek kullanımını önleme",
+          "risk_level": "medium"
+        },
+        "monochrome_image": {
+          "description": "Tek kanallı görüntü girişi",
+          "test_strategy": "Gri tonlamalı veya ikili görüntüler verme",
+          "expected_behavior": "Tek kanallı görüntüleri 3 kanallı gösterime dönüştürme",
+          "risk_level": "low"
+        },
+        "non_standard_dimensions": {
+          "description": "Standart olmayan boyutlara sahip görüntü girişi",
+          "test_strategy": "Farklı en/boy oranlarına sahip görüntüler verme",
+          "expected_behavior": "Görüntüleri uygun şekilde işleyebilme",
+          "risk_level": "medium"
+        },
+        "malformed_input": {
+          "description": "Bozuk veya kötü biçimlendirilmiş girdi",
+          "test_strategy": "Bozuk dosyalar, geçersiz formatlar veya eksik veri içeren girdiler verme",
+          "expected_behavior": "Uygun hata mesajı ve temiz hata işleme",
+          "risk_level": "high"
+        }
+      }
+    },
+    "numerical_stability": {
+      "description": "Sayısal kararlılık problemlerini test eden senaryolar",
+      "edge_cases": {
+        "zero_input": {
+          "description": "Tüm sıfır değerlerinden oluşan girdi",
+          "test_strategy": "Tensör elemanlarının hepsi sıfır olan girdiler verme",
+          "expected_behavior": "Sayısal kararsızlığa veya NaN/sonsuz değerlere yol açmama",
+          "risk_level": "medium"
+        },
+        "very_large_values": {
+          "description": "Çok büyük değerler içeren girdiler",
+          "test_strategy": "Büyük sayılar içeren girdiler verme (örn. 1e9)",
+          "expected_behavior": "Sayısal taşma olmadan işleme",
+          "risk_level": "high"
+        },
+        "very_small_values": {
+          "description": "Çok küçük değerler içeren girdiler",
+          "test_strategy": "Çok küçük sayılar içeren girdiler verme (örn. 1e-9)",
+          "expected_behavior": "Sayısal alttan taşma olmadan işleme",
+          "risk_level": "medium"
+        },
+        "extreme_gradients": {
+          "description": "Aşırı büyük gradyanlara yol açan girdiler",
+          "test_strategy": "Gradyan patlamasına neden olacak girdiler ve hiperparametreler verme",
+          "expected_behavior": "Gradyan kırpma ile istikrarlı eğitim",
+          "risk_level": "high"
+        },
+        "vanishing_gradients": {
+          "description": "Çok küçük/kaybolan gradyanlara yol açan girdiler",
+          "test_strategy": "Gradyan kaybına neden olacak girdiler ve model konfigürasyonları verme",
+          "expected_behavior": "Eğitim ilerlemesinin devam etmesi",
+          "risk_level": "high"
+        },
+        "activation_saturation": {
+          "description": "Aktivasyon fonksiyonlarının doygunluğuna yol açan girdiler",
+          "test_strategy": "Aktivasyon çıktılarının ekstrem değerlere (0 veya 1) yakınsamasına neden olan girdiler verme",
+          "expected_behavior": "Modelin hala öğrenme yeteneğini koruması",
+          "risk_level": "medium"
+        }
+      }
+    },
+    "resource_constraints": {
+      "description": "Kaynak kısıtlamaları altında performansı test eden senaryolar",
+      "edge_cases": {
+        "memory_limits": {
+          "description": "Düşük bellek koşulları",
+          "test_strategy": "Modelin sınırlı bellek ortamında çalışması",
+          "expected_behavior": "Bellek taşması olmadan çalışma veya temiz hata",
+          "risk_level": "high"
+        },
+        "batch_size_limits": {
+          "description": "Aşırı büyük veya küçük batch boyutları",
+          "test_strategy": "Çok küçük (1-2) veya çok büyük batch boyutlarıyla eğitim",
+          "expected_behavior": "İstikrarlı eğitim ve bellek verimli işlem",
+          "risk_level": "medium"
+        },
+        "device_throttling": {
+          "description": "Cihaz kısıtlaması/throttling durumları",
+          "test_strategy": "CPU/GPU kısıtlaması veya throttling simülasyonu",
+          "expected_behavior": "Performansın kademeli olarak düşmesi ama çökme olmaması",
+          "risk_level": "medium"
+        },
+        "long_running_operations": {
+          "description": "Uzun süren işlemler",
+          "test_strategy": "Uzun süreli eğitim veya çıkarım işlemleri",
+          "expected_behavior": "Bellek sızıntısı olmadan stabil çalışma",
+          "risk_level": "medium"
+        }
+      }
+    },
+    "concurrency": {
+      "description": "Eşzamanlılık sorunlarını test eden senaryolar",
+      "edge_cases": {
+        "parallel_inference": {
+          "description": "Paralel çıkarım işlemleri",
+          "test_strategy": "Aynı model üzerinde birden fazla iş parçacığıyla çıkarım yapma",
+          "expected_behavior": "İş parçacığı güvenli çalışma, kilitlenme olmaması",
+          "risk_level": "medium"
+        },
+        "concurrent_model_updates": {
+          "description": "Eşzamanlı model güncellemeleri",
+          "test_strategy": "Modeli birden çok iş parçacığından eşzamanlı güncelleme",
+          "expected_behavior": "Veri yarışı olmadan düzgün eğitim veya uygun hata",
+          "risk_level": "high"
+        },
+        "training_interruptions": {
+          "description": "Eğitim kesintileri",
+          "test_strategy": "Eğitim sırasında işlemi kesme veya durdurma",
+          "expected_behavior": "Uygun durum kaydı ve temiz sonlandırma",
+          "risk_level": "medium"
+        }
+      }
+    },
+    "data_quality": {
+      "description": "Veri kalitesi sorunlarını test eden senaryolar",
+      "edge_cases": {
+        "noisy_data": {
+          "description": "Yüksek gürültülü veri",
+          "test_strategy": "Gürültülü metin veya görüntü girdileri verme",
+          "expected_behavior": "Makul çıktılar üretme veya gürültüye karşı dayanıklılık",
+          "risk_level": "medium"
+        },
+        "adversarial_examples": {
+          "description": "Düşmanca örnekler",
+          "test_strategy": "Modeli yanıltmak için tasarlanmış girdiler verme",
+          "expected_behavior": "Mantıklı çıktılar üretme veya belirsizliği bildirme",
+          "risk_level": "high"
+        },
+        "outlier_data": {
+          "description": "Aykırı veri dağılımı",
+          "test_strategy": "Eğitim dağılımının çok dışında veri verme",
+          "expected_behavior": "Aşırı güven göstermeden makul tahminler yapma",
+          "risk_level": "medium"
+        },
+        "imbalanced_classes": {
+          "description": "Dengesiz sınıf dağılımı",
+          "test_strategy": "Çok dengesiz sınıf dağılımına sahip verilerle eğitim",
+          "expected_behavior": "Nadir sınıflar için makul performans",
+          "risk_level": "medium"
+        },
+        "limited_training_data": {
+          "description": "Çok sınırlı eğitim verisi",
+          "test_strategy": "Çok az sayıda örnekle eğitim",
+          "expected_behavior": "Aşırı uyum olmadan öğrenebilme veya yetersiz veri uyarısı",
+          "risk_level": "medium"
+        }
+      }
+    },
+    "model_specific": {
+      "description": "M³TM mimarisine özgü uç durumları test eden senaryolar",
+      "edge_cases": {
+        "single_modality": {
+          "description": "Tek modalite kullanımı",
+          "test_strategy": "Sadece metin veya sadece görüntü ile test etme",
+          "expected_behavior": "Tek modaliteyle düzgün çalışma",
+          "risk_level": "low"
+        },
+        "modality_mismatch": {
+          "description": "Modalite uyumsuzluğu",
+          "test_strategy": "Semantik olarak uyumsuz metin ve görüntü çiftleri verme",
+          "expected_behavior": "Düşük güvenle tahminde bulunma veya uyumsuzluğu bildirme",
+          "risk_level": "medium"
+        },
+        "adapter_conflicts": {
+          "description": "Adapter çakışmaları",
+          "test_strategy": "Birbiriyle çelişen adapterleri aynı anda modele ekleme",
+          "expected_behavior": "Kararlı davranış veya uygun hata mesajı",
+          "risk_level": "medium"
+        },
+        "modality_dominance": {
+          "description": "Bir modalitenin diğerini baskılaması",
+          "test_strategy": "Bir modalitenin çok güçlü sinyal verdiği, diğerinin zayıf olduğu durumlar",
+          "expected_behavior": "Her iki modaliteyi de uygun şekilde değerlendirme",
+          "risk_level": "medium"
+        },
+        "missing_modal_components": {
+          "description": "Modalite bileşenlerinin eksikliği",
+          "test_strategy": "Modelde belirli modalite bileşenlerinin devre dışı bırakılması",
+          "expected_behavior": "Çalışan bileşenlerle düzgün şekilde çalışmaya devam etme",
+          "risk_level": "medium"
+        }
+      }
+    },
+    "on_device_training": {
+      "description": "Cihaz üzerinde eğitimle ilgili uç durumları test eden senaryolar",
+      "edge_cases": {
+        "variable_learning_rate": {
+          "description": "Değişken öğrenme oranı",
+          "test_strategy": "Çok düşük veya çok yüksek öğrenme oranları ve değişken öğrenme oranı zamanlaması",
+          "expected_behavior": "Kararlı eğitim ve model yakınsaması",
+          "risk_level": "medium"
+        },
+        "early_stopping": {
+          "description": "Erken durdurma",
+          "test_strategy": "Eğitimi çeşitli noktalarda erken durdurma",
+          "expected_behavior": "Model durumunun doğru şekilde kaydedilmesi ve erken durdurmanın uygun şekilde işlenmesi",
+          "risk_level": "low"
+        },
+        "training_restart": {
+          "description": "Eğitimi yeniden başlatma",
+          "test_strategy": "Eğitimi çeşitli noktalarda durdurup yeniden başlatma",
+          "expected_behavior": "Eğitimin kesintisiz şekilde devam etmesi",
+          "risk_level": "medium"
+        },
+        "mixed_precision_training": {
+          "description": "Karışık hassasiyetli eğitim",
+          "test_strategy": "FP16/FP32 karışık hassasiyetli eğitim",
+          "expected_behavior": "Sayısal kararlılık ve doğruluk kaybı olmadan eğitim",
+          "risk_level": "medium"
+        },
+        "quantized_training": {
+          "description": "Kuantalanmış eğitim",
+          "test_strategy": "Düşük bit hassasiyetiyle kuantalanmış eğitim",
+          "expected_behavior": "Kararlı eğitim ve kabul edilebilir doğruluk",
+          "risk_level": "high"
+        },
+        "federated_averaging": {
+          "description": "Federated learning ortalama hesaplama",
+          "test_strategy": "Farklı cihazlardan gelen model güncellemelerini ortalama hesaplama",
+          "expected_behavior": "Model yakınsaması ve tutarlı performans",
+          "risk_level": "medium"
+        },
+        "differential_privacy": {
+          "description": "Diferansiyel gizlilik",
+          "test_strategy": "Diferansiyel gizlilik uygulanan eğitim",
+          "expected_behavior": "Gizlilik korurken makul doğruluk",
+          "risk_level": "medium"
+        }
+      }
+    },
+    "integration": {
+      "description": "Entegrasyon noktalarını test eden senaryolar",
+      "edge_cases": {
+        "api_version_mismatch": {
+          "description": "API version uyumsuzluğu",
+          "test_strategy": "Farklı API versiyonlarını kullanma",
+          "expected_behavior": "Uygun hata mesajı veya geriye dönük uyumluluk",
+          "risk_level": "medium"
+        },
+        "sdk_integration": {
+          "description": "SDK entegrasyonu",
+          "test_strategy": "Farklı SDK implementasyonlarıyla entegrasyon",
+          "expected_behavior": "Beklenen API davranışı ve tutarlı sonuçlar",
+          "risk_level": "medium"
+        },
+        "mobile_platform_variations": {
+          "description": "Farklı mobil platformlar",
+          "test_strategy": "Farklı mobil işletim sistemleri ve cihaz özellikleri",
+          "expected_behavior": "Platform bağımsız tutarlı davranış",
+          "risk_level": "medium"
+        },
+        "permissions_constraints": {
+          "description": "İzin kısıtlamaları",
+          "test_strategy": "Sınırlı izinlerle çalışma",
+          "expected_behavior": "Temiz hata mesajları veya kontrollü degradasyon",
+          "risk_level": "medium"
+        }
+      }
+    }
+  }
+} 

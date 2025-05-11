@@ -1,0 +1,346 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM model senaryoları kataloğu",
+  "scenarios": {
+    "text_embedding": {
+      "category": "modalite_işleme",
+      "description": "Metin gömme modülünün test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "text_embedding_basic",
+          "name": "Temel Metin Gömme",
+          "description": "Farklı uzunluklarda ve içeriklerde metin girişleri için temel gömme senaryosu",
+          "expected_behavior": "Metin girişlerinin istikrarlı ve tutarlı gömmelerinin oluşturulması",
+          "prd_requirements": ["5.1.1"],
+          "edge_cases": ["empty_text", "very_long_text", "rare_tokens"]
+        },
+        {
+          "id": "text_embedding_multilingual",
+          "name": "Çok Dilli Metin Gömme",
+          "description": "Farklı dillerde metin girişleri için gömme senaryosu",
+          "expected_behavior": "Farklı dillerdeki metinlerin semantik anlamlarını koruyan gömmelerin oluşturulması",
+          "prd_requirements": ["5.1.1"],
+          "edge_cases": ["mixed_language", "non_latin_scripts", "special_characters"]
+        },
+        {
+          "id": "text_embedding_tokenization",
+          "name": "Metin Tokenizasyon",
+          "description": "Tokenizasyon sürecinin doğruluğu ve tutarlılığı için senaryo",
+          "expected_behavior": "Metin girişlerinin tutarlı bir şekilde tokenize edilmesi",
+          "prd_requirements": ["5.1.1"],
+          "edge_cases": ["out_of_vocabulary", "special_tokens", "token_sequence_length"]
+        }
+      ]
+    },
+    "image_embedding": {
+      "category": "modalite_işleme",
+      "description": "Görüntü gömme modülünün test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "image_embedding_basic",
+          "name": "Temel Görüntü Gömme",
+          "description": "Farklı boyutlarda ve içeriklerde görüntü girişleri için temel gömme senaryosu",
+          "expected_behavior": "Görüntü girişlerinin istikrarlı ve tutarlı gömmelerinin oluşturulması",
+          "prd_requirements": ["5.1.2"],
+          "edge_cases": ["very_small_image", "high_resolution_image", "monochrome_image"]
+        },
+        {
+          "id": "image_patch_extraction",
+          "name": "Görüntü Yama Çıkarımı",
+          "description": "Görüntülerden yama çıkarma işleminin doğruluğu ve verimliliği için senaryo",
+          "expected_behavior": "Görüntülerin doğru boyutlarda yamalara ayrılması",
+          "prd_requirements": ["5.1.2"],
+          "edge_cases": ["non_standard_dimensions", "very_few_patches", "many_patches"]
+        },
+        {
+          "id": "image_patch_embedding",
+          "name": "Görüntü Yama Gömme",
+          "description": "Çıkarılan yamaların gömme işlemi senaryosu",
+          "expected_behavior": "Yamaların uzaysal ilişkilerini koruyan gömmelerin oluşturulması",
+          "prd_requirements": ["5.1.2"],
+          "edge_cases": ["uniform_texture_patches", "high_contrast_patches", "noisy_patches"]
+        }
+      ]
+    },
+    "transformer_blocks": {
+      "category": "model_bileşenleri",
+      "description": "Proto-Transformer bloklarının test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "attention_mechanism",
+          "name": "Dikkat Mekanizması",
+          "description": "Dikkat mekanizmasının farklı giriş türleri için davranışı senaryosu",
+          "expected_behavior": "Giriş dizilerindeki önemli bilgilere odaklanan dikkat ağırlıklarının oluşturulması",
+          "prd_requirements": ["5.1.3"],
+          "edge_cases": ["uniform_input", "attention_saturation", "sparse_attention"]
+        },
+        {
+          "id": "ffn_processing",
+          "name": "FFN İşleme",
+          "description": "İleri beslemeli ağ işleme senaryosu",
+          "expected_behavior": "Giriş temsillerinin doğrusal olmayan dönüşümlerinin gerçekleştirilmesi",
+          "prd_requirements": ["5.1.3"],
+          "edge_cases": ["zero_input", "activation_saturation", "gradient_flow"]
+        },
+        {
+          "id": "adapter_slot_integration",
+          "name": "Adapter Yuvası Entegrasyonu",
+          "description": "Transformer bloklarda adapter yuvalarının entegrasyonu senaryosu",
+          "expected_behavior": "Adapter modüllerinin transformer bloklarıyla düzgün entegrasyonu",
+          "prd_requirements": ["5.1.3", "5.2.1"],
+          "edge_cases": ["multiple_adapters", "zero_adapter", "adapter_bypass"]
+        }
+      ]
+    },
+    "fusion": {
+      "category": "modalite_entegrasyonu",
+      "description": "Modalite füzyonu test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "basic_fusion",
+          "name": "Temel Füzyon",
+          "description": "Metin ve görüntü gömmeleri için temel füzyon senaryosu",
+          "expected_behavior": "Modalitelerin semantik ilişkilerini koruyan birleştirilmiş temsillerin oluşturulması",
+          "prd_requirements": ["5.1.4"],
+          "edge_cases": ["single_modality", "dominant_modality", "conflicting_modality_signals"]
+        },
+        {
+          "id": "cross_modal_attention",
+          "name": "Çapraz Modalite Dikkati",
+          "description": "Farklı modaliteler arasındaki dikkat mekanizmaları senaryosu",
+          "expected_behavior": "Modaliteler arası ilişkilere odaklanan dikkat ağırlıklarının oluşturulması",
+          "prd_requirements": ["5.1.4"],
+          "edge_cases": ["modality_mismatch", "attention_imbalance", "attention_leakage"]
+        },
+        {
+          "id": "modality_weighting",
+          "name": "Modalite Ağırlıklandırma",
+          "description": "Farklı görevler için modalite katkılarının ağırlıklandırılması senaryosu",
+          "expected_behavior": "Görev için en ilgili modaliteye yüksek ağırlık verilmesi",
+          "prd_requirements": ["5.1.4"],
+          "edge_cases": ["dominant_modality_bias", "modality_conflict", "dynamic_weighting_limits"]
+        }
+      ]
+    },
+    "search_embedding": {
+      "category": "uygulama_özellikleri",
+      "description": "Arama gömme işlemi test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "search_projection",
+          "name": "Arama Projeksiyonu",
+          "description": "Füzyon temsillerinin arama uzayına izdüşümü senaryosu",
+          "expected_behavior": "Semantik benzerliği koruyan arama gömmelerinin oluşturulması",
+          "prd_requirements": ["5.1.5"],
+          "edge_cases": ["zero_projection", "collapsing_embeddings", "expanding_embeddings"]
+        },
+        {
+          "id": "semantic_similarity",
+          "name": "Semantik Benzerlik",
+          "description": "Arama gömmelerinin semantik benzerlik ölçümü senaryosu",
+          "expected_behavior": "Semantik olarak benzer içeriğin yakın gömmelerinin oluşturulması",
+          "prd_requirements": ["5.1.5"],
+          "edge_cases": ["false_similarity", "missed_similarity", "similarity_collapse"]
+        },
+        {
+          "id": "cross_modal_search",
+          "name": "Çapraz Modalite Araması",
+          "description": "Bir modalite kullanarak diğer modaliteyi arama senaryosu",
+          "expected_behavior": "Semantik olarak eşleşen içeriğin modaliteler arası aranabilmesi",
+          "prd_requirements": ["5.1.5"],
+          "edge_cases": ["modality_gap", "modality_bias", "cross_domain_noise"]
+        }
+      ]
+    },
+    "adapters": {
+      "category": "büyüme_modülleri",
+      "description": "Adapter modülleri test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "adapter_initialization",
+          "name": "Adapter Başlatma",
+          "description": "Adapter modüllerinin farklı boyutlarla başlatılması senaryosu",
+          "expected_behavior": "Adapter modüllerinin ana modeli etkilemeden başlatılması",
+          "prd_requirements": ["5.2.1"],
+          "edge_cases": ["zero_bottleneck", "large_bottleneck", "identity_initialization"]
+        },
+        {
+          "id": "adapter_training",
+          "name": "Adapter Eğitimi",
+          "description": "Adapter modüllerinin eğitimi senaryosu",
+          "expected_behavior": "Ana model parametrelerini korurken adapterlerin eğitilebilmesi",
+          "prd_requirements": ["5.2.1", "5.4"],
+          "edge_cases": ["freezing_failure", "gradient_leakage", "zero_gradients"]
+        },
+        {
+          "id": "adapter_composition",
+          "name": "Adapter Kompozisyonu",
+          "description": "Birden fazla adapterin birleştirilmesi senaryosu",
+          "expected_behavior": "Farklı adapterlerin etkin bir şekilde birleştirilebilmesi",
+          "prd_requirements": ["5.2.1"],
+          "edge_cases": ["conflicting_adapters", "dominating_adapters", "neutral_adapters"]
+        }
+      ]
+    },
+    "search_indexing": {
+      "category": "uygulama_özellikleri",
+      "description": "Arama indeksleme modülü test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "index_building",
+          "name": "İndeks Oluşturma",
+          "description": "Arama indeksinin oluşturulması senaryosu",
+          "expected_behavior": "Gömme vektörlerinin verimli bir indeks yapısıyla depolanması",
+          "prd_requirements": ["5.2.2"],
+          "edge_cases": ["empty_index", "very_large_index", "duplicate_entries"]
+        },
+        {
+          "id": "approximate_search",
+          "name": "Yaklaşık Arama",
+          "description": "Yaklaşık en yakın komşu arama senaryosu",
+          "expected_behavior": "Doğru en yakın komşuların verimli bir şekilde bulunması",
+          "prd_requirements": ["5.2.2"],
+          "edge_cases": ["distant_vectors", "uniform_vectors", "high_dimensional_vectors"]
+        },
+        {
+          "id": "index_persistence",
+          "name": "İndeks Kalıcılığı",
+          "description": "İndeksin cihaz belleğinde kalıcılığı senaryosu",
+          "expected_behavior": "İndeksin cihaz belleğine kaydedilip geri yüklenmesi",
+          "prd_requirements": ["5.2.2"],
+          "edge_cases": ["corrupted_index", "version_mismatch", "incomplete_index"]
+        }
+      ]
+    },
+    "data_formatting": {
+      "category": "uygulama_özellikleri",
+      "description": "Veri formatlama/indirme modülü test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "data_export",
+          "name": "Veri Dışa Aktarma",
+          "description": "Kullanıcı verilerinin dışa aktarılması senaryosu",
+          "expected_behavior": "Verilerin seçilen formatta doğru dışa aktarılması",
+          "prd_requirements": ["5.2.3"],
+          "edge_cases": ["very_large_data", "empty_data", "malformed_data"]
+        },
+        {
+          "id": "format_conversion",
+          "name": "Format Dönüşümü",
+          "description": "Verilerin farklı formatlara dönüştürülmesi senaryosu",
+          "expected_behavior": "Verilerin bilgi kaybı olmadan dönüştürülmesi",
+          "prd_requirements": ["5.2.3"],
+          "edge_cases": ["incompatible_format", "lossy_conversion", "recursive_structures"]
+        },
+        {
+          "id": "data_filtering",
+          "name": "Veri Filtreleme",
+          "description": "Dışa aktarılacak verilerin filtrelenmesi senaryosu",
+          "expected_behavior": "Verilerin belirtilen kriterlere göre filtrelenmesi",
+          "prd_requirements": ["5.2.3"],
+          "edge_cases": ["no_matching_data", "all_matching_data", "complex_filter_criteria"]
+        }
+      ]
+    },
+    "task_heads": {
+      "category": "model_bileşenleri",
+      "description": "Dinamik görev başlıkları test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "classification_head",
+          "name": "Sınıflandırma Başlığı",
+          "description": "Sınıflandırma görev başlığı senaryosu",
+          "expected_behavior": "Girdi temsillerinin doğru sınıflara atanması",
+          "prd_requirements": ["5.3"],
+          "edge_cases": ["imbalanced_classes", "ambiguous_input", "out_of_distribution_input"]
+        },
+        {
+          "id": "regression_head",
+          "name": "Regresyon Başlığı",
+          "description": "Regresyon görev başlığı senaryosu",
+          "expected_behavior": "Girdi temsillerinden doğru sayısal değerlerin tahmin edilmesi",
+          "prd_requirements": ["5.3"],
+          "edge_cases": ["out_of_range_prediction", "zero_prediction", "extreme_value_prediction"]
+        },
+        {
+          "id": "multi_task_head",
+          "name": "Çoklu Görev Başlığı",
+          "description": "Birden fazla görevin aynı anda çalıştırılması senaryosu",
+          "expected_behavior": "Girdi temsillerinden birden fazla görevin doğru sonuçlarının tahmin edilmesi",
+          "prd_requirements": ["5.3"],
+          "edge_cases": ["task_interference", "unbalanced_task_importance", "contradictory_tasks"]
+        }
+      ]
+    },
+    "on_device_training": {
+      "category": "eğitim",
+      "description": "Cihaz üzerinde eğitim test senaryoları",
+      "sub_scenarios": [
+        {
+          "id": "basic_training_loop",
+          "name": "Temel Eğitim Döngüsü",
+          "description": "Cihaz üzerinde temel eğitim döngüsü senaryosu",
+          "expected_behavior": "Modelin cihaz üzerinde başarıyla eğitilebilmesi",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["zero_batch", "very_small_batch", "very_large_batch"]
+        },
+        {
+          "id": "optimizer_behavior",
+          "name": "Optimize Edici Davranışı",
+          "description": "Farklı optimize ediciler ve hiperparametreler senaryosu",
+          "expected_behavior": "Optimize edicilerin modeli verimli bir şekilde güncellemesi",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["zero_learning_rate", "very_high_learning_rate", "vanishing_gradients"]
+        },
+        {
+          "id": "lr_scheduling",
+          "name": "Öğrenme Oranı Zamanlama",
+          "description": "Öğrenme oranı zamanlaması senaryosu",
+          "expected_behavior": "Öğrenme oranının zamanla doğru şekilde ayarlanması",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["early_decay", "no_decay", "oscillating_learning_rate"]
+        },
+        {
+          "id": "gradient_clipping",
+          "name": "Gradyan Kırpma",
+          "description": "Gradyan kırpma senaryosu",
+          "expected_behavior": "Büyük gradyanların eğitim istikrarını bozmadan kırpılması",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["all_gradients_clipped", "no_gradients_clipped", "clipping_threshold_impact"]
+        },
+        {
+          "id": "frozen_layers",
+          "name": "Dondurulmuş Katmanlar",
+          "description": "Belirli katmanların dondurularak eğitim senaryosu",
+          "expected_behavior": "Dondurulmuş katmanların parametrelerinin korunması",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["partial_freezing", "alternating_freezing", "freezing_and_unfreezing"]
+        },
+        {
+          "id": "batch_processing",
+          "name": "Batch İşleme",
+          "description": "Farklı batch boyutları ve işleme stratejileri senaryosu",
+          "expected_behavior": "Batch işlemenin verimli ve istikrarlı gerçekleştirilmesi",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["single_sample_batch", "variable_size_batch", "heterogeneous_batch"]
+        },
+        {
+          "id": "memory_management",
+          "name": "Bellek Yönetimi",
+          "description": "Eğitim sırasında bellek yönetimi senaryosu",
+          "expected_behavior": "Eğitimin bellek sınırlamaları içinde gerçekleştirilmesi",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["near_memory_limit", "memory_fragmentation", "memory_leak"]
+        },
+        {
+          "id": "checkpointing",
+          "name": "Kontrol Noktası Oluşturma",
+          "description": "Eğitim durumunun kaydedilmesi ve geri yüklenmesi senaryosu",
+          "expected_behavior": "Eğitim durumunun doğru şekilde kaydedilip geri yüklenmesi",
+          "prd_requirements": ["5.4"],
+          "edge_cases": ["corrupted_checkpoint", "partial_checkpoint", "checkpoint_version_mismatch"]
+        }
+      ]
+    }
+  }
+} 

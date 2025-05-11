@@ -1,0 +1,159 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM mobil model eğitim test konfigürasyonu",
+  "test_scenarios": {
+    "basic_adapter_training": {
+      "category": "temel_eğitim",
+      "description": "Temel adaptör fine-tuning testleri",
+      "prd_requirements": ["5.2.1", "5.4"],
+      "related_modules": ["adapter", "on_device_trainer", "task_heads"],
+      "test_data": "basic_adapter_data.json",
+      "expected_results": "basic_adapter_results.json"
+    },
+    "personalized_learning": {
+      "category": "kişiselleştirme",
+      "description": "Kullanıcı verileriyle kişiselleştirilmiş öğrenme testleri",
+      "prd_requirements": ["4.0", "5.2.1", "5.4"],
+      "related_modules": ["adapter", "on_device_trainer", "task_heads"],
+      "test_data": "personalized_learning_data.json",
+      "expected_results": "personalized_learning_results.json"
+    },
+    "offline_learning": {
+      "category": "çevrimdışı_eğitim",
+      "description": "Cihazda depolanmış verilerle çevrimdışı eğitim testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "data_store"],
+      "test_data": "offline_learning_data.json",
+      "expected_results": "offline_learning_results.json"
+    },
+    "hardware_constraints": {
+      "category": "performans",
+      "description": "Mobil donanım kısıtlamaları altında eğitim performansı testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "mobile_optimization"],
+      "test_data": "hardware_constraints_data.json",
+      "expected_results": "hardware_constraints_results.json"
+    },
+    "dynamic_learning_rate": {
+      "category": "optimizasyon",
+      "description": "Dinamik öğrenme oranları ve iyileştirme stratejileri testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer"],
+      "test_data": "dynamic_lr_data.json",
+      "expected_results": "dynamic_lr_results.json"
+    },
+    "resume_training": {
+      "category": "durum_yönetimi",
+      "description": "Eğitim durum yönetimi ve devam eden eğitim testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "checkpointing"],
+      "test_data": "resume_training_data.json",
+      "expected_results": "resume_training_results.json"
+    },
+    "quantization_training": {
+      "category": "optimizasyon",
+      "description": "Düşük hassasiyetli kuantalama eğitimi testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "quantization"],
+      "test_data": "quantization_training_data.json",
+      "expected_results": "quantization_training_results.json"
+    },
+    "data_augmentation": {
+      "category": "veri_zenginleştirme",
+      "description": "Veri zenginleştirme teknikleri ile eğitim testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "augmentation"],
+      "test_data": "data_augmentation_data.json",
+      "expected_results": "data_augmentation_results.json"
+    },
+    "federated_learning": {
+      "category": "dağıtık_eğitim",
+      "description": "Federated learning simülasyon testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "federated"],
+      "test_data": "federated_learning_data.json",
+      "expected_results": "federated_learning_results.json"
+    },
+    "privacy_preserving_training": {
+      "category": "gizlilik",
+      "description": "Gizlilik korumalı eğitim testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "privacy"],
+      "test_data": "privacy_training_data.json",
+      "expected_results": "privacy_training_results.json"
+    },
+    "multi_modal_interaction": {
+      "category": "modalite_etkileşimi",
+      "description": "Metin ve görüntü modaliteleri arasındaki etkileşim eğitim testleri",
+      "prd_requirements": ["5.1", "5.1.4"],
+      "related_modules": ["fusion", "on_device_trainer"],
+      "test_data": "multi_modal_data.json",
+      "expected_results": "multi_modal_results.json"
+    },
+    "low_memory_training": {
+      "category": "kısıtlı_kaynaklar",
+      "description": "Düşük bellek ortamlarında eğitim testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "mobile_optimization"],
+      "test_data": "low_memory_data.json",
+      "expected_results": "low_memory_results.json"
+    },
+    "incremental_learning": {
+      "category": "sürekli_öğrenme",
+      "description": "Aşamalı ve sürekli öğrenme testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "adapter"],
+      "test_data": "incremental_learning_data.json",
+      "expected_results": "incremental_learning_results.json"
+    },
+    "adversarial_robustness": {
+      "category": "dayanıklılık",
+      "description": "Adversarial örneklere karşı dayanıklılık eğitim testleri",
+      "prd_requirements": ["5.4"],
+      "related_modules": ["on_device_trainer", "robustness"],
+      "test_data": "adversarial_data.json",
+      "expected_results": "adversarial_results.json"
+    },
+    "cross_domain_adaptation": {
+      "category": "adaptasyon",
+      "description": "Farklı alan verileriyle eğitim ve adaptasyon testleri",
+      "prd_requirements": ["5.2.1", "5.4"],
+      "related_modules": ["on_device_trainer", "adapter"],
+      "test_data": "cross_domain_data.json",
+      "expected_results": "cross_domain_results.json"
+    }
+  },
+  "metrics": {
+    "model_capability_coverage": {
+      "description": "Model yeteneklerinin test senaryoları tarafından kapsanma yüzdesi",
+      "target": ">98%"
+    },
+    "edge_case_coverage": {
+      "description": "Uç durum senaryolarının kapsanma yüzdesi",
+      "target": ">95%"
+    },
+    "performance_boundary_coverage": {
+      "description": "Performans sınırlarının test senaryoları tarafından kapsanma yüzdesi",
+      "target": ">90%"
+    },
+    "data_variation_coverage": {
+      "description": "Veri varyasyonlarının test senaryoları tarafından kapsanma yüzdesi",
+      "target": ">95%"
+    },
+    "error_condition_coverage": {
+      "description": "Hata durumlarının test senaryoları tarafından kapsanma yüzdesi",
+      "target": ">98%"
+    },
+    "integration_point_coverage": {
+      "description": "Entegrasyon noktalarının test senaryoları tarafından kapsanma yüzdesi",
+      "target": ">95%"
+    }
+  },
+  "execution_environment": {
+    "python_version": ">=3.8",
+    "pytorch_version": ">=1.10.0",
+    "memory_requirements": ">=4GB",
+    "cpu_requirements": ">=2 cores",
+    "gpu_support": "optional"
+  }
+} 

@@ -1,0 +1,395 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM modeli için performans sınırları test kataloğu",
+  "categories": {
+    "memory_utilization": {
+      "description": "Bellek kullanımı ile ilgili performans sınırları",
+      "boundaries": {
+        "model_initialization": {
+          "description": "Model başlatma sırasındaki bellek kullanımı",
+          "test_strategy": "Farklı model konfigürasyonlarının bellek ayak izini ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için bellek sınırları",
+              "peak_memory": "150MB",
+              "steady_state": "100MB"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için bellek sınırları",
+              "peak_memory": "300MB",
+              "steady_state": "200MB"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için bellek sınırları",
+              "peak_memory": "80MB",
+              "steady_state": "50MB"
+            }
+          },
+          "critical": true
+        },
+        "inference": {
+          "description": "Çıkarım işlemleri sırasındaki bellek kullanımı",
+          "test_strategy": "Farklı giriş boyutları ve batch boyutları için bellek kullanımını ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için çıkarım bellek sınırları",
+              "peak_memory": "200MB",
+              "steady_state": "120MB"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için çıkarım bellek sınırları",
+              "peak_memory": "400MB",
+              "steady_state": "250MB"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için çıkarım bellek sınırları",
+              "peak_memory": "100MB",
+              "steady_state": "70MB"
+            }
+          },
+          "critical": true
+        },
+        "on_device_training": {
+          "description": "Cihaz üzerinde eğitim sırasındaki bellek kullanımı",
+          "test_strategy": "Farklı batch boyutları ve öğrenme yapılandırmaları için bellek kullanımını ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için eğitim bellek sınırları",
+              "peak_memory": "350MB",
+              "steady_state": "250MB"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için eğitim bellek sınırları",
+              "peak_memory": "600MB",
+              "steady_state": "400MB"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için eğitim bellek sınırları",
+              "peak_memory": "200MB",
+              "steady_state": "150MB"
+            }
+          },
+          "critical": true
+        },
+        "search_index": {
+          "description": "Arama indeksi için bellek kullanımı",
+          "test_strategy": "Farklı indeks boyutları için bellek kullanımını ölçme",
+          "target_limits": {
+            "small_index": {
+              "description": "Küçük indeks (1000 öğe) için bellek sınırları",
+              "peak_memory": "50MB",
+              "steady_state": "30MB"
+            },
+            "medium_index": {
+              "description": "Orta boyutlu indeks (10000 öğe) için bellek sınırları",
+              "peak_memory": "100MB",
+              "steady_state": "70MB"
+            },
+            "large_index": {
+              "description": "Büyük indeks (100000 öğe) için bellek sınırları",
+              "peak_memory": "300MB",
+              "steady_state": "200MB"
+            }
+          },
+          "critical": true
+        }
+      }
+    },
+    "execution_time": {
+      "description": "Yürütme süresi ile ilgili performans sınırları",
+      "boundaries": {
+        "model_initialization": {
+          "description": "Model başlatma süresi",
+          "test_strategy": "Farklı model konfigürasyonlarının başlatma süresini ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için başlatma süresi sınırları",
+              "cold_start": "1500ms",
+              "warm_start": "500ms"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için başlatma süresi sınırları",
+              "cold_start": "1000ms",
+              "warm_start": "300ms"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için başlatma süresi sınırları",
+              "cold_start": "3000ms",
+              "warm_start": "1000ms"
+            }
+          },
+          "critical": true
+        },
+        "text_embedding": {
+          "description": "Metin gömme süresi",
+          "test_strategy": "Farklı metin uzunlukları için işlem süresini ölçme",
+          "target_limits": {
+            "short_text": {
+              "description": "Kısa metin (10 token) için süre sınırları",
+              "max_time": "20ms",
+              "average_time": "10ms"
+            },
+            "medium_text": {
+              "description": "Orta uzunlukta metin (100 token) için süre sınırları",
+              "max_time": "50ms",
+              "average_time": "30ms"
+            },
+            "long_text": {
+              "description": "Uzun metin (512 token) için süre sınırları",
+              "max_time": "150ms",
+              "average_time": "100ms"
+            }
+          },
+          "critical": false
+        },
+        "image_embedding": {
+          "description": "Görüntü gömme süresi",
+          "test_strategy": "Farklı görüntü boyutları için işlem süresini ölçme",
+          "target_limits": {
+            "small_image": {
+              "description": "Küçük görüntü (112x112) için süre sınırları",
+              "max_time": "50ms",
+              "average_time": "30ms"
+            },
+            "medium_image": {
+              "description": "Orta boyutlu görüntü (224x224) için süre sınırları",
+              "max_time": "100ms",
+              "average_time": "70ms"
+            },
+            "large_image": {
+              "description": "Büyük görüntü (448x448) için süre sınırları",
+              "max_time": "300ms",
+              "average_time": "200ms"
+            }
+          },
+          "critical": false
+        },
+        "multimodal_inference": {
+          "description": "Çok modlu çıkarım süresi",
+          "test_strategy": "Metin ve görüntü girişleriyle çıkarım süresini ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için çıkarım süresi sınırları",
+              "max_time": "200ms",
+              "average_time": "150ms"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için çıkarım süresi sınırları",
+              "max_time": "150ms",
+              "average_time": "100ms"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için çıkarım süresi sınırları",
+              "max_time": "400ms",
+              "average_time": "300ms"
+            }
+          },
+          "critical": true
+        },
+        "search_operation": {
+          "description": "Arama işlemi süresi",
+          "test_strategy": "Farklı indeks boyutları için arama süresini ölçme",
+          "target_limits": {
+            "small_index": {
+              "description": "Küçük indeks (1000 öğe) için süre sınırları",
+              "max_time": "30ms",
+              "average_time": "20ms"
+            },
+            "medium_index": {
+              "description": "Orta boyutlu indeks (10000 öğe) için süre sınırları",
+              "max_time": "80ms",
+              "average_time": "50ms"
+            },
+            "large_index": {
+              "description": "Büyük indeks (100000 öğe) için süre sınırları",
+              "max_time": "200ms",
+              "average_time": "150ms"
+            }
+          },
+          "critical": true
+        },
+        "training_iteration": {
+          "description": "Eğitim iterasyonu süresi",
+          "test_strategy": "Farklı batch boyutları için eğitim iterasyonu süresini ölçme",
+          "target_limits": {
+            "small_batch": {
+              "description": "Küçük batch (4) için süre sınırları",
+              "max_time": "200ms",
+              "average_time": "150ms"
+            },
+            "medium_batch": {
+              "description": "Orta boyutlu batch (8) için süre sınırları",
+              "max_time": "350ms",
+              "average_time": "250ms"
+            },
+            "large_batch": {
+              "description": "Büyük batch (16) için süre sınırları",
+              "max_time": "600ms",
+              "average_time": "450ms"
+            }
+          },
+          "critical": false
+        }
+      }
+    },
+    "energy_efficiency": {
+      "description": "Enerji verimliliği ile ilgili performans sınırları",
+      "boundaries": {
+        "inference_energy": {
+          "description": "Çıkarım işlemleri için enerji tüketimi",
+          "test_strategy": "Sürekli çıkarım sırasında pil tüketimini ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için enerji tüketimi sınırları",
+              "max_power": "800mW",
+              "average_power": "500mW"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için enerji tüketimi sınırları",
+              "max_power": "1200mW",
+              "average_power": "700mW"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için enerji tüketimi sınırları",
+              "max_power": "500mW",
+              "average_power": "300mW"
+            }
+          },
+          "critical": false
+        },
+        "training_energy": {
+          "description": "Eğitim işlemleri için enerji tüketimi",
+          "test_strategy": "Sürekli eğitim sırasında pil tüketimini ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için eğitim enerji tüketimi sınırları",
+              "max_power": "1500mW",
+              "average_power": "1000mW"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için eğitim enerji tüketimi sınırları",
+              "max_power": "2000mW",
+              "average_power": "1400mW"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için eğitim enerji tüketimi sınırları",
+              "max_power": "900mW",
+              "average_power": "600mW"
+            }
+          },
+          "critical": false
+        },
+        "thermal_performance": {
+          "description": "Termal performans sınırları",
+          "test_strategy": "Uzun süreli çalışma sırasında cihaz sıcaklığını ölçme",
+          "target_limits": {
+            "standard_mobile": {
+              "description": "Orta seviye mobil cihazlar için sıcaklık artışı sınırları",
+              "max_temperature_increase": "15°C",
+              "steady_state_increase": "10°C"
+            },
+            "high_end_mobile": {
+              "description": "Üst seviye mobil cihazlar için sıcaklık artışı sınırları",
+              "max_temperature_increase": "18°C",
+              "steady_state_increase": "12°C"
+            },
+            "low_end_mobile": {
+              "description": "Düşük seviye mobil cihazlar için sıcaklık artışı sınırları",
+              "max_temperature_increase": "12°C",
+              "steady_state_increase": "8°C"
+            }
+          },
+          "critical": true
+        },
+        "background_mode": {
+          "description": "Arka planda çalışma sırasındaki enerji tüketimi",
+          "test_strategy": "Arka planda çalışırken enerji tüketimini ölçme",
+          "target_limits": {
+            "idle_state": {
+              "description": "Boşta bekleme durumunda enerji tüketimi",
+              "max_power": "50mW",
+              "average_power": "20mW"
+            },
+            "background_processing": {
+              "description": "Arka planda işlem yaparken enerji tüketimi",
+              "max_power": "300mW",
+              "average_power": "200mW"
+            }
+          },
+          "critical": false
+        }
+      }
+    },
+    "scalability": {
+      "description": "Ölçeklenebilirlik ile ilgili performans sınırları",
+      "boundaries": {
+        "data_volume": {
+          "description": "Veri hacmi ölçeklenebilirliği",
+          "test_strategy": "Artan veri hacimleriyle model performansını ölçme",
+          "target_limits": {
+            "small_dataset": {
+              "description": "Küçük veri seti (100 örnek) işleme sınırları",
+              "indexing_time": "5s",
+              "memory_overhead": "20MB"
+            },
+            "medium_dataset": {
+              "description": "Orta boyutlu veri seti (1000 örnek) işleme sınırları",
+              "indexing_time": "30s",
+              "memory_overhead": "50MB"
+            },
+            "large_dataset": {
+              "description": "Büyük veri seti (10000 örnek) işleme sınırları",
+              "indexing_time": "5min",
+              "memory_overhead": "200MB"
+            }
+          },
+          "critical": false
+        },
+        "concurrent_operations": {
+          "description": "Eşzamanlı işlem ölçeklenebilirliği",
+          "test_strategy": "Eşzamanlı istek sayısını artırarak model performansını ölçme",
+          "target_limits": {
+            "low_concurrency": {
+              "description": "Düşük eşzamanlılık (2-4 istek) sınırları",
+              "max_latency_increase": "20%",
+              "throughput": "3 req/s"
+            },
+            "medium_concurrency": {
+              "description": "Orta düzeyde eşzamanlılık (5-8 istek) sınırları",
+              "max_latency_increase": "50%",
+              "throughput": "6 req/s"
+            },
+            "high_concurrency": {
+              "description": "Yüksek eşzamanlılık (>8 istek) sınırları",
+              "max_latency_increase": "100%",
+              "throughput": "8 req/s"
+            }
+          },
+          "critical": false
+        },
+        "adapter_scaling": {
+          "description": "Adapter sayısı ölçeklenebilirliği",
+          "test_strategy": "Modele eklenen adapter sayısını artırarak performansı ölçme",
+          "target_limits": {
+            "few_adapters": {
+              "description": "Az sayıda adapter (1-3) sınırları",
+              "memory_overhead": "10MB",
+              "inference_slowdown": "5%"
+            },
+            "medium_adapters": {
+              "description": "Orta sayıda adapter (4-10) sınırları",
+              "memory_overhead": "30MB",
+              "inference_slowdown": "15%"
+            },
+            "many_adapters": {
+              "description": "Çok sayıda adapter (>10) sınırları",
+              "memory_overhead": "80MB",
+              "inference_slowdown": "30%"
+            }
+          },
+          "critical": false
+        }
+      }
+    }
+  }
+} 

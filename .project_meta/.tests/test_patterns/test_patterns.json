@@ -1,0 +1,332 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM mobil model eğitimi için test kalıpları kataloğu",
+  "patterns": {
+    "setup_teardown": {
+      "description": "Test öncesi kurulum ve test sonrası temizlik işlemlerini gerçekleştiren kalıp",
+      "implementation": {
+        "setup": "Her testten önce temiz bir çalışma ortamı hazırlamak için model durumunu sıfırlama ve test veri ortamını oluşturma",
+        "teardown": "Her testten sonra model durumunu temizleme ve kullanılan kaynakları serbest bırakma",
+        "fixture_usage": "PyTest fixture'larını kullanarak kurulum ve temizlik işlemlerini otomatikleştirme"
+      },
+      "benefits": [
+        "Test izolasyonu sağlama",
+        "Kaynakların verimli yönetimi",
+        "Tutarlı test ortamı garantisi"
+      ],
+      "examples": [
+        "model_fixture", 
+        "dataset_fixture",
+        "training_environment_fixture"
+      ]
+    },
+    "isolated_component_test": {
+      "description": "Model bileşenlerini izole şekilde test eden kalıp",
+      "implementation": {
+        "component_isolation": "Test edilen bileşeni diğer bileşenlerden ayırarak test etme",
+        "dependency_mocking": "Bileşenin bağımlılıklarını mock nesnelerle değiştirme",
+        "focused_assertions": "Yalnızca test edilen bileşenin davranışları üzerine odaklanmış assertions kullanma"
+      },
+      "benefits": [
+        "Yüksek test hassasiyeti",
+        "Bileşen davranışının net anlaşılması",
+        "Hata lokalizasyonunun kolaylaştırılması"
+      ],
+      "examples": [
+        "adapter_isolation_test",
+        "embedding_component_test",
+        "loss_function_isolation_test"
+      ]
+    },
+    "parametrized_test": {
+      "description": "Birden fazla girdi kombinasyonu ile testleri parametrize eden kalıp",
+      "implementation": {
+        "data_parameterization": "Girdileri ve beklenen sonuçları parametrize etme",
+        "pytest_parametrize": "PyTest parametrize dekoratörünü kullanma",
+        "test_case_generation": "Geniş bir test uzayını kapsayan parametreler üretme"
+      },
+      "benefits": [
+        "Test kapsamını artırma",
+        "Kod tekrarını azaltma",
+        "Edge case'leri sistematik olarak kapsama"
+      ],
+      "examples": [
+        "batch_size_param_test",
+        "learning_rate_param_test",
+        "input_size_param_test"
+      ]
+    },
+    "golden_master_test": {
+      "description": "Bilinen çıktılarla karşılaştırma yaparak davranış değişikliklerini tespit eden kalıp",
+      "implementation": {
+        "output_snapshot": "Model çıktılarının snapshot'larını kaydetme",
+        "regression_detection": "Mevcut çıktıları referans sonuçlarla karşılaştırma",
+        "tolerance_setting": "Kabul edilebilir farklılık eşiklerini ayarlama"
+      },
+      "benefits": [
+        "Gerileme tespiti",
+        "Davranış kararlılığı doğrulama",
+        "İstemeden yayılan değişikliklerin tespit edilmesi"
+      ],
+      "examples": [
+        "embedding_comparison_test",
+        "training_loss_trend_test",
+        "model_weight_evolution_test"
+      ]
+    },
+    "performance_profile": {
+      "description": "Model performansını ölçen ve belirli kriterlere göre değerlendiren kalıp",
+      "implementation": {
+        "metric_collection": "Performans metriklerini toplama (bellek, CPU, pil)",
+        "threshold_validation": "Toplanan metrikleri kabul edilebilir eşiklerle karşılaştırma",
+        "trend_analysis": "Performans trendlerini zaman içinde izleme"
+      },
+      "benefits": [
+        "Performans gerileme tespiti",
+        "Kaynak kullanımı optimizasyonu",
+        "Mobil cihaz limitlerine uygunluk sağlama"
+      ],
+      "examples": [
+        "memory_usage_profile",
+        "training_time_profile",
+        "battery_drain_profile"
+      ]
+    },
+    "boundary_test": {
+      "description": "Sistemin sınır değerlerinde davranışını doğrulayan kalıp",
+      "implementation": {
+        "edge_case_generation": "Sınır değeri ve ekstrem girdi senaryolarını oluşturma",
+        "resource_limit_testing": "Kaynak sınırlarında çalışma testleri",
+        "error_handling_validation": "Sınır aşımı durumlarında hata işlemenin doğrulanması"
+      },
+      "benefits": [
+        "Dayanıklılık ve güvenilirlik artışı",
+        "Beklenmeyen girdi işleme doğrulama",
+        "Kaynak kısıtlı ortamlarda kararlılık sağlama"
+      ],
+      "examples": [
+        "zero_batch_size_test",
+        "maximum_sequence_length_test",
+        "minimal_memory_test"
+      ]
+    },
+    "integration_cascade": {
+      "description": "Bileşenleri aşamalı olarak entegre ederek test eden kalıp",
+      "implementation": {
+        "progressive_integration": "Bileşenleri adım adım entegre etme",
+        "interface_contract_test": "Bileşen arayüzlerini doğrulama",
+        "end_to_end_validation": "Tam entegrasyonla çalışma doğrulama"
+      },
+      "benefits": [
+        "Entegrasyon sorunlarının erken tespiti",
+        "Bileşenler arası uyumluluğun doğrulanması",
+        "Entegrasyon yolları boyunca kaynak davranışının takibi"
+      ],
+      "examples": [
+        "embedding_to_adapter_cascade",
+        "trainer_to_model_cascade",
+        "preprocessing_to_training_cascade"
+      ]
+    },
+    "simulated_environment": {
+      "description": "Farklı cihaz özelliklerini ve çalışma koşullarını simüle eden kalıp",
+      "implementation": {
+        "device_simulation": "Farklı mobil cihaz türlerini simüle etme",
+        "resource_constraint_simulation": "Bellek, CPU ve ağ kısıtlamalarını uygulama",
+        "environmental_variation": "Kesintili ağ, düşük pil gibi durumlarda test etme"
+      },
+      "benefits": [
+        "Gerçek dünya koşullarında davranış doğrulama",
+        "Çeşitli cihaz profilleri arasında tutarlılık sağlama",
+        "Zor senaryolarda dayanıklılık test etme"
+      ],
+      "examples": [
+        "low_memory_device_test",
+        "slow_cpu_test",
+        "interrupted_training_test"
+      ]
+    },
+    "property_based_test": {
+      "description": "Model davranışının belirli özelliklerini random girişlerle doğrulayan kalıp",
+      "implementation": {
+        "property_definition": "Modelinin değişmez özelliklerini tanımlama",
+        "random_input_generation": "Çeşitli rastgele girişler oluşturma",
+        "property_assertion": "Tüm girdiler için özelliklerin geçerli olduğunu doğrulama"
+      },
+      "benefits": [
+        "Kapsamlı test alanı",
+        "Beklenmeyen keşifler",
+        "Temel modelin ilkelerinin doğrulanması"
+      ],
+      "examples": [
+        "embedding_distance_property",
+        "training_convergence_property",
+        "output_shape_property"
+      ]
+    },
+    "comparative_test": {
+      "description": "Farklı model versiyonları veya yapılandırmalarını karşılaştıran kalıp",
+      "implementation": {
+        "side_by_side_execution": "Farklı modelleri aynı girdilerle çalıştırma",
+        "output_comparison": "Sonuçları karşılaştırma",
+        "regression_metrics": "İyileştirme veya gerileme metriklerini hesaplama"
+      },
+      "benefits": [
+        "Model değişikliklerinin etkisini ölçme",
+        "Optimizasyonların validasyonu",
+        "Yapılandırma değişikliklerinin karşılaştırılması"
+      ],
+      "examples": [
+        "adapter_vs_full_finetune",
+        "quantized_vs_full_precision",
+        "old_vs_new_architecture"
+      ]
+    },
+    "reproducibility_test": {
+      "description": "Sonuçların tekrarlanabilirliğini doğrulayan kalıp",
+      "implementation": {
+        "seed_control": "Rastsallık kaynaklarını kontrol etme",
+        "deterministic_setup": "Deterministik çalışma ortamı oluşturma",
+        "multiple_run_comparison": "Çoklu çalıştırma sonuçlarını karşılaştırma"
+      },
+      "benefits": [
+        "Sonuçların tutarlılığını sağlama",
+        "Hataların yeniden üretilebilmesi",
+        "Bilimsel kesinlik"
+      ],
+      "examples": [
+        "seed_controlled_training",
+        "deterministic_inference_test",
+        "cross_platform_reproducibility"
+      ]
+    },
+    "progression_test": {
+      "description": "Eğitim ilerlemesini zaman içinde değerlendiren kalıp",
+      "implementation": {
+        "checkpoint_validation": "Eğitim kontrol noktalarını doğrulama",
+        "learning_curve_analysis": "Öğrenme eğrilerini analiz etme",
+        "convergence_verification": "Yakınsama ve kararlılığı doğrulama"
+      },
+      "benefits": [
+        "Eğitim dinamiklerinin anlaşılması",
+        "Erken durma kriterlerinin doğrulanması",
+        "Model kararlılığının değerlendirilmesi"
+      ],
+      "examples": [
+        "loss_curve_test",
+        "gradient_norm_progression",
+        "weight_update_magnitude_test"
+      ]
+    },
+    "data_integrity_test": {
+      "description": "Veri işleme ve yükleme süreçlerinin bütünlüğünü doğrulayan kalıp",
+      "implementation": {
+        "data_transformation_verification": "Veri dönüşümlerinin doğruluğunu kontrol etme",
+        "pipeline_consistency": "Veri boru hattının tutarlı davranışını doğrulama",
+        "data_loading_stress": "Veri yükleme süreçlerini stres altında test etme"
+      },
+      "benefits": [
+        "Veri hatalarının önlenmesi",
+        "İşlem boru hattı güvenilirliği",
+        "Veri işleme tutarlılığı"
+      ],
+      "examples": [
+        "transformation_roundtrip_test",
+        "batch_shuffling_test",
+        "data_loader_stress_test"
+      ]
+    }
+  },
+  "anti_patterns": {
+    "flaky_timing_test": {
+      "description": "Zamanlama veya performansa aşırı duyarlı, istikrarsız sonuçlar üreten testler",
+      "consequences": [
+        "CI/CD hatalarının artması",
+        "Güvenilir olmayan test sonuçları",
+        "Test geçerliliklerinin sorgulanması"
+      ],
+      "remediation": "Mutlak zaman yerine göreli ölçümler kullanma, tolerans aralıkları belirleme, test yürütme ortamına uygun beklentiler oluşturma."
+    },
+    "boilerplate_test": {
+      "description": "Gerçek değer katmayan, yalnızca kapsam artırmak için yazılan şablon testler",
+      "consequences": [
+        "Bakım yükünün artması",
+        "Gerçek hataları yakalayamama",
+        "Yanıltıcı test kapsam metrikleri"
+      ],
+      "remediation": "Her testin açık bir amacı olduğundan emin olma, testleri işlevsellik veya özellik değişikliklerine göre yapılandırma, kalite odaklı test yaklaşımı benimseme."
+    },
+    "brittle_mock": {
+      "description": "Gerçek sistem davranışını doğru yansıtmayan, uygulamanın iç yapısına aşırı bağımlı mocklar",
+      "consequences": [
+        "Yapısal değişikliklerde sık bozulma",
+        "Yanlış güven",
+        "Gerçek entegrasyon sorunlarını gizleme"
+      ],
+      "remediation": "Mockların davranış odaklı olmasını sağlama, gerçek bileşenlerin davranışını taklit etmek için contract testleri kullanma, mockları minimum seviyede tutma."
+    },
+    "resource_leak": {
+      "description": "Test sonrası temizlik yapılmadığı için kaynak sızıntılarına yol açan testler",
+      "consequences": [
+        "Bellek ve kaynak tüketimi",
+        "Test paketi yürütme zamanının artması",
+        "Test ortamının bozulması"
+      ],
+      "remediation": "Kaynak kullanımını fixture'lar veya context manager'lar içine alma, kaynak temizliği için teardown mekanizmaları kullanma, kaynak izleme ve kontrol mekanizmaları ekleme."
+    },
+    "shotgun_test": {
+      "description": "Çok sayıda davranışı tek bir test içinde doğrulayan, odaklanmamış testler",
+      "consequences": [
+        "Hata nedenlerinin belirsizleşmesi",
+        "Bakım zorluğu",
+        "Artan test süresi"
+      ],
+      "remediation": "Testleri tek sorumluluk ilkesine göre bölme, her testin tek bir konsepti veya davranışı doğrulmasını sağlama, parametrize testler kullanarak tekrarı azaltma."
+    },
+    "happy_path_only": {
+      "description": "Sadece ideal yolu test eden, hata durumlarını ve uç durumları kapsamayan testler",
+      "consequences": [
+        "Gerçek kullanım senaryolarında beklenmeyen hatalar",
+        "Zayıf hata işleme",
+        "Yanlış güven"
+      ],
+      "remediation": "Sistematik olarak hata durumlarını test etme, uç durumlar ve sınır koşulları için kapsamlı test senaryoları oluşturma, negatif test senaryolarını dahil etme."
+    },
+    "hardcoded_time": {
+      "description": "Belirli bir tarihe veya saate bağlı olan, zamanla başarısız olacak testler",
+      "consequences": [
+        "Gelecekte beklenmeyen hatalar",
+        "Test bakımında artan yük",
+        "Yanlış pozitif/negatif sonuçlar"
+      ],
+      "remediation": "Göreceli zaman hesaplamaları kullanma, zaman bağımlılıklarını mock'lama, zaman tabanlı testler için parametrizasyon kullanma."
+    },
+    "interdependent_tests": {
+      "description": "Diğer testlerin yan etkilerine bağımlı olan, izolasyonu olmayan testler",
+      "consequences": [
+        "Kırılgan test paketi",
+        "Test sırasına bağımlılık",
+        "Hata ayıklama zorluğu"
+      ],
+      "remediation": "Her testi tamamen izole hale getirme, paylaşılan verileri fixture'lar aracılığıyla sağlama, testler arasında durum temizliği yapma."
+    },
+    "complex_test_logic": {
+      "description": "Karmaşık mantık içeren, kendi başına test edilmesi gereken testler",
+      "consequences": [
+        "Testlerin güvenilirliğine şüphe",
+        "Bakım zorluğu",
+        "Anlaşılabilirlik problemleri"
+      ],
+      "remediation": "Test mantığını basitleştirme, helper metotları test edilebilir şekilde ayrı tutma, test mantığını açık ve okunabilir tutma."
+    },
+    "test_duplication": {
+      "description": "Aynı işlevselliği tekrar tekrar test eden, tekrarlanan testler",
+      "consequences": [
+        "Bakım yükü artışı",
+        "Test süresinin uzaması",
+        "Kod tabanında şişkinlik"
+      ],
+      "remediation": "Ortak test senaryolarını parametrize testlerle birleştirme, test fixture'larını ve helper'ları kullanma, test kapsamını analiz ederek gereksiz testleri tespit etme."
+    }
+  }
+} 
