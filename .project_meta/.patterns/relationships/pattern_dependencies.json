@@ -1,92 +1,309 @@
 {
-  "version": "1.0.0",
-  "timestamp": "2024-06-23T14:35:00Z",
-  "relationships": [
+  "nodes": [
     {
-      "source_pattern_id": "PT-001",
-      "target_pattern_id": "PT-009",
-      "relationship_type": "uses",
-      "strength": 0.85,
-      "description": "ConfigurationDataclass (PT-001) tipik olarak doğrulama için ConfigValidationPipeline (PT-009) desenini kullanır."
+      "id": "PT-001",
+      "name": "ConfigurationDataclass",
+      "category": "configuration",
+      "centrality": 0.65
     },
     {
-      "source_pattern_id": "PT-003",
-      "target_pattern_id": "PT-016",
-      "relationship_type": "specializes",
-      "strength": 0.80,
-      "description": "VisionTransformerPatching (PT-016), ModelComposite (PT-003) deseninin görüntü işleme alanındaki özelleşmiş bir uygulamasıdır."
+      "id": "PT-002",
+      "name": "FactoryMethod",
+      "category": "creation",
+      "centrality": 0.78
     },
     {
-      "source_pattern_id": "PT-016",
-      "target_pattern_id": "PT-021",
-      "relationship_type": "uses",
-      "strength": 0.78,
-      "description": "VisionTransformerPatching (PT-016), farklı boyutlardaki görüntüleri işlemek için FlexibleInputProcessing (PT-021) desenini kullanır."
+      "id": "PT-003",
+      "name": "ModelComposite",
+      "category": "structural",
+      "centrality": 0.85
     },
     {
-      "source_pattern_id": "PT-021",
-      "target_pattern_id": "PT-023",
-      "relationship_type": "relies_on",
-      "strength": 0.75,
-      "description": "FlexibleInputProcessing (PT-021), farklı girdi türlerini işleyebilmek için ConditionalBehaviorStrategy (PT-023) desenine güvenir."
+      "id": "PT-006",
+      "name": "DatasetFactory",
+      "category": "creation",
+      "centrality": 0.55
     },
     {
-      "source_pattern_id": "PT-024",
-      "target_pattern_id": "PT-023",
-      "relationship_type": "uses",
-      "strength": 0.90,
-      "description": "DynamicPositionEncoding (PT-024), farklı kodlama stratejileri arasında seçim yapmak için ConditionalBehaviorStrategy (PT-023) desenini kullanır."
+      "id": "PT-007",
+      "name": "MechanismRegistry",
+      "category": "registration",
+      "centrality": 0.60
     },
     {
-      "source_pattern_id": "PT-024",
-      "target_pattern_id": "PT-021",
-      "relationship_type": "complements",
-      "strength": 0.82,
-      "description": "DynamicPositionEncoding (PT-024) ve FlexibleInputProcessing (PT-021) desenleri birbirini tamamlar, biri girdi işlemeyi diğeri pozisyon kodlamayı esnek hale getirir."
+      "id": "PT-008",
+      "name": "MetricsCollector",
+      "category": "behavioral",
+      "centrality": 0.45
     },
     {
-      "source_pattern_id": "PT-003",
-      "target_pattern_id": "PT-022",
-      "relationship_type": "uses",
-      "strength": 0.70,
-      "description": "ModelComposite (PT-003) genellikle ParameterizedModuleInitialization (PT-022) desenini kullanarak alt modüllerini başlatır."
+      "id": "PT-009",
+      "name": "ConfigValidationPipeline",
+      "category": "validation",
+      "centrality": 0.42
     },
     {
-      "source_pattern_id": "PT-002",
-      "target_pattern_id": "PT-023",
-      "relationship_type": "complements",
-      "strength": 0.65,
-      "description": "FactoryMethod (PT-002) ve ConditionalBehaviorStrategy (PT-023) desenleri genellikle birlikte çalışır, biri nesne oluşturma diğeri koşullu davranış uygulama sorumluluğunu üstlenir."
+      "id": "PT-010",
+      "name": "DataPreprocessingPipeline",
+      "category": "data",
+      "centrality": 0.50
     },
     {
-      "source_pattern_id": "PT-016",
-      "target_pattern_id": "PT-024",
-      "relationship_type": "uses",
-      "strength": 0.88,
-      "description": "VisionTransformerPatching (PT-016), pozisyon bilgilerini kodlamak için DynamicPositionEncoding (PT-024) desenini kullanır."
+      "id": "PT-012",
+      "name": "ConfigurationComposite",
+      "category": "configuration",
+      "centrality": 0.40
+    },
+    {
+      "id": "PT-013",
+      "name": "TrainingLoopTemplate",
+      "category": "behavioral",
+      "centrality": 0.75
+    },
+    {
+      "id": "PT-014",
+      "name": "CompositeAdapter",
+      "category": "adaptation",
+      "centrality": 0.70
+    },
+    {
+      "id": "PT-015",
+      "name": "PluggableComponentStrategy",
+      "category": "behavioral",
+      "centrality": 0.65
+    },
+    {
+      "id": "PT-016",
+      "name": "VisionTransformerPatching",
+      "category": "image_processing",
+      "centrality": 0.55
+    },
+    {
+      "id": "PT-017",
+      "name": "DecoratorPattern",
+      "category": "behavioral",
+      "centrality": 0.50
+    },
+    {
+      "id": "PT-020",
+      "name": "DocTemplateSystem",
+      "category": "documentation",
+      "centrality": 0.35
+    },
+    {
+      "id": "PT-021",
+      "name": "LiveCodeExamples",
+      "category": "documentation",
+      "centrality": 0.30
+    },
+    {
+      "id": "PT-021",
+      "name": "FlexibleInputProcessing",
+      "category": "data_processing",
+      "centrality": 0.45
+    },
+    {
+      "id": "PT-022",
+      "name": "ParameterizedModuleInitialization",
+      "category": "initialization",
+      "centrality": 0.40
+    },
+    {
+      "id": "PT-023",
+      "name": "ConditionalBehaviorStrategy",
+      "category": "behavioral",
+      "centrality": 0.55
+    },
+    {
+      "id": "PT-024",
+      "name": "DynamicPositionEncoding",
+      "category": "transformer",
+      "centrality": 0.50
+    },
+    {
+      "id": "PT-025",
+      "name": "AdapterPattern",
+      "category": "adaptation",
+      "centrality": 0.85
+    },
+    {
+      "id": "PT-026",
+      "name": "CompositeModelPattern",
+      "category": "structural",
+      "centrality": 0.80
+    },
+    {
+      "id": "PT-027",
+      "name": "MobileOptimizationPattern",
+      "category": "optimization",
+      "centrality": 0.75
+    },
+    {
+      "id": "PT-028",
+      "name": "TestFixturePattern",
+      "category": "testing",
+      "centrality": 0.65
+    },
+    {
+      "id": "PT-029",
+      "name": "ParametrizedTestPattern",
+      "category": "testing",
+      "centrality": 0.70
+    }
+  ],
+  "edges": [
+    {
+      "source": "PT-001",
+      "target": "PT-009",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "PT-003",
+      "target": "PT-014",
+      "type": "uses",
+      "strength": 0.8
+    },
+    {
+      "source": "PT-003",
+      "target": "PT-026",
+      "type": "similar_to",
+      "strength": 0.7
+    },
+    {
+      "source": "PT-013",
+      "target": "PT-008",
+      "type": "uses",
+      "strength": 0.6
+    },
+    {
+      "source": "PT-014",
+      "target": "PT-025",
+      "type": "similar_to",
+      "strength": 0.85
+    },
+    {
+      "source": "PT-014",
+      "target": "PT-026",
+      "type": "used_by",
+      "strength": 0.75
+    },
+    {
+      "source": "PT-015",
+      "target": "PT-007",
+      "type": "uses",
+      "strength": 0.7
+    },
+    {
+      "source": "PT-016",
+      "target": "PT-021",
+      "type": "uses",
+      "strength": 0.5
+    },
+    {
+      "source": "PT-020",
+      "target": "PT-021",
+      "type": "used_by",
+      "strength": 0.9
+    },
+    {
+      "source": "PT-023",
+      "target": "PT-015",
+      "type": "similar_to",
+      "strength": 0.6
+    },
+    {
+      "source": "PT-024",
+      "target": "PT-023",
+      "type": "uses",
+      "strength": 0.7
+    },
+    {
+      "source": "PT-025",
+      "target": "PT-026",
+      "type": "used_by",
+      "strength": 0.95
+    },
+    {
+      "source": "PT-025",
+      "target": "PT-027",
+      "type": "complements",
+      "strength": 0.8
+    },
+    {
+      "source": "PT-026",
+      "target": "PT-003",
+      "type": "extends",
+      "strength": 0.75
+    },
+    {
+      "source": "PT-026",
+      "target": "PT-014",
+      "type": "implements",
+      "strength": 0.7
+    },
+    {
+      "source": "PT-027",
+      "target": "PT-025",
+      "type": "enhances",
+      "strength": 0.85
+    },
+    {
+      "source": "PT-027",
+      "target": "PT-021",
+      "type": "uses",
+      "strength": 0.6
+    },
+    {
+      "source": "PT-028",
+      "target": "PT-029",
+      "type": "used_with",
+      "strength": 0.9
+    },
+    {
+      "source": "PT-029",
+      "target": "PT-028",
+      "type": "enhances",
+      "strength": 0.85
     }
   ],
   "clusters": [
     {
-      "cluster_id": "CL-001",
-      "name": "Configuration Management Patterns",
+      "id": "C1",
+      "name": "Model Architecture",
+      "patterns": ["PT-003", "PT-014", "PT-025", "PT-026"],
+      "cohesion": 0.85
+    },
+    {
+      "id": "C2",
+      "name": "Configuration",
       "patterns": ["PT-001", "PT-009", "PT-012"],
-      "coherence": 0.85,
-      "description": "Yapılandırma yönetimi ve doğrulamasıyla ilgili desenler kümesi."
+      "cohesion": 0.75
     },
     {
-      "cluster_id": "CL-002",
-      "name": "Model Creation and Composition Patterns",
-      "patterns": ["PT-002", "PT-003", "PT-014", "PT-022"],
-      "coherence": 0.80,
-      "description": "Model oluşturma ve birleştirme ile ilgili desenler kümesi."
+      "id": "C3",
+      "name": "Factory & Registry",
+      "patterns": ["PT-002", "PT-006", "PT-007"],
+      "cohesion": 0.8
     },
     {
-      "cluster_id": "CL-003",
-      "name": "Input Processing and Encoding Patterns",
-      "patterns": ["PT-016", "PT-021", "PT-023", "PT-024"],
-      "coherence": 0.88,
-      "description": "Girdi işleme, dönüştürme ve kodlama ile ilgili desenler kümesi."
+      "id": "C4",
+      "name": "Testing",
+      "patterns": ["PT-028", "PT-029"],
+      "cohesion": 0.9
+    },
+    {
+      "id": "C5",
+      "name": "Mobile Optimization",
+      "patterns": ["PT-025", "PT-027"],
+      "cohesion": 0.85
     }
-  ]
+  ],
+  "metrics": {
+    "density": 0.42,
+    "clustering_coefficient": 0.65,
+    "average_path_length": 2.8,
+    "strongly_connected_components": 3
+  },
+  "last_updated": "2024-06-23"
 } 

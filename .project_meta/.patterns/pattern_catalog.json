@@ -725,6 +725,106 @@
       ],
       "related_patterns": ["PT-023", "PT-021", "PT-016"],
       "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-025",
+      "name": "AdapterPattern",
+      "category": "adaptation",
+      "description": "Mevcut bir modelin fonksiyonelliğini yeniden eğitime gerek kalmadan düşük parametreli bir katman ile değiştirmeye olanak tanıyan desen",
+      "benefits": [
+        "Büyük modelleri verimli bir şekilde özelleştirme",
+        "Düşük depolama ve bellek gereksinimleri",
+        "Mobil cihazlarda eğitim için optimize edilebilir",
+        "Transfer öğrenme uygulamalarını kolaylaştırır"
+      ],
+      "implementation_notes": "Dar bir dönüşüm katmanı (bottleneck) ve genişletme katmanı içeren, orjinal modelin davranışını değiştirmek için mimari yapıya dahil edilen bir modül olarak uygulanır. Adaptör, genellikle aşağı-yukarı ölçekleme yapısı içerir ve skip connection ile birleştirilir.",
+      "examples": [
+        "m3tm.adapters.BottleneckAdapter",
+        "m3tm.training.adapter_training.AdapterTrainingManager",
+        "tests/training/test_on_device_training.py:CompositeModel"
+      ],
+      "related_patterns": ["PT-003", "PT-014", "PT-026"],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-026",
+      "name": "CompositeModelPattern",
+      "category": "structural",
+      "description": "Farklı model bileşenlerini birleştirerek yeni bir fonksiyonellik sağlayan yapısal desen",
+      "benefits": [
+        "Mevcut modelleri yeniden kullanma",
+        "Mimari esneklik sağlama",
+        "Modüler yapı ile bakım kolaylığı",
+        "Farklı bileşenlerin ayrı ayrı test edilebilmesi"
+      ],
+      "implementation_notes": "Ana model ile adapter gibi yardımcı bileşenleri birleştiren bir sarmalayıcı sınıf olarak uygulanır. forward metodunda giriş verilerini işleyip çıktıların doğru formatta döndürülmesini sağlar. Eğitim döngüsü ile uyumlu olması için genellikle eğitici (trainer) sınıfın beklediği veri formatını dikkate alır.",
+      "examples": [
+        "tests/training/test_on_device_training.py:CompositeModel",
+        "m3tm.training.trainer.TextClassificationModel"
+      ],
+      "related_patterns": ["PT-003", "PT-014", "PT-025"],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-027",
+      "name": "MobileOptimizationPattern",
+      "category": "optimization",
+      "description": "Modelleri mobil cihazlarda verimli çalışacak şekilde optimize eden desen",
+      "benefits": [
+        "Düşük depolama gereksinimleri",
+        "Hızlı çıkarım süresi",
+        "Batarya kullanımını azaltma",
+        "Sınırlı donanım kaynaklarında performans sağlama"
+      ],
+      "implementation_notes": "Modellerden gereksiz katmanları kaldırma, kuantalama, budama (pruning), model sıkıştırma ve platform spesifik optimizasyonlar uygulanır. Genellikle optimize_model_for_mobile gibi işlevlerle gerçekleştirilir ve TorchScript veya ONNX formatına dönüştürme içerebilir.",
+      "examples": [
+        "m3tm.mobile.optimization.optimize_model_for_mobile",
+        "tests/training/test_on_device_training.py"
+      ],
+      "related_patterns": ["PT-025", "PT-021"],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-028",
+      "name": "TestFixturePattern",
+      "category": "testing",
+      "description": "Test öncesi ortam kurulumu ve test sonrası temizleme işlemlerini standartlaştıran desen",
+      "benefits": [
+        "Test kodunun yeniden kullanılabilirliği",
+        "Tekrarlanan kurulum/temizleme kodunun azaltılması",
+        "Test izolasyonunun sağlanması",
+        "Kaynakların etkin yönetimi"
+      ],
+      "implementation_notes": "pytest fixture'ları kullanarak, testlerin ihtiyaç duyduğu nesnelerin oluşturulması ve testlerden sonra temizlenmesi sağlanır. Özellikle bellek yoğun işlemlerde önemlidir.",
+      "examples": [
+        "tests/training/test_on_device_training.py:model_fixture",
+        "tests/training/test_on_device_training.py:adapter_fixture",
+        "tests/training/test_on_device_training.py:trainer_fixture",
+        "tests/training/test_on_device_training.py:dummy_dataset"
+      ],
+      "related_patterns": [],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-029",
+      "name": "ParametrizedTestPattern",
+      "category": "testing",
+      "description": "Aynı test kodunu farklı parametrelerle çalıştırmayı sağlayan test deseni",
+      "benefits": [
+        "Test kapsamının artırılması",
+        "Tekrarlı test kodu yazımının azaltılması",
+        "Sınır değerlerin ve farklı senaryoların kolay test edilmesi",
+        "Test bakımının kolaylaştırılması"
+      ],
+      "implementation_notes": "pytest.mark.parametrize dekoratörü kullanılarak, aynı test fonksiyonu farklı giriş parametreleriyle birden çok kez çalıştırılır. Bu desen, özellikle farklı model boyutları, batch size'lar veya öğrenme oranları gibi değişkenlerin test edilmesinde kullanışlıdır.",
+      "examples": [
+        "tests/training/test_on_device_training.py:test_training_parameters",
+        "tests/training/test_on_device_training.py:test_boundary_batch_sizes",
+        "tests/training/test_on_device_training.py:test_boundary_sequence_lengths",
+        "tests/training/test_on_device_training.py:test_adapter_output_shape_property"
+      ],
+      "related_patterns": ["PT-028"],
+      "last_updated": "2024-06-23"
     }
   ],
   "last_updated": "2024-06-23"

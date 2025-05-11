@@ -221,5 +221,118 @@
       "previous": 0.82,
       "trend": "improving"
     }
-  }
+  },
+  "evolution_history": [
+    {
+      "date": "2024-06-23",
+      "event_type": "pattern_discovery",
+      "patterns": ["PT-025", "PT-026", "PT-027", "PT-028", "PT-029"],
+      "summary": "Test dosyalarının analizi sırasında, on-device training yapısı içerisinde 5 yeni pattern tespit edildi.",
+      "context": "M3TM modelinin test dosyaları incelenirken, AdapterPattern, CompositeModelPattern, MobileOptimizationPattern ve iki test deseni keşfedildi."
+    }
+  ],
+  "pattern_lifecycle": [
+    {
+      "pattern_id": "PT-025",
+      "name": "AdapterPattern",
+      "status": "active",
+      "lifecycle_stage": "growing",
+      "discovery_date": "2024-06-23",
+      "evolution_events": [
+        {
+          "date": "2024-06-23",
+          "event_type": "initial_discovery",
+          "description": "Adapter Pattern, test dosyalarında belirgin bir şekilde tanımlandı ve kataloglandı."
+        }
+      ],
+      "future_directions": "Farklı adapter yapılarını desteklemek için genişletilmesi ve diğer model türleriyle entegrasyonunun güçlendirilmesi planlanmaktadır."
+    },
+    {
+      "pattern_id": "PT-026",
+      "name": "CompositeModelPattern",
+      "status": "active",
+      "lifecycle_stage": "growing",
+      "discovery_date": "2024-06-23",
+      "evolution_events": [
+        {
+          "date": "2024-06-23",
+          "event_type": "initial_discovery",
+          "description": "CompositeModelPattern, test kodlarında tekrarlanan bir yapı olarak tespit edildi ve kataloglandı."
+        }
+      ],
+      "future_directions": "Standartlaştırılmış bir arayüz veya temel sınıf oluşturularak genelleştirilmesi planlanmaktadır."
+    },
+    {
+      "pattern_id": "PT-027",
+      "name": "MobileOptimizationPattern",
+      "status": "active",
+      "lifecycle_stage": "growing",
+      "discovery_date": "2024-06-23",
+      "evolution_events": [
+        {
+          "date": "2024-06-23",
+          "event_type": "initial_discovery",
+          "description": "MobileOptimizationPattern, mobil cihazlarda çalışan modeller için özelleştirilmiş optimize etme deseni olarak tanımlandı."
+        }
+      ],
+      "future_directions": "Kuantalama, budama ve model sıkıştırma tekniklerinin geliştirilmesi ile genişletilecektir."
+    },
+    {
+      "pattern_id": "PT-028",
+      "name": "TestFixturePattern",
+      "status": "active",
+      "lifecycle_stage": "stable",
+      "discovery_date": "2024-06-23",
+      "evolution_events": [
+        {
+          "date": "2024-06-23",
+          "event_type": "initial_discovery",
+          "description": "TestFixturePattern, test kodlarında kaynak yönetimi ve kurulum/temizleme işlemleri için kullanılan bir desen olarak tanımlandı."
+        }
+      ],
+      "future_directions": "Fixture'ların paylaşımı ve yeniden kullanılabilirliği için geliştirilecektir."
+    },
+    {
+      "pattern_id": "PT-029",
+      "name": "ParametrizedTestPattern",
+      "status": "active",
+      "lifecycle_stage": "stable",
+      "discovery_date": "2024-06-23",
+      "evolution_events": [
+        {
+          "date": "2024-06-23",
+          "event_type": "initial_discovery",
+          "description": "ParametrizedTestPattern, test çeşitliliğini artırmak ve kod tekrarını azaltmak için kullanılan bir desen olarak tanımlandı."
+        }
+      ],
+      "future_directions": "Veri odaklı test yaklaşımlarıyla birleştirilerek genişletilecektir."
+    }
+  ],
+  "pattern_relationships_evolution": [
+    {
+      "date": "2024-06-23",
+      "summary": "AdapterPattern ve CompositeModelPattern arasında güçlü bir ilişki tespit edildi. Bu iki pattern genellikle birlikte kullanılıyor.",
+      "relationship_changes": [
+        {
+          "pattern_ids": ["PT-025", "PT-026"],
+          "relationship_type": "complementary",
+          "strength": "high",
+          "notes": "AdapterPattern, CompositeModelPattern içinde sıklıkla kullanılarak modüler ve esnek bir yapı sağlar."
+        },
+        {
+          "pattern_ids": ["PT-025", "PT-027"],
+          "relationship_type": "complementary",
+          "strength": "medium",
+          "notes": "AdapterPattern, MobileOptimizationPattern ile birlikte kullanıldığında mobil cihazlarda verimli çalışan kişiselleştirilmiş modeller oluşturulabilir."
+        },
+        {
+          "pattern_ids": ["PT-028", "PT-029"],
+          "relationship_type": "complementary",
+          "strength": "high",
+          "notes": "TestFixturePattern ve ParametrizedTestPattern genellikle birlikte kullanılarak kapsamlı ve verimli test suiteleri oluşturulabilir."
+        }
+      ]
+    }
+  ],
+  "last_updated": "2024-06-23"
 } 
