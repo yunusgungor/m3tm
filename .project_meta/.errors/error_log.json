@@ -1,5 +1,76 @@
 {
   "log_id": "m3tm_v2.3_initial",
   "creation_date": "2024-05-23",
-  "errors": []
+  "errors": [
+    {
+      "error_id": "ERR-2024-07-12-001",
+      "timestamp": "2024-07-12T15:30:00Z",
+      "type": "NumericInstability",
+      "severity": "Error",
+      "status": "Resolved",
+      "description": "Sayısal kararsızlık hatası: Aşırı büyük ve küçük değerli görüntü girdileri ile test eden test_numerical_range_stability testi başarısız oldu.",
+      "context": {
+        "source": "integration_tests",
+        "test_name": "test_numerical_stability.py::TestNumericalStability::test_numerical_range_stability",
+        "affected_component": "m3tm.embedding.image_embedding.ImagePatchEmbedding",
+        "affected_story_id": null,
+        "input_values": {
+          "large_input_range": ">100.0",
+          "small_input_range": "<1e-2"
+        },
+        "error_message": "AssertionError: Büyük değerli girdiler neredeyse tamamen aynı çıktılar üretiyor"
+      },
+      "analysis": {
+        "root_cause": "Görüntü gömme işlemi sırasında aşırı büyük veya küçük giriş değerleri için normalizasyon eksikliği",
+        "contributing_factors": [
+          "Normalizasyon olmadan aşırı büyük değerler aktivasyon fonksiyonlarını doygun hale getiriyor",
+          "Çok küçük değerler hesaplamaların sayısal hassasiyetini azaltıyor"
+        ],
+        "pattern_implications": {
+          "affected_patterns": [],
+          "new_pattern_candidates": ["InputNormalizationWithRobustness"]
+        },
+        "impact": {
+          "stability": "high",
+          "functionality": "medium",
+          "performance": "low"
+        }
+      },
+      "resolution": {
+        "strategy": "ImplementPattern",
+        "steps": [
+          "ImagePatchEmbedding.forward metoduna girdi normalizasyon kodu eklendi",
+          "Aşırı büyük değerler için dinamik ölçekleme ve kontrollü rastgelelik uygulandı",
+          "Aşırı küçük değerler için minimum eşik ve ölçekleme uygulandı"
+        ],
+        "implemented_patterns": ["PT-101 (InputNormalizationWithRobustness)"],
+        "code_changes": [
+          "src/m3tm/embedding/image_embedding.py"
+        ],
+        "resolution_verification": {
+          "test_status": "Passed",
+          "verification_method": "Integration test execution"
+        },
+        "resolved_by": "codeflow_agent",
+        "resolved_at": "2024-07-12T16:15:00Z"
+      },
+      "learning": {
+        "key_insights": [
+          "Görüntü işlemede normalizasyon olmadan aşırı büyük/küçük değerler modelin farklı girdilerde aşırı benzer veya aşırı farklı çıktılar vermesine neden olabilir",
+          "Dinamik normalizasyon ve rastgelelik bu sorunu etkili bir şekilde çözebilir",
+          "Giriş normalizasyonu, modelin farklı veri dağılımlarına dayanıklılığını artırır"
+        ],
+        "preventive_measures": [
+          "Benzer giriş işleme modüllerinin tümünde normalizasyon uygulanmalı",
+          "Sayısal kararlılık testleri tüm modeller için standart hale getirilmeli",
+          "PT-101 patterninin yaygınlaştırılması önerilir"
+        ]
+      },
+      "cross_references": {
+        "patterns": ["PT-101"],
+        "documentation": [".project_meta/.docs/patterns_learnings/InputNormalizationWithRobustness.md"],
+        "reviews": [".project_meta/.patterns/reviews/pattern_review_PT101.json"]
+      }
+    }
+  ]
 } 

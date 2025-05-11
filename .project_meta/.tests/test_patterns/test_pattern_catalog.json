@@ -1,0 +1,23 @@
+{
+  "patterns": {
+    "multidimensional_parameter_sweep": {
+      "name": "multidimensional_parameter_sweep",
+      "description": "Birden fazla model parametresinin farklı kombinasyonlarıyla test gerçekleştirir",
+      "implementation": {
+        "parameter_space_definition": "Test edilecek parametrelerin ve her biri için değerler aralığının tanımlanması",
+        "sweep_strategy": "Tam veya örneklenmiş parametre uzayının taranması stratejisi",
+        "result_aggregation": "Parametre kombinasyonları genelinde sonuçların toplanması ve analizi"
+      },
+      "benefits": [
+        "Parametre etkileşimlerini tespit etme",
+        "En iyi parametre kombinasyonlarını belirleme",
+        "Model davranışının hassasiyetini haritalama"
+      ],
+      "examples": [
+        "layer_size_vs_dropout_sweep",
+        "learning_rate_vs_batch_size_sweep",
+        "attention_heads_vs_ffn_dim_sweep"
+      ]
+    }
+  }
+} 

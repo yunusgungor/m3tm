@@ -148,8 +148,8 @@ class BottleneckAdapter(Adapter):
         """
         super().__init__(config, input_dim)
         
-        self.down_proj = nn.Linear(input_dim, config.bottleneck_dim)
-        self.up_proj = nn.Linear(config.bottleneck_dim, input_dim)
+        self._down_proj = nn.Linear(input_dim, config.bottleneck_dim)
+        self._up_proj = nn.Linear(config.bottleneck_dim, input_dim)
         self.activation = self.get_activation()
         
         # Opsiyonel layer normalization
@@ -172,10 +172,10 @@ class BottleneckAdapter(Adapter):
     
     def _init_weights(self) -> None:
         """Ağırlıkları başlat."""
-        nn.init.normal_(self.down_proj.weight, std=self.config.init_scale)
-        nn.init.normal_(self.up_proj.weight, std=self.config.init_scale)
-        nn.init.zeros_(self.down_proj.bias)
-        nn.init.zeros_(self.up_proj.bias)
+        nn.init.normal_(self._down_proj.weight, std=self.config.init_scale)
+        nn.init.normal_(self._up_proj.weight, std=self.config.init_scale)
+        nn.init.zeros_(self._down_proj.bias)
+        nn.init.zeros_(self._up_proj.bias)
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -185,10 +185,19 @@ class BottleneckAdapter(Adapter):
         Returns:
             Adapter çıktısı, şekil (batch_size, seq_len, input_dim)
         """
+        # x bir sözlük ise, girdi olarak doğru değeri al
+        if isinstance(x, dict):
+            if 'hidden_states' in x:
+                x = x['hidden_states']
+            elif 'embeddings' in x:
+                x = x['embeddings']
+            elif len(x) == 1:  # Tek bir anahtar varsa, değeri doğrudan al
+                x = list(x.values())[0]
+        
         residual = x
         
         # Down-projeksiyon
-        h = self.down_proj(x)
+        h = self._down_proj(x)
         
         # Layer normalization (varsa)
         if self.layer_norm is not None:
@@ -202,7 +211,7 @@ class BottleneckAdapter(Adapter):
             h = self.dropout(h)
         
         # Up-projeksiyon
-        h = self.up_proj(h)
+        h = self._up_proj(h)
         
         # Artık bağlantı
         if self.use_residual:
@@ -246,8 +255,8 @@ class ParallelAdapter(Adapter):
         self.layer_norm = nn.LayerNorm(input_dim)
         
         # Projeksiyon katmanları
-        self.down_proj = nn.Linear(input_dim, config.bottleneck_dim)
-        self.up_proj = nn.Linear(config.bottleneck_dim, input_dim)
+        self._down_proj = nn.Linear(input_dim, config.bottleneck_dim)
+        self._up_proj = nn.Linear(config.bottleneck_dim, input_dim)
         
         # Aktivasyon
         self.activation = self.get_activation()
@@ -266,10 +275,10 @@ class ParallelAdapter(Adapter):
     
     def _init_weights(self) -> None:
         """Ağırlıkları başlat."""
-        nn.init.normal_(self.down_proj.weight, std=self.config.init_scale)
-        nn.init.normal_(self.up_proj.weight, std=self.config.init_scale)
-        nn.init.zeros_(self.down_proj.bias)
-        nn.init.zeros_(self.up_proj.bias)
+        nn.init.normal_(self._down_proj.weight, std=self.config.init_scale)
+        nn.init.normal_(self._up_proj.weight, std=self.config.init_scale)
+        nn.init.zeros_(self._down_proj.bias)
+        nn.init.zeros_(self._up_proj.bias)
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -279,11 +288,20 @@ class ParallelAdapter(Adapter):
         Returns:
             Adapter çıktısı, şekil (batch_size, seq_len, input_dim)
         """
+        # x bir sözlük ise, girdi olarak doğru değeri al
+        if isinstance(x, dict):
+            if 'hidden_states' in x:
+                x = x['hidden_states']
+            elif 'embeddings' in x:
+                x = x['embeddings']
+            elif len(x) == 1:  # Tek bir anahtar varsa, değeri doğrudan al
+                x = list(x.values())[0]
+        
         # Layer normalization
         h = self.layer_norm(x)
         
         # Down-projeksiyon
-        h = self.down_proj(h)
+        h = self._down_proj(h)
         
         # Aktivasyon
         h = self.activation(h)
@@ -293,26 +311,56 @@ class ParallelAdapter(Adapter):
             h = self.dropout(h)
         
         # Up-projeksiyon
-        h = self.up_proj(h)
+        h = self._up_proj(h)
         
         # Ölçeklendirilmiş toplama
         return x + self.alpha * h
 
 
-def create_adapter(config: AdapterConfig, input_dim: int) -> Adapter:
+def create_adapter(config: Union[AdapterConfig, int] = None, input_dim: int = None, **kwargs) -> Adapter:
     """
     Verilen yapılandırma ve girdi boyutuna göre uygun adapter'ı oluşturur.
     
     Args:
-        config: Adapter yapılandırması
-        input_dim: Girdi boyutu
+        config: Adapter yapılandırması veya input_dim parametresi kullanılacaksa girdi boyutu
+        input_dim: Girdi boyutu (config bir AdapterConfig ise) veya bottleneck_dim (config bir int ise)
+        **kwargs: Doğrudan parametre olarak bottleneck_dim, adapter_type, vs.
         
     Returns:
         Oluşturulan adapter
     """
-    if config.adapter_type == AdapterType.BOTTLENECK:
-        return BottleneckAdapter(config, input_dim)
-    elif config.adapter_type == AdapterType.PARALLEL:
-        return ParallelAdapter(config, input_dim)
-    else:
-        raise ValueError(f"Geçersiz adapter türü: {config.adapter_type}") 
+    # Geriye dönük uyumluluk desteği
+    if isinstance(config, int) and input_dim is not None:
+        # Eski kullanım şekli: create_adapter(input_dim, bottleneck_dim)
+        _input_dim = config  # İlk parametre aslında input_dim
+        bottleneck_dim = input_dim  # İkinci parametre aslında bottleneck_dim
+        
+        # AdapterConfig oluştur
+        adapter_config = AdapterConfig(bottleneck_dim=bottleneck_dim)
+        return create_adapter(adapter_config, _input_dim)
+    
+    # Yeni kullanım: create_adapter(adapter_config, input_dim)
+    if isinstance(config, AdapterConfig) and input_dim is not None:
+        if config.adapter_type == AdapterType.BOTTLENECK:
+            return BottleneckAdapter(config, input_dim)
+        elif config.adapter_type == AdapterType.PARALLEL:
+            return ParallelAdapter(config, input_dim)
+        else:
+            raise ValueError(f"Geçersiz adapter türü: {config.adapter_type}")
+    
+    # Doğrudan kwargs kullanımı: create_adapter(input_dim=64, bottleneck_dim=16)
+    if config is None and input_dim is not None and 'bottleneck_dim' in kwargs:
+        bottleneck_dim = kwargs.pop('bottleneck_dim')
+        adapter_type = kwargs.pop('adapter_type', AdapterType.BOTTLENECK)
+        adapter_config = AdapterConfig(
+            bottleneck_dim=bottleneck_dim,
+            adapter_type=adapter_type,
+            **kwargs
+        )
+        return create_adapter(adapter_config, input_dim)
+    
+    # Hatalı kullanım
+    raise ValueError("Geçersiz parametre kombinasyonu. Şu formatlardan birini kullanın: "
+                    "create_adapter(adapter_config, input_dim), "
+                    "create_adapter(input_dim, bottleneck_dim), "
+                    "create_adapter(input_dim=64, bottleneck_dim=16)") 

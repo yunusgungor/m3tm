@@ -717,4 +717,82 @@ def get_tiny_config() -> M3TMConfig:
     config.fused_embed_dim = 32
     config.search_embed_dim = 32
     
+    return config
+
+def get_small_config() -> M3TMConfig:
+    """Küçük-orta model yapılandırmasını döndürür.
+    
+    Tiny'dan daha büyük ancak tam boyutlu modelden daha küçük boyutlar içerir.
+    Mobil performans testleri için uygundur.
+    """
+    # Tek adımda tüm bileşenleri oluşturalım
+    
+    # 1. Metin yapılandırması
+    text_config = TextEmbeddingConfig(
+        vocab_size=2000,
+        embed_dim=32,
+        max_seq_len=192
+    )
+    
+    # 2. Görüntü yapılandırması
+    image_config = ImagePatchEmbeddingConfig(
+        embed_dim=32,
+        patch_size=4,
+        image_size=(160, 160)
+    )
+    
+    # 3. Transformer yapılandırması
+    transformer_config = TransformerConfig(
+        embed_dim=32,
+        num_heads=4,
+        mlp_ratio=4.0, 
+        ffn_hidden_dim=128,
+        _skip_post_init=True
+    )
+    
+    # 4. Füzyon yapılandırması
+    fusion_config = FusionConfig(
+        text_dim=32,
+        image_dim=32,
+        output_dim=64,
+        text_embed_dim=32,
+        image_embed_dim=32,
+        fused_embed_dim=64
+    )
+    
+    # 5. Arama yapılandırması
+    search_config = SearchConfig(
+        input_dim=64,
+        search_dim=64
+    )
+    
+    # 6. Adapter yapılandırması
+    adapter_config = AdapterConfig(
+        embed_dim=32,
+        reduction_factor=4,
+        input_dim=32,
+        bottleneck_dim=8
+    )
+    
+    # 7. Ana model yapılandırması
+    config = M3TMConfig(
+        text_config=text_config,
+        image_config=image_config,
+        transformer_config=transformer_config,
+        fusion_config=fusion_config,
+        search_config=search_config,
+        adapter_config=adapter_config,
+        num_transformer_blocks=4,
+        num_core_blocks=4,
+        fused_embed_dim=64,
+        search_embed_dim=64,
+        _skip_validation=True  # Doğrulama işlemini atla
+    )
+    
+    # Debug çıktısı
+    print(f"\n=== GET_SMALL_CONFIG FINAL ===")
+    print(f"Final transformer_config.ffn_hidden_dim: {config.transformer_config.ffn_hidden_dim}")
+    print(f"Final transformer_config._skip_post_init: {config.transformer_config._skip_post_init}")
+    print(f"=== END ===\n")
+    
     return config 

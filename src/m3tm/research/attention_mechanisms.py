@@ -395,6 +395,210 @@ class LinformerAttention(nn.Module):
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
 
 
+@AttentionMechanismRegistry.register
+class MobileAttention(nn.Module):
+    """Mobil cihazlar için optimize edilmiş dikkat mekanizması.
+    
+    Referans: "MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer"
+    https://arxiv.org/abs/2110.02178
+    
+    Bu mekanizma, derinlik yönlü ayrılabilir konvolüsyonlar ve dikkat sıkıştırma teknikleri 
+    kullanarak, sınırlı kaynakları olan mobil cihazlarda verimli çalışmayı hedefler.
+    """
+    
+    def __init__(self, config: MobileAttentionConfig):
+        """
+        Args:
+            config: MobileAttention dikkat mekanizması yapılandırması
+        """
+        super().__init__()
+        self.config = config
+        
+        if config.head_dim * config.num_heads != config.input_dim:
+            self.head_dim = config.input_dim // config.num_heads
+        else:
+            self.head_dim = config.head_dim
+            
+        self.num_heads = config.num_heads
+        self.input_dim = config.input_dim
+        self.depth_wise = config.depth_wise
+        self.squeeze_factor = config.squeeze_factor
+        self.use_gating = config.use_gating
+        
+        # Derinlik yönlü ayrılabilir projeksiyonlar
+        if self.depth_wise:
+            # Derinlik yönlü ayrılabilir konvolüsyonlar (1x1 konvolüsyon + derinlik yönlü konvolüsyon)
+            self.q_proj_depth = nn.Conv1d(self.input_dim, self.input_dim, kernel_size=1, groups=1)
+            self.k_proj_depth = nn.Conv1d(self.input_dim, self.input_dim, kernel_size=1, groups=1)
+            self.v_proj_depth = nn.Conv1d(self.input_dim, self.input_dim, kernel_size=1, groups=1)
+            
+            # Grup sayısı: her kanal grubu bağımsız olarak işlenir
+            self.q_proj_point = nn.Conv1d(self.input_dim, self.input_dim, kernel_size=3, padding=1, groups=self.input_dim)
+            self.k_proj_point = nn.Conv1d(self.input_dim, self.input_dim, kernel_size=3, padding=1, groups=self.input_dim)
+            self.v_proj_point = nn.Conv1d(self.input_dim, self.input_dim, kernel_size=3, padding=1, groups=self.input_dim)
+        else:
+            # Standart projeksiyonlar
+            self.q_proj = nn.Linear(self.input_dim, self.input_dim, bias=config.use_bias)
+            self.k_proj = nn.Linear(self.input_dim, self.input_dim, bias=config.use_bias)
+            self.v_proj = nn.Linear(self.input_dim, self.input_dim, bias=config.use_bias)
+        
+        # Sıkıştırılmış dikkat için
+        bottleneck_dim = max(self.input_dim // self.squeeze_factor, 8) # En az 8 boyutuna sahip olmasını sağla
+        if self.squeeze_factor > 1:
+            self.squeeze = nn.Sequential(
+                nn.Linear(self.input_dim, bottleneck_dim),
+                nn.ReLU(),
+                nn.Linear(bottleneck_dim, self.input_dim)
+            )
+        
+        # Çıkış projeksiyonu
+        self.out_proj = nn.Linear(self.input_dim, self.input_dim, bias=config.use_bias)
+        
+        # Geçit mekanizması
+        if self.use_gating:
+            self.gate = nn.Sequential(
+                nn.Linear(self.input_dim, self.input_dim),
+                nn.Sigmoid()
+            )
+        
+        self.dropout = nn.Dropout(config.dropout)
+        
+        self._reset_parameters()
+    
+    def _reset_parameters(self):
+        """Modül parametrelerini sıfırlar."""
+        if self.depth_wise:
+            # Konvolüsyonel katmanlar için başlatma
+            nn.init.kaiming_normal_(self.q_proj_depth.weight)
+            nn.init.kaiming_normal_(self.k_proj_depth.weight)
+            nn.init.kaiming_normal_(self.v_proj_depth.weight)
+            nn.init.kaiming_normal_(self.q_proj_point.weight)
+            nn.init.kaiming_normal_(self.k_proj_point.weight)
+            nn.init.kaiming_normal_(self.v_proj_point.weight)
+            
+            if self.config.use_bias:
+                nn.init.zeros_(self.q_proj_depth.bias)
+                nn.init.zeros_(self.k_proj_depth.bias)
+                nn.init.zeros_(self.v_proj_depth.bias)
+                nn.init.zeros_(self.q_proj_point.bias)
+                nn.init.zeros_(self.k_proj_point.bias)
+                nn.init.zeros_(self.v_proj_point.bias)
+        else:
+            # Doğrusal katmanlar için başlatma
+            nn.init.xavier_uniform_(self.q_proj.weight)
+            nn.init.xavier_uniform_(self.k_proj.weight)
+            nn.init.xavier_uniform_(self.v_proj.weight)
+            
+            if self.config.use_bias:
+                nn.init.zeros_(self.q_proj.bias)
+                nn.init.zeros_(self.k_proj.bias)
+                nn.init.zeros_(self.v_proj.bias)
+        
+        # Çıkış projeksiyonu her durumda bulunur
+        nn.init.xavier_uniform_(self.out_proj.weight)
+        if self.config.use_bias:
+            nn.init.zeros_(self.out_proj.bias)
+    
+    def forward(self, 
+                x: torch.Tensor, 
+                mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """
+        Args:
+            x: Girdi tensörü, şekil (batch_size, seq_len, input_dim)
+            mask: Dikkat maskesi
+            
+        Returns:
+            Dikkat çıktısı, şekil (batch_size, seq_len, input_dim)
+        """
+        batch_size, seq_len, _ = x.size()
+        
+        # Projeksiyonları uygula
+        if self.depth_wise:
+            # x'i (batch_size, input_dim, seq_len) şekline dönüştür (konvolüsyon için)
+            x_conv = x.transpose(1, 2)
+            
+            # Derinlik yönlü ayrılabilir konvolüsyonları uygula
+            q = self.q_proj_point(self.q_proj_depth(x_conv))
+            k = self.k_proj_point(self.k_proj_depth(x_conv))
+            v = self.v_proj_point(self.v_proj_depth(x_conv))
+            
+            # Boyutu tekrar düzenle (batch_size, seq_len, input_dim)
+            q = q.transpose(1, 2)
+            k = k.transpose(1, 2)
+            v = v.transpose(1, 2)
+        else:
+            # Standart projeksiyonlar
+            q = self.q_proj(x)
+            k = self.k_proj(x)
+            v = self.v_proj(x)
+        
+        # Sıkıştırma uygula (tercihe bağlı)
+        if self.squeeze_factor > 1:
+            k_squeezed = self.squeeze(k)
+            v_squeezed = self.squeeze(v)
+        else:
+            k_squeezed = k
+            v_squeezed = v
+        
+        # Başlara böl
+        q = q.view(batch_size, seq_len, self.num_heads, self.head_dim)
+        k_squeezed = k_squeezed.view(batch_size, seq_len, self.num_heads, self.head_dim)
+        v_squeezed = v_squeezed.view(batch_size, seq_len, self.num_heads, self.head_dim)
+        
+        # Boyutları yeniden düzenle: (batch_size, num_heads, seq_len, head_dim)
+        q = q.permute(0, 2, 1, 3)
+        k_squeezed = k_squeezed.permute(0, 2, 1, 3)
+        v_squeezed = v_squeezed.permute(0, 2, 1, 3)
+        
+        # Dikkat skorlarını hesapla
+        attn_weights = torch.matmul(q, k_squeezed.transpose(-2, -1)) / math.sqrt(self.head_dim)
+        
+        # Maskeleme uygula
+        if mask is not None:
+            # Maske boyutunu kontrol et ve gerektiğinde dönüştür
+            if mask.dim() == 2:  # (batch_size, seq_len) şeklinde token maskesi
+                mask = mask.unsqueeze(1).unsqueeze(2)
+                mask = mask.expand(batch_size, self.num_heads, seq_len, seq_len)
+            elif mask.dim() == 3:  # (batch_size, seq_len, seq_len)
+                mask = mask.unsqueeze(1)
+                mask = mask.expand(batch_size, self.num_heads, seq_len, seq_len)
+                
+            # Maskeyi uygula
+            attn_weights = attn_weights.masked_fill(mask == 0, -1e9)
+        
+        # Softmax ve dropout
+        attn_weights = F.softmax(attn_weights, dim=-1)
+        attn_weights = self.dropout(attn_weights)
+        
+        # Değerlerle çarp
+        attn_output = torch.matmul(attn_weights, v_squeezed)
+        
+        # Başları birleştir ve çıktı projeksiyonu uygula
+        attn_output = attn_output.permute(0, 2, 1, 3).contiguous()
+        attn_output = attn_output.view(batch_size, seq_len, self.input_dim)
+        
+        # Geçit mekanizması uygula (tercihe bağlı)
+        if self.use_gating:
+            gate_values = self.gate(x)
+            attn_output = gate_values * attn_output
+        
+        # Çıkış projeksiyonu
+        attn_output = self.out_proj(attn_output)
+        
+        # Mekanizma kompleksliği için ekstra metrikleri döndürür
+        metrics = {
+            "memory_tokens_complexity": seq_len * (seq_len // self.squeeze_factor) if self.squeeze_factor > 1 else seq_len ** 2,
+            "compute_complexity": seq_len * (seq_len // self.squeeze_factor) * self.input_dim,
+            "parameter_count": self.count_parameters()
+        }
+        
+        return attn_output, metrics
+    
+    def count_parameters(self):
+        """Modülün eğitilebilir parametre sayısını hesaplar."""
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+
 def get_attention_mechanism_by_name(name: str, **kwargs):
     """İsme göre dikkat mekanizması sınıfını ve uygun yapılandırmasını döndürür.
     

@@ -94,6 +94,24 @@ class AdapterSlot(nn.Module):
         Returns:
             Adaptör çıktısı, şekil (batch_size, seq_len, hidden_size)
         """
+        # x bir sözlük ise, girdi olarak doğru değeri al
+        if isinstance(x, dict):
+            print(f"AdapterSlot input is dict with keys: {list(x.keys())}")
+            attention_mask = None
+            if 'attention_mask' in x:
+                attention_mask = x['attention_mask']  # Eğer kullanmamız gerekirse sakla
+            
+            if 'hidden_states' in x:
+                x = x['hidden_states']
+                print(f"  Using 'hidden_states' key, type: {type(x)}")
+            elif 'embeddings' in x:
+                x = x['embeddings']
+                print(f"  Using 'embeddings' key, type: {type(x)}")
+            elif len(x) == 1:  # Tek bir anahtar varsa, değeri doğrudan al
+                key = list(x.keys())[0]
+                print(f"  Using single key: {key}, type: {type(x[key])}")
+                x = list(x.values())[0]
+        
         # Performans için hızlı kontrol: Eğer adaptör yoksa veya eğitim modu kapalıysa ve çıkarım modundaysak
         # doğrudan girdiyi döndür
         if not self.adapters or (not self.training_mode and not self.training):
@@ -101,7 +119,9 @@ class AdapterSlot(nn.Module):
         
         # Adaptörleri sıralı olarak uygula
         output = x
-        for adapter in self.adapters:
+        for i, adapter in enumerate(self.adapters):
+            if isinstance(output, dict):
+                print(f"  Output is dict before adapter {i} call with keys: {list(output.keys())}")
             output = adapter(output)
         
         return output
@@ -236,8 +256,8 @@ class Adapter(nn.Module):
             init_scale: Başlangıç ölçeği
         """
         super().__init__()
-        self.down_project = nn.Linear(hidden_size, bottleneck_dim)
-        self.up_project = nn.Linear(bottleneck_dim, hidden_size)
+        self._down_project = nn.Linear(hidden_size, bottleneck_dim)
+        self._up_project = nn.Linear(bottleneck_dim, hidden_size)
         
         # Layer normalization
         self.layer_norm = nn.LayerNorm(bottleneck_dim) if use_layer_norm else None
@@ -268,10 +288,10 @@ class Adapter(nn.Module):
     
     def _init_weights(self, init_scale) -> None:
         """Ağırlıkları başlat."""
-        nn.init.normal_(self.down_project.weight, std=init_scale)
-        nn.init.normal_(self.up_project.weight, std=init_scale)
-        nn.init.zeros_(self.down_project.bias)
-        nn.init.zeros_(self.up_project.bias)
+        nn.init.normal_(self._down_project.weight, std=init_scale)
+        nn.init.normal_(self._up_project.weight, std=init_scale)
+        nn.init.zeros_(self._down_project.bias)
+        nn.init.zeros_(self._up_project.bias)
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -279,30 +299,39 @@ class Adapter(nn.Module):
             x: Girdi tensörü, şekil (batch_size, seq_len, hidden_size)
             
         Returns:
-            Adaptör çıktısı (girdi + adaptör çıktısı),
-            şekil (batch_size, seq_len, hidden_size)
+            Adaptor çıktısı, şekil (batch_size, seq_len, hidden_size)
         """
+        # x bir sözlük ise, girdi olarak doğru değeri al
+        if isinstance(x, dict):
+            if 'hidden_states' in x:
+                x = x['hidden_states']
+            elif 'embeddings' in x:
+                x = x['embeddings']
+            elif len(x) == 1:  # Tek bir anahtar varsa, değeri doğrudan al
+                x = list(x.values())[0]
+        
+        # Down projection
         residual = x
+        hidden_states = self._down_project(x)
         
-        # Darboğaz mimarisi
-        h = self.down_project(x)
-        
-        # Layer normalization (varsa)
+        # Layer normalization (if enabled)
         if self.layer_norm is not None:
-            h = self.layer_norm(h)
+            hidden_states = self.layer_norm(hidden_states)
         
-        # Aktivasyon
-        h = self.activation(h)
+        # Activation
+        hidden_states = self.activation(hidden_states)
         
-        # Dropout (varsa)
+        # Dropout (if enabled)
         if self.dropout is not None:
-            h = self.dropout(h)
+            hidden_states = self.dropout(hidden_states)
         
-        # Up-projeksiyon
-        h = self.up_project(h)
+        # Up projection
+        output = self._up_project(hidden_states)
         
-        # Artık bağlantı
-        return residual + h
+        # Residual connection
+        output = output + residual
+        
+        return output
     
     def count_parameters(self) -> int:
         """Modülün eğitilebilir parametre sayısını hesaplar."""
@@ -330,27 +359,23 @@ class ParallelAdapter(nn.Module):
         Args:
             hidden_size: Gizli durum boyutu
             bottleneck_dim: Darboğaz boyutu
-            scale: Adaptör çıktısını ölçeklendirme faktörü
+            scale: Ölçekleme faktörü
             use_layer_norm: Layer normalization kullanımı
-            activation: Aktivasyon fonksiyonu adı
+            activation: Aktivasyon fonksiyonu
             dropout: Dropout oranı
             init_scale: Başlangıç ölçeği
         """
         super().__init__()
-        self.down_project = nn.Linear(hidden_size, bottleneck_dim)
-        self.up_project = nn.Linear(bottleneck_dim, hidden_size)
-        
-        # Layer normalization her zaman kullanılır
+        self.scale = scale
         self.layer_norm = nn.LayerNorm(hidden_size)
+        self._down_project = nn.Linear(hidden_size, bottleneck_dim)
+        self._up_project = nn.Linear(bottleneck_dim, hidden_size)
         
         # Aktivasyon fonksiyonu
         self.activation = self._get_activation(activation)
         
         # Dropout
         self.dropout = nn.Dropout(dropout) if dropout > 0 else None
-        
-        # Ölçekleme faktörü (alpha)
-        self.scale = scale
         
         self._init_weights(init_scale)
     
@@ -372,10 +397,10 @@ class ParallelAdapter(nn.Module):
     
     def _init_weights(self, init_scale) -> None:
         """Ağırlıkları başlat."""
-        nn.init.normal_(self.down_project.weight, std=init_scale)
-        nn.init.normal_(self.up_project.weight, std=init_scale)
-        nn.init.zeros_(self.down_project.bias)
-        nn.init.zeros_(self.up_project.bias)
+        nn.init.normal_(self._down_project.weight, std=init_scale)
+        nn.init.normal_(self._up_project.weight, std=init_scale)
+        nn.init.zeros_(self._down_project.bias)
+        nn.init.zeros_(self._up_project.bias)
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -385,19 +410,35 @@ class ParallelAdapter(nn.Module):
         Returns:
             Adaptör çıktısı, şekil (batch_size, seq_len, hidden_size)
         """
-        # Paralel implementasyon
-        h = self.layer_norm(x)
-        h = self.down_project(h)
-        h = self.activation(h)
+        # x bir sözlük ise, girdi olarak doğru değeri al
+        if isinstance(x, dict):
+            if 'hidden_states' in x:
+                x = x['hidden_states']
+            elif 'embeddings' in x:
+                x = x['embeddings']
+            elif len(x) == 1:  # Tek bir anahtar varsa, değeri doğrudan al
+                x = list(x.values())[0]
         
-        # Dropout (varsa)
+        # Layer normalization
+        hidden_states = self.layer_norm(x)
+        
+        # Down projection
+        hidden_states = self._down_project(hidden_states)
+        
+        # Activation
+        hidden_states = self.activation(hidden_states)
+        
+        # Dropout (if enabled)
         if self.dropout is not None:
-            h = self.dropout(h)
-            
-        h = self.up_project(h)
+            hidden_states = self.dropout(hidden_states)
         
-        # Ölçeklendirilmiş toplama
-        return x + self.scale * h
+        # Up projection
+        hidden_states = self._up_project(hidden_states)
+        
+        # Scaled addition
+        output = x + self.scale * hidden_states
+        
+        return output
     
     def count_parameters(self) -> int:
         """Modülün eğitilebilir parametre sayısını hesaplar."""

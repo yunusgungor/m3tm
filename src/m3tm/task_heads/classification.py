@@ -30,42 +30,59 @@ class ClassificationHead(nn.Module):
     Örüntü: ModelComposite (PT-003)
     """
     
-    def __init__(self, config: ClassificationHeadConfig):
+    def __init__(self, config: ClassificationHeadConfig = None, **kwargs):
         """
         ClassificationHead modülünü başlatır.
         
         Args:
-            config: Sınıflandırma başlığı yapılandırması
+            config: Sınıflandırma başlığı yapılandırması, veya
+            **kwargs: Doğrudan parametre olarak input_dim, hidden_dim, num_classes, vs.
         """
         super().__init__()
-        self.config = config
+        
+        # Config nesnesi veya doğrudan parametreler kullanarak kurulum yapma
+        if config is None:
+            # Geriye dönük uyumluluk için, doğrudan parametre geçişini destekle
+            self.config = ClassificationHeadConfig(
+                input_dim=kwargs.get('input_dim', 64),
+                hidden_dim=kwargs.get('hidden_dim', 32),
+                num_classes=kwargs.get('num_classes', 2),
+                dropout_rate=kwargs.get('dropout_rate', 0.1),
+                activation=kwargs.get('activation', 'gelu'),
+                pooling=kwargs.get('pooling', 'mean'),
+                use_layer_norm=kwargs.get('use_layer_norm', True),
+                layer_norm_eps=kwargs.get('layer_norm_eps', 1e-12),
+                use_bias=kwargs.get('use_bias', True)
+            )
+        else:
+            self.config = config
         
         # Havuzlama metodunu belirle
-        self.pooling = config.pooling
+        self.pooling = self.config.pooling
         
         # Katmanları tanımla
         self.layers = nn.ModuleList()
         
         # Ara katman (hidden layer) varsa ekle
-        if config.hidden_dim > 0:
-            self.layers.append(nn.Linear(config.input_dim, config.hidden_dim, bias=config.use_bias))
+        if self.config.hidden_dim > 0:
+            self.layers.append(nn.Linear(self.config.input_dim, self.config.hidden_dim, bias=self.config.use_bias))
             
             # Layer normalization
-            if config.use_layer_norm:
-                self.layers.append(nn.LayerNorm(config.hidden_dim, eps=config.layer_norm_eps))
+            if self.config.use_layer_norm:
+                self.layers.append(nn.LayerNorm(self.config.hidden_dim, eps=self.config.layer_norm_eps))
             
             # Aktivasyon
-            self.layers.append(self._get_activation(config.activation))
+            self.layers.append(self._get_activation(self.config.activation))
             
             # Dropout
-            if config.dropout_rate > 0:
-                self.layers.append(nn.Dropout(config.dropout_rate))
+            if self.config.dropout_rate > 0:
+                self.layers.append(nn.Dropout(self.config.dropout_rate))
             
             # Çıktı katmanı
-            self.layers.append(nn.Linear(config.hidden_dim, config.num_classes, bias=config.use_bias))
+            self.layers.append(nn.Linear(self.config.hidden_dim, self.config.num_classes, bias=self.config.use_bias))
         else:
             # Doğrudan çıktı katmanı
-            self.layers.append(nn.Linear(config.input_dim, config.num_classes, bias=config.use_bias))
+            self.layers.append(nn.Linear(self.config.input_dim, self.config.num_classes, bias=self.config.use_bias))
     
     def _get_activation(self, activation_name: str) -> nn.Module:
         """

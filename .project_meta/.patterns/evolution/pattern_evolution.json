@@ -198,6 +198,33 @@
       "current_version": "1.0.0",
       "adoption_trend": "new",
       "health_score": 0.88
+    },
+    {
+      "pattern_id": "PT-101",
+      "name": "InputNormalizationWithRobustness",
+      "lifecycle_events": [
+        {
+          "event_type": "discovery",
+          "date": "2024-07-12",
+          "description": "Sayısal kararsızlık entegrasyon testleri sırasında algılandı",
+          "source": "integration_tests",
+          "contributor": "codeflow_agent"
+        },
+        {
+          "event_type": "initial_implementation",
+          "date": "2024-07-12",
+          "description": "image_embedding modülünde ilk uygulama gerçekleştirildi",
+          "affected_components": ["m3tm.embedding.image_embedding"]
+        },
+        {
+          "event_type": "cataloging",
+          "date": "2024-07-12",
+          "description": "Pattern kataloguna resmi olarak eklendi",
+          "catalog_version": "m3tm_v2.3_patterns"
+        }
+      ],
+      "maturity_level": "emerging",
+      "evolution_notes": "Test başarısızlıkları analizinden doğan, aşırı büyük/küçük değerlere karşı dayanıklı normalizasyon deseni. İlk sürümü testlerin başarılı olmasını sağlamıştır. Daha fazla bileşende kullanımının yaygınlaştırılması önerilir."
     }
   ],
   "evolution_metrics": {

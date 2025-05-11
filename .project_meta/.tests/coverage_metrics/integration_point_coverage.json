@@ -1,0 +1,178 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM modeli entegrasyon noktaları test kapsamı analizi",
+  "last_updated": "2024-06-15T10:00:00Z",
+  "overall_metrics": {
+    "integration_point_coverage": {
+      "current": 0.65,
+      "target": 0.95,
+      "description": "Model bileşenleri arasındaki entegrasyon noktalarının test kapsamı"
+    }
+  },
+  "component_integration_coverage": {
+    "text_embedding_transformer": {
+      "coverage_percentage": 0.80,
+      "description": "Metin gömme ve transformer blokları arasındaki entegrasyon",
+      "covered_scenarios": [
+        "basic_forward_flow",
+        "token_embedding_transformer_attention",
+        "positional_encoding_integration",
+        "contextual_embedding_flow"
+      ],
+      "missing_scenarios": [
+        "variable_length_sequence_handling"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py", "tests/integration/test_model_robustness.py"]
+    },
+    "image_embedding_transformer": {
+      "coverage_percentage": 0.60,
+      "description": "Görüntü gömme ve transformer blokları arasındaki entegrasyon",
+      "covered_scenarios": [
+        "basic_forward_flow",
+        "patch_embedding_transformer_attention",
+        "spatial_information_preservation"
+      ],
+      "missing_scenarios": [
+        "variable_size_image_handling",
+        "patch_position_encoding_integration"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py", "tests/integration/test_model_robustness.py"]
+    },
+    "transformer_fusion": {
+      "coverage_percentage": 0.50,
+      "description": "Transformer blokları ve füzyon mekanizması arasındaki entegrasyon",
+      "covered_scenarios": [
+        "transformer_output_pooling",
+        "multimodal_representation_concatenation"
+      ],
+      "missing_scenarios": [
+        "cross_attention_fusion",
+        "adaptive_weighting_fusion"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "fusion_search_embedding": {
+      "coverage_percentage": 0.75,
+      "description": "Füzyon ve arama gömme arasındaki entegrasyon",
+      "covered_scenarios": [
+        "fused_representation_projection",
+        "normalization_operations",
+        "similarity_calculation"
+      ],
+      "missing_scenarios": [
+        "high_dimensional_projection"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py", "tests/integration/test_search_robustness.py"]
+    },
+    "search_embedding_indexing": {
+      "coverage_percentage": 0.67,
+      "description": "Arama gömme ve indeksleme arasındaki entegrasyon",
+      "covered_scenarios": [
+        "embedding_indexing_flow",
+        "similarity_search_operations"
+      ],
+      "missing_scenarios": [
+        "incremental_index_updates"
+      ],
+      "test_file_references": ["tests/integration/test_search_robustness.py"]
+    },
+    "transformer_adapter": {
+      "coverage_percentage": 0.50,
+      "description": "Transformer blokları ve adapter modülleri arasındaki entegrasyon",
+      "covered_scenarios": [
+        "adapter_integration",
+        "adapted_forward_flow"
+      ],
+      "missing_scenarios": [
+        "multiple_adapters_switching",
+        "adapter_parameter_isolation"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "model_task_head": {
+      "coverage_percentage": 0.67,
+      "description": "Model gövdesi ve görev başlıkları arasındaki entegrasyon",
+      "covered_scenarios": [
+        "classification_head_integration",
+        "representation_to_prediction_flow"
+      ],
+      "missing_scenarios": [
+        "multi_task_head_integration"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "model_trainer": {
+      "coverage_percentage": 0.60,
+      "description": "Model ve eğitim mekanizması arasındaki entegrasyon",
+      "covered_scenarios": [
+        "parameter_gradient_flow",
+        "loss_backward_propagation",
+        "optimizer_update_flow"
+      ],
+      "missing_scenarios": [
+        "mixed_precision_training",
+        "gradient_accumulation"
+      ],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "model_mobile_optimizer": {
+      "coverage_percentage": 0.75,
+      "description": "Model ve mobil optimizasyon arasındaki entegrasyon",
+      "covered_scenarios": [
+        "quantization_integration",
+        "model_conversion_flow",
+        "operator_compatibility"
+      ],
+      "missing_scenarios": [
+        "platform_specific_optimization"
+      ],
+      "test_file_references": ["tests/integration/test_mobile_performance.py"]
+    },
+    "model_android_sdk": {
+      "coverage_percentage": 0.80,
+      "description": "Model ve Android SDK arasındaki entegrasyon",
+      "covered_scenarios": [
+        "java_native_interface",
+        "data_conversion",
+        "lifecycle_management",
+        "exception_handling"
+      ],
+      "missing_scenarios": [
+        "background_processing"
+      ],
+      "test_file_references": ["tests/integration/test_android_sdk.py", "tests/integration/run_android_tests.py"]
+    }
+  },
+  "priority_improvements": [
+    {
+      "integration_point": "transformer_fusion",
+      "missing_scenarios": ["cross_attention_fusion", "adaptive_weighting_fusion"],
+      "priority": "high",
+      "justification": "Modaliteler arası etkileşimlerin etkinliği modelin temel yetenekleri için kritiktir."
+    },
+    {
+      "integration_point": "transformer_adapter",
+      "missing_scenarios": ["multiple_adapters_switching", "adapter_parameter_isolation"],
+      "priority": "high",
+      "justification": "Adapter entegrasyonu kişiselleştirme için temel yetenektir ve test kapsamı düşüktür."
+    },
+    {
+      "integration_point": "model_trainer",
+      "missing_scenarios": ["mixed_precision_training"],
+      "priority": "medium",
+      "justification": "Mobil cihazlarda eğitim optimizasyonu için önemlidir."
+    },
+    {
+      "integration_point": "image_embedding_transformer",
+      "missing_scenarios": ["variable_size_image_handling"],
+      "priority": "medium",
+      "justification": "Farklı görüntü boyutlarıyla başa çıkma yeteneği pratik kullanımlar için önemlidir."
+    },
+    {
+      "integration_point": "search_embedding_indexing",
+      "missing_scenarios": ["incremental_index_updates"],
+      "priority": "medium",
+      "justification": "Büyük indekslerin verimli yönetimi için önemlidir."
+    }
+  ]
+} 

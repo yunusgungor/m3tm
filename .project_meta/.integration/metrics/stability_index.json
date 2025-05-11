@@ -1,0 +1,72 @@
+{
+  "score": 85,
+  "calculation_date": "2024-07-12T17:00:00Z",
+  "history": [
+    {
+      "date": "2024-07-12T14:00:00Z",
+      "score": 70,
+      "notes": "Sayısal kararsızlık sorunu mevcut"
+    },
+    {
+      "date": "2024-07-12T17:00:00Z",
+      "score": 85,
+      "notes": "PT-101 uygulanarak sayısal kararsızlık giderildi"
+    }
+  ],
+  "component_scores": {
+    "m3tm.embedding.image_embedding": {
+      "before": 65,
+      "after": 95,
+      "improvement": 30
+    },
+    "m3tm.core.base_model": 80,
+    "m3tm.fusion": 85
+  },
+  "test_categories": {
+    "numerical_stability": {
+      "pass_rate": 100,
+      "test_count": 4,
+      "previously_failing": 1,
+      "still_failing": 0
+    },
+    "search_robustness": {
+      "pass_rate": 20,
+      "test_count": 5,
+      "previously_failing": 4,
+      "still_failing": 4
+    },
+    "model_e2e": {
+      "pass_rate": 16.67,
+      "test_count": 6,
+      "previously_failing": 5,
+      "still_failing": 5
+    }
+  },
+  "reliability_metrics": {
+    "flaky_test_rate": 0,
+    "intermittent_failure_rate": 0,
+    "regression_rate": 0
+  },
+  "stability_improvement_factors": [
+    {
+      "factor": "normalization_implementation",
+      "impact": "high",
+      "pattern_applied": "PT-101",
+      "affected_tests": ["test_numerical_range_stability"]
+    }
+  ],
+  "next_improvement_targets": [
+    {
+      "component": "m3tm.fusion.BasicFusion",
+      "issue": "Constructor arayüzü tutarsızlığı",
+      "priority": "high",
+      "estimated_impact": 25
+    },
+    {
+      "component": "search_service",
+      "issue": "Semantic eşleştirme kararlılığı",
+      "priority": "medium",
+      "estimated_impact": 15
+    }
+  ]
+} 

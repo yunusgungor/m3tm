@@ -149,6 +149,12 @@
       "name": "ParametrizedTestPattern",
       "category": "testing",
       "centrality": 0.70
+    },
+    {
+      "id": "PT-101",
+      "name": "InputNormalizationWithRobustness",
+      "category": "numerical_stability",
+      "criticality": "high"
     }
   ],
   "edges": [
@@ -265,6 +271,20 @@
       "target": "PT-028",
       "type": "enhances",
       "strength": 0.85
+    },
+    {
+      "source": "PT-101",
+      "target": "PT-016",
+      "relationship_type": "complements",
+      "strength": 0.8,
+      "description": "InputNormalizationWithRobustness, RobustParameterInitialization (PT-016) desenini tamamlar. Parametre başlatma sayısal kararlılık sağlarken, giriş normalizasyonu çalışma zamanında kararlılığı artırır."
+    },
+    {
+      "source": "PT-101",
+      "target": "PT-023",
+      "relationship_type": "benefits_from",
+      "strength": 0.65,
+      "description": "InputNormalizationWithRobustness, StrictTypeValidation (PT-023) deseninden faydalanır, çünkü giriş verilerinin doğru tipte olması normalizasyon işleminin daha güvenilir olmasını sağlar."
     }
   ],
   "clusters": [

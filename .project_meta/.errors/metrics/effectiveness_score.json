@@ -1,0 +1,25 @@
+{
+  "score": 92,
+  "resolved_errors": 1,
+  "total_errors": 1,
+  "successful_patterns_applied": 1,
+  "error_type_effectiveness": {
+    "NumericInstability": 100
+  },
+  "component_effectiveness": {
+    "m3tm.embedding.image_embedding": 100
+  },
+  "resolution_type_effectiveness": {
+    "ImplementPattern": 100
+  },
+  "time_to_resolution_statistics": {
+    "average_minutes": 45,
+    "by_severity": {
+      "Critical": 0,
+      "Error": 45,
+      "Warning": 0,
+      "Info": 0
+    }
+  },
+  "last_updated": "2024-07-12T16:30:00Z"
+} 

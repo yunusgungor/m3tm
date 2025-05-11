@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM modeli uç durum test kapsamı analizi",
+  "last_updated": "2024-06-15T10:00:00Z",
+  "overall_metrics": {
+    "edge_case_coverage": {
+      "current": 0.45,
+      "target": 0.95,
+      "description": "Tanımlanmış uç durumların test kapsamı oranı"
+    }
+  },
+  "category_coverage": {
+    "input_validation": {
+      "coverage_percentage": 0.54,
+      "covered_edge_cases": [
+        "empty_text", 
+        "very_long_text", 
+        "out_of_vocabulary", 
+        "very_small_image",
+        "high_resolution_image", 
+        "malformed_input"
+      ],
+      "missing_edge_cases": [
+        "rare_tokens",
+        "special_tokens",
+        "token_sequence_length",
+        "monochrome_image",
+        "non_standard_dimensions"
+      ],
+      "test_file_references": ["tests/integration/test_model_robustness.py", "tests/integration/test_model_e2e.py"]
+    },
+    "numerical_stability": {
+      "coverage_percentage": 0.33,
+      "covered_edge_cases": [
+        "zero_input",
+        "activation_saturation"
+      ],
+      "missing_edge_cases": [
+        "very_large_values",
+        "very_small_values",
+        "extreme_gradients",
+        "vanishing_gradients"
+      ],
+      "test_file_references": ["tests/integration/test_model_robustness.py"]
+    },
+    "resource_constraints": {
+      "coverage_percentage": 0.50,
+      "covered_edge_cases": [
+        "memory_limits",
+        "device_throttling"
+      ],
+      "missing_edge_cases": [
+        "batch_size_limits",
+        "long_running_operations"
+      ],
+      "test_file_references": ["tests/integration/test_mobile_performance.py", "tests/integration/test_model_robustness.py"]
+    },
+    "concurrency": {
+      "coverage_percentage": 0.33,
+      "covered_edge_cases": [
+        "parallel_inference"
+      ],
+      "missing_edge_cases": [
+        "concurrent_model_updates",
+        "training_interruptions"
+      ],
+      "test_file_references": ["tests/integration/test_mobile_performance.py"]
+    },
+    "data_quality": {
+      "coverage_percentage": 0.50,
+      "covered_edge_cases": [
+        "noisy_data",
+        "adversarial_examples"
+      ],
+      "missing_edge_cases": [
+        "outlier_data",
+        "imbalanced_classes",
+        "limited_training_data"
+      ],
+      "test_file_references": ["tests/integration/test_model_robustness.py", "tests/integration/test_search_robustness.py"]
+    }
+  },
+  "priority_improvements": [
+    {
+      "category": "numerical_stability",
+      "missing_edge_cases": ["extreme_gradients", "vanishing_gradients"],
+      "priority": "high",
+      "justification": "Sayısal kararlılık sorunları, özellikle mobil cihazlarda eğitim için kritiktir."
+    },
+    {
+      "category": "resource_constraints",
+      "missing_edge_cases": ["batch_size_limits", "long_running_operations"],
+      "priority": "high",
+      "justification": "Kaynak kısıtlı mobil ortamlarda sürdürülebilirlik için önemlidir."
+    },
+    {
+      "category": "concurrency",
+      "missing_edge_cases": ["concurrent_model_updates", "training_interruptions"],
+      "priority": "medium",
+      "justification": "Gerçek dünya kullanıcı deneyimi için önemli uç durumlardır."
+    },
+    {
+      "category": "input_validation",
+      "missing_edge_cases": ["token_sequence_length", "non_standard_dimensions"],
+      "priority": "medium",
+      "justification": "Çeşitli kullanıcı girdilerine karşı dayanıklılık için önemlidir."
+    },
+    {
+      "category": "data_quality",
+      "missing_edge_cases": ["limited_training_data"],
+      "priority": "medium",
+      "justification": "Gerçekçi eğitim senaryolarını yansıtmak için önemlidir."
+    }
+  ]
+} 

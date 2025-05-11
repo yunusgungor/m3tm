@@ -378,6 +378,111 @@ class GhostFFN(nn.Module):
         return flops
 
 
+@FFNMechanismRegistry.register(name="GLU")
+class GatedLinearUnit(nn.Module):
+    """Gated Linear Unit (GLU) Feed-Forward Network.
+    
+    Referans: "GLU Variants Improve Transformer"
+    https://arxiv.org/abs/2002.05202
+    
+    GLU, geçit mekanizması kullanan bir FFN varyasyonudur. 
+    Standart FFN'e göre daha az parametre kullanarak benzer performans sağlar.
+    """
+    
+    def __init__(self, config: FeedForwardConfig):
+        """
+        Args:
+            config: FFN yapılandırması
+        """
+        super().__init__()
+        self.config = config
+        hidden_size = config.mechanism_params.get("hidden_size", 256)
+        intermediate_size = config.mechanism_params.get("intermediate_size", int(hidden_size * config.expansion_factor))
+        
+        # GLU için iki paralel projeksiyon - biri değer, diğeri geçit için
+        self.gate_proj = nn.Linear(hidden_size, intermediate_size, bias=config.use_bias)
+        self.value_proj = nn.Linear(hidden_size, intermediate_size, bias=config.use_bias)
+        self.output_proj = nn.Linear(intermediate_size, hidden_size, bias=config.use_bias)
+        
+        self.dropout = nn.Dropout(config.dropout)
+        
+        self._init_weights()
+    
+    def _init_weights(self):
+        """Ağırlıkları başlat."""
+        nn.init.normal_(self.gate_proj.weight, std=0.02)
+        nn.init.normal_(self.value_proj.weight, std=0.02)
+        nn.init.normal_(self.output_proj.weight, std=0.02)
+        
+        if self.config.use_bias:
+            nn.init.zeros_(self.gate_proj.bias)
+            nn.init.zeros_(self.value_proj.bias)
+            nn.init.zeros_(self.output_proj.bias)
+    
+    def get_activation(self, activation: str):
+        """Aktivasyon fonksiyonunu isimle al."""
+        if activation == "gelu":
+            return F.gelu
+        elif activation == "relu":
+            return F.relu
+        elif activation == "silu" or activation == "swish":
+            return F.silu
+        elif activation == "sigmoid":
+            return torch.sigmoid
+        else:
+            raise ValueError(f"Activation {activation} not supported")
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x: Girdi tensörü, şekil (batch_size, seq_len, hidden_size)
+            
+        Returns:
+            FFN çıktısı, şekil (batch_size, seq_len, hidden_size)
+        """
+        # Geçit ve değer projeksiyonları
+        gate = self.gate_proj(x)
+        gate = self.get_activation(self.config.hidden_act)(gate)  # Genellikle sigmoid veya gelu
+        
+        value = self.value_proj(x)
+        
+        # Geçitlenmiş lineer birim hesaplaması
+        intermediate = gate * value
+        
+        # Çıkış projeksiyonu
+        output = self.output_proj(intermediate)
+        output = self.dropout(output)
+        
+        metrics = {
+            "parameter_count": self.count_parameters(),
+            "flops": self._calculate_flops(x.shape),
+        }
+        
+        return output, metrics
+    
+    def count_parameters(self) -> int:
+        """Modülün eğitilebilir parametre sayısını hesaplar."""
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+    
+    def _calculate_flops(self, input_shape: Tuple) -> int:
+        """Yaklaşık FLOP sayısını hesaplar."""
+        batch_size, seq_len, hidden_size = input_shape
+        intermediate_size = self.config.mechanism_params.get(
+            "intermediate_size", int(hidden_size * self.config.expansion_factor)
+        )
+        
+        # Gate projection + Value projection + Activation + Multiplication + Output projection
+        flops = batch_size * seq_len * (
+            2 * hidden_size * intermediate_size + 
+            2 * hidden_size * intermediate_size + 
+            intermediate_size +  # Aktivasyon
+            intermediate_size +  # Çarpma işlemi
+            2 * intermediate_size * hidden_size
+        )
+        
+        return flops
+
+
 def get_ffn_mechanism(config: FeedForwardConfig) -> nn.Module:
     """FFN mekanizmasını yapılandırmaya göre oluşturur."""
     return FFNMechanismRegistry.get_ffn(config)

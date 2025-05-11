@@ -148,8 +148,10 @@ class ProtoTransformerBlock(nn.Module):
         Returns:
             Adaptör uygulanmış tensör
         """
+        # x bir sözlük ise, doğrudan içeriği adapter_slot'a ileterek içinde işlenmesini sağla
         if position in self.adapter_slots:
-            return self.adapter_slots[position](x)
+            result = self.adapter_slots[position](x)
+            return result
         return x
     
     def forward(self, 
@@ -164,6 +166,22 @@ class ProtoTransformerBlock(nn.Module):
             Transformer bloğu çıktısı, şekil (batch_size, seq_len, hidden_size)
             ve performans metrikleri
         """
+        # Original dict içeriğini sakla
+        original_dict = None
+        if isinstance(x, dict):
+            original_dict = x.copy()
+            attention_mask_from_dict = x.get('attention_mask', None)
+            if attention_mask is None:
+                attention_mask = attention_mask_from_dict
+                
+            if 'hidden_states' in x:
+                x = x['hidden_states']
+            elif 'embeddings' in x:
+                x = x['embeddings']
+            elif len(x) == 1:  # Tek bir anahtar varsa, değeri doğrudan al
+                x = list(x.values())[0]
+        
+        # Artık x bir tensor, şimdi residual'ı burada ayarlayalım
         residual = x
         metrics = {}
         
@@ -216,6 +234,15 @@ class ProtoTransformerBlock(nn.Module):
         # Toplam parametre sayısı
         metrics["total_parameters"] = self.count_parameters()
         
+        # Eğer orijinal girdi bir sözlük ise, sonucu da sözlük olarak gönderelim
+        if original_dict is not None:
+            if 'hidden_states' in original_dict:
+                original_dict['hidden_states'] = x
+            elif 'embeddings' in original_dict:
+                original_dict['embeddings'] = x
+            # Çıktı olarak sözlüğü döndürelim
+            return original_dict, metrics
+            
         return x, metrics
     
     def register_adapter(self, adapter: nn.Module, position: str, name: str = None) -> bool:

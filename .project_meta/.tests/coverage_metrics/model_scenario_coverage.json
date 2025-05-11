@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "description": "M³TM modeli senaryolarının test kapsamı analizi",
+  "last_updated": "2024-06-15T10:00:00Z",
+  "overall_metrics": {
+    "scenario_coverage": {
+      "current": 0.68,
+      "target": 0.98,
+      "description": "Test senaryolarının model fonksiyonel özelliklerini kapsama oranı"
+    }
+  },
+  "scenario_coverage_details": {
+    "text_embedding": {
+      "coverage_percentage": 0.80,
+      "implemented_scenarios": ["text_embedding_basic", "text_embedding_multilingual"],
+      "missing_scenarios": ["text_embedding_tokenization"],
+      "test_file_references": ["tests/integration/test_model_e2e.py", "tests/integration/test_model_robustness.py"]
+    },
+    "image_embedding": {
+      "coverage_percentage": 0.66,
+      "implemented_scenarios": ["image_embedding_basic", "image_patch_extraction"],
+      "missing_scenarios": ["image_patch_embedding"],
+      "test_file_references": ["tests/integration/test_model_e2e.py", "tests/integration/test_model_robustness.py"]
+    },
+    "transformer_blocks": {
+      "coverage_percentage": 0.66,
+      "implemented_scenarios": ["attention_mechanism", "ffn_processing"],
+      "missing_scenarios": ["adapter_slot_integration"],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "fusion": {
+      "coverage_percentage": 0.33,
+      "implemented_scenarios": ["basic_fusion"],
+      "missing_scenarios": ["cross_modal_attention", "modality_weighting"],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "search_embedding": {
+      "coverage_percentage": 0.66,
+      "implemented_scenarios": ["search_projection", "semantic_similarity"],
+      "missing_scenarios": ["cross_modal_search"],
+      "test_file_references": ["tests/integration/test_model_e2e.py", "tests/integration/test_search_robustness.py"]
+    },
+    "adapters": {
+      "coverage_percentage": 0.66,
+      "implemented_scenarios": ["adapter_initialization", "adapter_training"],
+      "missing_scenarios": ["adapter_composition"],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "search_indexing": {
+      "coverage_percentage": 0.50,
+      "implemented_scenarios": ["index_building"],
+      "missing_scenarios": ["approximate_search"],
+      "test_file_references": ["tests/integration/test_search_robustness.py"]
+    },
+    "search_service": {
+      "coverage_percentage": 0.75,
+      "implemented_scenarios": ["index_add_content", "search_text", "result_ranking"],
+      "missing_scenarios": ["search_filtering"],
+      "test_file_references": ["tests/integration/test_search_robustness.py", "tests/integration/test_model_e2e.py"]
+    },
+    "on_device_training": {
+      "coverage_percentage": 0.60,
+      "implemented_scenarios": ["adapter_training", "classification_head_training", "optimizer_setup"],
+      "missing_scenarios": ["hyperparameter_tuning", "training_checkpoints"],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "data_export": {
+      "coverage_percentage": 0.50,
+      "implemented_scenarios": ["basic_export"],
+      "missing_scenarios": ["filtered_export"],
+      "test_file_references": ["tests/integration/test_model_e2e.py"]
+    },
+    "mobile_optimization": {
+      "coverage_percentage": 0.75,
+      "implemented_scenarios": ["model_quantization", "model_size_reduction", "mobile_compatibility"],
+      "missing_scenarios": ["operator_fusion"],
+      "test_file_references": ["tests/integration/test_mobile_performance.py"]
+    },
+    "android_sdk": {
+      "coverage_percentage": 0.85,
+      "implemented_scenarios": ["sdk_interface", "jni_bindings", "java_api", "exception_handling", "model_loading"],
+      "missing_scenarios": ["sdk_versioning"],
+      "test_file_references": ["tests/integration/test_android_sdk.py", "tests/integration/run_android_tests.py"]
+    }
+  },
+  "priority_improvements": [
+    {
+      "scenario": "fusion",
+      "missing_scenarios": ["cross_modal_attention", "modality_weighting"],
+      "priority": "high",
+      "justification": "Multimodal füzyon, modelin temel özelliğidir ve düşük test kapsamı bulunmaktadır."
+    },
+    {
+      "scenario": "transformer_blocks",
+      "missing_scenarios": ["adapter_slot_integration"],
+      "priority": "high",
+      "justification": "Adapter entegrasyonu, modelin kişiselleştirme yeteneği için kritik öneme sahiptir."
+    },
+    {
+      "scenario": "search_embedding",
+      "missing_scenarios": ["cross_modal_search"],
+      "priority": "medium",
+      "justification": "Çapraz modalite araması, modelin anahtar farklılaştırıcı özelliklerindendir."
+    },
+    {
+      "scenario": "adapters",
+      "missing_scenarios": ["adapter_composition"],
+      "priority": "medium",
+      "justification": "Birden fazla adapterin birleştirilmesi gelişmiş kullanım senaryoları için önemlidir."
+    },
+    {
+      "scenario": "search_indexing",
+      "missing_scenarios": ["approximate_search"],
+      "priority": "medium",
+      "justification": "Yaklaşık arama, büyük indekslerle çalışırken performans için kritiktir."
+    }
+  ]
+} 

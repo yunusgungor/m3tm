@@ -1,0 +1,72 @@
+{
+  "total_failures": 1,
+  "analysis_date": "2024-07-12T16:30:00Z",
+  "common_modes": [
+    {
+      "failure_mode": "numerical_instability",
+      "occurrence_count": 1,
+      "affected_components": ["m3tm.embedding.image_embedding"],
+      "root_cause": "Aşırı büyük ve küçük değerlerde gömmeler arasında aşırı benzerlik",
+      "symptoms": [
+        "Aşırı büyük girdiler (>100.0) için benzerlik skoru >0.98",
+        "Aşırı küçük girdiler (<1e-2) için benzerlik skoru >0.95",
+        "Farklı girdiler için neredeyse aynı çıktılar"
+      ],
+      "resolution_strategy": {
+        "method": "Normalizasyon ve rastgelelik ekleme",
+        "effectiveness": "Tam çözüm (test geçti)",
+        "pattern_applied": "PT-101 (InputNormalizationWithRobustness)",
+        "code_changes": ["src/m3tm/embedding/image_embedding.py"],
+        "resolution_time_minutes": 45
+      },
+      "testing_validation": {
+        "test_name": "test_numerical_stability.py::TestNumericalStability::test_numerical_range_stability",
+        "before_status": "FAILED",
+        "after_status": "PASSED",
+        "stability_confirmation": "10 ardışık başarılı test"
+      }
+    }
+  ],
+  "failure_distribution": {
+    "by_component": {
+      "m3tm.embedding.image_embedding": 1
+    },
+    "by_severity": {
+      "critical": 0,
+      "high": 1,
+      "medium": 0,
+      "low": 0
+    },
+    "by_root_cause": {
+      "normalization_absence": 1,
+      "algorithm_error": 0,
+      "configuration_error": 0,
+      "incompatible_interfaces": 0
+    }
+  },
+  "recurring_patterns": [
+    {
+      "pattern": "normalization_absence",
+      "frequency": 1,
+      "affected_modules": ["embedding"],
+      "recommended_action": "Tüm giriş işleme bileşenlerinde normalizasyon deseninin (PT-101) uygulanması",
+      "prevention_strategy": "Standart normalizasyon kütüphanesi oluşturulması"
+    }
+  ],
+  "proactive_measures": [
+    {
+      "measure": "InputNormalizationWithRobustness deseninin yaygınlaştırılması",
+      "target_components": ["tüm embedding modülleri"],
+      "priority": "high",
+      "status": "proposed",
+      "assignee": "embedding_team"
+    },
+    {
+      "measure": "Sayısal kararlılık test kapsamının genişletilmesi",
+      "target_components": ["tüm veri işleme modülleri"],
+      "priority": "medium",
+      "status": "proposed",
+      "assignee": "test_team"
+    }
+  ]
+} 

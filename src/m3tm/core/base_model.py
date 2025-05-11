@@ -95,3 +95,233 @@ class BaseModel(nn.Module):
         Alt sınıflarda uygulanmalıdır.
         """
         raise NotImplementedError("BaseModel.forward alt sınıflarda uygulanmalıdır.") 
+
+
+class M3TMBaseModel(BaseModel):
+    """
+    Multimodal Mobile Model Transformer (M³TM) temel modeli.
+    
+    Bu sınıf, BaseModel'i genişleterek M³TM mimarisinin temel bileşenlerini içerir:
+    - Metin gömme (text_embedding)
+    - Görüntü yama gömme (image_embedding)
+    - Transformer blokları (transformer_blocks)
+    - Füzyon (fusion)
+    - Arama gömme projeksiyonu (search_embedding)
+    """
+    
+    def __init__(self, config: M3TMConfig):
+        """
+        M3TMBaseModel sınıfını başlatır.
+        
+        Args:
+            config: Model yapılandırması
+        """
+        super().__init__(config)
+        
+        # Metin gömme
+        self.text_embedding = None
+        if config.use_text_modality:
+            from m3tm.embedding.text_embedding import TextEmbedding
+            self.text_embedding = TextEmbedding(config.text_config)
+        
+        # Görüntü yama gömme
+        self.image_embedding = None
+        if config.use_image_modality:
+            from m3tm.embedding.image_embedding import ImagePatchEmbedding
+            self.image_embedding = ImagePatchEmbedding(config.image_config)
+        
+        # Transformer blokları
+        from m3tm.transformer.proto_transformer import ProtoTransformerBlock
+        self.transformer_blocks = nn.ModuleList([
+            ProtoTransformerBlock(config.transformer_config) 
+            for _ in range(config.num_transformer_blocks)
+        ])
+        
+        # Füzyon
+        from m3tm.fusion.basic_fusion import BasicFusion
+        self.fusion = BasicFusion(config.fusion_config)
+        
+        # Arama gömme projeksiyonu
+        from m3tm.search.search_embedding import SearchEmbeddingProjection
+        self.search_embedding = SearchEmbeddingProjection(config.search_config)
+    
+    def forward(self, text_input=None, image_input=None, return_dict=True):
+        """
+        İleri beslemeli geçiş.
+        
+        Args:
+            text_input: Metin girişi (opsiyonel)
+            image_input: Görüntü girişi (opsiyonel)
+            return_dict: Sözlük olarak dön (varsayılan: True)
+            
+        Returns:
+            Çıktı değerleri, return_dict=True ise sözlük olarak
+        """
+        outputs = {}
+        
+        # Metin gömme
+        text_features = None
+        if text_input is not None and self.text_embedding is not None:
+            text_features = self.text_embedding(text_input)
+            outputs["text_features"] = text_features
+        
+        # Görüntü gömme
+        image_features = None
+        if image_input is not None and self.image_embedding is not None:
+            image_features = self.image_embedding(image_input)
+            outputs["image_features"] = image_features
+        
+        # Transformer blokları - text_features için
+        if text_features is not None:
+            # text_features sözlük olabilir - doğrudan tensor almalıyız
+            text_tensor = text_features
+            if isinstance(text_tensor, dict):
+                if 'hidden_states' in text_tensor:
+                    text_tensor = text_tensor['hidden_states']
+                elif 'embeddings' in text_tensor:
+                    text_tensor = text_tensor['embeddings']
+                elif len(text_tensor) == 1:
+                    text_tensor = list(text_tensor.values())[0]
+                    
+            # Artık text_tensor gerçekten bir tensor
+            for transformer_block in self.transformer_blocks:
+                transformer_output = transformer_block(text_tensor)
+                
+                # transformer_block tuple döndürür (output, metrics)
+                if isinstance(transformer_output, tuple) and len(transformer_output) >= 1:
+                    text_tensor = transformer_output[0]
+                    # Eğer transformer_output[0] bir sözlükse, içerisindeki tensör değerini alalım
+                    if isinstance(text_tensor, dict):
+                        if 'hidden_states' in text_tensor:
+                            text_tensor = text_tensor['hidden_states']
+                        elif 'embeddings' in text_tensor:
+                            text_tensor = text_tensor['embeddings']
+                        elif len(text_tensor) == 1:
+                            text_tensor = list(text_tensor.values())[0]
+                else:
+                    text_tensor = transformer_output
+                    # Eğer text_tensor bir sözlükse, içerisindeki tensör değerini alalım
+                    if isinstance(text_tensor, dict):
+                        if 'hidden_states' in text_tensor:
+                            text_tensor = text_tensor['hidden_states']
+                        elif 'embeddings' in text_tensor:
+                            text_tensor = text_tensor['embeddings']
+                        elif len(text_tensor) == 1:
+                            text_tensor = list(text_tensor.values())[0]
+                
+            # Çıktı tensörünü kaydet
+            outputs["transformed_text"] = text_tensor
+            text_features = text_tensor  # fusion için güncelle
+        
+        # Transformer blokları - image_features için
+        if image_features is not None:
+            # image_features sözlük olabilir - doğrudan tensor almalıyız
+            image_tensor = image_features
+            if isinstance(image_tensor, dict):
+                if 'hidden_states' in image_tensor:
+                    image_tensor = image_tensor['hidden_states']
+                elif 'embeddings' in image_tensor:
+                    image_tensor = image_tensor['embeddings']
+                elif len(image_tensor) == 1:
+                    image_tensor = list(image_tensor.values())[0]
+                    
+            # Artık image_tensor gerçekten bir tensor
+            for transformer_block in self.transformer_blocks:
+                transformer_output = transformer_block(image_tensor)
+                
+                # transformer_block tuple döndürür (output, metrics)
+                if isinstance(transformer_output, tuple) and len(transformer_output) >= 1:
+                    image_tensor = transformer_output[0]
+                    # Eğer transformer_output[0] bir sözlükse, içerisindeki tensör değerini alalım
+                    if isinstance(image_tensor, dict):
+                        if 'hidden_states' in image_tensor:
+                            image_tensor = image_tensor['hidden_states']
+                        elif 'embeddings' in image_tensor:
+                            image_tensor = image_tensor['embeddings']
+                        elif len(image_tensor) == 1:
+                            image_tensor = list(image_tensor.values())[0]
+                else:
+                    image_tensor = transformer_output
+                    # Eğer image_tensor bir sözlükse, içerisindeki tensör değerini alalım
+                    if isinstance(image_tensor, dict):
+                        if 'hidden_states' in image_tensor:
+                            image_tensor = image_tensor['hidden_states']
+                        elif 'embeddings' in image_tensor:
+                            image_tensor = image_tensor['embeddings']
+                        elif len(image_tensor) == 1:
+                            image_tensor = list(image_tensor.values())[0]
+                
+            # Çıktı tensörünü kaydet
+            outputs["transformed_image"] = image_tensor
+            image_features = image_tensor  # fusion için güncelle
+        
+        # Füzyon
+        fused_features = None
+        if text_features is not None or image_features is not None:
+            # text_features ve image_features artık gerçek tensörler olmalı
+            # BasicFusion modülü [batch_size, feature_dim] şeklinde tensörler bekliyor,
+            # ancak Transformer çıktıları [batch_size, seq_len, feature_dim] şeklinde.
+            # Bu nedenle, seq_len ekseni boyunca ortalama alarak boyutları uyumlu hale getiriyoruz.
+            
+            if text_features is not None:
+                # Tensor şekli kontrol et ve gerekirse ortalama al
+                if len(text_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
+                    text_features = torch.mean(text_features, dim=1)  # [batch_size, feature_dim]
+            
+            if image_features is not None:
+                # Tensor şekli kontrol et ve gerekirse ortalama al
+                if len(image_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
+                    image_features = torch.mean(image_features, dim=1)  # [batch_size, feature_dim]
+            
+            fused_features = self.fusion(text_features, image_features)
+            outputs["fused_features"] = fused_features
+        
+        # Arama gömme
+        if fused_features is not None:
+            search_embedding_output = self.search_embedding(fused_features)
+            
+            # search_embedding_output bir tensor veya dict olabilir
+            if isinstance(search_embedding_output, dict):
+                # search_embedding_output bir dict - içerden search_embedding'i al 
+                search_embedding = search_embedding_output["search_embedding"]
+                # Tam çıktıyı da saklayalım
+                outputs.update(search_embedding_output)
+            else:
+                # search_embedding_output direkt bir tensor
+                search_embedding = search_embedding_output
+                outputs["search_embedding"] = search_embedding
+        
+        if not return_dict:
+            return outputs.get("search_embedding", None)
+        
+        return outputs
+    
+    def add_adapter(self, adapter_name: str, layer_id: int = 0):
+        """
+        Belirtilen katmana bir adapter ekler.
+        
+        Args:
+            adapter_name: Adapter adı
+            layer_id: Adapter eklenecek katman indeksi (varsayılan: 0)
+        """
+        if 0 <= layer_id < len(self.transformer_blocks):
+            from m3tm.adapters.adapter_manager import create_adapter
+            adapter = create_adapter(
+                input_dim=self.config.transformer_config.embed_dim,
+                bottleneck_dim=self.config.adapter_config.bottleneck_dim
+            )
+            self.transformer_blocks[layer_id].add_adapter(adapter_name, adapter)
+    
+    def get_search_embedding(self, text_input=None, image_input=None):
+        """
+        Verilen girdiler için arama gömme vektörünü döndürür.
+        
+        Args:
+            text_input: Metin girişi (opsiyonel)
+            image_input: Görüntü girişi (opsiyonel)
+            
+        Returns:
+            Arama gömme vektörü
+        """
+        outputs = self.forward(text_input=text_input, image_input=image_input)
+        return outputs.get("search_embedding", None) 

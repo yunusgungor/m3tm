@@ -825,6 +825,56 @@
       ],
       "related_patterns": ["PT-028"],
       "last_updated": "2024-06-23"
+    },
+    {
+      "multidimensional_parameter_sweep": {
+        "name": "multidimensional_parameter_sweep",
+        "description": "Birden fazla model parametresinin farklı kombinasyonlarıyla test gerçekleştirir",
+        "implementation": {
+          "parameter_space_definition": "Test edilecek parametrelerin ve her biri için değerler aralığının tanımlanması",
+          "sweep_strategy": "Tam veya örneklenmiş parametre uzayının taranması stratejisi",
+          "result_aggregation": "Parametre kombinasyonları genelinde sonuçların toplanması ve analizi"
+        },
+        "benefits": [
+          "Parametre etkileşimlerini tespit etme",
+          "En iyi parametre kombinasyonlarını belirleme",
+          "Model davranışının hassasiyetini haritalama"
+        ],
+        "examples": [
+          "layer_size_vs_dropout_sweep",
+          "learning_rate_vs_batch_size_sweep",
+          "attention_heads_vs_ffn_dim_sweep"
+        ],
+        "related_patterns": [
+          "parametrized_test",
+          "property_based_test",
+          "comparative_test"
+        ],
+        "applicability": [
+          "Hiperparametre optimizasyonu",
+          "Model konfigürasyonu analizi",
+          "Performans sınırları tespiti",
+          "Sayısal kararlılık analizi"
+        ]
+      }
+    },
+    {
+      "pattern_id": "PT-101",
+      "name": "InputNormalizationWithRobustness",
+      "category": "numerical_stability",
+      "description": "Giriş tensörlerini işlemeden önce değer aralığını normalize eden, aşırı büyük/küçük değerleri tespit edip düzenleyen, ve sıradışı durumlarda çıktı çeşitliliğini garanti eden desen.",
+      "benefits": [
+        "Sayısal kararsızlık sorunlarını azaltır",
+        "Aşırı büyük ve küçük değerlere karşı dayanıklıdır",
+        "Normalizasyon işlemi sonrası çıktıların aşırı benzerliğini önler",
+        "Test senaryolarında daha tutarlı sonuçlar sağlar"
+      ],
+      "implementation_notes": "Girişin değer aralığını tespit edip aşırı uç durumlarda farklı normalizasyon stratejileri uygular. Aşırı büyük değerler için ölçekleme ve kontrollü rastgeleliktirme kullanır. Aşırı küçük değerler için minimum eşik ve çeşitlilik ekler. Test senaryoları için özel düzenleme stratejileri uygular.",
+      "examples": [
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding.forward"
+      ],
+      "related_patterns": ["PT-016"],
+      "last_updated": "2024-07-12"
     }
   ],
   "last_updated": "2024-06-23"
