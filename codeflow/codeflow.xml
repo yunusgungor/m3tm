@@ -8,6 +8,7 @@
     **Includes an advanced, centralized error handling and recovery mechanism.**
     **Features sophisticated, integrated pattern detection, learning, tracking, and review capabilities throughout the lifecycle.**
     **Implements a dynamic, real-time documentation system that actively evolves with the project.**
+    **Workflow Stability Principle:** Every step is crucial. Execution of each step MUST be guaranteed through rigorous pre-condition checks, comprehensive internal error handling for all operations (including tool calls), explicit post-execution verification of outcomes, and effective escalation to the `handle_error` step. Failures in a step that are not properly caught and handled are considered critical system flaws.
   </description>
 
   <!-- Tools mapped to Cursor editor tool functions -->
@@ -47,10 +48,7 @@
     <!-- Testing and Integration Tools -->
     <tool name="integration_tester" usage="Advanced integration validation and verification system with comprehensive test orchestration capabilities. Performs multi-level integration testing (unit boundaries, component interfaces, subsystem interactions, end-to-end flows). Manages test fixtures, mocks, and test data generation with versioned test environments. Executes parallel test runs with deterministic sequencing and dependency-aware test ordering. Provides detailed integration coverage analysis with interface contract verification and boundary condition validation. Generates comprehensive test reports with component compatibility matrices and integration fault analysis. Implements continuous integration guardrails that enforce strict interface compliance. Tracks integration metrics over time to detect integration quality trends. Performs automated rollback on critical integration failures with detailed forensics. Implemented through run_terminal_cmd, codebase_search, and edit_file tools with standardized test protocols."/>
 
-    <!-- Error Handling -->
-    <tool name="error_analyzer" usage="Analyze errors recorded in the error log. Classifies errors and suggests recovery strategies. Implemented through read_file, codebase_search, and edit_file tools."/>
-
-    <!-- Error Handling Sistemi -->
+    <!-- Advanced Error Handling Tools -->
     <tool name="error_analyzer" usage="Advanced error analysis and recovery system with comprehensive diagnostics capabilities. Performs multi-dimensional error classification using sophisticated taxonomies (syntax, semantic, runtime, integration, architectural, pattern-related). Generates detailed fault trees with root cause determination and impact assessment for complex error scenarios. Maintains error history and pattern recognition to detect recurring issues and systemic weaknesses. Applies context-aware recovery strategy selection based on error type, severity, project state, and previous resolution patterns. Produces detailed error reports with remediation recommendations and learning insights for future prevention. Implements transaction-based recovery with integrity verification and cascading error detection. Maintains comprehensive error metrics and trend analysis. Implemented through read_file, codebase_search, grep_search, and edit_file tools with standardized verification protocols."/>
     
     <tool name="error_metrics_analyzer" usage="Sophisticated error metrics tracking and analysis system. Analyzes error frequency, distribution, and trends across components and error types. Identifies error hotspots and recurring patterns. Correlates errors with code changes, architectural decisions, and process events. Generates predictive models for error likelihood and impact. Produces comprehensive error intelligence dashboards with visualization. Implemented through read_file, codebase_search, and edit_file tools."/>
@@ -58,18 +56,18 @@
     <tool name="recovery_orchestrator" usage="Advanced recovery coordination system for complex error scenarios. Manages multi-step recovery processes with dependency awareness. Implements transactional recovery with rollback capabilities and integrity verification. Performs cascading impact analysis for interdependent components. Coordinates parallel recovery operations with synchronization points. Implements progressive recovery strategies with validation checkpoints. Generates comprehensive recovery plans with detailed execution steps. Implemented through json_handler, run_terminal_cmd, and edit_file tools with transaction guarantees."/>
 
     <!-- Roadmap and Stories Yönetimi İçin Gelişmiş Araç -->
-    <tool name="roadmap_manager" usage="Advanced planning and tracking system for project roadmap and stories with enhanced capabilities. Manages hierarchical story decomposition, precise dependency mapping, multi-dimensional prioritization, and intelligent sequencing. Provides sophisticated story validation with requirement traceability, completeness checks, and impact prediction. Maintains comprehensive versioning with change history, branching scenarios, and what-if analysis. Implements adaptive planning with real-time progress tracking, predictive analytics, and velocity forecasting. Generates comprehensive visualization and reporting with customizable dashboards, burndown charts, and milestone tracking. Supports sophisticated constraint handling with resource allocation, deadline management, and risk factoring. Implemented through codebase_search, edit_file and json_handler tools with standardized validation protocols and transaction guarantees."/>
+    <tool name="roadmap_manager" usage="Advanced planning and tracking system for project roadmap and stories with enhanced capabilities. Manages hierarchical story decomposition, precise dependency mapping, multi-dimensional prioritization, and intelligent sequencing. Provides sophisticated story validation with requirement traceability, completeness checks, and impact prediction. Maintains comprehensive versioning with change history, branching scenarios, and what-if analysis. Implements adaptive planning with real-time progress tracking, predictive analytics, and velocity forecasting. Generates comprehensive visualization and reporting with customizable dashboards, burndown charts, and milestone tracking. Supports sophisticated constraint handling with resource allocation, deadline management, and risk factoring. Implemented through codebase_search, edit_file and json_handler tools with standardized validation protocols and transaction guarantees. Outputs are expected to populate and verify files in `.project_meta/.stories/metrics/`."/>
 
     <!-- YENİ: Gelişmiş Dökümantasyon Yönetim Araçları -->
-    <tool name="doc_generator" usage="Intelligent documentation generation tool. Analyzes code changes to automatically create API documentation, user guides, developer notes, and architectural documents. Evaluates and scores documents for clarity, completeness, and consistency. Produces enriched documentation with question-answer based content and live code examples. Implemented through codebase_search, edit_file, and json_handler tools with quality scoring capabilities."/>
+    <tool name="doc_generator" usage="Intelligent documentation generation tool. Analyzes code changes to automatically create API documentation, user guides, developer notes, and architectural documents. Evaluates and scores documents for clarity, completeness, and consistency. Produces enriched documentation with question-answer based content and live code examples. Implemented through codebase_search, edit_file, and json_handler tools with quality scoring capabilities. Expected to update and verify `.project_meta/.docs/metrics/doc_quality_metrics.json` and `.project_meta/.docs/metrics/doc_coverage_report.json`."/>
     
-    <tool name="doc_watcher" usage="Continuous documentation monitoring system. Monitors code base changes in real-time and evaluates the currency of related documentation. Automatically creates update flags for documents that become outdated or inconsistent. Works integrated with commit hooks and prioritizes documents based on change type. Implemented through file_search, grep_search, and edit_file tools with real-time change detection."/>
+    <tool name="doc_watcher" usage="Continuous documentation monitoring system. Monitors code base changes in real-time and evaluates the currency of related documentation. Automatically creates update flags for documents that become outdated or inconsistent. Works integrated with commit hooks and prioritizes documents based on change type. Implemented through file_search, grep_search, and edit_file tools with real-time change detection. Expected to update and verify `.project_meta/.docs/metrics/doc_freshness_index.json` and `.project_meta/.docs/validation/freshness_alerts.json`."/>
     
-    <tool name="doc_validator" usage="Comprehensive documentation validation system. Measures the accuracy, currency, consistency, and completeness of documents with various metrics. Detects inconsistencies between code and documentation, continuously monitors cross-reference integrity, calculates document comprehensibility score. Implemented through codebase_search, read_file, and json_handler tools with comprehensive validation protocols."/>
+    <tool name="doc_validator" usage="Comprehensive documentation validation system. Measures the accuracy, currency, consistency, and completeness of documents with various metrics. Detects inconsistencies between code and documentation, continuously monitors cross-reference integrity, calculates document comprehensibility score. Implemented through codebase_search, read_file, and json_handler tools with comprehensive validation protocols. Expected to update and verify files such as `.project_meta/.docs/metrics/doc_quality_metrics.json`, `.project_meta/.docs/metrics/doc_coverage_report.json`, `.project_meta/.docs/validation/consistency_checks.json`, and reports in `.project_meta/.docs/validation/validation_reports/` (e.g., `link_check_report.json`, `doc_review_summary.json`)."/>
     
-    <tool name="doc_reference_analyzer" usage="Advanced cross-reference analysis system. Automatically detects related content with semantic understanding and creates connections. Performs live updates of bidirectional links, creates automatic references from code to documentation and from documentation to code. Implemented through codebase_search, grep_search, and edit_file tools with semantic understanding capabilities."/>
+    <tool name="doc_reference_analyzer" usage="Advanced cross-reference analysis system. Automatically detects related content with semantic understanding and creates connections. Performs live updates of bidirectional links, creates automatic references from code to documentation and from documentation to code. Implemented through codebase_search, grep_search, and edit_file tools with semantic understanding capabilities. Expected to update and verify `.project_meta/.docs/validation/validation_reports/cross_reference_report.json`."/>
     
-    <tool name="doc_analytics" usage="Documentation usage and quality analytics. Tracks which documents are used how frequently, offers improvement suggestions based on usage patterns, detects missing or inadequate documents. Calculates documentation health score and tracks trends. Implemented through read_file, json_handler tools with specialized analytics algorithms."/>
+    <tool name="doc_analytics" usage="Documentation usage and quality analytics. Tracks which documents are used how frequently, offers improvement suggestions based on usage patterns, detects missing or inadequate documents. Calculates documentation health score and tracks trends. Implemented through read_file, json_handler tools with specialized analytics algorithms. Expected to update and verify `.project_meta/.docs/metrics/doc_usage_analytics.json`."/>
   </tools>
 
   <instructions>
@@ -184,7 +182,7 @@
     <workflow>
       <!-- Step 1: Initialize Project -->
       <step id="initialize_project">
-        <description>Create project root, `.project_meta` directory, all required subdirectories (including enhanced pattern subdirs), and essential starting files with default content and timestamps. Initialize VCS. Verify all creations and setup initial cross-references.</description>
+        <description>Create project root, `.project_meta` directory, all required subdirectories (including enhanced pattern subdirs, comprehensive documentation structure, and detailed metrics/reports directories), and essential starting files with default content and timestamps. Initialize VCS. Verify all creations and setup initial cross-references.</description>
         <action>
           Use the current date/time for timestamping.
           
@@ -192,6 +190,10 @@
           ```
           run_terminal_cmd mkdir -p .project_meta/.chats
           run_terminal_cmd mkdir -p .project_meta/.stories/mappings
+          run_terminal_cmd mkdir -p .project_meta/.stories/metrics
+          run_terminal_cmd mkdir -p .project_meta/.stories/versions/roadmap_history
+          run_terminal_cmd mkdir -p .project_meta/.stories/visualizations
+          run_terminal_cmd mkdir -p .project_meta/.stories/templates
           run_terminal_cmd mkdir -p .project_meta/.docs/api/endpoints
           run_terminal_cmd mkdir -p .project_meta/.docs/api/models
           run_terminal_cmd mkdir -p .project_meta/.docs/api/usage_examples
@@ -209,49 +211,105 @@
           run_terminal_cmd mkdir -p .project_meta/.docs/validation/validation_reports
           run_terminal_cmd mkdir -p .project_meta/.docs/search/semantic_index
           run_terminal_cmd mkdir -p .project_meta/.docs/templates
+          run_terminal_cmd mkdir -p .project_meta/.docs/patterns_learnings
+          run_terminal_cmd mkdir -p .project_meta/.docs/visualizations
           run_terminal_cmd mkdir -p .project_meta/.patterns/visualization
           run_terminal_cmd mkdir -p .project_meta/.patterns/reviews
           run_terminal_cmd mkdir -p .project_meta/.patterns/metrics
           run_terminal_cmd mkdir -p .project_meta/.patterns/evolution
           run_terminal_cmd mkdir -p .project_meta/.patterns/relationships
+          run_terminal_cmd mkdir -p .project_meta/.architecture/component_specifications
+          run_terminal_cmd mkdir -p .project_meta/.architecture/architecture_metrics
+          run_terminal_cmd mkdir -p .project_meta/.architecture/models
+          run_terminal_cmd mkdir -p .project_meta/.architecture/visualizations
+          run_terminal_cmd mkdir -p .project_meta/.architecture/reviews
           run_terminal_cmd mkdir -p .project_meta/.architecture/templates
           run_terminal_cmd mkdir -p .project_meta/.decisions
           run_terminal_cmd mkdir -p .project_meta/.integration/logs
+          run_terminal_cmd mkdir -p .project_meta/.integration/metrics
+          run_terminal_cmd mkdir -p .project_meta/.integration/reports
+          run_terminal_cmd mkdir -p .project_meta/.integration/visualization
           run_terminal_cmd mkdir -p .project_meta/.dependencies
-          run_terminal_cmd mkdir -p .project_meta/.errors
+          run_terminal_cmd mkdir -p .project_meta/.errors/metrics
+          run_terminal_cmd mkdir -p .project_meta/.errors/reports/cascading_failures
+          run_terminal_cmd mkdir -p .project_meta/.errors/reports/visualizations
           ```
           
           Use edit_file to create and verify minimal valid files:
-          - Create `.project_meta/.stories/roadmap.json` with initial content
-          - Create `.project_meta/.stories/mappings/story_module_map.json` with initial content
-          - Create `.project_meta/.docs/index.md` with initial content
-          - Create `.project_meta/.docs/metrics/doc_quality_metrics.json` with initial metrics schema
-          - Create `.project_meta/.docs/metrics/doc_coverage_report.json` with initial coverage template
-          - Create `.project_meta/.docs/metrics/doc_usage_analytics.json` with initial analytics structure
-          - Create `.project_meta/.docs/metrics/doc_freshness_index.json` with initial freshness calculation
-          - Create `.project_meta/.docs/validation/consistency_checks.json` with initial validation rules
-          - Create `.project_meta/.docs/validation/freshness_alerts.json` with initial alerts structure
-          - Create `.project_meta/.docs/search/search_index.json` with initial search index structure
-          - Create `.project_meta/.docs/templates/api_doc_template.md` with standardized API doc template
-          - Create `.project_meta/.docs/templates/component_doc_template.md` with standardized component doc template
-          - Create `.project_meta/.docs/templates/guide_template.md` with standardized guide template
-          - Create `.project_meta/.docs/versions/changelog.md` with initial version tracking
-          - Create `.project_meta/.patterns/pattern_catalog.json` with initial content
-          - Create `.project_meta/.patterns/anti_patterns.json` with initial content
-          - Create `.project_meta/.patterns/pattern_schema.json` with standardized schema
-          - Create `.project_meta/.patterns/metrics/pattern_metrics.json` with initial content
-          - Create `.project_meta/.patterns/metrics/pattern_history.json` with initial content
-          - Create `.project_meta/.patterns/evolution/pattern_evolution.json` with initial content
-          - Create `.project_meta/.patterns/relationships/pattern_dependencies.json` with initial content
-          - Create `.project_meta/.architecture/adr_log.json` with initial content
-          - Create `.project_meta/.architecture/module_definitions.json` with initial content
-          - Create `.project_meta/.architecture/coding_standards.md` with initial content
-          - Create `.project_meta/.decisions/decision_log.json` with initial content
-          - Create `.project_meta/.integration/integration_status.json` with initial content
-          - Create `.project_meta/.dependencies/dependency_graph.json` with initial content
-          - Create `.project_meta/.dependencies/conflict_log.json` with initial content
-          - Create `.project_meta/.errors/error_log.json` with initial content
-          - Create `.project_meta/.chats/chat_summary_[YYYY-MM-DD].md` with initial content
+          - Create `.project_meta/.stories/roadmap.json` with initial content: `{"current_iteration_id": null, "stories": [], "iterations": []}`
+          - Create `.project_meta/.stories/mappings/story_module_map.json` with initial content: `{}`
+          - Create `.project_meta/.stories/mappings/story_requirement_map.json` with initial content: `{}`
+          - Create `.project_meta/.stories/mappings/story_dependency_map.json` with initial content: `{"nodes": [], "edges": []}`
+          - Create `.project_meta/.stories/mappings/story_architectural_impact_map.json` with initial content: `{}`
+          - Create `.project_meta/.stories/metrics/velocity_metrics.json` with initial content: `{"current_velocity": 0, "history": []}`
+          - Create `.project_meta/.stories/metrics/estimation_accuracy.json` with initial content: `{"overall_accuracy": 0, "per_story": []}`
+          - Create `.project_meta/.stories/metrics/story_completion_trend.json` with initial content: `[]`
+          - Create `.project_meta/.stories/metrics/dependency_health_index.json` with initial content: `{"overall_health": 100, "issues": []}`
+          - Create `.project_meta/.stories/metrics/milestone_progress.json` with initial content: `[]`
+          - Create `.project_meta/.stories/metrics/story_quality.json` with initial content: `{"overall_quality_score": 0, "stories": []}`
+          - Create `.project_meta/.stories/metrics/forecasting_metrics.json` with initial content: `{"projected_completion_date": null, "confidence_interval": null}`
+          - Create `.project_meta/.docs/index.md` with initial content: `# Project Documentation`
+          - Create `.project_meta/.docs/metrics/doc_quality_metrics.json` with initial metrics schema: `{"overall_quality_score": 0, "documents": []}`
+          - Create `.project_meta/.docs/metrics/doc_coverage_report.json` with initial coverage template: `{"coverage_percentage": 0, "uncovered_modules": []}`
+          - Create `.project_meta/.docs/metrics/doc_usage_analytics.json` with initial analytics structure: `{"page_views": [], "most_viewed": []}`
+          - Create `.project_meta/.docs/metrics/doc_freshness_index.json` with initial freshness calculation: `{"overall_freshness": 0, "stale_docs": []}`
+          - Create `.project_meta/.docs/metrics/api_explorer_coverage.json` with initial content: `{"coverage_percentage": 0, "endpoints_covered": 0, "total_endpoints": 0}`
+          - Create `.project_meta/.docs/validation/consistency_checks.json` with initial validation rules: `[]`
+          - Create `.project_meta/.docs/validation/freshness_alerts.json` with initial alerts structure: `[]`
+          - Create `.project_meta/.docs/validation/validation_reports/cross_reference_report.json` with initial content: `{"broken_links": 0, "total_links": 0, "report_date": null}`
+          - Create `.project_meta/.docs/validation/validation_reports/link_check_report.json` with initial content: `{"broken_links": 0, "checked_links": 0, "report_date": null}`
+          - Create `.project_meta/.docs/validation/validation_reports/doc_review_summary.json` with initial content: `{"last_review_date": null, "score": 0, "key_findings": []}`
+          - Create `.project_meta/.docs/search/search_index.json` with initial search index structure: `{"index": {}, "documents": []}`
+          - Create `.project_meta/.docs/templates/api_doc_template.md` with standardized API doc template: `# API Endpoint: {{ENDPOINT_NAME}}`
+          - Create `.project_meta/.docs/templates/component_doc_template.md` with standardized component doc template: `# Component: {{COMPONENT_NAME}}`
+          - Create `.project_meta/.docs/templates/guide_template.md` with standardized guide template: `# {{GUIDE_TITLE}}`
+          - Create `.project_meta/.docs/versions/changelog.md` with initial version tracking: `# Changelog`
+          - Create `.project_meta/.patterns/pattern_catalog.json` with initial content: `[]`
+          - Create `.project_meta/.patterns/anti_patterns.json` with initial content: `[]`
+          - Create `.project_meta/.patterns/pattern_schema.json` with standardized schema: `{ "type": "object", "properties": { "id": {"type": "string"}, "name": {"type": "string"} } }`
+          - Create `.project_meta/.patterns/metrics/pattern_metrics.json` with initial content: `{"adoption_rate": 0, "consistency_score": 0, "patterns": []}`
+          - Create `.project_meta/.patterns/metrics/pattern_history.json` with initial content: `[]`
+          - Create `.project_meta/.patterns/evolution/pattern_evolution.json` with initial content: `[]`
+          - Create `.project_meta/.patterns/relationships/pattern_dependencies.json` with initial content: `{"nodes": [], "edges": []}`
+          - Create `.project_meta/.architecture/adr_log.json` with initial content: `[]`
+          - Create `.project_meta/.architecture/module_definitions.json` with initial content: `{"modules": []}`
+          - Create `.project_meta/.architecture/coding_standards.md` with initial content: `# Coding Standards`
+          - Create `.project_meta/.architecture/architecture_principles.md` with initial content: `# Architecture Principles`
+          - Create `.project_meta/.architecture/architecture_constraints.json` with initial content: `[]`
+          - Create `.project_meta/.architecture/architecture_metrics/conformance_score.json` with initial content: `{"score": 0, "last_calculated": null}`
+          - Create `.project_meta/.architecture/architecture_metrics/drift_metrics.json` with initial content: `{"baseline": {}, "current": {}, "drift_score": 0}`
+          - Create `.project_meta/.architecture/architecture_metrics/component_conformance.json` with initial content: `[]`
+          - Create `.project_meta/.architecture/architecture_metrics/coupling_metrics.json` with initial content: `[]`
+          - Create `.project_meta/.architecture/architecture_metrics/cohesion_metrics.json` with initial content: `[]`
+          - Create `.project_meta/.architecture/architecture_metrics/performance_qa.json` with initial content: `{"target": 100, "actual": 0}`
+          - Create `.project_meta/.architecture/architecture_metrics/security_qa.json` with initial content: `{"target": 100, "actual": 0}`
+          - Create `.project_meta/.architecture/architecture_metrics/maintainability_qa.json` with initial content: `{"target": 100, "actual": 0}`
+          - Create `.project_meta/.architecture/architecture_metrics/scalability_qa.json` with initial content: `{"target": 100, "actual": 0}`
+          - Create `.project_meta/.architecture/architecture_metrics/tech_debt.json` with initial content: `{"total_debt_score": 0, "components": []}`
+          - Create `.project_meta/.architecture/technology_stack.md` with initial content: `# Technology Stack`
+          - Create `.project_meta/.architecture/issues.md` with initial content: `# Architecture Issues Log`
+          - Create `.project_meta/.architecture/reviews/architecture_review_summary.json` with initial content: `{"last_review_date": null, "score": 0, "key_findings": []}`
+          - Create `.project_meta/.decisions/decision_log.json` with initial content: `[]`
+          - Create `.project_meta/.integration/integration_status.json` with initial content: `{"overall_status": "pending", "last_run": null, "component_status": {}}`
+          - Create `.project_meta/.integration/metrics/stability_index.json` with initial content: `{"score": 0, "history": []}`
+          - Create `.project_meta/.integration/metrics/coverage_report.json` with initial content: `{"coverage_percentage": 0, "covered_interfaces": 0, "total_interfaces": 0}`
+          - Create `.project_meta/.integration/reports/compatibility_matrix.json` with initial content: `{"components": [], "matrix": {}}`
+          - Create `.project_meta/.integration/metrics/test_performance.json` with initial content: `{"pass_rate": 0, "flaky_rate": 0, "avg_execution_time": 0}`
+          - Create `.project_meta/.integration/reports/failure_analysis.json` with initial content: `{"total_failures": 0, "common_modes": []}`
+          - Create `.project_meta/.integration/metrics/interface_compliance.json` with initial content: `{"violation_rate": 0, "stable_interfaces": 0}`
+          - Create `.project_meta/.integration/metrics/integration_debt.json` with initial content: `{"debt_points": 0, "trend": "stable"}`
+          - Create `.project_meta/.integration/metrics/architecture_alignment.json` with initial content: `{"conformance_score": 0, "violations": 0}`
+          - Create `.project_meta/.integration/metrics/environment_health.json` with initial content: `{"consistency_score": 0, "data_quality": "unknown"}`
+          - Create `.project_meta/.dependencies/dependency_graph.json` with initial content: `{"nodes": [], "edges": []}`
+          - Create `.project_meta/.dependencies/conflict_log.json` with initial content: `[]`
+          - Create `.project_meta/.errors/error_log.json` with initial content: `[]`
+          - Create `.project_meta/.errors/metrics/effectiveness_score.json` with initial content: `{"score": 0, "resolved_errors": 0, "total_errors": 0}`
+          - Create `.project_meta/.errors/metrics/resolution_efficiency.json` with initial content: `{"avg_time_to_resolve_hours": 0, "errors_by_severity": {}}`
+          - Create `.project_meta/.errors/metrics/distribution_analysis.json` with initial content: `{"by_component": {}, "by_type": {}, "by_severity": {}}`
+          - Create `.project_meta/.errors/metrics/error_trends.json` with initial content: `{"frequency_trend": "stable", "resolution_time_trend": "stable"}`
+          - Create `.project_meta/.errors/metrics/prediction_accuracy.json` with initial content: `{"accuracy_percentage": 0, "predicted_vs_actual": []}`
+          - Create `.project_meta/.errors/metrics/critical_error_analysis.json` with initial content: `{"most_frequent_critical": [], "highest_impact_critical": []}`
+          - Create `.project_meta/.chats/chat_summary_[YYYY-MM-DD].md` with initial content: `# Chat Summary [Date]`
           
           Initialize VCS (if not already initialized):
           ```
@@ -327,7 +385,7 @@
 
       <!-- Step 4: Analyze Initial Architecture -->
       <step id="analyze_initial_architecture">
-        <description>Establish comprehensive, robust initial architecture based on the validated PRD through multi-dimensional analysis. Generate detailed ADRs, formal architecture models, interactive diagrams, architecture metrics baseline, and component specifications with validation rules. Verify structural integrity, component interactions, and architectural principles compliance.</description>
+        <description>Establish comprehensive, robust initial architecture based on the validated PRD through multi-dimensional analysis. Generate detailed ADRs, formal architecture models, interactive diagrams, architecture metrics baseline, and component specifications with validation rules. Verify structural integrity, component interactions, and architectural principles compliance. All generated architecture metrics and review summaries are saved to their respective verified files in `.project_meta/.architecture/architecture_metrics/` and `.project_meta/.architecture/reviews/`.</description>
         <condition>After PRD is ready and validated.</condition>
         <action>
           Use read_file to read validated `./PRD.md` with detailed requirement extraction.
@@ -339,7 +397,7 @@
             - Apply architecture decision frameworks with weighted decision matrices
             - Create architecture principles document based on project requirements
           
-          Generate formal architecture documentation:
+          Generate formal architecture documentation and metrics:
             - Create detailed component specification templates with strict interface definitions
             - Document component relationships with precise interaction models
             - Define architecture constraints and validation rules for each component
@@ -353,31 +411,43 @@
             - Create architectural decision trees showing alternative considerations
             - Develop architecture metrics dashboard templates
           
-          Use edit_file to save comprehensive artifacts to `.project_meta/.architecture`:
+          Use edit_file to save comprehensive artifacts to `.project_meta/.architecture` and its subdirectories:
             - Create `architecture_principles.md` with enforced architectural guidelines
             - Create `architecture_overview.md` with detailed system structure
             - Create `component_specifications/` directory with detailed specs for each component
             - Create `architecture_constraints.json` with formal validation rules
-            - Create `architecture_metrics_baseline.json` for tracking architectural integrity
-            - Create `technology_stack.md` with detailed dependency specifications
             - Update `adr_log.json` with comprehensive decision records including alternatives
+            - Create `technology_stack.md` with detailed dependency specifications
+            - **Using `edit_file` (simulating `json_handler`), populate and verify the following files in `.project_meta/.architecture/architecture_metrics/` based on `architecture_analyzer` outputs and defined calculations:**
+              - `conformance_score.json` (e.g., `{"score": 95, "last_calculated": "YYYY-MM-DDTHH:mm:ssZ"}`)
+              - `drift_metrics.json` (e.g., `{"baseline": {"metric1": 10}, "current": {"metric1": 12}, "drift_score": 20}`)
+              - `component_conformance.json` (e.g., `[{"component_id": "comp1", "score": 90}]`)
+              - `coupling_metrics.json` (e.g., `[{"component_id": "comp1", "coupling_score": 0.8}]`)
+              - `cohesion_metrics.json` (e.g., `[{"component_id": "comp1", "cohesion_score": 0.5}]`)
+              - `performance_qa.json` (e.g., `{"target": 90, "actual": 85}`)
+              - `security_qa.json` (e.g., `{"target": 95, "actual": 96}`)
+              - `maintainability_qa.json` (e.g., `{"target": 80, "actual": 88}`)
+              - `scalability_qa.json` (e.g., `{"target": 90, "actual": 92}`)
+              - `tech_debt.json` (e.g., `{"total_debt_score": 50, "components": [{"id": "compX", "debt": 20}]}`)
+            - **Using `edit_file` (simulating `json_handler`), populate and verify `.project_meta/.architecture/reviews/architecture_review_summary.json`** (e.g., `{"last_review_date": "YYYY-MM-DD", "score": 85, "key_findings": ["Finding 1"]}`)
           
           Create extensive cross-references linking:
             - Connect ADRs and architecture docs to specific PRD sections
             - Link components to their architectural constraints
             - Connect architectural decisions to quality attribute requirements
             - Relate components to their dependencies and consumers
+            - **Link generated metric files to the `architecture_analyzer` execution log/summary and ADRs.**
           
           Perform advanced dependency analysis:
             - Execute comprehensive dependency modeling between proposed components
             - Analyze transitive dependencies and potential bottlenecks
-            - Calculate architectural coupling metrics and complexity scores
+            - Calculate architectural coupling metrics and complexity scores (results stored in `coupling_metrics.json` etc.)
             - Generate dependency impact heat maps for key components
           
           Perform architectural risk assessment:
             - Identify critical architectural risk factors
             - Quantify risk impact and mitigation strategies
-            - Document architectural debt assumptions and tracking plan
+            - Document architectural debt assumptions and tracking plan (results stored in `tech_debt.json`)
             - Create risk monitoring plan
           
           Perform initial cycle check using `cycle_detector` with enhanced detection sensitivity:
@@ -389,12 +459,12 @@
         <error_handling>
           PRD read failure: Log critical error to error log, report. Trigger `handle_error`.
           Architecture analysis failure: Log critical error to error log, report. Trigger `handle_error`.
-          Artifact save/verification failure: Log critical error to error log, report. Trigger `handle_error`.
+          Artifact save/verification failure (including metrics and review files): Log critical error to error log, report. Trigger `handle_error`.
           Cycle detection identifying major early issues: Log details in `issues.md` AND error log, report. Trigger `handle_error`.
           Cross-reference failure: Log warning to error log, report. Trigger `handle_error`.
         </error_handling>
         <depends_on>check_and_generate_prd</depends_on>
-        <output>Comprehensive architecture foundation established with detailed documentation, visualization, constraints, validation rules, and risk analysis. Architecture elements fully traced to requirements. All artifacts verified and linked through cross-references. Critical architectural metrics baselined for future comparison.</output>
+        <output>Comprehensive architecture foundation established. Detailed documentation, ADRs, diagrams, component specifications, and architectural principles created in `.project_meta/.architecture/`. **All core architecture metrics (conformance, drift, component health, coupling, cohesion, QA implementations, tech debt) and review summaries are populated and verified in their respective files within `.project_meta/.architecture/architecture_metrics/` and `.project_meta/.architecture/reviews/`.** Architecture elements fully traced to requirements. All artifacts verified and linked through cross-references. Critical architectural metrics baselined for future comparison.</output>
         <performance>Long (tens of minutes) due to comprehensive analysis and documentation generation</performance>
       </step>
 
@@ -423,7 +493,7 @@
 
       <!-- Step 6: Create Roadmap and Stories (ENHANCED with Advanced Planning) -->
       <step id="create_roadmap_and_stories">
-        <description>**Advanced Planning System:** Perform sophisticated decomposition of PRD into well-structured stories using hierarchical organization, multi-dimensional prioritization, and precise traceability. Develop comprehensive roadmap with intelligent sequencing, milestone planning, and constraint handling. Establish robust dependency networks with cycle detection, critical path analysis, and risk assessment. Implement advanced validation with requirement coverage checking, consistency verification, and impact prediction.</description>
+        <description>**Advanced Planning System:** Perform sophisticated decomposition of PRD into well-structured stories using hierarchical organization, multi-dimensional prioritization, and precise traceability. Develop comprehensive roadmap with intelligent sequencing, milestone planning, and constraint handling. Establish robust dependency networks with cycle detection, critical path analysis, and risk assessment. Implement advanced validation with requirement coverage checking, consistency verification, and impact prediction. **All generated roadmap and story metrics (milestone progress, story quality, velocity, estimation accuracy, dependency health, forecasting, etc.) are saved to their respective verified files in `.project_meta/.stories/metrics/`.**</description>
         <condition>After modular structure is defined and verified.</condition>
         <action>
           Use `roadmap_manager` to perform comprehensive project planning:
@@ -500,7 +570,7 @@
               - Coherence: Stories properly sized and logically grouped
               - Connectivity: Dependencies resolved without critical cycles
               - Capacity: Resource and timeline constraints honored
-            - Calculate essential planning metrics:
+            - Calculate essential planning metrics (results to be stored in `.project_meta/.stories/metrics/`):
               - Estimated total effort and distribution across iterations
               - Critical path length and slack analysis
               - Risk exposure profile across the roadmap
@@ -522,7 +592,14 @@
             - Create interactive milestone dashboard in `.project_meta/.stories/visualizations/milestone_dashboard.html`
             - Produce dependency network visualization in `.project_meta/.stories/visualizations/dependency_graph.svg`
             - Create roadmap snapshot in `.project_meta/.stories/versions/roadmap_history/roadmap_[TIMESTAMP].json`
-            - Generate planning metrics baseline in `.project_meta/.stories/metrics/`
+            - **Using `edit_file` (simulating `json_handler`), populate and verify the following planning metrics baseline files in `.project_meta/.stories/metrics/` based on `roadmap_manager` outputs and defined calculations:**
+              - `milestone_progress.json` (e.g., `[{"milestone_id": "m1", "status": "on_track", "progress_percentage": 50}]`)
+              - `story_quality.json` (e.g., `{"overall_quality_score": 85, "stories": [{"id": "s1", "score": 90}]}`)
+              - `forecasting_metrics.json` (e.g., `{"projected_completion_date": "YYYY-MM-DD", "confidence_interval": "+/- 5 days"}`)
+              - `velocity_metrics.json` (update with initial baseline if applicable, e.g., `{"current_velocity": 0, "history": [], "initial_projection": X}`)
+              - `estimation_accuracy.json` (update with initial baseline if applicable, e.g., `{"overall_accuracy": 100, "per_story": []}`)
+              - `dependency_health_index.json` (update with initial assessment, e.g., `{"overall_health": 90, "issues": [{"type": "bottleneck", "story_id": "sX"}]}`)
+              - `story_completion_trend.json` (initialize as empty or with initial projection)
             - Save the final roadmap to `.project_meta/.stories/roadmap.json` with transaction guarantees
             - Verify all saved artifacts with integrity checks
         </action>
@@ -542,7 +619,7 @@
           **Traceability establishment failure:** Log warning with specific failed references, maintain partial traceability with quality metrics, generate gap analysis report. Trigger `handle_error` with traceability context.
         </error_handling>
         <depends_on>define_modular_structure</depends_on>
-        <output>Comprehensive, validated project roadmap with hierarchical story structure, precise requirement traceability, intelligent milestone planning, and robust dependency management. Complete story set with rich metadata and verification metrics. Detailed cross-references connecting all planning artifacts with architectural elements. Generated visualizations providing multiple perspectives on the project plan. Baseline metrics established for tracking progress and performance.</output>
+        <output>Comprehensive, validated project roadmap with hierarchical story structure, precise requirement traceability, intelligent milestone planning, and robust dependency management. Complete story set with rich metadata and verification metrics. **All core roadmap and story metrics (milestone progress, story quality, velocity, estimation accuracy, dependency health, forecasting, completion trends) are populated and verified in their respective files within `.project_meta/.stories/metrics/`.** Detailed cross-references connecting all planning artifacts with architectural elements. Generated visualizations providing multiple perspectives on the project plan. Baseline metrics established for tracking progress and performance.</output>
         <performance>Long (minutes to tens of minutes, with optimization for parallel processing of independent stories)</performance>
       </step>
 
@@ -585,7 +662,7 @@
 
       <!-- Step 8: Integration Phase & Iteration Check (ENHANCED with Pattern Checks) -->
        <step id="integration_phase">
-         <description>**Advanced Integration System:** Perform comprehensive multi-level integration of implemented code through progressive validation stages. Execute deterministic, dependency-aware test suites targeting unit boundaries, component interfaces, subsystems, and end-to-end flows. Verify interface contracts, validate boundary conditions, analyze integration stability metrics, enforce architectural constraints, and maintain comprehensive component compatibility matrix. Coordinate version-controlled integration with automated verification, detailed forensics, and intelligent rollback capabilities.</description>
+         <description>**Advanced Integration System:** Perform comprehensive multi-level integration of implemented code through progressive validation stages. Execute deterministic, dependency-aware test suites targeting unit boundaries, component interfaces, subsystems, and end-to-end flows. Verify interface contracts, validate boundary conditions, analyze integration stability metrics, enforce architectural constraints, and maintain comprehensive component compatibility matrix. **All generated integration metrics (stability, coverage, test performance, interface compliance, debt, alignment, environment health) and reports (compatibility matrix, failure analysis) are saved to their respective verified files in `.project_meta/.integration/metrics/` and `.project_meta/.integration/reports/`.** Coordinate version-controlled integration with automated verification, detailed forensics, and intelligent rollback capabilities.</description>
          <condition>Triggered by `execute_next_story` after successful implementation and basic validation.</condition>
          <action>
            Receive `story_id` from `execute_next_story`.
@@ -597,7 +674,7 @@
              - Identify integration dependencies and contract boundaries
              - Prepare test environment with appropriate versioning
              - Configure test fixtures and contextual test data
-             - Prepare integration monitoring and metrics collection
+             - Prepare integration monitoring and metrics collection (targeting files in `.project_meta/.integration/metrics/` and `.project_meta/.integration/reports/`)
              - Set up integration fault detection with specific contract assertions
            
              <!-- Progressive Integration Testing -->
@@ -610,24 +687,37 @@
              - Verify pattern compatibility in integrated context
            
              <!-- Integration Analysis -->
-             - Calculate integration coverage metrics across interfaces
-             - Generate component compatibility matrix
-             - Perform integration fault pattern analysis
-             - Evaluate integration stability index and trend
-             - Analyze interface contract compliance
+             - Calculate integration coverage metrics across interfaces (output to `coverage_report.json`)
+             - Generate component compatibility matrix (output to `compatibility_matrix.json`)
+             - Perform integration fault pattern analysis (output to `failure_analysis.json`)
+             - Evaluate integration stability index and trend (output to `stability_index.json`)
+             - Analyze interface contract compliance (output to `interface_compliance.json`)
              - Verify cross-cutting concerns (error propagation, performance, security)
+             - Assess architectural alignment during integration (output to `architecture_alignment.json`)
+             - Measure integration test performance (output to `test_performance.json`)
+             - Evaluate integration debt (output to `integration_debt.json`)
+             - Assess integration environment health (output to `environment_health.json`)
            
            Document comprehensive results:
-             - Generate detailed integration reports with interface-level results
-             - Create integration metrics dashboards
-             - Update integration coverage maps
-             - Document any identified integration weaknesses
-             - Create component compatibility matrices
-             - Generate integration quality trend analysis
-             - Log detailed test execution traces with contextual information
-             - Update `.project_meta/.integration/status.json` with detailed component status
-             - Save all logs and reports to appropriate `.project_meta/.integration/` subdirectories
-             - Verify all saves with strict consistency checks
+             - Generate detailed integration reports with interface-level results (can be part of `failure_analysis.json` or separate logs)
+             - Create integration metrics dashboards (potentially linking to the raw JSON metric files)
+             - Update integration coverage maps (based on `coverage_report.json`)
+             - Document any identified integration weaknesses (can be logged in `failure_analysis.json` or `issues.md`)
+             - Create component compatibility matrices (saved as `compatibility_matrix.json`)
+             - Generate integration quality trend analysis (derived from historical data in metric files like `stability_index.json`)
+             - Log detailed test execution traces with contextual information (to `.project_meta/.integration/logs/`)
+             - Update `.project_meta/.integration/integration_status.json` with detailed component status
+             - **Using `edit_file` (simulating `json_handler`), save/update and verify all generated metrics and reports to their respective files in `.project_meta/.integration/metrics/` and `.project_meta/.integration/reports/`. This includes:**
+               - `.project_meta/.integration/metrics/stability_index.json`
+               - `.project_meta/.integration/metrics/coverage_report.json`
+               - `.project_meta/.integration/reports/compatibility_matrix.json`
+               - `.project_meta/.integration/metrics/test_performance.json`
+               - `.project_meta/.integration/reports/failure_analysis.json`
+               - `.project_meta/.integration/metrics/interface_compliance.json`
+               - `.project_meta/.integration/metrics/integration_debt.json`
+               - `.project_meta/.integration/metrics/architecture_alignment.json`
+               - `.project_meta/.integration/metrics/environment_health.json`
+             - Verify all saves with strict consistency checks.
            
            Use `cross_reference_manager` to establish comprehensive traceability:
              - Link integration results to code changes
@@ -640,7 +730,7 @@
              - Read `roadmap.json` (`json_handler`)
              - Find the story by `story_id` in the main `stories` list 
              - Update status to 'done'
-             - Use `cross_reference_manager` to link integration reports to the story
+             - Use `cross_reference_manager` to link integration reports (from `.project_meta/.integration/reports/`) and metric summaries to the story
              - Use `run_terminal_cmd` to commit ALL changes with comprehensive commit message
              - Verify commit with specific integrity checks
              - Check if the current iteration is complete by analyzing all story statuses
@@ -652,7 +742,7 @@
                - Verify tag creation with explicit checks
                - Update `current_iteration_id` to next planned iteration or null
              - Save the updated `roadmap.json` with verification
-             - Update integration metrics trends and integration history
+             - Update integration metrics trends and integration history (by appending to or updating files in `.project_meta/.integration/metrics/`)
              - Trigger post-integration steps with contextual information
            
            **If integration fails:**
@@ -667,8 +757,8 @@
              - Revert story status to 'failed_integration' with failure context
              - Add specific failure tags for classification
              - Save updated `roadmap.json` with verification
-             - Use `cross_reference_manager` to link detailed failure reports
-             - Create integration hotspot analysis for recurring failures
+             - Use `cross_reference_manager` to link detailed failure reports (from `.project_meta/.integration/reports/failure_analysis.json`) to the story
+             - Create integration hotspot analysis for recurring failures (can update `failure_analysis.json` or a dedicated issue log)
              - Generate potential remediation approaches based on failure pattern
              - Report failure with actionable next steps
              - Trigger `handle_error` with comprehensive context
@@ -687,507 +777,13 @@
            **Cross-reference failure:** Log warning with relationship map visualization, attempt partial reference preservation, report impact assessment. Trigger `handle_error` with traceability context.
          </error_handling>
          <depends_on>execute_next_story</depends_on>
-         <output>Comprehensive integration completed with multi-level validations, detailed metrics, and complete traceability. Integration quality assessed through objective measures with trend analysis. All artifacts properly linked with explicit verification. Automated recovery procedures executed if needed with detailed diagnostics. Integration knowledge captured and contributed to system intelligence.</output>
+         <output>Comprehensive integration completed with multi-level validations, detailed metrics, and complete traceability. **All key integration metrics (stability, coverage, test performance, interface compliance, debt, alignment, environment health) and reports (compatibility matrix, failure analysis) are generated, populated, and verified in their respective files within `.project_meta/.integration/metrics/` and `.project_meta/.integration/reports/`.** Integration quality assessed through objective measures with trend analysis. All artifacts properly linked with explicit verification. Automated recovery procedures executed if needed with detailed diagnostics. Integration knowledge captured and contributed to system intelligence.</output>
          <performance>Medium to Long (minutes to tens of minutes, scaled based on integration complexity with optimization for parallel execution)</performance>
        </step>
 
-      <!-- Step 9: Central Error Handling Step -->
-      <step id="handle_error">
-        <description>Analyzes a logged error, selects and applies an appropriate recovery strategy, verifies the outcome, and determines the next course of action for the workflow.</description>
-        <condition>Triggered by the `<error_handling>` block of any step that logs an error to `.project_meta/.errors/error_log.json`.</condition>
-        <action>
-          Receive `error_id`. Read `.project_meta/.errors/error_log.json` (`json_handler`) to get error details.
-          Update error status to 'Analyzing' in `error_log.json`. Verify save.
-          Use `error_analyzer` tool. Provide `error_id` and potentially context (current step, relevant artifacts like story/module). The analyzer uses rules based on `error_type`, `severity`, `context`, potentially consulting `dependency_resolver`, `impact_analyzer`, **and `pattern_learner` (for pattern-related errors)**.
-          `error_analyzer` suggests a recovery strategy: `Retry`, `Rollback`, `RevertState`, `IsolateAndContinue`, `Diagnose`, `Escalate`, `LogAndContinue` (for warnings).
-          Based on the suggested strategy:
-            - **Retry:** Use the original tool (`error_log.json` context) with same/modified parameters. Limit retries.
-            - **Rollback:** Use `run_terminal_cmd`.
-            - **RevertState:** Use `json_handler` / `list_dir` to modify specific state files (e.g., `roadmap.json` story status).
-            - **IsolateAndContinue:** Update relevant status (e.g., story to 'blocked'), check dependencies (`dependency_resolver`), potentially trigger `plan_next_task`.
-            - **Diagnose:** Trigger other tools (`impact_analyzer`, `dependency_resolver`, `pattern_learner`) to gather more info, update error log. May lead to another strategy.
-            - **Escalate:** Log need for manual intervention. Stop relevant workflow path. Report detailed status.
-            - **LogAndContinue:** (For warnings) Ensure logged correctly, continue workflow from where it left off.
-          Execute the chosen strategy using the appropriate tools.
-          Verify the outcome of the recovery action (e.g., check file state, VCS status, roadmap consistency).
-          Update the error entry in `.project_meta/.errors/error_log.json` with the outcome (`Resolved`, `FailedResolution`, `Escalated`), strategy attempted, and verification result. Verify save.
-          Use `cross_reference_manager` to link the error log entry update to the recovery actions/verifications.
-          If recovery successful (`Resolved`, or `IsolateAndContinue` allowing progress): Determine the correct next step (e.g., re-trigger the step that failed if retry worked, trigger `plan_next_task` if isolated, continue from post-recovery point) and trigger it.
-          If recovery failed (`FailedResolution`) or requires intervention (`Escalated`): Stop the current workflow path. Report the status clearly, referencing the `error_id`.
-        </action>
-        <error_handling>
-          **Critical failure within `handle_error` itself** (e.g., cannot read/write `error_log.json`, core tool fails catastrophically): Log emergency message if possible, report system instability. **STOP WORKFLOW IMMEDIATELY.**
-          **Failure of a recovery tool (e.g., rollback fails):** Log this secondary failure within the original error's context in `error_log.json`, update status to `FailedResolution` or `Escalated`, report, stop.
-        </error_handling>
-        <depends_on>Any step that logs an error</depends_on>
-        <output>Error analyzed, recovery attempted/executed, outcome logged and verified. Workflow either resumes from an appropriate point, stops pending intervention, or stops due to unrecoverable failure.</output>
-        <performance>Variable (Quick for simple retry/log, Long for complex diagnosis/rollback)</performance>
-      </step>
-
-      <!-- Post-Integration & Learning Steps (Triggered sequentially after successful integration) -->
-      <!-- Step 10: Learn Patterns (ENHANCED) -->
-      <step id="learn_patterns">
-        <description>Systematically identify, categorize, and catalog code patterns from successfully integrated code. Use standardized taxonomy and schema for consistent pattern documentation. Detect anti-patterns and suggest remediation strategies. Maintain comprehensive pattern relationships and metrics.</description>
-        <condition>Triggered after successful `integration_phase`.</condition>
-        <action>
-          Receive `story_id` context from `integration_phase`. Get related code changes (e.g., from commit diff or file paths).
-          
-          Use `pattern_learner` to perform comprehensive pattern analysis:
-            - Read `.project_meta/.patterns/pattern_schema.json` to ensure pattern entries follow standardized format
-            - Use `codebase_search` to identify recurring structural and behavioral patterns
-            - Use `grep_search` for precise pattern signature detection
-            - Analyze code against known pattern implementations for recognition
-            - Categorize findings using standardized taxonomy (structural, behavioral, creational, etc.)
-            - Assign confidence scores to identified patterns
-          
-          For new patterns with high confidence:
-            - Generate standardized pattern entry following schema
-            - Assign unique pattern ID using consistent naming scheme
-            - Include sample code and implementation variants
-            - Document context, benefits, and constraints
-            - Update `.project_meta/.patterns/pattern_catalog.json`
-            - Verify save consistency against schema
-          
-          For existing patterns:
-            - Update usage examples and context
-            - Refine implementation notes
-            - Increment occurrence count
-          
-          If anti-patterns detected:
-            - Document in `.project_meta/.patterns/anti_patterns.json`
-            - Include remediation strategies
-            - Suggest refactoring opportunities
-            - Consider adding technical debt story to roadmap
-          
-          Update pattern relationships:
-            - Analyze dependencies between patterns
-            - Update `.project_meta/.patterns/relationships/pattern_dependencies.json`
-            - Identify complementary and conflicting patterns
-          
-          Generate pattern metrics:
-            - Calculate adoption rates
-            - Measure effectiveness metrics
-            - Update `.project_meta/.patterns/metrics/pattern_metrics.json`
-            - Append to `.project_meta/.patterns/metrics/pattern_history.json` for trend analysis
-          
-          Use `cross_reference_manager` to:
-            - Link patterns to source code implementations
-            - Connect related patterns
-            - Associate patterns with architectural decisions
-            - Link anti-patterns to remediation tasks
-          
-          Verify all saves and cross-references.
-        </action>
-        <error_handling>
-          Pattern analysis failure: Log warning, report. Trigger `handle_error`.
-          Schema validation failure: Log error, revert changes, report. Trigger `handle_error`.
-          Catalog/Anti-pattern/Metrics save/verification failure: Log error, report. Trigger `handle_error`.
-          Cross-reference failure: Log warning, report. Trigger `handle_error`.
-        </error_handling>
-        <depends_on>integration_phase</depends_on>
-        <output>Consistently structured pattern and anti-pattern catalogs with standardized entries. Updated pattern metrics, relationships, and cross-references. Potential refactoring opportunities identified.</output>
-        <performance>Medium to Long (minutes, depending on analysis depth)</performance>
-      </step>
-
-      <!-- **NEW Step 11: Track Pattern Evolution** -->
-      <step id="pattern_evolution_tracking">
-        <description>Track pattern usage trends, measure impacts using aggregated data, maintain historical pattern metrics, analyze pattern relationships, and generate visualizations for decision support.</description>
-        <condition>Triggered after `learn_patterns`.</condition>
-        <action>
-          Use `pattern_analyzer` to perform comprehensive pattern evolution analysis:
-            - Read all pattern-related files from `.project_meta/.patterns/`
-            - Aggregate pattern usage data across the project
-            - Calculate standardized metrics:
-              - Adoption rate (overall and by module)
-              - Implementation consistency
-              - Effectiveness (complexity reduction, maintainability improvement)
-              - Impact on performance and resource usage
-            - Analyze pattern lifecycle stages (emerging, stable, declining)
-            - Detect patterns requiring refinement or deprecation
-            - Identify patterns eligible for promotion to coding standards
-          
-          Update metric files:
-            - Update current metrics in `.project_meta/.patterns/metrics/pattern_metrics.json`
-            - Append historical data point to `.project_meta/.patterns/metrics/pattern_history.json`
-            - Update pattern evolution data in `.project_meta/.patterns/evolution/pattern_evolution.json`
-          
-          Generate visualization data:
-            - Create pattern usage heatmap data
-            - Generate pattern relationship graph
-            - Produce trend charts for key metrics
-            - Save visualization data to `.project_meta/.patterns/visualization/`
-          
-          Perform pattern impact analysis:
-            - Analyze how patterns affect codebase metrics
-            - Evaluate pattern combinations for synergies or conflicts
-            - Suggest optimization opportunities
-          
-          Use `cross_reference_manager` to:
-            - Link metric data to patterns
-            - Connect evolution data to architectural decisions
-            - Relate pattern trends to project milestones
-          
-          Verify all saves and cross-references.
-        </action>
-        <error_handling>
-          Metric/Evolution analysis failure: Log warning, report. Trigger `handle_error`.
-          File write/verification error: Log critical error, report state inconsistency. Trigger `handle_error`.
-          Cross-reference failure: Log warning, report. Trigger `handle_error`.
-        </error_handling>
-        <depends_on>learn_patterns</depends_on>
-        <output>Comprehensive pattern metrics, evolution trends, relationship maps, and visualizations. Clear identification of pattern lifecycle stages and optimization opportunities.</output>
-        <performance>Medium (minutes)</performance>
-      </step>
-
-      <!-- Step 12: Update Documentation (ENHANCED) -->
-      <step id="update_documentation">
-         <description>Dynamic documentation system that monitors code changes, automatically generates documentation, and performs validation. Not only creates new documentation but also continuously evaluates and improves the currency, accuracy, and comprehensibility of existing documents.</description>
-         <condition>Triggered after `pattern_evolution_tracking` OR when the documentation monitoring system detects a need for updates. Can also be run periodically.</condition>
-         <action>
-          <!-- Context and Change Analysis -->
-          Receive `story_id` context. Get related code changes.
-          
-          Use `doc_watcher` to analyze what documentation needs updating:
-            - Analyze code changes to identify affected components and functionality
-            - Check for new, modified, or removed APIs, data models, or interfaces
-            - Identify impacted documentation sections across all document types
-            - Calculate "documentation freshness risk score" for each affected document
-            - Generate prioritized update list based on impact and usage metrics
-          
-          <!-- Documentation Production and Update -->
-          Use `doc_generator` to create or update documentation:
-            - Generate API documentation for new/modified endpoints, models, and interfaces
-            - Update architecture documentation to reflect structural changes
-            - Create usage examples based on new functionality
-            - Update user guides and tutorials with new features
-            - Generate visual diagrams for updated workflows or data flows
-            - Add implementation notes for developers
-            - Include specific pattern implementations and rationale if documented
-          
-          <!-- Cross-Reference Creation -->
-          Use `doc_reference_analyzer` to create intelligent cross-references:
-            - Establish semantic links between code and documentation
-            - Create bidirectional references between related documentation sections
-            - Link documentation to source code using permanent anchors
-            - Connect API documentation to examples and tutorials
-            - Create links between architectural decisions and their implementations
-            - Map documentation pages to relevant patterns
-          
-          <!-- Documentation Validation -->
-          Use `doc_validator` to verify documentation quality:
-            - Verify accuracy of generated documentation against code
-            - Check consistency across all documentation
-            - Validate technical correctness with static analysis
-            - Measure documentation completeness with coverage metrics
-            - Evaluate readability and clarity with standardized metrics
-            - Check cross-reference integrity throughout the documentation
-          
-          <!-- Documentation Version Management -->
-          Manage documentation versions and history:
-            - Create versioned snapshots of documentation for significant changes
-            - Update changelog with documentation modifications
-            - Generate diffs between documentation versions
-            - Preserve historical documentation for backward compatibility
-            - Tag documentation with code version information
-          
-          <!-- Update Documentation Quality Metrics -->
-          Update documentation metrics:
-            - Calculate updated documentation quality score
-            - Update documentation coverage metrics
-            - Refresh documentation freshness index
-            - Update usage analytics with new sections
-            - Generate documentation health report
-          
-          <!-- Indexing and Search Update -->
-          Update search capabilities:
-            - Refresh documentation search index
-            - Update semantic search mappings
-            - Generate new keywords and topic mappings
-            - Update search weights based on importance and usage
-          
-          <!-- Update Interactive Elements -->
-          Update interactive documentation elements:
-            - Refresh API explorer with new endpoints
-            - Update interactive diagrams with changed components
-            - Regenerate example code samples with current implementations
-            - Update executable examples with latest functionality
-          
-          Use enhanced `cross_reference_manager` to establish comprehensive traceability:
-            - Link documentation changes to triggering story/code changes
-            - Connect documentation sections to affected components
-            - Relate documentation updates to architectural decisions
-            - Associate pattern documentation with pattern catalog entries
-            - Create bidirectional navigation paths for all links
-          
-          Verify all changes and updates with extensive validation:
-            - Perform documentation schema validation
-            - Check link integrity throughout the documentation
-            - Verify render correctness across documentation formats
-            - Validate documentation coverage against requirements
-            - Ensure consistency with other project artifacts
-        </action>
-         <error_handling>
-            **Documentation generation failure:** Log detailed error with context and failure points, preserve partial outputs, generate fallback minimal documentation, report specific issues. Trigger `handle_error` with documentation context.
-            
-            **Documentation validation failure:** Log comprehensive validation report with inconsistencies, preserve documentation with validation warnings, add warning metadata to generated documents, report detailed validation failures. Trigger `handle_error` with validation context.
-            
-            **Cross-reference failure:** Log specific failed references with relationship details, maintain partial reference graph, generate reference gap analysis report, create repair recommendations, report impact assessment. Trigger `handle_error` with reference context.
-            
-            **Version management failure:** Log version control error with transaction details, preserve document states, rollback to stable version if necessary, report potential consistency issues. Trigger `handle_error` with versioning context.
-            
-            **Metrics update failure:** Log metrics calculation error with specific metric failures, preserve previous valid metrics, generate partial metrics where possible, report completeness status. Trigger `handle_error` with metrics context.
-         </error_handling>
-         <depends_on>pattern_evolution_tracking</depends_on> <!-- Depends on previous step -->
-         <output>Comprehensive and up-to-date documentation produced. API documentation, architecture guides, user guides, and interactive examples have been updated and validated. All documentation elements are consistently linked with each other and traceable to source code. Documentation quality metrics have been calculated and updated. Search index and interactive elements have been refreshed.</output>
-         <performance>Medium to Long (minutes to tens of minutes, depending on the scope of documentation updates, with parallel processing of independent documentation sections)</performance>
-      </step>
-
-      <!-- Step 13: Perform Impact Analysis (ENHANCED with Pattern Focus) -->
-      <step id="perform_impact_analysis">
-         <description>**Enhanced:** Analyze the broader impact of the recent integration on architecture, dependencies, and future work, **specifically including the impact and consistency of applied patterns**. Document findings, flag risks (**including pattern-based technical debt or architectural drift**), and potentially suggest corrective actions or reviews.</description>
-         <condition>Triggered after `update_documentation`.</condition>
-         <action>
-          Receive `story_id` context. Get related changes (code, roadmap, dependencies, **applied patterns from `learn_patterns` context**).
-          Use `impact_analyzer` to assess effects on: other modules, overall architecture (**including pattern consistency/adherence**), performance, security etc. Check for changes in dependency complexity (`dependency_resolver`). **Evaluate pattern impact on measured quality attributes.**
-          Document structured findings, identified risks (**including pattern-related ones**), and recommendations in `.project_meta/.decisions/decision_log.json` (new entry linked to the story/iteration). Verify save (`json_handler`).
-          **If significant risks, architectural drift (potentially pattern-related), high coupling, or significant anti-pattern impact detected:**
-            Log specific concerns in `.project_meta/.architecture/issues.md`. Verify save.
-            Flag this prominently in the decision log entry.
-            Potentially suggest a specific review task or a refactoring story (possibly targeting anti-patterns) for the roadmap backlog.
-          Use `cross_reference_manager` to link the impact analysis entry to the story, iteration, commit, potentially related ADRs, modules, logged issues, **and relevant patterns/anti-patterns**.
-        </action>
-         <error_handling>
-            **Impact analysis failure:** Log warning, report. Trigger `handle_error`.
-            **Decision log/Issues save/verification failure:** Log error, report. Trigger `handle_error` (may continue with warning).
-            **Dependency check failure:** Log error, report. Trigger `handle_error`.
-            **Cross-reference failure:** Log warning, report. Trigger `handle_error`.
-         </error_handling>
-        <depends_on>update_documentation</depends_on>
-        <output>**Enhanced:** Impact analysis report (including pattern impact) stored, verified, and linked. Significant risks/drift/pattern-debt potentially flagged or noted for future action. Artifacts linked.</output>
-        <performance>Medium to Long (minutes)</performance>
-      </step>
-
-      <!-- Step 14: Plan Next Task (Core Loop Driver) -->
-      <step id="plan_next_task">
-         <description>Determine the next actionable 'todo' story based on roadmap state, current iteration, and verified dependencies. Considers project completion, active errors, blocking issues, or suggested refactoring tasks (**including those related to anti-patterns**).</description>
-         <condition>Triggered initially after roadmap creation, after successful post-integration steps (like `perform_impact_analysis`), or after resolving an error state via `handle_error` allows continuation. **May also trigger periodic review steps if conditions are met.**</condition>
-         <action>
-           Read `roadmap.json`, `conflict_log.json`, `issues.md`, `error_log.json`, **`pattern_metrics.json` (for review triggers)**. Verify reads. Get `current_iteration_id`.
-           Define `next_action` = null.
-           **Check for Blocking Errors:** Review `error_log.json`. If critical blockers exist, log state, report, **DO NOT proceed**, wait or stop.
-           **Check for Periodic Reviews Due:**
-             - Check if `periodic_pattern_review` is due (e.g., story count threshold met, iteration completed). If yes, set `next_action` = `trigger(periodic_pattern_review)` and skip story planning for now.
-             - Check if `periodic_architecture_review` is due (similar logic). If yes and pattern review isn't, set `next_action` = `trigger(periodic_architecture_review)` and skip story planning.
-           **Handle Iteration State (if no review triggered):**
-           If `current_iteration_id` is null OR iteration status is 'completed':
-              Find the first 'planned' iteration. If found, update `current_iteration_id` in `roadmap.json`, verify save, log start, proceed to find story. If not found, log project completion, set `next_action` = `end_workflow`, report completion.
-           **Check for High Priority Issues/Tasks (if no review/completion):** Review `issues.md` (including anti-pattern refactoring suggestions), `decision_log.json`. Prioritize these if rules dictate (e.g., create temporary high-priority task). *[Simplification: Assume standard story prioritization for now]*
-           **Find Next Story (if iteration active, no review/completion/blocker):**
-           Get `story_ids` for `current_iteration_id`. Iterate:
-              If story status is 'todo': Check dependencies (`dependency_resolver`, `roadmap.json`). If met, set `next_action` = `trigger(execute_next_story, story_id)`. Break loop.
-           **Trigger Action or Report State:**
-           If `next_action` is `trigger(step, context)`: Log intent. Trigger the specified step with context.
-           Else if `next_action` is `end_workflow`: Stop.
-           Else (blocked, waiting): Log current state (e.g., "Iteration active, but no actionable stories/reviews found. Reviewing issues/dependencies/errors."). Report the situation (mentioning potential blockers from logs/issues). Enter waiting state or require review.
-         </action>
-         <error_handling>
-           **Critical file read error:** Log critical error, report. Trigger `handle_error` (stop).
-           **Roadmap update/verification error:** Log critical error, report state inconsistency. Trigger `handle_error` (stop).
-           **Inconsistent project state detected:** Log error, report inconsistency. Trigger `handle_error` (stop for review).
-           **Triggering next step failure:** Log critical error, report. Trigger `handle_error` (stop).
-         </error_handling>
-         <!-- Depends on the full post-integration cycle OR initial setup OR error recovery -->
-         <depends_on>create_roadmap_and_stories, perform_impact_analysis, handle_error, periodic_pattern_review, periodic_architecture_review</depends_on>
-         <output>Next action determined: `execute_next_story` triggered with context, a periodic review triggered, project completion reported, OR waiting/blocked state logged and reported.</output>
-         <performance>Quick to Medium (seconds to minutes)</performance>
-      </step>
-
-      <!-- Step 15: Summarize Chat -->
-       <step id="summarize_and_save_chat">
-        <description>Summarize the current interaction context and save it, linking to relevant artifacts.</description>
-         <condition>Run periodically or at the end of significant interactions.</condition>
-        <action>
-          Gather recent conversation history.
-          Use `cross_reference_manager` to link summary to project artifacts discussed or modified during the interaction (e.g., stories, ADRs, patterns).
-        </action>
-        <error_handling>
-           **Cross-reference failure:** Log warning, report. Trigger `handle_error`.
-        </error_handling>
-        <depends_on>Any interaction</depends_on>
-        <output>Interaction summary saved, verified, and linked in `.project_meta/.chats`.</output>
-        <performance>Quick to Medium (seconds to minutes)</performance>
-       </step>
-
-      <!-- Step 16: Resolve Dependency Conflicts -->
-       <step id="resolve_dependency_conflicts">
-        <description>Identify, analyze, and attempt to automatically resolve dependency conflicts or cycles. Document outcome.</description>
-        <condition>Triggered when `dependency_resolver` or `cycle_detector` reports a conflict/cycle needing resolution (e.g., during roadmap creation, planning) **or potentially suggested by `handle_error` for certain dependency-related errors**.</condition>
-        <action>
-          Receive conflict/cycle details (involved stories/modules).
-          Use `dependency_resolver` to analyze the conflict type (e.g., cycle, resource contention).
-          Log the detailed conflict in `.project_meta/.dependencies/conflict_log.json` AND **potentially link/relate to an entry in `error_log.json` if triggered by an error**. Verify saves.
-          Attempt automated resolution based on predefined strategies (e.g., reorder stories if possible, suggest alternative module dependencies). This might involve updating `roadmap.json` or `.project_meta/.dependencies/dependency_graph.json`. **Verify any changes.**
-          Run `cycle_detector` again after attempted resolution.
-          Document the attempted strategy and outcome (success/failure) in the conflict log. Verify save.
-          Use `cross_reference_manager` to link the conflict log entry to involved artifacts and potentially the error log entry.
-          If resolution successful: Log success, potentially re-trigger the step that was blocked (e.g., `plan_next_task`).
-          If resolution fails: Log failure in conflict log AND update related error log entry status if applicable (e.g., to `FailedResolution`). Report the unresolvable conflict. Trigger `handle_error` or stop relevant workflow path.
-        </action>
-        <error_handling>
-          **Analysis failure:** Log error, report. Trigger `handle_error`.
-          **Log/Graph/Roadmap save/verification failure:** Log critical error, report state inconsistency. Trigger `handle_error` (stop).
-          **Re-triggering failure:** Log error. Trigger `handle_error`.
-        </error_handling>
-        <depends_on>create_roadmap_and_stories, plan_next_task, define_modular_structure, handle_error</depends_on>
-        <output>Conflict analysis, resolution attempt, and outcome documented and verified within `.project_meta/.dependencies` (and potentially `.errors`). Workflow may resume or stop based on outcome.</output>
-        <performance>Medium to Long (minutes)</performance>
-       </step>
-
-      <!-- **NEW Step 17: Periodic Pattern Review** -->
-      <step id="periodic_pattern_review">
-        <description>Systematically review the pattern catalog, metrics, and evolution data to optimize pattern usage, refine definitions, identify architectural implications, and provide actionable recommendations.</description>
-        <condition>Triggered by `plan_next_task` based on configured frequency (e.g., after N stories, end of iteration).</condition>
-        <action>
-          Use `pattern_analyzer` to conduct comprehensive pattern review:
-            - Read all pattern-related files from `.project_meta/.patterns/`
-            - Analyze historical trend data from `.project_meta/.patterns/metrics/pattern_history.json`
-            - Evaluate pattern effectiveness across modules and contexts
-            - Identify patterns for promotion, refinement, or deprecation based on:
-              - Usage frequency and consistency
-              - Measurable impact on code quality
-              - Alignment with architectural goals
-              - Implementation complexity vs. benefit
-            - Analyze anti-pattern occurrences and remediation success
-            - Identify pattern combinations with high synergy
-            - Detect conflicting pattern implementations
-          
-          Perform pattern optimization:
-            - Refine pattern descriptions and implementation notes
-            - Update categorization and relationships
-            - Standardize pattern metadata
-            - Clarify usage contexts and constraints
-            - Identify new pattern candidates from recurring implementations
-          
-          For patterns identified for promotion:
-            - Update `.project_meta/.architecture/coding_standards.md` with pattern recommendations
-            - Create ADRs for significant pattern adoptions
-          
-          For patterns identified for deprecation:
-            - Document rationale and migration strategy
-            - Mark as deprecated in catalog
-            - Suggest refactoring approaches
-          
-          Generate comprehensive review report:
-            - Document findings with supporting metrics
-            - Provide actionable recommendations
-            - Include visualizations of key trends
-            - Save to `.project_meta/.patterns/reviews/review_[TIMESTAMP].md`
-          
-          Update pattern catalog files:
-            - Apply refinements to `.project_meta/.patterns/pattern_catalog.json`
-            - Update anti-pattern information in `.project_meta/.patterns/anti_patterns.json`
-            - Refresh relationship data in `.project_meta/.patterns/relationships/pattern_dependencies.json`
-          
-          Use `cross_reference_manager` to:
-            - Link review to affected patterns
-            - Connect recommendations to architectural decisions
-            - Associate deprecation notices with migration tasks
-          
-          Trigger `plan_next_task` to continue workflow.
-        </action>
-        <error_handling>
-          Read failure: Log error, report. Trigger `handle_error`.
-          Analysis failure: Log warning, report. Trigger `handle_error`.
-          File write/verification failure: Log error, report state inconsistency. Trigger `handle_error`.
-          Cross-reference failure: Log warning, report. Trigger `handle_error`.
-          Triggering plan_next_task failure: Log critical error, report. Trigger `handle_error` (stop).
-        </error_handling>
-        <depends_on>plan_next_task, pattern_evolution_tracking</depends_on>
-        <output>Optimized pattern catalog with refined definitions. Comprehensive review report with actionable recommendations. Updated coding standards and architectural decisions based on pattern insights.</output>
-        <performance>Medium to Long (minutes)</performance>
-      </step>
-
-      <!-- Step 18: Periodic Architecture Review -->
-      <step id="periodic_architecture_review">
-        <description>Conduct systematic, high-precision architecture conformance checking through comprehensive verification of implemented code against architectural specifications. Detect architectural drift, erosion, or degradation through multi-dimensional analysis with concrete metrics. Evaluate component evolution against quality attributes, identify areas of technical debt accrual, and provide strategic architecture improvement recommendations.</description>
-        <condition>Triggered by `plan_next_task` based on configured frequency (every 4 completed stories minimum), significant impact analysis findings, pattern analysis suggesting structural issues, or detected architectural drift metrics exceeding thresholds.</condition>
-        <action>
-          Use `architecture_analyzer` to perform comprehensive architecture evaluation:
-            - Read current architecture specifications, constraints, and baseline metrics (`.project_meta/.architecture`)
-            - Analyze recent impact analyses and decision history (`.project_meta/.decisions`)
-            - Review architectural issues and technical debt logs (`.project_meta/.architecture/issues.md`)
-            - Evaluate pattern consistency and anti-pattern reports (`.project_meta/.patterns`)
-            - Cross-check with original PRD requirements (`./PRD.md`)
-            
-          Perform architectural conformance analysis:
-            - Execute automated architecture conformance checking on codebase
-            - Verify component boundaries and interface compliance
-            - Detect unauthorized component dependencies and boundary violations
-            - Compare implemented components against formal specifications
-            - Calculate architecture conformance scores for each component
-          
-          Calculate architectural health metrics:
-            - Measure architectural drift against baseline metrics
-            - Calculate technical debt accrual rate in architecture implementation
-            - Assess architecture erosion indicators (coupling increases, cohesion decreases)
-            - Track component complexity growth trends
-            - Measure interface stability and compatibility maintenance
-            - Calculate architectural risk accumulation rates
-            
-          Perform quality attribute evaluation:
-            - Assess performance characteristics against architectural goals
-            - Evaluate security implementation against architectural security model
-            - Analyze maintainability metrics compared to architectural targets
-            - Verify scalability implementation against architectural constraints
-            - Cross-reference reliability requirements with implemented error handling
-          
-          Generate architecture evolution recommendations:
-            - Identify components requiring refactoring or restructuring
-            - Suggest architectural pattern applications to address identified issues
-            - Recommend specific technical debt remediation priorities
-            - Propose interface standardization or component consolidation opportunities
-            - Provide technology upgrade or replacement recommendations
-            
-          Document findings in structured, actionable outputs:
-            - Create new ADR entries for significant architectural decisions
-            - Update `architecture_overview.md` with current state assessment
-            - Generate detailed architecture health report with trend analysis
-            - Create prioritized architecture improvement task list
-            - Update `issues.md` with tagged architecture concerns
-            - Generate architecture metrics trends visualization
-            - Create component health heat map
-          
-          Use `cross_reference_manager` to establish comprehensive traceability:
-            - Link review findings to specific architectural elements
-            - Connect architecture concerns to relevant code implementations
-            - Relate architectural recommendations to business impact factors
-            - Associate architecture issues with patterns and anti-patterns
-            - Link architectural change proposals to quality attribute improvements
-          
-          If significant architectural concerns identified:
-            - Rate concerns by criticality, technical risk, and business impact
-            - Flag critical issues requiring immediate attention
-            - Create architectural improvement stories with detailed description
-            - Suggest roadmap adjustments to accommodate critical architectural work
-            - Generate detailed remediation approaches with cost/benefit analysis
-            
-          Trigger `plan_next_task` to continue the main workflow loop after the review.
-        </action>
-        <error_handling>
-          **Read failure:** Log error, report. Trigger `handle_error`.
-          **Analysis failure:** Log error, report. Trigger `handle_error`.
-          **Save/verification failure:** Log error, report. Trigger `handle_error` (review state might be incomplete).
-          **Cross-reference failure:** Log warning, report. Trigger `handle_error`.
-          **Triggering plan_next_task failure:** Log critical error, report. Trigger `handle_error` (stop).
-        </error_handling>
-        <depends_on>plan_next_task, perform_impact_analysis, pattern_evolution_tracking</depends_on>
-        <output>Comprehensive architecture health assessment with concrete metrics, trend analysis, and prioritized improvement recommendations. Architectural conformance verification results with detailed violation reports if present. Generated architecture evolution strategy aligned with business goals, with specific, actionable tasks for maintaining architectural integrity.</output>
-        <performance>Long (tens of minutes) due to comprehensive analysis and documentation generation</performance>
-      </step>
-
       <!-- Step 9: Advanced Error Handling and Recovery System -->
       <step id="handle_error">
-        <description>Sophisticated error analysis and recovery orchestration system with multi-dimensional classification, root cause determination, and context-aware recovery strategy selection. Implements transactional recovery with integrity verification, comprehensive traceability, and error intelligence generation for continuous improvement.</description>
+        <description>Sophisticated error analysis and recovery orchestration system. When triggered (e.g., by user commands like "fix error" associated with an error ID, or automatically), it performs multi-dimensional classification, and root cause determination by analyzing the pattern catalog (`.project_meta/.patterns/pattern_catalog.json`) and project architecture (`.project_meta/.architecture/*`). It then selects a context-aware recovery strategy to apply the most suitable corrections, implementing transactional recovery with integrity verification, comprehensive traceability, and error intelligence generation for continuous improvement. **All generated error metrics (effectiveness, resolution efficiency, distribution, trends, prediction accuracy, critical error analysis) are saved to their respective verified files in `.project_meta/.errors/metrics/`.**</description>
         <condition>Triggered by the `<error_handling>` block of any step that logs an error to `.project_meta/.errors/error_log.json`.</condition>
         <action>
           <!-- Error Reception and Context Collection -->
@@ -1209,12 +805,12 @@
             - Identify primary and contributing factors with confidence levels
             - Calculate error criticality score based on impact and recovery difficulty
             - Detect potential cascading effects on dependent components
-            - Check for pattern-related or architectural implications
+            - Check for pattern-related or architectural implications, **consulting pattern catalog (`.project_meta/.patterns/pattern_catalog.json`) and architecture documents (`.project_meta/.architecture/*`) to identify root causes and potential fixes.**
             - Determine if error is novel or matches known patterns
           
           <!-- Error Pattern Recognition -->
           Compare with historical errors to identify patterns:
-            - Read error history from `.project_meta/.errors/metrics/error_trends.json`
+            - Read error history from `.project_meta/.errors/metrics/error_trends.json` (this file will be updated later in this step)
             - Check for recurring patterns in same component or error type
             - Analyze temporal distribution and triggering conditions
             - Evaluate previous resolution approaches and their effectiveness
@@ -1278,11 +874,17 @@
           <!-- Error Knowledge Management -->
           Document error knowledge for continuous improvement:
             - Update `.project_meta/.errors/error_log.json` with detailed resolution information
-            - Create root cause analysis report for significant errors
-            - Update error metrics in `.project_meta/.errors/metrics/`
-            - Generate visualizations of error patterns if relevant
-            - Create learning document with preventive recommendations
-            - Update error prediction models with new data points
+            - Create root cause analysis report for significant errors (potentially in `.project_meta/.errors/reports/`)
+            - **Using `edit_file` (simulating `json_handler`), populate/update and verify the following error metrics files in `.project_meta/.errors/metrics/` based on `error_analyzer` outputs, recovery outcomes, and defined calculations:**
+              - `effectiveness_score.json` (e.g., `{"score": 80, "resolved_errors": 4, "total_errors": 5, "last_updated": "YYYY-MM-DD..."}`)
+              - `resolution_efficiency.json` (e.g., `{"avg_time_to_resolve_hours": 2.5, "errors_by_severity": {"critical": 4.0}}`)
+              - `distribution_analysis.json` (e.g., `{"by_component": {"compA": 10}, "by_type": {"runtime": 5}}`)
+              - `error_trends.json` (append new error data and recalculate trends, e.g., `{"frequency_trend": "decreasing", "new_errors_past_week": 1}`)
+              - `prediction_accuracy.json` (if predictive models are in use, update with actuals vs. predictions)
+              - `critical_error_analysis.json` (update with details of any new critical errors handled)
+            - Generate visualizations of error patterns if relevant (e.g., to `.project_meta/.errors/reports/visualizations/`)
+            - Create learning document with preventive recommendations (e.g., in `.project_meta/.docs/learnings/` or linked to specific components)
+            - Update error prediction models with new data points (if applicable)
           
           <!-- Workflow Resumption -->
           Determine appropriate workflow continuation strategy:
@@ -1335,8 +937,72 @@
             - Preserve execution state for post-mortem investigation
         </error_handling>
         <depends_on>Any step that logs an error</depends_on>
-        <output>Comprehensive error analysis with formal classification, root cause determination, and impact assessment. Executed recovery strategy with transactional integrity and verification. Detailed error intelligence with preventive recommendations and knowledge capture. Workflow resumption with appropriate context restoration or controlled termination with actionable guidance.</output>
+        <output>Comprehensive error analysis with formal classification, root cause determination, and impact assessment. Executed recovery strategy with transactional integrity and verification. **All key error metrics (effectiveness, resolution efficiency, distribution, trends, prediction accuracy, critical error analysis) are generated, populated/updated, and verified in their respective files within `.project_meta/.errors/metrics/`.** Detailed error intelligence with preventive recommendations and knowledge capture. Workflow resumption with appropriate context restoration or controlled termination with actionable guidance.</output>
         <performance>Variable and context-dependent (Milliseconds for simple validations to minutes for complex recovery sequences, with optimizations for parallel recovery operations and progressive verification)</performance>
+      </step>
+
+      <!-- Post-Integration & Learning Steps (Triggered sequentially after successful integration) -->
+      <!-- Step 10: Learn Patterns (ENHANCED) -->
+      <step id="learn_patterns">
+        <description>
+          **Advanced Pattern Learning &amp; Knowledge Base Management:** Continuously analyzes the integrated codebase to identify, categorize, and validate design patterns and anti-patterns using `pattern_learner` and `pattern_analyzer`. Updates the comprehensive pattern knowledge base in `.project_meta/.patterns/` (including catalog, metrics, evolution, relationships) with rigorous verification. Generates learning documents and detailed cross-references, ensuring insights are actionable and contribute to architectural integrity and ongoing project improvement. This step is triggered after successful integration.
+        </description>
+        <condition>Triggered by `integration_phase` after successful integration.</condition>
+        <action>
+          <!-- Phase 1: Pattern Identification and Initial Cataloging -->
+          Use `pattern_learner` to analyze the codebase (src/) post-integration:
+            - Identify recurring code structures, behavioral motifs, and design solutions.
+            - Detect instances of known anti-patterns.
+            - Tentatively categorize findings based on established taxonomies (structural, behavioral, etc.).
+            - Propose new entries or updates for `.project_meta/.patterns/pattern_catalog.json` and `.project_meta/.patterns/anti_patterns.json` based on `pattern_schema.json`.
+
+          <!-- Phase 2: Pattern Analysis, Validation, and Metric Generation -->
+          For each newly identified or significantly changed pattern/anti-pattern:
+            Use `pattern_analyzer` to:
+              - Evaluate its effectiveness against predefined metrics (e.g., complexity, maintainability).
+              - Calculate consistency scores for its implementations.
+              - Verify implementations against any canonical examples or schema.
+              - Analyze its relationships and interdependencies with other patterns.
+              - Generate recommendations for improvement or wider adoption.
+
+          <!-- Phase 3: Update Pattern Knowledge Base (with Verification) -->
+          Use `edit_file` (simulating `json_handler` capabilities) to update and verify the following files in `.project_meta/.patterns/`:
+            - `pattern_catalog.json`: Add/update validated patterns with metadata (description, category, examples, variants, context, analyzer's evaluation).
+            - `anti_patterns.json`: Add/update validated anti-patterns with details (problem, consequences, refactoring suggestions, analyzer's evaluation).
+            - `metrics/pattern_metrics.json`: Update quantitative metrics (adoption rates, consistency scores, effectiveness scores derived from `pattern_analyzer`).
+            - `metrics/pattern_history.json`: Append new metric snapshots for trend analysis.
+            - `evolution/pattern_evolution.json`: Record changes to pattern lifecycle (e.g., new pattern discovery, existing pattern refinement).
+            - `relationships/pattern_dependencies.json`: Document newly identified or analyzed pattern relationships/conflicts.
+          Verify all JSON updates by reading back the content or checking schema conformance.
+
+          <!-- Phase 4: Documentation and Cross-Referencing -->
+          Generate comprehensive learning documents summarizing:
+            - New patterns identified and their benefits/use-cases.
+            - New anti-patterns detected and remediation advice.
+            - Key insights from `pattern_analyzer` (effectiveness, consistency).
+            - Trends in pattern usage or evolution.
+          Use `edit_file` to save these documents into a dedicated subdirectory like `.project_meta/.docs/patterns_learnings/` (or integrate into existing docs).
+
+          Use `cross_reference_manager` to create robust links:
+            - Between entries in `pattern_catalog.json`/`anti_patterns.json` and the learning documents.
+            - Between patterns/anti-patterns and the specific code modules/files in `src/` where they were observed or are applicable.
+            - Between patterns and relevant ADRs in `.project_meta/.architecture/adr_log.json`.
+            - Between patterns and their metrics in `pattern_metrics.json`.
+
+          Generate pattern review reports or add to `.project_meta/.patterns/reviews/`.
+        </action>
+        <error_handling>
+          `pattern_learner` execution failure: Log critical error (type: `PatternLearningError`), details of analysis scope, report. Trigger `handle_error`.
+          `pattern_analyzer` execution failure: Log critical error (type: `PatternAnalysisError`), details of pattern being analyzed, report. Trigger `handle_error`.
+          Pattern knowledge base update/verification failure (e.g., to `pattern_catalog.json` or `pattern_metrics.json`): Log critical error (type: `DataUpdateError`, subtype: `PatternDataError`), specific file and data, report. Trigger `handle_error`.
+          Learning document/review generation failure: Log error (type: `DocumentationError`), report. Trigger `handle_error`.
+          Cross-referencing failure for patterns: Log warning (type: `TraceabilityError`), details of missing links, report. Trigger `handle_error`.
+        </error_handling>
+        <depends_on>integration_phase</depends_on>
+        <output>
+          Comprehensive pattern knowledge base updated in `.project_meta/.patterns/` (catalog, anti-patterns, metrics, history, evolution, relationships all verified). New learning documents and pattern review artifacts generated in `.project_meta/.docs/` and `.project_meta/.patterns/reviews/`. All new and updated pattern information thoroughly cross-referenced with code, ADRs, and documentation.
+        </output>
+        <performance>Medium to Long (minutes to tens of minutes, with optimization for parallel processing of independent stories)</performance>
       </step>
 
     </workflow>
@@ -1356,33 +1022,33 @@
       <section id="modularity_and_architecture">
         <title>Architecture Health Assessment (Verified with Metrics)</title>
         <body>
-          - Architecture Conformance: [Score/100] (measures implemented code adherence to architectural specifications)
+          - Architecture Conformance: [Score/100] (measures implemented code adherence to architectural specifications, from verified `.project_meta/.architecture/architecture_metrics/conformance_score.json`)
           - Architecture Drift Metrics: [Current Score vs Baseline] (from verified `.project_meta/.architecture/architecture_metrics/drift_metrics.json`)
-          - Module Boundaries: [Count] modules defined, [Violation Count] boundary violations detected (from verified `.project_meta/.architecture/module_definitions.json`)
+          - Module Boundaries: [Count] modules defined, [Violation Count] boundary violations detected (from verified `.project_meta/.architecture/module_definitions.json` and analysis by `architecture_analyzer`)
           - Component Health:
-            - Highest Conformance: [Component Names], [Scores]
-            - Lowest Conformance: [Component Names], [Scores]
-            - Critical Components Status: [Names with Health Indicators]
+            - Highest Conformance: [Component Names], [Scores] (from verified `.project_meta/.architecture/architecture_metrics/component_conformance.json`)
+            - Lowest Conformance: [Component Names], [Scores] (from verified `.project_meta/.architecture/architecture_metrics/component_conformance.json`)
+            - Critical Components Status: [Names with Health Indicators] (derived from verified `architecture_analyzer` output)
           - Dependency Analysis:
             - Graph Complexity: [Node Count] nodes, [Edge Count] edges (from verified `.project_meta/.dependencies/dependency_graph.json`)
-            - Cycles Detected: [Count], [Criticality Distribution]
-            - Highest Coupling: [Component Names], [Coupling Scores]
-            - Lowest Cohesion: [Component Names], [Cohesion Scores]
+            - Cycles Detected: [Count], [Criticality Distribution] (from verified `.project_meta/.dependencies/conflict_log.json`)
+            - Highest Coupling: [Component Names], [Coupling Scores] (from verified `.project_meta/.architecture/architecture_metrics/coupling_metrics.json`)
+            - Lowest Cohesion: [Component Names], [Cohesion Scores] (from verified `.project_meta/.architecture/architecture_metrics/cohesion_metrics.json`)
           - Quality Attribute Implementation:
-            - Performance: [Score/100] (implementation vs architectural targets)
-            - Security: [Score/100] (implementation vs architectural security model)
-            - Maintainability: [Score/100] (measured against architectural goals)
-            - Scalability: [Score/100] (implementation vs architectural constraints)
+            - Performance: [Score/100] (implementation vs architectural targets, from verified `.project_meta/.architecture/architecture_metrics/performance_qa.json`)
+            - Security: [Score/100] (implementation vs architectural security model, from verified `.project_meta/.architecture/architecture_metrics/security_qa.json`)
+            - Maintainability: [Score/100] (measured against architectural goals, from verified `.project_meta/.architecture/architecture_metrics/maintainability_qa.json`)
+            - Scalability: [Score/100] (implementation vs architectural constraints, from verified `.project_meta/.architecture/architecture_metrics/scalability_qa.json`)
           - Technical Debt Assessment:
-            - Architecture Debt Accrual Rate: [Current Period] vs [Previous Period]
-            - Critical Areas: [Component Names], [Debt Scores]
+            - Architecture Debt Accrual Rate: [Current Period] vs [Previous Period] (from verified `.project_meta/.architecture/architecture_metrics/tech_debt.json`)
+            - Critical Areas: [Component Names], [Debt Scores] (from verified `.project_meta/.architecture/architecture_metrics/tech_debt.json`)
             - Remediation Priority Items: [Count] (from verified `.project_meta/.architecture/issues.md`)
           - Architecture Evolution Strategy:
-            - Recommended Refactorings: [Count], [Priority Distribution]
-            - Pattern Application Opportunities: [Count], [Types]
-            - Technology Refresh Recommendations: [Count], [Impact Assessment]
-          - Last Architecture Review: [Date], [Comprehensive Score], [Key Findings Summary]
-          - Critical Architecture Alerts: [Count], [Summary of Major Concerns]
+            - Recommended Refactorings: [Count], [Priority Distribution] (derived from `architecture_analyzer` output and verified `.project_meta/.architecture/issues.md`)
+            - Pattern Application Opportunities: [Count], [Types] (derived from `pattern_analyzer` output and verified `.project_meta/.patterns/pattern_catalog.json`)
+            - Technology Refresh Recommendations: [Count], [Impact Assessment] (from verified `.project_meta/.architecture/adr_log.json`)
+          - Last Architecture Review: [Date], [Comprehensive Score], [Key Findings Summary] (from verified `.project_meta/.architecture/reviews/architecture_review_summary.json`)
+          - Critical Architecture Alerts: [Count], [Summary of Major Concerns] (from verified `.project_meta/.architecture/issues.md`)
         </body>
       </section>
       <section id="active_errors">
@@ -1470,35 +1136,35 @@
       <section id="integration_health">
         <title>Integration Health Assessment (Verified with Metrics)</title>
         <body>
-          - Integration Stability Index: [Score/100] (composite metric of integration reliability)
-          - Integration Coverage: [Score/100] (percentage of interfaces verified by integration tests)
-          - Component Compatibility Matrix Summary:
+          - Integration Stability Index: [Score/100] (composite metric of integration reliability, from verified `.project_meta/.integration/metrics/stability_index.json`)
+          - Integration Coverage: [Score/100] (percentage of interfaces verified by integration tests, from verified `.project_meta/.integration/metrics/coverage_report.json`)
+          - Component Compatibility Matrix Summary: (derived from verified `.project_meta/.integration/reports/compatibility_matrix.json`)
             - Fully Compatible Components: [Count] ([List])
             - Partially Compatible Components: [Count] ([List]) with [Issue Count] boundary issues
             - Incompatible Components: [Count] ([List]) requiring immediate remediation
-          - Integration Test Performance:
+          - Integration Test Performance: (from verified `.project_meta/.integration/metrics/test_performance.json`)
             - Pass Rate: [Percentage]
             - Flaky Test Rate: [Percentage]
             - Integration Test Execution Time: [Time] (trend vs baseline: [up/down arrow])
-          - Integration Failure Analysis:
+          - Integration Failure Analysis: (derived from analysis of verified `.project_meta/.integration/logs/` and `integration_status.json`, summarized in `.project_meta/.integration/reports/failure_analysis.json`)
             - Most Common Failure Mode: [Description], occurring [Count] times
             - Integration Hotspots: [Component Names] with [Count] integration issues
             - Recently Remediated Issues: [Count]
-          - Interface Contract Compliance:
+          - Interface Contract Compliance: (from verified `.project_meta/.integration/metrics/interface_compliance.json`)
             - Contract Violation Rate: [Percentage]
             - Interface Stability Metrics: [Changes/Integration Cycle]
             - Highest Risk Interfaces: [Interface Names]
-          - Integration Debt:
+          - Integration Debt: (from verified `.project_meta/.integration/metrics/integration_debt.json`)
             - Estimated Integration Technical Debt: [Points]
             - Integration Debt Trend: [Increasing/Decreasing/Stable]
             - Recommended Integration Refactoring Priority: [Component Names]
-          - Architectural Alignment:
+          - Architectural Alignment: (from verified `.project_meta/.integration/metrics/architecture_alignment.json`)
             - Integration-to-Architecture Conformance: [Score/100]
             - Integration Constraint Violations: [Count]
-          - Integration Environment Health:
+          - Integration Environment Health: (from verified `.project_meta/.integration/metrics/environment_health.json`)
             - Environment Consistency Score: [Score/100]
             - Test Data Quality Metrics: [Summary]
-          - Recent Integration Activities:
+          - Recent Integration Activities: (from verified `.project_meta/.integration/integration_status.json` and `git log`)
             - Last Full Integration: [Date/Time]
             - Significant Changes: [Summary]
         </body>
@@ -1506,35 +1172,35 @@
       <section id="roadmap_health">
         <title>Roadmap and Stories Health Assessment (Verified with Metrics)</title>
         <body>
-          - Roadmap Progress: [Percentage] complete ([Story Count] of [Total Stories] done)
-          - Current Milestone: [Name], [Status] ([Days Ahead/Behind] schedule)
-          - Iteration Health Metrics:
+          - Roadmap Progress: [Percentage] complete ([Story Count] of [Total Stories] done, derived from story counts in verified `roadmap.json`)
+          - Current Milestone: [Name], [Status] ([Days Ahead/Behind] schedule, from verified `roadmap.json` and `.project_meta/.stories/metrics/milestone_progress.json`)
+          - Iteration Health Metrics: (from verified `.project_meta/.stories/metrics/velocity_metrics.json`, `.project_meta/.stories/metrics/estimation_accuracy.json`, and `roadmap.json`)
             - Current Iteration: [Number], [Percentage] complete, [Days Remaining]
             - Iteration Velocity: [Stories/Week] (trend: [up/down arrow])
             - Estimation Accuracy: [Percentage] (deviation from estimates)
             - Scope Stability: [Percentage] (changes to planned stories)
-          - Story Quality Metrics:
+          - Story Quality Metrics: (from verified `.project_meta/.stories/metrics/story_quality.json` and `.project_meta/.stories/mappings/story_requirement_map.json`)
             - Requirement Coverage: [Percentage] of PRD requirements covered by stories
             - Acceptance Criteria Completeness: [Score/100]
             - Story Granularity: [Distribution of story sizes]
             - Implementation-to-Story Alignment: [Score/100]
-          - Dependency Health:
+          - Dependency Health: (derived from verified `.project_meta/.stories/mappings/story_dependency_map.json`, `.project_meta/.dependencies/conflict_log.json`, and summarized in `.project_meta/.stories/metrics/dependency_health_index.json`)
             - Dependency Network Complexity: [Score/100]
             - Bottleneck Factor: [Score/100] ([Components] critical components)
             - Blocking Dependencies: [Count] currently blocking progress
             - Cycle Risk: [Score] (potential for circular dependencies)
-          - Forecasting:
+          - Forecasting: (derived from verified `roadmap.json` and `.project_meta/.stories/metrics/forecasting_metrics.json`)
             - Projected Completion Date: [Date] (based on current velocity)
             - Risk-Adjusted Timeline: [Date Range] (with confidence interval)
             - Critical Path Length: [Number] of sequential stories required
             - Milestone Risk Assessment: [High/Medium/Low] for each milestone
-          - Recently Completed Stories:
+          - Recently Completed Stories: (from verified `roadmap.json`)
             - [List of recently completed stories with metrics]
-          - Upcoming Stories:
+          - Upcoming Stories: (from verified `roadmap.json`)
             - Next in Queue: [List] (verified dependencies cleared)
             - Blocked Stories: [List] with blocking factors
             - High-Risk Stories: [List] with risk factors
-          - Roadmap Adjustments:
+          - Roadmap Adjustments: (from verified `roadmap.json` and its version history in `.project_meta/.stories/versions/roadmap_history/`)
             - Recent Scope Changes: [Summary of additions/removals]
             - Timeline Adjustments: [Summary of schedule changes]
             - Prioritization Shifts: [Summary of priority changes]
@@ -1543,33 +1209,33 @@
       <section id="error_health">
         <title>Error Management Health Assessment (Verified with Metrics)</title>
         <body>
-          - Error Handling Effectiveness: [Score/100] (composite metric of error resolution success)
-          - Error Resolution Efficiency: [Score/100] (time-to-resolution metrics weighted by severity)
-          - Error Distribution Analysis:
+          - Error Handling Effectiveness: [Score/100] (composite metric of error resolution success, from verified `.project_meta/.errors/metrics/effectiveness_score.json`)
+          - Error Resolution Efficiency: [Score/100] (time-to-resolution metrics weighted by severity, from verified `.project_meta/.errors/metrics/resolution_efficiency.json`)
+          - Error Distribution Analysis: (derived from verified `.project_meta/.errors/error_log.json` and summarized in `.project_meta/.errors/metrics/distribution_analysis.json`)
             - By Component: [Distribution chart of error frequency across components]
             - By Type: [Breakdown of errors by taxonomy classification]
             - By Severity: [Critical/High/Medium/Low counts and percentages]
-          - Error Resolution Status:
+          - Error Resolution Status: (derived from verified `.project_meta/.errors/error_log.json`)
             - Successfully Resolved: [Count] ([Percentage])
             - Partially Resolved: [Count] ([Percentage]) with [Limitation Count] limitations
             - Pending Resolution: [Count] ([Percentage]) with [Count] requiring intervention
             - Failed Resolution Attempts: [Count] ([Percentage]) with [Strategy Count] strategies attempted
-          - Error Trend Analysis:
+          - Error Trend Analysis: (from verified `.project_meta/.errors/metrics/error_trends.json` and `.project_meta/.errors/metrics/prediction_accuracy.json`)
             - Error Frequency Trend: [increasing/decreasing/stable] ([Percentage] change)
             - Resolution Time Trend: [improving/degrading/stable] ([Percentage] change)
             - Recurring Error Patterns: [Count] patterns identified across [Component Count] components
             - Error Prediction Accuracy: [Percentage] of predicted errors correctly anticipated
-          - Critical Error Analysis:
+          - Critical Error Analysis: (derived from verified `.project_meta/.errors/error_log.json` and summarized in `.project_meta/.errors/metrics/critical_error_analysis.json`)
             - Most Frequent Error Types: [List of top error types with counts]
             - Highest Impact Errors: [List with impact scores]
             - Most Error-Prone Components: [Component names with error density]
             - Most Successful Recovery Strategies: [Strategy types with success rates]
-          - Error Knowledge Base Status:
+          - Error Knowledge Base Status: (derived from verified `.project_meta/.errors/reports/`, `.project_meta/.errors/metrics/`, and links to verified documentation)
             - Root Cause Analyses Completed: [Count]
             - Preventive Recommendations Implemented: [Count] of [Total Count]
             - Error Prediction Models Updated: [Date] with [Accuracy Score] accuracy
             - Learning Documents Generated: [Count] covering [Component Count] components
-          - Recent Error Activities:
+          - Recent Error Activities: (from verified `.project_meta/.errors/error_log.json` and `.project_meta/.errors/metrics/error_trends.json`)
             - New Error Patterns Identified: [Count] in the last [Timeframe]
             - Recovery Strategy Improvements: [Count] optimizations implemented
             - Error Prevention Initiatives: [List of preventive actions]
@@ -1579,31 +1245,31 @@
       <section id="documentation_health">
         <title>Documentation Health Assessment (Verified with Metrics)</title>
         <body>
-          - Documentation Quality Score: [Score/100] (measure of documentation accuracy, completeness, and comprehensibility)
-          - Documentation Coverage Ratio: [Percentage] (documented system features/APIs/modules)
-          - Freshness Index: [Score/100] (consistency measure between code and documentation)
+          - Documentation Quality Score: [Score/100] (measure of documentation accuracy, completeness, and comprehensibility, from verified `.project_meta/.docs/metrics/doc_quality_metrics.json`)
+          - Documentation Coverage Ratio: [Percentage] (documented system features/APIs/modules, from verified `.project_meta/.docs/metrics/doc_coverage_report.json`)
+          - Freshness Index: [Score/100] (consistency measure between code and documentation, from verified `.project_meta/.docs/metrics/doc_freshness_index.json`)
           - Documentation Integrity:
-            - Highest Quality Documentation: [Document Names], [Quality Scores]
-            - Documents Requiring Updates: [Document Names], [Freshness Scores]
-            - Critical Component Documentation Status: [Component Names and Documentation Health Indicators]
+            - Highest Quality Documentation: [Document Names], [Quality Scores] (from verified `.project_meta/.docs/metrics/doc_quality_metrics.json`)
+            - Documents Requiring Updates: [Document Names], [Freshness Scores] (from verified `.project_meta/.docs/metrics/doc_freshness_index.json` and `.project_meta/.docs/validation/freshness_alerts.json`)
+            - Critical Component Documentation Status: [Component Names and Documentation Health Indicators] (derived from verified doc metrics)
           - Cross-Reference Health:
-            - Reference Count: [Count] cross-references
-            - Broken Links: [Count] (%[Percentage])
-            - Most Referenced Documents: [Document Names], [Reference Counts]
-          - Documentation Usage Analysis:
+            - Reference Count: [Count] cross-references (derived from `doc_reference_analyzer` output, potentially logged in `.project_meta/.docs/validation/validation_reports/cross_reference_report.json`)
+            - Broken Links: [Count] (%[Percentage]) (derived from `doc_validator` output, potentially logged in `.project_meta/.docs/validation/validation_reports/link_check_report.json`)
+            - Most Referenced Documents: [Document Names], [Reference Counts] (from verified `.project_meta/.docs/metrics/doc_usage_analytics.json`)
+          - Documentation Usage Analysis: (from verified `.project_meta/.docs/metrics/doc_usage_analytics.json`)
             - Most Frequently Used Documents: [Document Names], [Access Counts]
             - Least Used Documents: [Document Names], [Access Counts]
-            - High Usage / Low Quality Documents: [Document Names] (for priority improvement)
+            - High Usage / Low Quality Documents: [Document Names] (for priority improvement, derived from usage and quality metrics)
           - Interactive Documentation Status:
-            - API Explorer Coverage: [Percentage] (coverage rate of all APIs)
-            - Interactive Example Count: [Count]
-            - Executable Code Count: [Count]
+            - API Explorer Coverage: [Percentage] (coverage rate of all APIs, from verified `.project_meta/.docs/metrics/api_explorer_coverage.json`)
+            - Interactive Example Count: [Count] (derived from scanning `.project_meta/.docs/interactive/examples_runner/`)
+            - Executable Code Count: [Count] (derived from scanning `.project_meta/.docs/interactive/examples_runner/`)
           - Documentation Development Strategy:
-            - Suggested Documentation Improvements: [Count], [Priority Distribution]
-            - Documentation Gaps: [Count], [Type Distribution]
-            - Technology/Tool Improvement Suggestions: [Count], [Impact Assessment]
-          - Last Documentation Review: [Date], [Comprehensive Score], [Key Findings Summary]
-          - Critical Documentation Alerts: [Count], [Summary of Major Concerns]
+            - Suggested Documentation Improvements: [Count], [Priority Distribution] (derived from `doc_analytics` and `doc_validator` outputs)
+            - Documentation Gaps: [Count], [Type Distribution] (from verified `.project_meta/.docs/metrics/doc_coverage_report.json`)
+            - Technology/Tool Improvement Suggestions: [Count], [Impact Assessment] (derived from documentation team feedback or review, logged in ADRs or issue trackers)
+          - Last Documentation Review: [Date], [Comprehensive Score], [Key Findings Summary] (from verified `.project_meta/.docs/validation/validation_reports/doc_review_summary.json`)
+          - Critical Documentation Alerts: [Count], [Summary of Major Concerns] (from verified `.project_meta/.docs/validation/freshness_alerts.json` and `validation_reports`)
         </body>
       </section>
     </report_structure>

@@ -39,7 +39,7 @@
 
 ## Proje Tanımı
 
-CodeFlow, yapay zeka destekli proje geliştirme süreçlerinizi otomatize eden kapsamlı bir iş akış motorudur. Gelişmiş desen yönetimi, mimari yönetişim, entegrasyon mükemmelliği, yol haritası zekası ve hata yönetimi mekanizmaları sayesinde kod kalitesini ve sürdürülebilirliğini önemli ölçüde artırır.
+CodeFlow, yapay zeka destekli proje geliştirme süreçlerinizi otomatize eden kapsamlı bir iş akış motorudur. Sistemin kalbini oluşturan `codeflow.xml` (iş akış motoru) ve `prompt.xml` (iş akış yapılandırma ve yönlendirme) dosyaları aracılığıyla yönetilen CodeFlow, gelişmiş desen yönetimi, mimari yönetişim, entegrasyon mükemmelliği, yol haritası zekası ve hata yönetimi mekanizmaları sayesinde kod kalitesini ve sürdürülebilirliğini önemli ölçüde artırır. Tüm proje metrikleri, raporları, geçici dosyalar ve sistem tarafından üretilen diğer önemli çıktılar `.project_meta/` dizini altında yapılandırılmış bir şekilde saklanır.
 
 **Neden CodeFlow?**
 
@@ -49,70 +49,104 @@ CodeFlow, yapay zeka destekli proje geliştirme süreçlerinizi otomatize eden k
 * **Ölçeklenebilirlik:** Büyüyen kodtabanlarını ve ekipleri destekler
 * **Sürdürülebilirlik:** Teknik borcun proaktif yönetimini sağlar
 
-CodeFlow, iş akış motoru (codeflow.xml) ve iş akış talebi (prompt.xml) olmak üzere iki temel XML dosyasıyla çalışır. Bu dosyalar, proje geliştirme sürecinin otomatizasyonunu ve optimizasyonunu sağlayan kapsamlı bir çerçeve sunar.
+CodeFlow, proje geliştirme sürecinin otomasyonunu ve optimizasyonunu sağlayan kapsamlı bir çerçeve sunmak için birbirini tamamlayan iki temel XML dosyasıyla çalışır:
+*   **`codeflow.xml`**: Ana iş akışlarını, adımlarını, kullanılacak araçları ve bu adımların sıralı mantığını tanımlar. Sistemin temel operasyonel motorudur.
+*   **`prompt.xml`**: `codeflow.xml`'deki iş akışlarının belirli bir proje veya bağlam için nasıl çalışacağını detaylandıran, hedefleri, kalite standartlarını, beklenen çıktıları ve insan etkileşim noktalarını tanımlayan bir yapılandırma ve yönlendirme dosyasıdır. LLM'e verilen görevlerde `codeflow.xml` ile birlikte kullanılarak sürecin davranışını özelleştirir.
 
 ### Ana Bileşenler
 
-* **Desen Yönetim Motoru:** Kod desenlerini otomatik olarak tespit eder, sınıflandırır ve geliştirir
-* **Mimari Doğrulama Sistemi:** Kod tabanının mimari ilkelere uyumunu sağlar
-* **Entegrasyon Orkestratörü:** Çok seviyeli entegrasyon testlerini yönetir
-* **Hikaye ve Bağımlılık Yöneticisi:** Proje planlamasını optimize eder
-* **Gelişmiş Hata Analiz Sistemi:** Çok boyutlu hata sınıflandırması ve akıllı kurtarma
+CodeFlow'un temel yetenekleri, aşağıdaki gibi entegre çalışan ana bileşenler ve sistemler tarafından sağlanır:
+
+* **İş Akışı Motoru (`codeflow.xml`)**: Proje yaşam döngüsündeki tüm adımları, koşulları ve eylemleri tanımlar. `initialize_project` gibi adımlarla proje için gerekli tüm başlangıç yapılandırmasını (örneğin, `.project_meta/` altındaki metrik ve rapor dizinlerini oluşturma) gerçekleştirir.
+* **İş Akışı Yapılandırması (`prompt.xml`)**: Kalite beklentileri, hedeflenen iş akışı adımları, özel metrikler, raporlama formatları ve insan müdahalesi gerektiren durumlar gibi proje özelindeki girdileri tanımlar.
+* **Desen Yönetim Motoru (`learn_patterns` adımı ve ilgili araçlar)**: Kod desenlerini otomatik olarak tespit eder, sınıflandırır, geliştirir, evrimini takip eder ve `.project_meta/.patterns/` altında metriklerini, geçmişini ve ilişkilerini yönetir.
+* **Mimari Doğrulama Sistemi (`analyze_initial_architecture` adımı ve `architecture_analyzer` gibi araçlar)**: Kod tabanının mimari ilkelere uyumunu sağlar ve `.project_meta/.architecture/` altında ilgili metrik ve raporları üretir.
+* **Entegrasyon Orkestratörü (`integration_phase` adımı ve ilgili araçlar)**: Çok seviyeli entegrasyon testlerini yönetir, uyumluluk analizleri yapar ve `.project_meta/.integration/` altında metrik ve raporları saklar.
+* **Yol Haritası ve Hikaye Yöneticisi (`create_roadmap_and_stories` adımı ve `roadmap_manager` gibi araçlar)**: Proje planlamasını optimize eder, gereksinimleri hikayelere böler, bağımlılıkları yönetir ve `.project_meta/.stories/` altında metrikleri tutar.
+* **Gelişmiş Hata Analiz ve Yönetim Sistemi (`handle_error` adımı ve `error_analyzer` gibi araçlar)**: Hataları çok boyutlu sınıflandırır, kök neden analizi yapar, akıllı kurtarma stratejileri sunar ve `.project_meta/.errors/` altında metrik ve raporları barındırır.
+* **Dinamik Dökümantasyon Sistemi (çeşitli dokümantasyon araçları)**: Kod ve proje hakkında sürekli güncel kalan dokümanlar üretir, doğrular ve `.project_meta/.docs/` altında metriklerini, doğrulama sonuçlarını ve görselleştirmelerini yönetir.
 
 Bu sistemler birlikte çalışarak modern yazılım geliştirme süreçlerinde kalite, tutarlılık ve verimlilik sağlar.
 
 ## Temel Özellikler
 
-### 🔄 Entegre İş Akışı
+### 🔄 Entegre ve Yapılandırılabilir İş Akışı
 
-CodeFlow, doğrulanmış bir ürün gereksinimleri dokümanı (PRD) temelinde proje geliştirmeyi otomatize eden kapsamlı bir iş akış motoru sunar:
+CodeFlow, doğrulanmış bir ürün gereksinimleri dokümanı (PRD) ve `prompt.xml` içinde tanımlanan proje hedefleri temelinde proje geliştirmeyi otomatize eden kapsamlı bir iş akış motoru sunar. `codeflow.xml` ana süreci tanımlarken, `prompt.xml` bu sürecin özel ihtiyaçlara göre nasıl işleyeceğini (örneğin, hangi adımlara odaklanılacağı, kalite standartları, beklenen çıktılar) belirler.
 
-* **Otomatik PRD doğrulama ve analizi**
-* **Yapay zeka destekli mimari tasarım ve değerlendirme**
-* **Akıllı modüler yapı ve bağımlılık yönetimi**
-* **İteratif ve döngüsel geliştirme süreç otomasyonu**
-* **Aşamalı entegrasyon ve test otomasyonu**
-* **Kesintisiz geri bildirim ve sürekli iyileştirme**
-* **Dinamik, gerçek zamanlı dökümantasyon sistemi**
+* **Otomatik PRD doğrulama ve analizi (`validate_prd` adımı)**
+* **`prompt.xml` ile yönlendirilen yapay zeka destekli mimari tasarım ve değerlendirme (`analyze_initial_architecture` adımı).** Çıktılar `.project_meta/.architecture/` altında saklanır.
+* **Akıllı modüler yapı ve bağımlılık yönetimi (`create_roadmap_and_stories` adımı).** Çıktılar `.project_meta/.stories/` altında saklanır.
+* **İteratif ve döngüsel geliştirme süreç otomasyonu.**
+* **Aşamalı entegrasyon ve test otomasyonu (`integration_phase` adımı).** Çıktılar `.project_meta/.integration/` altında saklanır.
+* **Hata yönetimi ve bilgi birikimi (`handle_error` adımı).** Çıktılar `.project_meta/.errors/` altında saklanır.
+* **Kesintisiz geri bildirim ve sürekli iyileştirme.**
+* **Dinamik, gerçek zamanlı dökümantasyon sistemi (dokümantasyon araçları).** Çıktılar `.project_meta/.docs/` altında saklanır.
+* **Proje başlangıç yapılandırması (`initialize_project` adımı):** `.project_meta/` altında tüm gerekli metrik, rapor, ve çalışma dizinlerini oluşturur.
 
 ```xml
-<!-- Örnek İş Akışı Yapılandırması (codeflow.xml'den özet) -->
-<workflow>
-  <step id="analyze_initial_architecture">
-    <description>Establish comprehensive, robust initial architecture based on the validated PRD through multi-dimensional analysis.</description>
-    <condition>After PRD is ready and validated.</condition>
-    <action>
-      Use `architecture_analyzer` to perform comprehensive architecture analysis:
-        - Evaluate multiple architecture styles/patterns against PRD requirements
-        - Perform quantitative analysis of quality attributes
-        - Generate architecture quality scores for each candidate approach
-      <!-- ... diğer eylemler ... -->
-    </action>
-  </step>
-  <!-- ... diğer adımlar ... -->
-</workflow>
+<!-- Örnek İş Akışı Adımı (codeflow.xml'den 'analyze_initial_architecture') -->
+<step id="analyze_initial_architecture">
+  <description>Establish comprehensive, robust initial architecture based on the validated PRD and prompt.xml specifications through multi-dimensional analysis. Relevant metrics and review files will be generated and validated under .project_meta/.architecture/.</description>
+  <condition>After PRD is ready and validated, and project is initialized.</condition>
+  <tools_setup>
+    <tool name="architecture_analyzer"/>
+    <tool name="prd_analyzer"/>
+    <tool name="code_reviewer"/>
+    <tool name="reporting_tool"/>
+  </tools_setup>
+  <action>
+    <phase name="Architectural Analysis and Design">
+      Use `architecture_analyzer` to perform comprehensive architecture analysis based on PRD and `prompt.xml` quality/performance targets:
+        - Evaluate multiple architecture styles/patterns against PRD requirements.
+        - Perform quantitative analysis of quality attributes (e.g., performance, scalability, security, maintainability).
+        - Generate architecture quality scores for each candidate approach.
+        - Identify potential risks and trade-offs for each option.
+      Use `prd_analyzer` to ensure deep understanding of functional and non-functional requirements influencing architecture.
+    </phase>
+    <phase name="Documentation and Metric Generation">
+      The `architecture_analyzer` and `reporting_tool` will generate and store detailed architectural documents, decision logs, and all relevant metrics (including those specified in `prompt.xml`) in `.project_meta/.architecture/architecture_metrics/` and `.project_meta/.architecture/reviews/`.
+      All generated files will be validated for completeness and correctness.
+    </phase>
+  </action>
+  <output>
+    <item type="report" path=".project_meta/.architecture/main_architecture_document.json" description="Main architecture document detailing the chosen approach, rationale, and design."/>
+    <item type="metrics" path=".project_meta/.architecture/architecture_metrics/" description="Directory containing all generated architectural metrics."/>
+    <item type="reviews" path=".project_meta/.architecture/reviews/" description="Directory containing architectural review files and feedback."/>
+    <item type="status" description="Architecture analysis complete. All metrics and reports are generated and validated in their respective .project_meta/architecture/ subdirectories."/>
+  </output>
+  <error_management>
+    <handle error_type="prd_ambiguity" action="request_clarification_from_user"/>
+    <handle error_type="tool_failure" action="retry_with_alternative_tool_or_log_error"/>
+    <handle error_type="metric_generation_failure" action="log_error_and_proceed_with_available_data"/>
+  </error_management>
+</step>
 ```
 
-### 📊 Gelişmiş Desen Yönetimi
+### 📊 Gelişmiş Desen Yönetimi (`learn_patterns` Adımı)
 
-Desen yönetim sistemi, kod kalitesini ve tutarlılığını artırmak için kapsamlı özellikler sunar:
+`learn_patterns` adımı liderliğindeki desen yönetim sistemi, kod kalitesini ve tutarlılığını artırmak için kapsamlı ve iyileştirilmiş özellikler sunar. Bu adım, `pattern_learner` ve `pattern_analyzer` gibi daha spesifik araçlar kullanarak `.project_meta/.patterns/` altındaki tüm metrik, geçmiş, evrim ve ilişki dosyalarını günceller ve doğrular. Detaylı çıktılar, raporlama ve güçlendirilmiş izlenebilirlik sağlar.
 
-* **Otomatik desen tanıma ve sınıflandırma**
+* **Otomatik desen tanıma ve sınıflandırma (`pattern_analyzer`)**
 * **Desen uygulamalarının tutarlılık kontrolü**
-* **Anti-desen tespiti ve çözüm önerileri**
-* **Desen kataloğu ve evrim yönetimi**
-* **Desen metriklerinin ölçümü ve analizi**
-* **Desen ilişkilerinin haritalanması ve görselleştirilmesi**
+* **Anti-desen tespiti ve çözüm önerileri (`anti_pattern_detector`)**
+* **Desen kataloğu ve evrim yönetimi (`pattern_learner`, çıktılar `.project_meta/.patterns/evolution/` altında)**
+* **Kapsamlı desen metrikleri ölçümü ve analizi (çıktılar `.project_meta/.patterns/metrics/` altında)**
+* **Desen ilişkilerinin haritalanması ve görselleştirilmesi (çıktılar `.project_meta/.patterns/relationships/` altında)**
+* **Desen öğrenme ve uygulama geçmişinin takibi (çıktılar `.project_meta/.patterns/history/` altında)**
 
 ```xml
 <!-- Örnek Desen Metrik Tanımlaması (prompt.xml'den) -->
 <pattern_metrics>
-  <metric name="pattern_adoption_rate" 
-         description="Percentage of relevant coding opportunities where a cataloged pattern was applied." 
-         target=">75%"/>
-  <metric name="pattern_effectiveness_score" 
-         description="Aggregated score based on pattern impact on complexity, testability, performance." 
-         target="increasing_trend"/>
+  <metric name="pattern_adoption_rate"
+          description="Percentage of relevant coding opportunities where a cataloged pattern was applied. Stored in .project_meta/.patterns/metrics/pattern_adoption_rate.json"
+          target=">75%"/>
+  <metric name="pattern_effectiveness_score"
+          description="Aggregated score based on pattern impact on complexity, testability, performance. Stored in .project_meta/.patterns/metrics/pattern_effectiveness_score.json"
+          target="increasing_trend"/>
+  <metric name="new_patterns_identified_count"
+          description="Number of new, potentially reusable patterns identified in the last analysis cycle. Stored in .project_meta/.patterns/metrics/new_patterns_identified_count.json"
+          target="monitor"/>
   <!-- ... diğer metrikler ... -->
 </pattern_metrics>
 ```
@@ -131,10 +165,11 @@ Mimari yönetişim sistemi, kodunuzun tanımlanmış mimari ilkelere ve kısıtl
 ```xml
 <!-- Örnek Mimari Analiz Mekanizması (prompt.xml'den) -->
 <architecture_analysis_mechanism>
-  <process>Perform multi-dimensional architecture analysis against PRD requirements, architectural principles, and industry standards.</process>
-  <process>Validate structural integrity, modularity, component interactions, and alignment with business goals.</process>
-  <!-- ... diğer süreçler ... -->
-  <feedback_loop>Continuously monitor architecture conformance and update metrics to detect drift early.</feedback_loop>
+  <process>Perform multi-dimensional architecture analysis against PRD requirements, architectural principles, defined quality standards (e.g., target_latency_ms < 100), and industry standards. Generate reports in .project_meta/.architecture/reviews/.</process>
+  <process>Validate structural integrity, modularity, component interactions, and alignment with business goals. Document findings in .project_meta/.architecture/main_architecture_document.json.</process>
+  <output_expectation format="detailed_report" location=".project_meta/.architecture/architecture_assessment_report.json"/>
+  <output_expectation format="metrics_dashboard_data" location=".project_meta/.architecture/architecture_metrics/dashboard_data.json"/>
+  <feedback_loop>Continuously monitor architecture conformance via metrics in .project_meta/.architecture/architecture_metrics/ and update them to detect drift early. Report deviations against prompt.xml targets.</feedback_loop>
 </architecture_analysis_mechanism>
 ```
 
@@ -174,10 +209,11 @@ Hata yönetim sistemi, hatalarınızı etkili bir şekilde analiz eder, sınıfl
 ```xml
 <!-- Örnek Hata Analiz Mekanizması (prompt.xml'den) -->
 <error_analysis_mechanism>
-  <process>Perform multi-dimensional error classification using sophisticated taxonomies.</process>
-  <process>Generate detailed fault trees with root cause determination and impact assessment.</process>
-  <!-- ... diğer süreçler ... -->
-  <feedback_loop>Continuously update error metrics to improve error handling capabilities over time.</feedback_loop>
+  <process>Perform multi-dimensional error classification using sophisticated taxonomies. Store classifications in .project_meta/.errors/classified_errors.json.</process>
+  <process>Generate detailed fault trees with root cause determination and impact assessment. Reports in .project_meta/.errors/reports/fault_trees/.</process>
+  <output_expectation format="error_dashboard_data" location=".project_meta/.errors/metrics/dashboard_data.json"/>
+  <output_expectation format="knowledge_base_update_summary" location=".project_meta/.errors/knowledge_base_updates.json"/>
+  <feedback_loop>Continuously update error metrics in .project_meta/.errors/metrics/ and visualizations in .project_meta/.errors/reports/visualizations/ to improve error handling capabilities over time.</feedback_loop>
 </error_analysis_mechanism>
 ```
 
@@ -185,92 +221,90 @@ Hata yönetim sistemi, hatalarınızı etkili bir şekilde analiz eder, sınıfl
 
 ### Ön Koşullar
 
-- Herhangi bir LLM (GPT-4, Claude, Llama vb.)
-- codeflow.xml ve prompt.xml dosyaları
+-   Erişiminiz olan bir Büyük Dil Modeli (LLM) (örn: GPT-4, Claude, Llama vb.). LLM, XML formatındaki `codeflow.xml` ve `prompt.xml` dosyalarını işleyebilmeli ve talimatları anlayabilmelidir.
+-   `codeflow.xml` (iş akışı motoru) ve `prompt.xml` (proje özelinde iş akışı yapılandırması) dosyaları.
+-   Analiz edilecek veya geliştirilecek proje kodları ve ilgili dokümanlar (örn: PRD).
 
 ### Kurulum
 
-CodeFlow, bir yazılım paketi olarak kurulmaz. XML dosyaları (codeflow.xml ve prompt.xml) doğrudan LLM'e sistem promptu olarak sunulur:
+CodeFlow, geleneksel bir yazılım paketi gibi kurulmaz. `codeflow.xml` ve `prompt.xml` dosyaları, kullanılacak LLM'e doğrudan bir sistem mesajı (system prompt) veya kullanıcı mesajının bir parçası olarak sunulur:
 
-1. codeflow.xml ve prompt.xml dosyalarını indirin
-2. Tercih ettiğiniz LLM platformuna sistem promptu olarak entegre edin
-3. Çalışma akışınızı başlatmak için uygun talimatlar ile LLM'i çağırın
+1.  CodeFlow deposundan (veya size sağlanan yerden) `codeflow.xml` ve `prompt.xml` dosyalarının en güncel sürümlerini edinin.
+2.  Bu XML dosyalarının içeriğini kopyalayın.
+3.  Kullandığınız LLM platformunda, bu içerikleri LLM'e talimatlarınızla birlikte verin. Genellikle, `codeflow.xml` ve `prompt.xml` içerikleri, asıl sorgunuzdan önce veya özel bir sistem mesajı alanına yerleştirilir.
+    *   **Örnek:** "Aşağıdaki `codeflow.xml` ve `prompt.xml` içeriklerini kullanarak, sağladığım PRD dokümanını analiz et ve bir başlangıç mimari planı oluştur. Çıktıları `.project_meta/` altında belirtilen yapıya göre kaydet.
+        
+        `<codeflow_xml_icerigi_buraya_gelecek>`
+        
+        `<prompt_xml_icerigi_buraya_gelecek>`
+        
+        `<PRD_icerigi_veya_referansi_buraya_gelecek>`"
+4.  LLM, bu XML'leri yorumlayarak tanımlanmış iş akışını ve yapılandırmayı anlayacak ve talimatlarınızı bu çerçevede yerine getirecektir.
 
-### Temel Kullanım
+CodeFlow, tüm çıktılarını ve çalışma dosyalarını projenizin kök dizininde oluşturacağı `.project_meta/` adlı bir klasör altında saklar. Bu nedenle, LLM'in bu dizine yazma ve okuma yetkisi olduğundan emin olun (eğer LLM yerel bir dosya sistemiyle etkileşimde bulunuyorsa).
 
+### Temel Kullanım Senaryoları
+
+LLM'e verilecek talimatlar genellikle `codeflow.xml` içeriği, `prompt.xml` içeriği (isteğe bağlı olarak hedeflenmiş kullanım için) ve spesifik bir görevi içerir.
+
+```plaintext
+# Projeyi başlatma ve PRD analizi (prompt.xml'deki varsayılan ayarlar kullanılır)
+"[codeflow.xml] [prompt.xml] Bu PRD'yi analiz et ve projeyi ilklendir. Raporları .project_meta/architecture/ altına kaydet.
+[PRD İçeriği]"
+
+# Belirli bir adıma odaklanma (örneğin, desenleri öğrenme)
+"[codeflow.xml] [prompt.xml] Bu kod tabanındaki desenleri öğren ve .project_meta/patterns/ altına kaydet.
+[Kod Örnekleri veya Kod Tabanı Referansı]"
+
+# Mevcut proje durumu ve metrikleri hakkında genel bir rapor alma
+"[codeflow.xml] [prompt.xml] Projenin mevcut durumunu analiz et ve .project_meta/ altındaki metriklerden genel bir özet raporu oluştur."
+
+# Spesifik bir metrik setini sorgulama
+"[codeflow.xml] [prompt.xml] Entegrasyon metriklerini (.project_meta/integration/metrics/) ve hata trendlerini (.project_meta/errors/metrics/trend_analysis.json) raporla."
+
+# Hata analizi istemek
+"[codeflow.xml] [prompt.xml] Belirtilen log dosyalarındaki potansiyel hataları analiz et ve .project_meta/errors/ altına raporla.
+[Log Dosyası İçeriği veya Referansı]"
+
+# Dokümantasyon kalitesini ve güncelliğini kontrol etme
+"[codeflow.xml] [prompt.xml] Projenin dokümantasyon kalitesini (.project_meta/docs/metrics/) değerlendir ve eksiklikleri raporla."
+
+# Bir kullanıcı hikayesinin tamamlanma durumunu ve bağımlılıklarını kontrol etme
+"[codeflow.xml] [prompt.xml] 'story_id_xyz' numaralı hikayenin durumunu, bağımlılıklarını ve .project_meta/stories/ altındaki ilgili metriklerini kontrol et."
+
+# İnsan etkileşim noktası hakkında bilgi alma veya tetiklenme durumunda ne yapılacağını sorma
+"[codeflow.xml] [prompt.xml] 'critical_anti_pattern_detected' olayı için tanımlanmış insan etkileşim noktasının detayları nelerdir? Tetiklenmesi durumunda ne gibi bildirimler alırım?"
+
+# Bir sonraki iterasyon için planlama desteği
+"[codeflow.xml] [prompt.xml] .project_meta/stories/product_backlog.json dosyasındaki hikayeleri önceliklendir, bağımlılıklarını analiz et ve bir sonraki sprint için öneriler sun."
 ```
-# LLM'e temel iş akışı talimatını gönderin
-"[codeflow.xml içeriği] Lütfen bu iş akışını başlat ve PRD'yi analiz et."
 
-# Belirli bir adıma odaklanmak için
-"[codeflow.xml içeriği] Bu iş akışının 'analyze_initial_architecture' adımını çalıştır."
+### Gelişmiş Kullanım Senaryoları
 
-# Durum raporu almak için
-"[codeflow.xml içeriği] Mevcut mimari durumu analiz et ve rapor oluştur."
+```plaintext
+# PRD'den yeni ve kapsamlı bir mimari analiz talep etme (prompt.xml'de özel hedefler belirtilmiş olabilir)
+"[codeflow.xml] [prompt.xml] [PRD içeriği] Bu PRD'yi kullanarak, prompt.xml'deki performans ve güvenlik hedeflerini göz önünde bulundurarak kapsamlı bir mimari analiz oluştur. Çıktıları .project_meta/architecture/ altına detaylı olarak kaydet."
 
-# Hata analizi istemek için
-"[codeflow.xml içeriği] Bu projede potansiyel hataları analiz et."
+# Kod tabanında desen analizi ve yeni desen önerileri isteme
+"[codeflow.xml] [prompt.xml] [kod içeriği veya referansı] Bu kod tabanında kullanılan desenleri tespit et, .project_meta/patterns/ altında analiz et ve kodun iyileştirilmesi için yeni desenler öner."
 
-# Dökümantasyon durumunu kontrol etmek için
-"[codeflow.xml içeriği] Projenin dökümantasyon kalitesini ve güncelliğini değerlendir."
+# Mimari doğrulama ve sapma analizi
+"[codeflow.xml] [prompt.xml] [kod içeriği veya referansı] Bu kod tabanının .project_meta/architecture/main_architecture_document.json adresindeki tanımlanmış mimari prensiplerle uyumluluğunu doğrula. Sapmaları ve olası riskleri raporla."
 
-# Bir hikayenin tamamlanma durumunu kontrol etmek için
-"[codeflow.xml içeriği] 'story_123' kodlu hikayenin durumunu ve bağımlılıklarını kontrol et."
+# Entegrasyon uyumluluk analizi ve test senaryosu üretimi
+"[codeflow.xml] [prompt.xml] [bileşen tanımları ve arayüzleri] Bu bileşenlerin entegrasyon uyumluluğunu analiz et, olası çakışmaları belirt ve .project_meta/integration/reports/ altına bir test senaryosu öneri listesi oluştur."
 
-# Proje ilerlemesini özetlemek için
-"[codeflow.xml içeriği] Mevcut iterasyonun ilerlemesini özet rapor olarak sun."
+# Otomatik dokümantasyon oluşturma, güncelleme ve doğrulama
+"[codeflow.xml] [prompt.xml] [kod içeriği veya referansı] Bu kod için API dokümantasyonunu .project_meta/docs/api/ altında oluştur, mevcut dokümantasyonla (.project_meta/docs/existing/) karşılaştırarak güncelle ve .project_meta/docs/validation/ altında doğrulama raporu üret."
 
-# Sonraki adımları planlamak için
-"[codeflow.xml içeriği] Bir sonraki adımı planla ve önceliklendir."
+# Performans testi sonuçlarını analiz etme ve darboğazları belirleme
+"[codeflow.xml] [prompt.xml] [performans testi ham sonuçları] Bu performans testi sonuçlarını analiz et, darboğazları belirle ve .project_meta/.integration/reports/performance_tests/performance_analysis_report.json olarak kaydet."
 
-# Çevik süreç için planlama toplantısı desteği
-"[codeflow.xml içeriği] Bir sonraki sprint için hikaye önerilerini önceliklendir ve bağımlılıklarını analiz et."
-```
+# Güvenlik tarama raporunu inceleme ve kritik açıkları önceliklendirme
+"[codeflow.xml] [prompt.xml] [güvenlik tarama raporu] Bu güvenlik raporunu incele, OWASP Top 10'a göre kritik açıkları .project_meta/.integration/reports/security_tests/critical_vulnerabilities.json altında önceliklendir."
 
-### Gelişmiş Kullanım
-
-```
-# PRD'den yeni mimari analiz talep etme
-"[codeflow.xml içeriği] [prompt.xml içeriği] [PRD içeriği] Bu PRD'yi kullanarak kapsamlı bir mimari analiz oluştur."
-
-# Desen analizi talep etme
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanında kullanılan desenleri tespit et ve analiz et."
-
-# Mimari doğrulama
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanının tanımlanan mimari prensiplerle uyumluluğunu doğrula."
-
-# Entegrasyon analizi
-"[codeflow.xml içeriği] [bileşen tanımları] Bu bileşenlerin entegrasyon uyumluluğunu analiz et."
-
-# Desen önerisi
-"[codeflow.xml içeriği] [kod içeriği] Bu kod için uygun tasarım desenleri öner ve uygulanabilirliğini açıkla."
-
-# Dökümantasyon oluşturma ve güncelleme
-"[codeflow.xml içeriği] [kod içeriği] Bu kod için otomatik API dökümantasyonu oluştur ve mevcut dökümantasyonu güncelle."
-
-# Karmaşık mimari dönüşüm planlama
-"[codeflow.xml içeriği] [kod içeriği] [hedef mimari] Bu kod tabanını hedef mimariye dönüştürmek için aşamalı bir plan oluştur."
-
-# Teknik borç analizi ve refaktörleme planı
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki teknik borcu analiz et ve önceliklendirilmiş refaktörleme önerileri sun."
-
-# Güvenlik analizi ve iyileştirme
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki güvenlik açıklarını analiz et ve iyileştirme önerileri sun."
-
-# Performans optimizasyonu
-"[codeflow.xml içeriği] [kod içeriği] [performans gereksinimleri] Bu kod tabanını belirtilen performans gereksinimlerini karşılayacak şekilde optimize etmek için öneriler sun."
-
-# Birim testleri ve test kapsamı analizi
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanı için birim test kapsamını analiz et ve eksik alanlar için test önerileri sun."
-
-# Anti-desen tespiti ve düzeltme
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki anti-desenleri tespit et ve düzeltme önerileri sun."
-
-# Bağımlılık optimizasyonu
-"[codeflow.xml içeriği] [kod içeriği] Bu kod tabanındaki bağımlılıkları analiz et ve optimizasyon önerileri sun."
-
-# Kod tutarlılığı ve standartlar doğrulama
-"[codeflow.xml içeriği] [kod içeriği] [kodlama standartları] Bu kod tabanını belirtilen kodlama standartlarına göre doğrula ve iyileştirme önerileri sun."
+# Belirli bir modül için desen evrimini ve teknik borcu analiz etme
+"[codeflow.xml] [prompt.xml] 'user_management_module' için .project_meta/patterns/evolution/ ve .project_meta/patterns/metrics/ altındaki verileri kullanarak desen evrimini ve biriken teknik borcu analiz et."
 ```
 
 ## Metrikler ve Analitik

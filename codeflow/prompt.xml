@@ -15,13 +15,11 @@
       <!-- Core development loop is now implicitly managed by codeflow's plan_next_task logic -->
       <!-- Focus here is on configuration or emphasis for specific steps -->
       <step_emphasis ref="execute_next_story">Prioritize application of patterns tagged 'core_architecture' or 'performance_critical' from the catalog.</step_emphasis>
-      <step_emphasis ref="learn_patterns">Ensure detailed comparison documentation (code before/after pattern) is generated.</step_emphasis>
-      <step_emphasis ref="pattern_evolution_tracking">Monitor pattern effectiveness metrics and generate visualizations for decision support.</step_emphasis>
+      <step_emphasis ref="learn_patterns">Emphasize monitoring pattern effectiveness metrics (via `pattern_analyzer`), generating visualizations, updating evolution data (`pattern_evolution.json`), and producing detailed comparison documentation (code before/after pattern) during the `learn_patterns` step for comprehensive decision support.</step_emphasis>
       <step_emphasis ref="perform_impact_analysis">Quantify pattern impact using metrics defined in `pattern_metrics` section.</step_emphasis>
       <step_emphasis ref="analyze_initial_architecture">Establish comprehensive, robust architecture foundation with formal models and validation rules.</step_emphasis>
-      <step_emphasis ref="integration_phase">Perform comprehensive multi-level integration with detailed metrics analysis and interface contract verification.</step_emphasis>
+      <step_emphasis ref="integration_phase">Perform comprehensive multi-level integration with detailed metrics analysis and interface contract verification. Include dedicated security testing (e.g., against OWASP Top 10, project-specific threats) and performance/load testing for critical components and user flows, beyond general integration checks.</step_emphasis>
       <step_emphasis ref="create_roadmap_and_stories">Develop intelligent roadmap with hierarchical story structure, dependency analysis, and predictive analytics.</step_emphasis>
-      <step_emphasis ref="update_documentation">Implement dynamic documentation system with real-time code change monitoring, intelligent cross-referencing, and comprehensive validation.</step_emphasis>
       <step_configuration ref="periodic_pattern_review">Trigger review after every 4 completed stories OR at the end of each iteration, whichever comes first.</step_configuration>
       <step_configuration ref="periodic_architecture_review">Trigger comprehensive architecture conformance checking after every 4 completed stories minimum, with enhanced sensitivity to architectural drift metrics exceeding defined thresholds.</step_configuration>
     </target_workflow_steps>
@@ -49,11 +47,24 @@
       <dependency>.project_meta/.architecture/component_specifications/</dependency>
       <dependency>.project_meta/.architecture/architecture_principles.md</dependency>
       <dependency>.project_meta/.architecture/architecture_constraints.json</dependency>
-      <dependency>.project_meta/.architecture/architecture_metrics/drift_metrics.json</dependency>
+      <dependency>.project_meta/.architecture/adr_log.json</dependency>
       <dependency>.project_meta/.architecture/technology_stack.md</dependency>
+      <dependency>.project_meta/.architecture/issues.md</dependency>
       <dependency>.project_meta/.architecture/models/</dependency>
       <dependency>.project_meta/.architecture/visualizations/</dependency>
+      <dependency>.project_meta/.architecture/reviews/architecture_review_summary.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/conformance_score.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/drift_metrics.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/component_conformance.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/coupling_metrics.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/cohesion_metrics.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/performance_qa.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/security_qa.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/maintainability_qa.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/scalability_qa.json</dependency>
+      <dependency>.project_meta/.architecture/architecture_metrics/tech_debt.json</dependency>
       <dependency>.project_meta/.dependencies/dependency_graph.json</dependency>
+      <dependency>.project_meta/.dependencies/conflict_log.json</dependency>
       <!-- Enhanced roadmap and stories artifacts required for the workflow -->
       <dependency>.project_meta/.stories/roadmap.json</dependency>
       <dependency>.project_meta/.stories/mappings/story_module_map.json</dependency>
@@ -62,10 +73,16 @@
       <dependency>.project_meta/.stories/mappings/story_architectural_impact_map.json</dependency>
       <dependency>.project_meta/.stories/metrics/velocity_metrics.json</dependency>
       <dependency>.project_meta/.stories/metrics/estimation_accuracy.json</dependency>
+      <dependency>.project_meta/.stories/metrics/story_completion_trend.json</dependency>
       <dependency>.project_meta/.stories/metrics/dependency_health_index.json</dependency>
+      <dependency>.project_meta/.stories/metrics/milestone_progress.json</dependency>
+      <dependency>.project_meta/.stories/metrics/story_quality.json</dependency>
+      <dependency>.project_meta/.stories/metrics/forecasting_metrics.json</dependency>
       <dependency>.project_meta/.stories/visualizations/dependency_graph.svg</dependency>
       <dependency>.project_meta/.stories/visualizations/timeline_chart.svg</dependency>
+      <dependency>.project_meta/.stories/visualizations/milestone_dashboard.html</dependency>
       <dependency>.project_meta/.stories/templates/</dependency>
+      <dependency>.project_meta/.stories/versions/roadmap_history/</dependency>
       <!-- Enhanced pattern artifacts required for the workflow -->
       <dependency>.project_meta/.patterns/pattern_catalog.json</dependency>
       <dependency>.project_meta/.patterns/anti_patterns.json</dependency>
@@ -75,15 +92,31 @@
       <dependency>.project_meta/.patterns/evolution/pattern_evolution.json</dependency>
       <dependency>.project_meta/.patterns/relationships/pattern_dependencies.json</dependency>
       <dependency>.project_meta/.patterns/visualization/</dependency>
+      <dependency>.project_meta/.patterns/reviews/</dependency>
       <!-- Enhanced integration artifacts required for the workflow -->
       <dependency>.project_meta/.integration/integration_status.json</dependency>
-      <dependency>.project_meta/.integration/tests/</dependency>
-      <dependency>.project_meta/.integration/fixtures/</dependency>
-      <dependency>.project_meta/.integration/environments/</dependency>
+      <dependency>.project_meta/.integration/logs/</dependency>
+      <!-- <dependency>.project_meta/.integration/tests/</dependency> -->
+      <!-- <dependency>.project_meta/.integration/fixtures/</dependency> -->
+      <!-- <dependency>.project_meta/.integration/environments/</dependency> -->
       <dependency>.project_meta/.integration/metrics/stability_index.json</dependency>
-      <dependency>.project_meta/.integration/metrics/failure_patterns.json</dependency>
-      <dependency>.project_meta/.integration/policies/</dependency>
+      <dependency>.project_meta/.integration/metrics/coverage_report.json</dependency>
+      <dependency>.project_meta/.integration/reports/compatibility_matrix.json</dependency>
+      <dependency>.project_meta/.integration/metrics/test_performance.json</dependency>
+      <dependency>.project_meta/.integration/reports/failure_analysis.json</dependency>
+      <dependency>.project_meta/.integration/metrics/interface_compliance.json</dependency>
+      <dependency>.project_meta/.integration/metrics/integration_debt.json</dependency>
+      <dependency>.project_meta/.integration/metrics/architecture_alignment.json</dependency>
+      <dependency>.project_meta/.integration/metrics/environment_health.json</dependency>
+      <!-- <dependency>.project_meta/.integration/policies/</dependency> -->
       <dependency>.project_meta/.errors/error_log.json</dependency>
+      <dependency>.project_meta/.errors/metrics/effectiveness_score.json</dependency>
+      <dependency>.project_meta/.errors/metrics/resolution_efficiency.json</dependency>
+      <dependency>.project_meta/.errors/metrics/distribution_analysis.json</dependency>
+      <dependency>.project_meta/.errors/metrics/error_trends.json</dependency>
+      <dependency>.project_meta/.errors/metrics/prediction_accuracy.json</dependency>
+      <dependency>.project_meta/.errors/metrics/critical_error_analysis.json</dependency>
+      <dependency>.project_meta/.errors/reports/cascading_failures/</dependency>
       <!-- Enhanced documentation artifacts required for the workflow -->
       <dependency>.project_meta/.docs/index.md</dependency>
       <dependency>.project_meta/.docs/api/api_reference.md</dependency>
@@ -92,10 +125,18 @@
       <dependency>.project_meta/.docs/tutorials/</dependency>
       <dependency>.project_meta/.docs/metrics/doc_quality_metrics.json</dependency>
       <dependency>.project_meta/.docs/metrics/doc_coverage_report.json</dependency>
+      <dependency>.project_meta/.docs/metrics/doc_usage_analytics.json</dependency>
       <dependency>.project_meta/.docs/metrics/doc_freshness_index.json</dependency>
+      <dependency>.project_meta/.docs/metrics/api_explorer_coverage.json</dependency>
       <dependency>.project_meta/.docs/validation/consistency_checks.json</dependency>
+      <dependency>.project_meta/.docs/validation/freshness_alerts.json</dependency>
+      <dependency>.project_meta/.docs/validation/validation_reports/cross_reference_report.json</dependency>
+      <dependency>.project_meta/.docs/validation/validation_reports/link_check_report.json</dependency>
+      <dependency>.project_meta/.docs/validation/validation_reports/doc_review_summary.json</dependency>
       <dependency>.project_meta/.docs/search/search_index.json</dependency>
       <dependency>.project_meta/.docs/templates/</dependency>
+      <dependency>.project_meta/.docs/versions/changelog.md</dependency>
+      <dependency>.project_meta/.docs/patterns_learnings/</dependency>
     </dependencies>
   </context>
 
@@ -135,6 +176,7 @@
       <standard>Consistent documentation style following templates and standards defined in `.project_meta/.docs/templates/`.</standard>
       <standard>Documentation semantically linked to code with bidirectional references for traceability.</standard>
       <standard>High documentation quality score (>85%) as measured by freshness, completeness, and consistency metrics.</standard>
+      <standard>Ensure critical components and patterns meet defined performance benchmarks under load.</standard>
     </quality_standards>
 
     <learning_integration>
@@ -306,6 +348,7 @@
       <point event="critical_error_recovery_failure" action="request_intervention">If multiple recovery strategies fail for a critical error, request human intervention with detailed forensic information.</point>
       <point event="cascading_error_detected" action="request_guidance">If a cascading error pattern is detected affecting multiple components, request human guidance on system-wide recovery approach.</point>
       <point event="recurring_error_pattern_identified" action="request_approval">If a significant recurring error pattern is identified, request human approval for proposed systemic remediation.</point>
+      <point event="major_prd_deviation_discovered" action="request_guidance">If a significant deviation from PRD is discovered during development or integration that impacts core functionality or scope, request human guidance on how to proceed (e.g., update PRD, create new story, log issue).</point>
     </human_interaction_points>
 
     <documentation_implementation_strategies>
@@ -390,10 +433,10 @@
     <metric name="interactive_documentation_coverage" description="Percentage of APIs and examples with interactive elements." target=">75%"/>
     <metric name="documentation_consistency_score" description="Measure of terminology and style consistency across documentation." target=">90%"/>
     <visualization>
-      <chart type="documentation_heatmap" path=".project_meta/.docs/visualization/coverage_heatmap.svg" description="Code-to-documentation coverage visualization"/>
-      <chart type="freshness_trend" path=".project_meta/.docs/visualization/freshness_trend.svg" description="Trend of documentation freshness over time"/>
-      <chart type="usage_analytics" path=".project_meta/.docs/visualization/usage_analytics.svg" description="Documentation section usage analytics visualization"/>
-      <chart type="quality_distribution" path=".project_meta/.docs/visualization/quality_distribution.svg" description="Distribution of documentation quality scores across sections"/>
+      <chart type="documentation_heatmap" path=".project_meta/.docs/visualizations/coverage_heatmap.svg" description="Code-to-documentation coverage visualization"/>
+      <chart type="freshness_trend" path=".project_meta/.docs/visualizations/freshness_trend.svg" description="Trend of documentation freshness over time"/>
+      <chart type="usage_analytics" path=".project_meta/.docs/visualizations/usage_analytics.svg" description="Documentation section usage analytics visualization"/>
+      <chart type="quality_distribution" path=".project_meta/.docs/visualizations/quality_distribution.svg" description="Distribution of documentation quality scores across sections"/>
     </visualization>
   </documentation_metrics>
 
@@ -410,37 +453,40 @@
   <output_expectations>
     <expectation>Successful completion and integration of all tasks, adhering to quality standards, pattern guidelines, and architectural constraints.</expectation>
     <expectation>Git tags for each iteration, with commits including all `.project_meta` changes.</expectation>
-    <expectation>Comprehensive, cross-referenced documentation (`.project_meta/.docs/`) including API docs, pattern usage notes, and architectural descriptions.</expectation>
+    <expectation>Comprehensive, cross-referenced documentation (`.project_meta/.docs/`) including API docs, pattern usage notes (in `.project_meta/.docs/patterns_learnings/`), and architectural descriptions.</expectation>
     <expectation>A rich, categorized, and well-documented pattern catalog (`.project_meta/.patterns/pattern_catalog.json`) with implementation comparisons and links.</expectation>
     <expectation>A detailed anti-pattern log (`.project_meta/.patterns/anti_patterns.json`) linked to potential refactoring issues.</expectation>
     <expectation>Quantified pattern metrics (`.project_meta/.patterns/metrics/pattern_metrics.json`) tracking adoption and effectiveness.</expectation>
     <expectation>Pattern evolution trend data (`.project_meta/.patterns/evolution/pattern_evolution.json`) and visualizations (`.project_meta/.patterns/visualization/`).</expectation>
     <expectation>Periodic pattern review reports (`.project_meta/.patterns/reviews/`).</expectation>
-    <expectation>Comprehensive architecture documentation with formal models, specifications, and constraint definitions.</expectation>
-    <expectation>Architecture conformance reports with detailed health metrics and trend analysis.</expectation>
-    <expectation>Component specifications with strict interface definitions and validation rules.</expectation>
-    <expectation>Quality attribute evaluation reports against architectural targets.</expectation>
-    <expectation>Detailed impact analysis reports (`decision_log.json`) quantifying pattern effects and architectural implications.</expectation>
-    <expectation>Comprehensive integration test suites with multi-level validation coverage.</expectation>
-    <expectation>Detailed integration metrics with stability indices and failure pattern analysis.</expectation>
-    <expectation>Component compatibility matrices tracking integration quality across boundaries.</expectation>
-    <expectation>Integration fault analysis reports with detailed diagnostics and remediation approaches.</expectation>
-    <expectation>Verified integration test results (`.project_meta/.integration/`) including pattern-specific checks and architectural conformance tests.</expectation>
-    <expectation>Comprehensive roadmap with hierarchical story organization and intelligent milestone planning.</expectation>
-    <expectation>Detailed story specifications with rich metadata and precise acceptance criteria.</expectation>
-    <expectation>Dependency network analysis with critical path identification and bottleneck detection.</expectation>
-    <expectation>Roadmap visualizations including timeline charts and dependency graphs.</expectation>
-    <expectation>Roadmap metrics tracking velocity, estimation accuracy, and dependency health.</expectation>
+    <expectation>Comprehensive architecture documentation with formal models, specifications, and constraint definitions in `.project_meta/.architecture/`.</expectation>
+    <expectation>Architecture conformance reports with detailed health metrics (`.project_meta/.architecture/architecture_metrics/`) and trend analysis.</expectation>
+    <expectation>Component specifications with strict interface definitions and validation rules in `.project_meta/.architecture/component_specifications/`.</expectation>
+    <expectation>Quality attribute evaluation reports (`.project_meta/.architecture/architecture_metrics/`) against architectural targets.</expectation>
+    <expectation>Detailed impact analysis reports (`.project_meta/.decisions/decision_log.json`) quantifying pattern effects and architectural implications.</expectation>
+    <!-- <expectation>Comprehensive integration test suites with multi-level validation coverage.</expectation> -->
+    <expectation>Detailed integration metrics (`.project_meta/.integration/metrics/`) with stability indices and failure pattern analysis.</expectation>
+    <expectation>Component compatibility matrices (`.project_meta/.integration/reports/compatibility_matrix.json`) tracking integration quality across boundaries.</expectation>
+    <expectation>Integration fault analysis reports (`.project_meta/.integration/reports/failure_analysis.json`) with detailed diagnostics and remediation approaches.</expectation>
+    <expectation>Verified integration test results (`.project_meta/.integration/logs/`) including pattern-specific checks and architectural conformance tests.</expectation>
+    <expectation>Comprehensive roadmap (`.project_meta/.stories/roadmap.json`) with hierarchical story organization and intelligent milestone planning.</expectation>
+    <expectation>Detailed story specifications (`.project_meta/.stories/story_*.json`) with rich metadata and precise acceptance criteria.</expectation>
+    <expectation>Dependency network analysis (`.project_meta/.stories/mappings/story_dependency_map.json`) with critical path identification and bottleneck detection.</expectation>
+    <expectation>Roadmap visualizations (`.project_meta/.stories/visualizations/`) including timeline charts and dependency graphs.</expectation>
+    <expectation>Roadmap metrics (`.project_meta/.stories/metrics/`) tracking velocity, estimation accuracy, and dependency health.</expectation>
     <expectation>Clear traceability links connecting requirements, architecture, patterns, stories, and implementation.</expectation>
     <expectation>Advanced error analysis with multi-dimensional classification, root cause determination, and impact assessment.</expectation>
-    <expectation>Comprehensive error metrics with trend analysis, pattern recognition, and predictive modeling capabilities.</expectation>
+    <expectation>Comprehensive error metrics (`.project_meta/.errors/metrics/`) with trend analysis, pattern recognition, and predictive modeling capabilities.</expectation>
     <expectation>Transaction-based recovery mechanisms with integrity verification, validation checkpoints, and rollback capabilities.</expectation>
     <expectation>Detailed error intelligence dashboards with visualization of error trends, hotspots, and resolution effectiveness.</expectation>
     <expectation>A log of resolved errors (`.project_meta/.errors/error_log.json`) with comprehensive error metadata and resolution history.</expectation>
-    <expectation>Technical debt related to patterns, architecture, integration, roadmap, and error handling clearly identified and tracked.</expectation>
-    <expectation>Dynamic, real-time documentation with high quality scores, freshness metrics, and usage analytics.</expectation>
-    <expectation>Interactive API explorers and executable code examples enhancing usability.</expectation>
-    <expectation>Detailed documentation quality metrics and trend analysis.</expectation>
+    <expectation>Technical debt related to patterns, architecture, integration, roadmap, and error handling clearly identified and tracked in relevant issue logs or metric files.</expectation>
+    <expectation>Dynamic, real-time documentation with high quality scores, freshness metrics (`.project_meta/.docs/metrics/`), and usage analytics.</expectation>
+    <expectation>Interactive API explorers and executable code examples enhancing usability (in `.project_meta/.docs/interactive/`).</expectation>
+    <expectation>Detailed documentation quality metrics and trend analysis (in `.project_meta/.docs/metrics/` and `.project_meta/.docs/validation/validation_reports/`).</expectation>
+    <expectation>Generated release notes or iteration summaries detailing completed features, changes, and known issues.</expectation>
+    <expectation>Security testing reports highlighting vulnerabilities found and remediated (if applicable).</expectation>
+    <expectation>Performance testing reports for critical components, indicating adherence to benchmarks.</expectation>
   </output_expectations>
 
   <feedback_request>
@@ -550,10 +596,10 @@
     <metric name="cascading_failure_prevention" description="Success rate in preventing error propagation to dependent components." target=">90%"/>
     <metric name="transaction_integrity_maintenance" description="Percentage of recoveries maintaining data and state integrity." target="100%"/>
     <visualization>
-      <chart type="error_heatmap" path=".project_meta/.errors/visualization/error_heatmap.svg" description="Component-level error frequency visualization"/>
-      <chart type="resolution_efficiency" path=".project_meta/.errors/visualization/resolution_efficiency.svg" description="Trend of recovery time efficiency by error type"/>
-      <chart type="error_classification" path=".project_meta/.errors/visualization/error_classification.svg" description="Distribution of errors by classification type"/>
-      <chart type="root_cause_network" path=".project_meta/.errors/visualization/root_cause_network.svg" description="Network visualization of error causes and relationships"/>
+      <chart type="error_heatmap" path=".project_meta/.errors/reports/visualizations/error_heatmap.svg" description="Component-level error frequency visualization"/>
+      <chart type="resolution_efficiency" path=".project_meta/.errors/reports/visualizations/resolution_efficiency.svg" description="Trend of recovery time efficiency by error type"/>
+      <chart type="error_classification" path=".project_meta/.errors/reports/visualizations/error_classification.svg" description="Distribution of errors by classification type"/>
+      <chart type="root_cause_network" path=".project_meta/.errors/reports/visualizations/root_cause_network.svg" description="Network visualization of error causes and relationships"/>
     </visualization>
   </error_metrics>
 </development_workflow_request>
