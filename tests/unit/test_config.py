@@ -3,6 +3,10 @@ Yapılandırma modülü için birim testler.
 """
 
 import pytest
+import os
+import json
+import tempfile
+from dataclasses import dataclass, field
 
 from m3tm.config.model_config import (
     AdapterConfig,
@@ -15,6 +19,8 @@ from m3tm.config.model_config import (
     get_default_config,
     get_tiny_config,
 )
+from m3tm.config.config_base import ConfigBase
+from m3tm.config.config_manager import ConfigManager
 
 
 def test_default_config():
@@ -158,3 +164,153 @@ def test_config_post_init():
     assert config.transformer_config.embed_dim == config.text_config.embed_dim == 24
     assert config.adapter_config.input_dim == config.transformer_config.embed_dim == 24
     assert config.fusion_config.text_embed_dim == config.text_config.embed_dim == 24 
+
+@dataclass
+class TestConfig(ConfigBase):
+    """Test için ConfigBase'den türetilmiş sınıf"""
+    param_int: int = 42
+    param_float: float = 0.1
+    param_str: str = "test"
+    param_list: list = field(default_factory=lambda: [1, 2, 3])
+    
+    def validate(self):
+        assert self.param_int > 0, "param_int must be positive"
+        assert 0 <= self.param_float <= 1, "param_float must be between 0 and 1"
+
+class TestConfigModule:
+    """Config modülü testleri"""
+    
+    def test_config_base_initialization(self):
+        """ConfigBase temel özelliklerini test eder"""
+        config = TestConfig()
+        assert config.param_int == 42
+        assert config.param_float == 0.1
+        assert config.param_str == "test"
+        assert config.param_list == [1, 2, 3]
+        
+    def test_config_base_validation(self):
+        """ConfigBase doğrulama mekanizmasını test eder"""
+        # Geçerli yapılandırma
+        config = TestConfig()
+        config.validate()  # Exception fırlatmamalı
+        
+        # Geçersiz yapılandırma (param_int negatif)
+        with pytest.raises(AssertionError, match="param_int must be positive"):
+            invalid_config = TestConfig(param_int=-1)
+            
+        # Geçersiz yapılandırma (param_float aralık dışı)
+        with pytest.raises(AssertionError, match="param_float must be between 0 and 1"):
+            invalid_config = TestConfig(param_float=1.5)
+    
+    def test_config_base_to_dict(self):
+        """ConfigBase to_dict metodu testi"""
+        config = TestConfig()
+        config_dict = config.to_dict()
+        
+        assert isinstance(config_dict, dict)
+        assert config_dict["param_int"] == 42
+        assert config_dict["param_float"] == 0.1
+        assert config_dict["param_str"] == "test"
+        assert config_dict["param_list"] == [1, 2, 3]
+    
+    def test_config_base_from_dict(self):
+        """ConfigBase from_dict metodu testi"""
+        config_dict = {
+            "param_int": 100,
+            "param_float": 0.5,
+            "param_str": "modified",
+            "param_list": [4, 5, 6]
+        }
+        
+        config = TestConfig.from_dict(config_dict)
+        
+        assert config.param_int == 100
+        assert config.param_float == 0.5
+        assert config.param_str == "modified"
+        assert config.param_list == [4, 5, 6]
+    
+    def test_config_base_to_json(self):
+        """ConfigBase to_json metodu testi"""
+        config = TestConfig()
+        json_str = config.to_json()
+        
+        # JSON string'i doğrulama
+        json_dict = json.loads(json_str)
+        assert json_dict["param_int"] == 42
+        assert json_dict["param_float"] == 0.1
+        assert json_dict["param_str"] == "test"
+        assert json_dict["param_list"] == [1, 2, 3]
+    
+    def test_config_base_from_json(self):
+        """ConfigBase from_json metodu testi"""
+        json_str = '{"param_int": 200, "param_float": 0.7, "param_str": "json_test", "param_list": [7, 8, 9]}'
+        
+        config = TestConfig.from_json(json_str)
+        
+        assert config.param_int == 200
+        assert config.param_float == 0.7
+        assert config.param_str == "json_test"
+        assert config.param_list == [7, 8, 9]
+    
+    def test_config_base_save_load(self):
+        """ConfigBase save ve load metotlarını test eder"""
+        config = TestConfig(param_int=300, param_str="save_test")
+        
+        # Geçici dosya oluşturma
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
+            temp_filename = temp_file.name
+        
+        try:
+            # Yapılandırmayı kaydet ve yükle
+            config.save(temp_filename)
+            loaded_config = TestConfig.load(temp_filename)
+            
+            # Doğrulama
+            assert loaded_config.param_int == 300
+            assert loaded_config.param_float == 0.1  # Varsayılan değer
+            assert loaded_config.param_str == "save_test"
+            assert loaded_config.param_list == [1, 2, 3]  # Varsayılan değer
+        finally:
+            # Geçici dosyayı temizle
+            if os.path.exists(temp_filename):
+                os.unlink(temp_filename)
+    
+    def test_config_manager_basic(self):
+        """ConfigManager temel işlevlerini test eder"""
+        # Yapılandırma oluşturma
+        config_manager = ConfigManager()
+        
+        # Yapılandırma ekleme
+        config_manager.register_config("test_config", TestConfig())
+        
+        # Yapılandırma alımı
+        retrieved_config = config_manager.get_config("test_config")
+        assert isinstance(retrieved_config, TestConfig)
+        assert retrieved_config.param_int == 42
+        
+        # Yapılandırma güncelleme - doğru şekilde
+        config_updates = {"param_int": 500}
+        config_manager.update_config("test_config", config_updates)
+        updated_config = config_manager.get_config("test_config")
+        assert updated_config.param_int == 500
+        
+        # Olmayan yapılandırma
+        assert config_manager.get_config("non_existent") is None
+        
+        # Olmayan yapılandırmanın güncellenmesi durumunda KeyError fırlatmalı
+        with pytest.raises(KeyError):
+            config_manager.update_config("non_existent", {"param": "value"})
+    
+    def test_config_manager_singleton(self):
+        """ConfigManager'ın singleton özelliğini test eder"""
+        # İki farklı örnek oluşturma
+        manager1 = ConfigManager()
+        manager2 = ConfigManager()
+        
+        # İki örneğin aynı olduğunu doğrulama
+        assert manager1 is manager2
+        
+        # Bir örnekteki değişikliklerin diğerine yansıdığını doğrulama
+        manager1.register_config("singleton_test", TestConfig())
+        config_from_manager2 = manager2.get_config("singleton_test")
+        assert config_from_manager2.param_int == 42 

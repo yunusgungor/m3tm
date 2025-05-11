@@ -150,7 +150,7 @@
     {
       "story_id": "story_21",
       "title": "Birim ve entegrasyon testleri",
-      "status": "todo"
+      "status": "in_progress"
     },
     {
       "story_id": "story_22",
@@ -163,5 +163,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-06-14"
+  "last_updated": "2024-06-15"
 } 

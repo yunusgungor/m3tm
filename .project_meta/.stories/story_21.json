@@ -1,0 +1,34 @@
+{
+  "story_id": "story_21",
+  "title": "Birim ve entegrasyon testleri",
+  "description": "M³TM v2.3 modelinin bileşenleri için kapsamlı birim testleri ve entegrasyon testleri oluşturma. Bu, modelin güvenilirliğini ve kararlılığını sağlamak için kritik bir aşamadır.",
+  "acceptance_criteria": [
+    "Tüm çekirdek modül bileşenleri için birim testleri oluşturulması (text_processing, image_processing, transformer, fusion, search)",
+    "Büyüme modülleri (adapters, task_heads) için birim testlerinin oluşturulması",
+    "End-to-end model entegrasyon testlerinin oluşturulması",
+    "Test kapsamının %80'in üzerinde olması",
+    "Mobil cihaz ortamında test senaryolarının oluşturulması",
+    "CI/CD pipeline entegrasyonu için test konfigürasyonunun hazırlanması"
+  ],
+  "module_mapping": ["testing", "model_core", "model_growth", "sdk"],
+  "priority": "high",
+  "estimated_effort": "medium",
+  "status": "in_progress",
+  "dependencies": ["story_20"],
+  "architectural_impact": {
+    "impact_type": "low",
+    "details": "Test süiti, mevcut mimariyi değiştirmeden uygulama kalitesini doğrulayacaktır. Testin sonuçları, potansiyel mimari iyileştirme alanlarını belirlemede yararlı olabilir."
+  },
+  "technical_risk": {
+    "risk_level": "low",
+    "risk_details": "Testler, var olan kodu değiştirmediği için düşük risk taşır. Ancak, yeterli test kapsamının sağlanması ve mobil ortamda özel testlerin doğru çalışması konusunda dikkatli olunmalıdır."
+  },
+  "business_value": {
+    "value_level": "high",
+    "value_details": "Kapsamlı test süiti, modelin güvenilirliğini artırarak son kullanıcı deneyimini iyileştirir ve geliştiriciler için daha güvenilir bir SDK sağlar."
+  },
+  "iteration_id": "iter_7",
+  "created_date": "2024-06-15",
+  "last_updated": "2024-06-15",
+  "tags": ["testing", "quality", "validation"]
+} 

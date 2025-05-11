@@ -1,8 +1,7 @@
 """
-M³TM Fusion Module
+Füzyon Modülü
 
-Bu modül, farklı modaliteleri (metin, görüntü) birleştirmek için kullanılan
-füzyon mekanizmalarını sağlar.
+Bu modül, farklı modalitelerin (metin, görüntü) birleştirilmesi için mekanizmalar sağlar.
 """
 
 from .config import (

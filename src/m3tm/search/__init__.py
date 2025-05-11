@@ -1,8 +1,7 @@
 """
-M³TM Arama Modülü
+Arama modülü
 
-Bu modül, M³TM modelinin semantik arama özelliklerini sağlar. Arama gömme projeksiyonu,
-indeksleme ve sorgu işleme bileşenlerini içerir.
+Bu modül, metin ve görüntü verilerinin semantik arama yetenekleri için gerekli bileşenleri içerir.
 """
 
 from .projection import (
