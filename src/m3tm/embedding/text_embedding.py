@@ -37,41 +37,53 @@ class TextEmbedding(nn.Module):
         super().__init__()
         
         self.config = config
-        self.tokenizer_config = config.tokenizer_config
+        
+        # tokenizer_config uyumluluk kontrolü
+        # model_config.py'den gelen yapılandırma ile uyumluluğu sağlar
+        if not hasattr(config, 'tokenizer_config'):
+            # Eğer tokenizer_config yoksa, varsayılan bir tokenizer_config oluştur
+            self.tokenizer_config = TokenizerConfig(
+                vocab_size=getattr(config, 'vocab_size', 10000),
+                max_seq_length=getattr(config, 'max_seq_len', 512)
+            )
+        else:
+            self.tokenizer_config = config.tokenizer_config
         
         # Token embedding tablosu
         self.token_embedding = nn.Embedding(
             num_embeddings=self.tokenizer_config.vocab_size,
             embedding_dim=config.embed_dim,
-            padding_idx=config.padding_idx
+            padding_idx=getattr(config, 'padding_idx', getattr(config, 'pad_token_id', 0))
         )
         
         # Konum embedding'i (opsiyonel)
         self.position_embedding = None
-        if config.use_position_embedding:
+        if getattr(config, 'use_position_embedding', True):
+            max_position = getattr(config, 'max_position_embeddings', 
+                                  getattr(config, 'max_seq_len', 512))
             self.position_embedding = nn.Embedding(
-                num_embeddings=config.max_position_embeddings,
+                num_embeddings=max_position,
                 embedding_dim=config.embed_dim
             )
             self.register_buffer(
                 "position_ids",
-                torch.arange(config.max_position_embeddings).expand((1, -1))
+                torch.arange(max_position).expand((1, -1))
             )
         
         # Embedding boyut düşürme projeksiyonu (opsiyonel)
         self.projection = None
-        if config.use_embedding_projection and config.projection_dim is not None:
+        if getattr(config, 'use_embedding_projection', False) and getattr(config, 'projection_dim', None) is not None:
             self.projection = nn.Linear(config.embed_dim, config.projection_dim)
         
         # Layer Normalization
+        norm_dim = config.projection_dim if getattr(config, 'use_embedding_projection', False) and getattr(config, 'projection_dim', None) is not None else config.embed_dim
         self.layer_norm = nn.LayerNorm(
-            config.projection_dim if config.use_embedding_projection and config.projection_dim is not None
-            else config.embed_dim,
-            eps=config.layer_norm_eps
+            norm_dim,
+            eps=getattr(config, 'layer_norm_eps', 1e-12)
         )
         
         # Dropout
-        self.dropout = nn.Dropout(config.dropout_rate)
+        self.dropout = nn.Dropout(getattr(config, 'dropout_rate', 0.1))
         
         # Model parametrelerini başlat
         self._init_weights()

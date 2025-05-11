@@ -39,55 +39,101 @@ class ProtoTransformerBlock(nn.Module):
     - CompositeAdapter (PT-014): Birden fazla adaptörü sıralı olarak uygulama
     """
     
-    def __init__(self, config: ProtoTransformerConfig):
+    def __init__(self, config):
         """
         Args:
-            config: Transformer bloğu yapılandırması
+            config: Transformer bloğu yapılandırması (ProtoTransformerConfig veya TransformerConfig)
         """
         super().__init__()
         self.config = config
-        self.hidden_size = config.hidden_size
-        self.pre_ln = config.pre_layer_norm
+        
+        # TransformerConfig veya ProtoTransformerConfig arasında uyumluluk
+        self.hidden_size = getattr(config, 'hidden_size', getattr(config, 'embed_dim', 768))
+        self.pre_ln = getattr(config, 'pre_layer_norm', True)
+        
+        # Farklı yapılandırma sınıfları için default değerler
+        attention_config = getattr(config, 'attention_config', {})
+        attention_mechanism_name = getattr(attention_config, 'mechanism_name', 
+                                         getattr(config, 'attention_type', 'StandardSelfAttention'))
         
         # Dikkat mekanizmasını al (PluggableComponentStrategy)
         attention_params = {
-            "input_dim": config.hidden_size,
-            **config.attention_config.mechanism_params
+            "input_dim": self.hidden_size,
+            "num_heads": getattr(config, 'num_heads', 8),
+            "dropout": getattr(config, 'attention_dropout', getattr(config, 'dropout', 0.1))
         }
+        
+        if hasattr(attention_config, 'mechanism_params'):
+            attention_params.update(attention_config.mechanism_params)
+            
         attention_class, attention_config = get_attention_mechanism_by_name(
-            config.attention_config.mechanism_name,
+            attention_mechanism_name,
             **attention_params
         )
         self.attention = attention_class(attention_config)
         
         # Feed-forward mekanizmasını al (PluggableComponentStrategy)
-        ffn_params = config.ffn_config.mechanism_params.copy()
-        if "hidden_size" not in ffn_params:
-            ffn_params["hidden_size"] = config.hidden_size
-        config.ffn_config.mechanism_params = ffn_params
-        self.ffn = get_ffn_mechanism(config.ffn_config)
+        ffn_config = getattr(config, 'ffn_config', {})
+        ffn_mechanism_name = getattr(ffn_config, 'mechanism_name', 
+                                    getattr(config, 'ffn_type', 'StandardFFN'))
+        
+        ffn_params = {
+            "hidden_size": self.hidden_size,
+            "intermediate_size": getattr(config, 'ffn_hidden_dim', self.hidden_size * 4),
+            "dropout": getattr(config, 'dropout', 0.1),
+            "activation": getattr(config, 'activation', 'gelu')
+        }
+        
+        if hasattr(ffn_config, 'mechanism_params'):
+            ffn_params.update(ffn_config.mechanism_params)
+            
+        # FFN yapılandırmasını oluştur ve FFN mekanizmasını al
+        from m3tm.transformer.config import FeedForwardConfig
+        temp_ffn_config = FeedForwardConfig(
+            mechanism_name=ffn_mechanism_name,
+            mechanism_params=ffn_params
+        )
+        self.ffn = get_ffn_mechanism(temp_ffn_config)
         
         # Normalizasyon katmanları
-        self.attn_ln = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        self.ffn_ln = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        layer_norm_eps = getattr(config, 'layer_norm_eps', 1e-12)
+        self.attn_ln = nn.LayerNorm(self.hidden_size, eps=layer_norm_eps)
+        self.ffn_ln = nn.LayerNorm(self.hidden_size, eps=layer_norm_eps)
         
         # Dropout
-        self.dropout = nn.Dropout(config.dropout)
+        self.dropout = nn.Dropout(getattr(config, 'dropout', 0.1))
         
         # Adapter yuvaları
-        if config.adapter_config.enabled:
+        adapter_config = getattr(config, 'adapter_config', None)
+        use_adapter_slots = getattr(config, 'use_adapter_slots', False)
+        
+        if adapter_config and getattr(adapter_config, 'enabled', False):
             # Tüm pozisyonlar için adapter yuvaları oluştur
             self.adapter_slots = create_adapter_slots(
-                config.adapter_config,
-                config.hidden_size,
-                ["pre_attention", "post_attention", "pre_ffn", "post_ffn"]
+                adapter_config,
+                self.hidden_size,
+                getattr(adapter_config, 'adapter_positions', 
+                       ["pre_attention", "post_attention", "pre_ffn", "post_ffn"])
+            )
+        elif use_adapter_slots:
+            # TransformerConfig için basit adapter konfigürasyonu oluştur
+            from m3tm.transformer.config import AdapterConfig
+            simple_adapter_config = AdapterConfig(
+                enabled=True,
+                bottleneck_dim=self.hidden_size // 8,
+                adapter_positions=["post_attention", "post_ffn"]
+            )
+            self.adapter_slots = create_adapter_slots(
+                simple_adapter_config,
+                self.hidden_size,
+                ["post_attention", "post_ffn"]
             )
         else:
             self.adapter_slots = {}
         
         # Optimize edilmiş operasyonlar
-        self.use_flash_attention = config.use_flash_attention
-        self.fuse_operations = config.fuse_operations
+        self.use_flash_attention = getattr(config, 'use_flash_attention', False)
+        self.fuse_operations = getattr(config, 'fuse_operations', False)
         
         # Eğitim ve çıkarım modları için kontroller
         self.training_adapters = True
@@ -317,6 +363,49 @@ class ProtoTransformerBlock(nn.Module):
         flops["total"] = 2 * ln_flops + attention_flops + ffn_flops + adapter_flops
         
         return flops
+    
+    def add_adapter(self, adapter_name: str, adapter_size: int = None) -> None:
+        """Test için isim ve boyutla adapter eklemek için kullanılır.
+        
+        Args:
+            adapter_name: Eklenecek adaptörün adı
+            adapter_size: Adaptör boyutu (bottleneck boyutu)
+        """
+        # Standart pozisyonlar için adaptör oluştur
+        from m3tm.adapters.adapter import create_adapter, AdapterConfig, AdapterType
+        
+        # Eğer adapter_size belirtilmemişse, varsayılan bir değer kullan
+        if adapter_size is None:
+            adapter_size = self.hidden_size // 8
+            
+        positions = self.get_adapter_positions()
+        if not positions:
+            positions = ["post_attention", "post_ffn"]
+            
+        # Her pozisyon için adaptör oluştur ve kaydet
+        for position in positions:
+            # AdapterConfig oluştur
+            adapter_config = AdapterConfig(
+                adapter_type=AdapterType.BOTTLENECK,
+                bottleneck_dim=adapter_size,
+                use_layer_norm=True,
+                activation="gelu",
+                dropout=0.0
+            )
+            
+            # Adapter'ı oluştur
+            adapter = create_adapter(adapter_config, self.hidden_size)
+                
+            # Eğer pozisyon yoksa, slot oluştur
+            if position not in self.adapter_slots:
+                from m3tm.transformer.adapter import AdapterSlot
+                self.adapter_slots[position] = AdapterSlot(self.hidden_size)
+                
+            # Adaptörü kaydet
+            self.register_adapter(adapter, position, adapter_name)
+        
+        # Adaptör modunda çalıştığından emin ol
+        self.set_training_adapters(True)
 
 
 class ProtoTransformer(nn.Module):

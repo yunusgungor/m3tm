@@ -137,30 +137,61 @@ class ImagePatchEmbedding(nn.Module):
         
         # Konum gömmesi
         self.position_embedding = None
-        if config.use_position_embedding:
-            if config.position_embedding_type == "learned":
+        
+        # Farklı config sınıfları arasında uyumluluk
+        use_position_embedding = getattr(config, 'use_position_embedding', True)
+        position_embedding_type = getattr(config, 'position_embedding_type', 'sincos')
+        init_std = getattr(config, 'init_std', 0.02)
+        
+        if use_position_embedding:
+            if position_embedding_type == "learned":
+                # Öğrenilmiş konum gömmelerini kullan
+                num_patches = getattr(config, 'num_patches', 
+                                     (config.image_size[0] // config.patch_size) * 
+                                     (config.image_size[1] // config.patch_size) 
+                                     if isinstance(config.image_size, tuple) 
+                                     else (config.image_size // config.patch_size) ** 2)
+                
                 self.position_embedding = nn.Parameter(
-                    torch.zeros(1, config.num_patches, config.embed_dim)
+                    torch.zeros(1, num_patches, config.embed_dim)
                 )
-                nn.init.normal_(self.position_embedding, std=config.init_std)
-            elif config.position_embedding_type == "sincos":
+                nn.init.normal_(self.position_embedding, std=init_std)
+            elif position_embedding_type == "sincos":
                 # Sinüzoidal konum kodlaması, ileri geçişte dinamik olarak oluşturulacak
                 pass
         
         # Embedding boyut düşürme projeksiyonu (opsiyonel)
         self.projection_layer = None
-        if config.use_embedding_projection and config.projection_dim is not None:
-            self.projection_layer = nn.Linear(config.embed_dim, config.projection_dim)
+        use_embedding_projection = getattr(config, 'use_embedding_projection', False)
+        projection_dim = getattr(config, 'projection_dim', None)
+        
+        if use_embedding_projection and projection_dim is not None:
+            self.projection_layer = nn.Linear(config.embed_dim, projection_dim)
         
         # Layer Normalization
+        layer_norm_dim = projection_dim if use_embedding_projection and projection_dim is not None else config.embed_dim
+        layer_norm_eps = getattr(config, 'layer_norm_eps', 1e-12)
+        
         self.layer_norm = nn.LayerNorm(
-            config.projection_dim if config.use_embedding_projection and config.projection_dim is not None
-            else config.embed_dim,
-            eps=config.layer_norm_eps
+            layer_norm_dim,
+            eps=layer_norm_eps
         )
         
         # Dropout
-        self.dropout = nn.Dropout(config.dropout_rate)
+        dropout_rate = getattr(config, 'dropout_rate', 0.1)
+        self.dropout = nn.Dropout(dropout_rate)
+        
+        # Ek konfigürasyon özellikleri için varsayılan değerleri ata
+        if not hasattr(self.config, 'interpolate_pos_encoding'):
+            self.config.interpolate_pos_encoding = False
+        if not hasattr(self.config, 'interpolate_mode'):
+            self.config.interpolate_mode = 'bicubic'
+        if not hasattr(self.config, 'position_embedding_type'):
+            self.config.position_embedding_type = position_embedding_type
+        if not hasattr(self.config, 'use_position_embedding'):
+            self.config.use_position_embedding = use_position_embedding
+        if not hasattr(self.config, 'init_std'):
+            self.config.init_std = init_std
         
         # Model parametrelerini başlat
         self._init_weights()
@@ -168,12 +199,13 @@ class ImagePatchEmbedding(nn.Module):
     def _init_weights(self) -> None:
         """Model ağırlıklarını başlatır."""
         # Projeksiyon katmanını başlat
-        nn.init.normal_(self.projection.weight, std=self.config.init_std)
+        init_std = getattr(self.config, 'init_std', 0.02)
+        nn.init.normal_(self.projection.weight, std=init_std)
         nn.init.zeros_(self.projection.bias)
         
         # Projeksiyon katmanını başlat (varsa)
         if self.projection_layer is not None:
-            nn.init.normal_(self.projection_layer.weight, std=self.config.init_std)
+            nn.init.normal_(self.projection_layer.weight, std=init_std)
             nn.init.zeros_(self.projection_layer.bias)
         
         # LayerNorm'u başlat

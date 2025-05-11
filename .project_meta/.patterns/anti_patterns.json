@@ -148,6 +148,57 @@
       "severity": "High",
       "prevalence": "Low",
       "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "AP-018",
+      "name": "InconsistentConfigurationUsage",
+      "category": "configuration",
+      "description": "Farklı konfigürasyon sınıflarının uyumsuz kullanımı, bileşenlerin entegrasyonunda sorunlara neden olur",
+      "symptoms": [
+        "Farklı modüllerde benzer işlevsellik için farklı isimlerde yapılandırma değişkenleri",
+        "Bileşenler arası boyut uyumsuzlukları",
+        "Eksik alanlar için varsayılan değerlere güvenme",
+        "getattr() fonksiyonunun aşırı kullanımı"
+      ],
+      "negative_consequences": [
+        "Entegrasyon testleri başarısız olur",
+        "Karmaşık uyumluluk kodları gerektirir",
+        "Hata ayıklama zorlaşır",
+        "Bakım ve genişletilebilirlik azalır"
+      ],
+      "remediation": "ConfigurationComposite (PT-012) desenini tutarlı bir şekilde uygulayın. Model bileşenleri için standart yapılandırma şeması kullanın. Yapılandırma alanları için tutarlı isimlendirme kuralları belirleyin ve bunlara uyun. Uyumluluk katmanları yerine doğrudan konfigürasyon tutarlılığı sağlayın.",
+      "examples": [
+        "ProtoTransformerBlock sınıfında hidden_size/embed_dim karışımı",
+        "TextEmbedding'de tokenizer_config alanı özellikleri",
+        "ImagePatchEmbedding'de channels/in_channels farklılıkları"
+      ],
+      "related_good_patterns": ["PT-001", "PT-012"],
+      "last_updated": "2024-06-15"
+    },
+    {
+      "pattern_id": "AP-019",
+      "name": "InconsistentClassNaming",
+      "category": "code_organization",
+      "description": "Sınıf isimleri ve bunları içeren modül/dosya isimlendirmelerinde tutarsızlık",
+      "symptoms": [
+        "İmport hatası mesajları",
+        "Modül adı ve sınıf adı arasında uyumsuzluk",
+        "Bir dosyada tek sınıf olmasına rağmen dosya adında sınıf adından farklı ifadeler",
+        "İsimlendirme standardının eksikliği"
+      ],
+      "negative_consequences": [
+        "Import hataları",
+        "Entegrasyon sorunları",
+        "Karışık kod taban yapısı",
+        "Öğrenme eğrisinin artması"
+      ],
+      "remediation": "Tutarlı bir isimlendirme standardı belirleyin ve uygulayın. Modül/dosya adları, içerdikleri ana sınıf adıyla tutarlı olmalı. _head, _manager gibi son ekleri tutarlı kullanın veya hiç kullanmayın. İmport ifadelerini ve dokümantasyonu güncelleyerek mevcut tutarsızlıkları düzeltin.",
+      "examples": [
+        "from m3tm.task_heads.classification_head import ClassificationHead yerine from m3tm.task_heads.classification import ClassificationHead",
+        "from m3tm.training.trainer import TextClassificationModel yerine from m3tm.training.trainer import TextClassificationTrainer"
+      ],
+      "related_good_patterns": [],
+      "last_updated": "2024-06-15"
     }
   ]
 } 

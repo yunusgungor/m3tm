@@ -1,20 +1,21 @@
 {
   "metrics_id": "m3tm_v2.3_pattern_metrics",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-09",
+  "last_updated": "2024-06-15",
   "metrics": {
     "pattern_adoption_rate": {
-      "overall": 0.88,
+      "overall": 0.89,
       "by_category": {
         "configuration": 0.95,
         "creation": 0.82,
         "structural": 0.92,
-        "behavioral": 0.80,
+        "behavioral": 0.82,
         "validation": 0.90,
         "data": 0.70,
         "image_processing": 1.0,
         "registration": 0.95,
-        "embedding": 1.0
+        "embedding": 1.0,
+        "adaptation": 0.94
       }
     },
     "pattern_effectiveness_score": {
@@ -22,20 +23,21 @@
       "by_pattern_id": {
         "PT-001": 0.92,
         "PT-002": 0.88,
-        "PT-003": 0.85,
+        "PT-003": 0.87,
         "PT-006": 0.78,
         "PT-007": 0.91,
         "PT-008": 0.81,
         "PT-009": 0.87,
         "PT-010": 0.79,
-        "PT-012": 0.86,
+        "PT-012": 0.88,
         "PT-013": 0.84,
-        "PT-014": 0.93,
-        "PT-015": 0.90,
+        "PT-014": 0.94,
+        "PT-015": 0.92,
         "PT-016": 0.92,
         "PT-017": 0.86,
         "PT-018": 0.83,
-        "PT-019": 0.85
+        "PT-019": 0.85,
+        "PT-020": 0.90
       }
     },
     "pattern_consistency_score": {
@@ -44,19 +46,22 @@
         "configuration": 0.93,
         "creation": 0.85,
         "structural": 0.93,
-        "behavioral": 0.87,
+        "behavioral": 0.89,
         "validation": 0.92,
         "data": 0.83,
         "image_processing": 0.90,
         "registration": 0.94,
-        "embedding": 0.91
+        "embedding": 0.91,
+        "adaptation": 0.92
       }
     },
     "anti_pattern_density": {
-      "overall": 0.038,
+      "overall": 0.042,
       "by_category": {
         "code_structure": 0.052,
-        "design": 0.034
+        "design": 0.034,
+        "configuration": 0.048,
+        "code_organization": 0.060
       }
     },
     "pattern_impact": {
@@ -75,12 +80,12 @@
         }
       },
       "maintainability": {
-        "overall_improvement": 0.23,
-        "top_contributors": ["PT-007", "PT-014", "PT-015", "PT-017"]
+        "overall_improvement": 0.25,
+        "top_contributors": ["PT-007", "PT-014", "PT-020", "PT-017"]
       }
     }
   },
-  "metrics_timestamp": "2024-06-11",
+  "metrics_timestamp": "2024-06-15",
   "pattern_usage": {
     "PT-001": {
       "occurrence_count": 15,
@@ -95,10 +100,10 @@
       "implementation_consistency": 0.90
     },
     "PT-003": {
-      "occurrence_count": 8,
-      "adoption_rate": 0.65,
-      "effectiveness_score": 0.78,
-      "implementation_consistency": 0.85
+      "occurrence_count": 10,
+      "adoption_rate": 0.70,
+      "effectiveness_score": 0.82,
+      "implementation_consistency": 0.87
     },
     "PT-006": {
       "occurrence_count": 6,
@@ -107,10 +112,10 @@
       "implementation_consistency": 0.88
     },
     "PT-007": {
-      "occurrence_count": 9,
-      "adoption_rate": 0.75,
-      "effectiveness_score": 0.84,
-      "implementation_consistency": 0.87
+      "occurrence_count": 11,
+      "adoption_rate": 0.78,
+      "effectiveness_score": 0.86,
+      "implementation_consistency": 0.89
     },
     "PT-008": {
       "occurrence_count": 4,
@@ -131,10 +136,10 @@
       "implementation_consistency": 0.80
     },
     "PT-012": {
-      "occurrence_count": 10,
-      "adoption_rate": 0.78,
-      "effectiveness_score": 0.85,
-      "implementation_consistency": 0.88
+      "occurrence_count": 12,
+      "adoption_rate": 0.82,
+      "effectiveness_score": 0.88,
+      "implementation_consistency": 0.90
     },
     "PT-013": {
       "occurrence_count": 3,
@@ -149,16 +154,22 @@
       "implementation_consistency": 0.82
     },
     "PT-014": {
-      "occurrence_count": 8,
-      "adoption_rate": 0.70,
-      "effectiveness_score": 0.82,
-      "implementation_consistency": 0.85
+      "occurrence_count": 9,
+      "adoption_rate": 0.74,
+      "effectiveness_score": 0.86,
+      "implementation_consistency": 0.88
     },
     "PT-015": {
       "occurrence_count": 7,
       "adoption_rate": 0.68,
       "effectiveness_score": 0.80,
       "implementation_consistency": 0.83
+    },
+    "PT-020": {
+      "occurrence_count": 8,
+      "adoption_rate": 0.72,
+      "effectiveness_score": 0.84,
+      "implementation_consistency": 0.86
     },
     "PT-100": {
       "occurrence_count": 1,

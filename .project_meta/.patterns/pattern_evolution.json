@@ -1,7 +1,7 @@
 {
   "evolution_id": "m3tm_v2.3_pattern_evolution",
   "creation_date": "2024-05-31",
-  "last_updated": "2024-06-11",
+  "last_updated": "2024-06-15",
   "trends": [
     {
       "date": "2024-05-23",
@@ -175,21 +175,58 @@
           "impact": "Eğitim sürecini değiştirmeden gelişmiş izleme, raporlama ve kontrol mekanizmaları eklemeyi kolaylaştırıyor"
         }
       ]
+    },
+    {
+      "date": "2024-06-15",
+      "patterns_added": ["PT-020"],
+      "patterns_modified": ["PT-003", "PT-007", "PT-012", "PT-014", "PT-015"],
+      "patterns_deprecated": [],
+      "anti_patterns_detected": ["AP-018", "AP-019"],
+      "pattern_count": 23,
+      "anti_pattern_count": 4,
+      "highlights": [
+        {
+          "type": "pattern_reclassification",
+          "description": "PluggableComponentStrategy (PT-020) deseni PT-015 ID'sinden yeniden düzenlenerek tanımlandı ve behavior kategorisine alındı",
+          "impact": "Desen kataloğunun daha tutarlı hale getirilmesi, desen tanımında netlik sağlanması"
+        },
+        {
+          "type": "pattern_implementation_improvement",
+          "description": "CompositeAdapter (PT-014) deseni adaptation kategorisine taşındı ve daha kapsamlı bir tanım ve örneklerle iyileştirildi",
+          "impact": "Adapter deseni kullanımının standartlaştırılması ve model davranışını değiştirmenin tutarlı yolunun tanımlanması"
+        },
+        {
+          "type": "anti_pattern_detection",
+          "description": "InconsistentConfigurationUsage (AP-018) ve InconsistentClassNaming (AP-019) desenlerinin entegrasyon testlerini çalıştırırken tespit edilmesi", 
+          "impact": "Bu anti-patternlerin tespit edilmesi ve belgelenmesi, kod tabanının daha tutarlı hale getirilmesi için önlem alınmasını sağlar"
+        },
+        {
+          "type": "pattern_connection_discovered",
+          "description": "PluggableComponentStrategy (PT-020), MechanismRegistry (PT-007) ve ModelComposite (PT-003) desenleri arasında güçlü bir ilişki keşfedildi",
+          "impact": "Bu desenlerin birlikte kullanımı, esnek, genişletilebilir ve modüler bir mimari oluşumunu destekler"
+        },
+        {
+          "type": "refactoring_opportunity",
+          "description": "Entegrasyon testleri sırasında tespit edilen InconsistentConfigurationUsage (AP-018) anti-patterninin ConfigurationComposite (PT-012) deseni uygulanarak giderilmesi önerildi",
+          "impact": "Yapılandırma tutarlılığının sağlanması, entegrasyon sorunlarının azaltılması ve bakım kolaylığının artırılması"
+        }
+      ]
     }
   ],
   "growth_metrics": {
     "pattern_growth_rate": {
-      "overall": 7.33,
+      "overall": 7.67,
       "by_category": {
         "configuration": 0.0,
         "creation": 1.0,
         "structural": 3.0,
-        "behavioral": 1.0,
+        "behavioral": 2.0,
         "validation": 0.0,
         "data": 0.0,
         "image_processing": 1.0,
         "embedding": 0.0,
         "registration": 1.0,
+        "adaptation": 1.0,
         "concurrency": 1.0,
         "mobile": 1.0,
         "performance": 2.0,

@@ -58,8 +58,8 @@
         "m3tm.transformer.adapter.AdapterSlot",
         "m3tm.transformer.proto_transformer.ProtoTransformerBlock"
       ],
-      "related_patterns": ["PT-014", "PT-015"],
-      "last_updated": "2024-06-09"
+      "related_patterns": ["PT-014", "PT-015", "PT-020"],
+      "last_updated": "2024-06-15"
     },
     {
       "pattern_id": "PT-006",
@@ -95,8 +95,8 @@
         "m3tm.research.attention_mechanisms.AttentionMechanismRegistry",
         "m3tm.config.config_manager.ConfigRegistry"
       ],
-      "related_patterns": ["PT-016", "PT-002", "PT-015"],
-      "last_updated": "2024-06-09"
+      "related_patterns": ["PT-016", "PT-002", "PT-015", "PT-020"],
+      "last_updated": "2024-06-15"
     },
     {
       "pattern_id": "PT-008",
@@ -162,10 +162,11 @@
       "implementation_notes": "Bir yapılandırma sınıfı, diğer yapılandırma sınıflarını içerir ve bunları yönetir.",
       "examples": [
         "m3tm.task_heads.config.ClassificationHeadConfig",
-        "m3tm.transformer.proto_transformer.ProtoTransformerConfig"
+        "m3tm.transformer.proto_transformer.ProtoTransformerConfig",
+        "m3tm.research.attention_mechanisms.AttentionMechanismConfig"
       ],
       "related_patterns": ["PT-001"],
-      "last_updated": "2024-06-09"
+      "last_updated": "2024-06-15"
     },
     {
       "pattern_id": "PT-013",
@@ -185,6 +186,45 @@
       "last_updated": "2024-05-24"
     },
     {
+      "pattern_id": "PT-014",
+      "name": "CompositeAdapter",
+      "category": "adaptation",
+      "description": "Birden fazla adaptörü sıralı olarak uygulayan ve ana modelin davranışını değiştiren desendir",
+      "benefits": [
+        "Modelin davranışını değiştirmek için küçük, özelleştirilebilir modüller sunar",
+        "Tam modeli yeniden eğitme ihtiyacını ortadan kaldırır",
+        "Farklı görevler veya veri tipleri için modeli adapte etmeyi sağlar",
+        "Adaptörler arasında kompozisyon yapılabilir"
+      ],
+      "implementation_notes": "Ana modelin içine entegre edilen küçük alt ağlar olarak uygulanır. Her bir adaptör, bir alt ağ içerir ve özel konumlara (örn. dikkat sonrası, FFN sonrası) yerleştirilir.",
+      "examples": [
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock.add_adapter",
+        "m3tm.transformer.adapter.AdapterSlot"
+      ],
+      "related_patterns": ["PT-003", "PT-020"],
+      "last_updated": "2024-06-15"
+    },
+    {
+      "pattern_id": "PT-015",
+      "name": "PluggableComponentStrategy",
+      "category": "behavioral",
+      "description": "Farklı algoritmaları veya mekanizmaları dinamik olarak değiştirilebilir kılan, gevşek bağlı bir strateji deseni",
+      "benefits": [
+        "Farklı algoritma implementasyonlarını çalışma zamanında değiştirebilme",
+        "Yeni mekanizmalar eklemek için mevcut kodu değiştirmeye gerek yok",
+        "İsimlendirilmiş stratejiler arasında seçim yapabilme",
+        "Esnek ve genişletilebilir mimari"
+      ],
+      "implementation_notes": "Mekanizma adına göre ilgili bileşenleri elde eden fabrika metotları kullanılır. Registry deseni ile birlikte kullanıldığında, isime göre strateji seçimi yapılabilir.",
+      "examples": [
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock.__init__ (dikkat ve FFN mekanizması seçimi)",
+        "m3tm.research.attention_mechanisms.get_attention_mechanism_by_name",
+        "m3tm.transformer.ffn.get_ffn_mechanism"
+      ],
+      "related_patterns": ["PT-007", "PT-003", "PT-014"],
+      "last_updated": "2024-06-15"
+    },
+    {
       "pattern_id": "PT-016",
       "name": "VisionTransformerPatching",
       "category": "image_processing",
@@ -202,47 +242,6 @@
         "m3tm.image.patch.get_2d_sincos_pos_embed"
       ],
       "related_patterns": ["PT-003"],
-      "last_updated": "2024-06-09"
-    },
-    {
-      "pattern_id": "PT-014",
-      "name": "CompositeAdapter",
-      "category": "structural",
-      "description": "Birden fazla adaptörü sıralı olarak uygulayan ve yöneten desen. Çekirdek modeli değiştirmeden özelleştirme olanağı sağlar.",
-      "benefits": [
-        "Çekirdek model yapısını değiştirmeden genişletilebilirlik sağlar",
-        "Adaptörler arasında isimli bir kayıt sistemi sunar",
-        "Birden fazla adaptörün kombinasyonunu destekler",
-        "Eğitim ve çıkarım modları arasında dinamik geçiş imkanı sunar",
-        "Minimal hesaplama ek yükü ekler"
-      ],
-      "implementation_notes": "PyTorch nn.ModuleList kullanarak birden fazla adaptörü depolar. Adaptörler isimle referans edilebilir ve dinamik olarak eklenip çıkarılabilir. İleri geçiş sırasında girdiye sıralı olarak uygulanırlar.",
-      "examples": [
-        "m3tm.transformer.adapter.AdapterSlot",
-        "m3tm.transformer.proto_transformer.ProtoTransformerBlock._apply_adapters"
-      ],
-      "related_patterns": ["PT-003", "PT-015"],
-      "last_updated": "2024-06-07"
-    },
-    {
-      "pattern_id": "PT-015",
-      "name": "PluggableComponentStrategy",
-      "category": "structural",
-      "description": "Model bileşenlerinin (dikkat, feed-forward ağ, adaptörler) çalışma zamanında değiştirilebilmesini sağlayan strateji deseni.",
-      "benefits": [
-        "Çekirdek model yapısının bileşenlerini çalışma zamanında değiştirilebilir kılar",
-        "Farklı model varyantlarını tek bir yapı üzerinden oluşturmayı sağlar",
-        "Yeni bileşen türlerinin kolay entegrasyonuna olanak tanır",
-        "Değiştirilebilir bileşenler sayesinde modeli farklı görevlere adapte etmeyi kolaylaştırır"
-      ],
-      "implementation_notes": "Ana model bileşenlerini konuma göre organize eden ve dinamik olarak değiştirilebilen bir yapı sunar. Bileşenler için standartlaştırılmış arayüzler ve bileşen registrasyonu için metotlar içerir.",
-      "examples": [
-        "m3tm.transformer.proto_transformer.ProtoTransformerBlock",
-        "m3tm.transformer.adapter.create_adapter_slots",
-        "m3tm.transformer.ffn.get_ffn_mechanism",
-        "m3tm.research.attention_mechanisms.get_attention_mechanism_by_name"
-      ],
-      "related_patterns": ["PT-003", "PT-014", "PT-007"],
       "last_updated": "2024-06-09"
     },
     {

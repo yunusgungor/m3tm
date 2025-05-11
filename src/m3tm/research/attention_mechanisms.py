@@ -194,7 +194,10 @@ class StandardSelfAttention(nn.Module):
         """
         Args:
             x: Girdi tensörü, şekil (batch_size, seq_len, input_dim)
-            mask: Dikkat maskesi, şekil (batch_size, seq_len, seq_len) veya (batch_size, 1, seq_len, seq_len)
+            mask: Dikkat maskesi, çeşitli şekillerde olabilir:
+                  - (batch_size, seq_len): Token maskesi
+                  - (batch_size, seq_len, seq_len): Tam dikkat maskesi
+                  - (batch_size, 1, seq_len, seq_len): Çok başlı dikkat maskesi
             
         Returns:
             Dikkat çıktısı, şekil (batch_size, seq_len, input_dim)
@@ -214,8 +217,23 @@ class StandardSelfAttention(nn.Module):
         # Dikkat skorlarını hesapla
         attn_weights = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.head_dim)
         
-        # Maskeleme uygula
+        # Maskeleme uygula - farklı maske formatlarını destekle
         if mask is not None:
+            # Maske boyutunu kontrol et ve gerektiğinde dönüştür
+            if mask.dim() == 2:  # (batch_size, seq_len) şeklinde token maskesi
+                # Token maskesini attention maskesine dönüştür
+                # (batch_size, seq_len) -> (batch_size, 1, 1, seq_len)
+                mask = mask.unsqueeze(1).unsqueeze(2)
+                # (batch_size, 1, 1, seq_len) -> (batch_size, num_heads, seq_len, seq_len)
+                # Her bir sorgu pozisyonu için anahtar pozisyonlarını maskeler 
+                mask = mask.expand(batch_size, self.num_heads, seq_len, seq_len)
+            elif mask.dim() == 3:  # (batch_size, seq_len, seq_len)
+                # (batch_size, seq_len, seq_len) -> (batch_size, 1, seq_len, seq_len)
+                mask = mask.unsqueeze(1)
+                # Tüm başlara genişlet
+                mask = mask.expand(batch_size, self.num_heads, seq_len, seq_len)
+                
+            # Maskeyi uygula (1 -> görünür, 0 -> maskelenmiş)
             attn_weights = attn_weights.masked_fill(mask == 0, -1e9)
         elif self.causal:
             # Nedensel maskeleme oluştur ve uygula
