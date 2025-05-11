@@ -1,0 +1,225 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2024-06-23T14:40:00Z",
+  "pattern_evolutions": [
+    {
+      "pattern_id": "PT-001",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-05-23T10:00:00Z",
+          "description": "İlk kez ConfigBase sınıfında tespit edildi.",
+          "version": "1.0.0"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-23T14:00:00Z",
+          "description": "ImagePatchEmbeddingConfig sınıfında yeni bir örneği tespit edildi. Doğrulama mantığı ve genişletilmiş özellikler eklendi.",
+          "version": "1.1.0",
+          "changes": [
+            "Örnek listesine ImagePatchEmbeddingConfig eklendi",
+            "Doğrulama mantığının ayrıntılı uygulaması görüldü"
+          ]
+        }
+      ],
+      "current_stage": "mature",
+      "current_version": "1.1.0",
+      "adoption_trend": "increasing",
+      "health_score": 0.92
+    },
+    {
+      "pattern_id": "PT-002",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-05-23T11:30:00Z",
+          "description": "EmbeddingFactory sınıfında tespit edildi.",
+          "version": "1.0.0"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-09T09:15:00Z",
+          "description": "SearchProjectionFactory'de yeni bir örnek tespit edildi.",
+          "version": "1.0.1"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-23T14:05:00Z",
+          "description": "ImagePatchEmbeddingFactory'de yeni bir uygulama tespit edildi.",
+          "version": "1.1.0",
+          "changes": [
+            "ImagePatchEmbeddingFactory'de verimlilik odaklı fabrika metodu uygulaması eklendi"
+          ]
+        }
+      ],
+      "current_stage": "mature",
+      "current_version": "1.1.0",
+      "adoption_trend": "stable",
+      "health_score": 0.88
+    },
+    {
+      "pattern_id": "PT-003",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-05-23T14:00:00Z",
+          "description": "TextClassificationModel'de tespit edildi.",
+          "version": "1.0.0"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-15T10:30:00Z",
+          "description": "ProtoTransformerBlock'da genişletildi.",
+          "version": "1.0.1"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-23T14:10:00Z",
+          "description": "ImagePatchEmbedding'de yeni bir kompozisyon örneği tespit edildi.",
+          "version": "1.1.0",
+          "changes": [
+            "Görüntü işleme alanında kompozisyon uygulaması eklendi",
+            "Çoklu modül tipi kompozisyonu desteklendi"
+          ]
+        }
+      ],
+      "current_stage": "mature",
+      "current_version": "1.1.0",
+      "adoption_trend": "increasing",
+      "health_score": 0.94
+    },
+    {
+      "pattern_id": "PT-009",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-05-23T16:45:00Z",
+          "description": "ConfigBase.validate'de tespit edildi.",
+          "version": "1.0.0"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-23T14:15:00Z",
+          "description": "ImagePatchEmbeddingConfig.validate'de modüler doğrulama yaklaşımı genişletildi.",
+          "version": "1.1.0",
+          "changes": [
+            "Görüntü özellikleri için özel doğrulama mantığı eklendi",
+            "İç içe doğrulama metodları yaklaşımı pekiştirildi"
+          ]
+        }
+      ],
+      "current_stage": "evolving",
+      "current_version": "1.1.0",
+      "adoption_trend": "increasing",
+      "health_score": 0.88
+    },
+    {
+      "pattern_id": "PT-016",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-06-09T15:20:00Z",
+          "description": "Görüntü işleme modüllerinde tespit edildi.",
+          "version": "1.0.0"
+        },
+        {
+          "stage": "refinement",
+          "timestamp": "2024-06-23T14:20:00Z",
+          "description": "ImagePatchEmbedding sınıfında genişletilmiş uygulaması görüldü.",
+          "version": "1.1.0",
+          "changes": [
+            "Farklı görüntü boyutlarına uyum sağlama yeteneği eklendi",
+            "İnterpolasyon seçenekleriyle genişletildi",
+            "Konum kodlama entegrasyonu geliştirildi"
+          ]
+        }
+      ],
+      "current_stage": "evolving",
+      "current_version": "1.1.0",
+      "adoption_trend": "increasing",
+      "health_score": 0.90
+    },
+    {
+      "pattern_id": "PT-021",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-06-23T14:25:00Z",
+          "description": "ImagePatchEmbedding.forward metodunda esnek girdi işleme yeteneği olarak tespit edildi.",
+          "version": "1.0.0"
+        }
+      ],
+      "current_stage": "emerging",
+      "current_version": "1.0.0",
+      "adoption_trend": "new",
+      "health_score": 0.85
+    },
+    {
+      "pattern_id": "PT-022",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-06-23T14:30:00Z",
+          "description": "ImagePatchEmbedding._init_weights metodunda tespit edildi.",
+          "version": "1.0.0"
+        }
+      ],
+      "current_stage": "emerging",
+      "current_version": "1.0.0",
+      "adoption_trend": "new",
+      "health_score": 0.82
+    },
+    {
+      "pattern_id": "PT-023",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-06-23T14:32:00Z",
+          "description": "ImagePatchEmbedding sınıfında koşullu davranış stratejisi olarak tespit edildi.",
+          "version": "1.0.0"
+        }
+      ],
+      "current_stage": "emerging",
+      "current_version": "1.0.0",
+      "adoption_trend": "new",
+      "health_score": 0.80
+    },
+    {
+      "pattern_id": "PT-024",
+      "evolution_stages": [
+        {
+          "stage": "discovery",
+          "timestamp": "2024-06-23T14:35:00Z",
+          "description": "ImagePatchEmbedding sınıfında dinamik konum kodlama yaklaşımı olarak tespit edildi.",
+          "version": "1.0.0"
+        }
+      ],
+      "current_stage": "emerging",
+      "current_version": "1.0.0",
+      "adoption_trend": "new",
+      "health_score": 0.88
+    }
+  ],
+  "evolution_metrics": {
+    "pattern_discovery_rate": {
+      "last_30_days": 4,
+      "previous_30_days": 2,
+      "trend": "increasing"
+    },
+    "pattern_refinement_rate": {
+      "last_30_days": 5,
+      "previous_30_days": 3,
+      "trend": "increasing"
+    },
+    "pattern_adoption_score": {
+      "current": 0.85,
+      "previous": 0.78,
+      "trend": "improving"
+    },
+    "pattern_consistency_score": {
+      "current": 0.88,
+      "previous": 0.82,
+      "trend": "improving"
+    }
+  }
+} 

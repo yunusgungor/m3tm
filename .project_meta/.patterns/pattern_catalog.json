@@ -17,10 +17,11 @@
       "examples": [
         "m3tm.config.config_base.ConfigBase",
         "m3tm.config.model_config.ModelConfig",
-        "m3tm.embedding.config.TextEmbeddingConfig"
+        "m3tm.embedding.config.TextEmbeddingConfig",
+        "m3tm.embedding.image_embedding.ImagePatchEmbeddingConfig"
       ],
       "related_patterns": ["PT-009"],
-      "last_updated": "2024-05-23"
+      "last_updated": "2024-06-23"
     },
     {
       "pattern_id": "PT-002",
@@ -37,10 +38,11 @@
         "m3tm.embedding.factory.EmbeddingFactory",
         "m3tm.task_heads.config.TaskHeadFactory",
         "m3tm.search.SearchProjectionFactory",
-        "m3tm.adapters.adapter_manager.create_adapter"
+        "m3tm.adapters.adapter_manager.create_adapter",
+        "m3tm.embedding.image_embedding.ImagePatchEmbeddingFactory"
       ],
       "related_patterns": ["PT-006", "PT-016"],
-      "last_updated": "2024-06-09"
+      "last_updated": "2024-06-23"
     },
     {
       "pattern_id": "PT-003",
@@ -56,10 +58,11 @@
       "examples": [
         "m3tm.training.trainer.TextClassificationModel",
         "m3tm.transformer.adapter.AdapterSlot",
-        "m3tm.transformer.proto_transformer.ProtoTransformerBlock"
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock",
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding"
       ],
-      "related_patterns": ["PT-014", "PT-015", "PT-020"],
-      "last_updated": "2024-06-15"
+      "related_patterns": ["PT-014", "PT-015", "PT-020", "PT-021"],
+      "last_updated": "2024-06-23"
     },
     {
       "pattern_id": "PT-006",
@@ -127,10 +130,11 @@
       ],
       "implementation_notes": "Doğrulama kurallarını uygulayan ve hataları toplayan bir dizi fonksiyon veya sınıf.",
       "examples": [
-        "m3tm.config.config_base.ConfigBase.validate"
+        "m3tm.config.config_base.ConfigBase.validate",
+        "m3tm.embedding.image_embedding.ImagePatchEmbeddingConfig.validate"
       ],
       "related_patterns": ["PT-001"],
-      "last_updated": "2024-05-23"
+      "last_updated": "2024-06-23"
     },
     {
       "pattern_id": "PT-010",
@@ -241,8 +245,8 @@
         "m3tm.image.patch.patchify_image",
         "m3tm.image.patch.get_2d_sincos_pos_embed"
       ],
-      "related_patterns": ["PT-003"],
-      "last_updated": "2024-06-09"
+      "related_patterns": ["PT-003", "PT-021"],
+      "last_updated": "2024-06-23"
     },
     {
       "pattern_id": "PT-017",
@@ -645,7 +649,83 @@
       ],
       "related_patterns": [],
       "last_updated": "2024-06-11"
+    },
+    {
+      "pattern_id": "PT-021",
+      "name": "FlexibleInputProcessing",
+      "category": "data_processing",
+      "description": "Farklı boyut, kanal sayısı veya diğer özelliklere sahip girdileri işleyebilen esnek bir işleme mekanizması",
+      "benefits": [
+        "Farklı girdi formatları ve boyutları için uyumlu API",
+        "İstemci kodunun girdi uyumsuzluklarını yönetme yükünü azaltır",
+        "Boyut uyumsuzluklarını otomatik olarak çözer",
+        "Dinamik koşullara uyum sağlar"
+      ],
+      "implementation_notes": "Girdilerin boyut ve özelliklerini kontrol eder, gerektiğinde boyutlandırma, yeniden şekillendirme veya dönüştürme işlemleri uygular. İç içe kontrol yapıları veya koşullu işlemlerle desteklenir.",
+      "examples": [
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding.forward",
+        "m3tm.image.patch.patchify_image"
+      ],
+      "related_patterns": ["PT-016", "PT-010"],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-022",
+      "name": "ParameterizedModuleInitialization",
+      "category": "initialization",
+      "description": "Modül parametrelerini belirli bir dağılıma veya stratejiye göre bilinçli bir şekilde başlatan desen",
+      "benefits": [
+        "Model eğitiminin daha hızlı ve kararlı ilerlemesini sağlar",
+        "Gradyan patlaması/kaybı sorunlarını azaltır",
+        "Farklı katman tipleri için uygun başlatma stratejileri kullanır",
+        "Eğitim dinamiklerini iyileştirir"
+      ],
+      "implementation_notes": "Modül başlatma sırasında parametrelerin (ağırlıklar ve biaslar) normal dağılım, uniform dağılım, Xavier/Glorot veya Kaiming başlatma gibi özel stratejilerle ilklendirilmesini içerir. Genellikle _init_weights gibi özel bir metot içinde uygulanır.",
+      "examples": [
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding._init_weights",
+        "m3tm.transformer.proto_transformer.ProtoTransformerBlock._init_weights"
+      ],
+      "related_patterns": ["PT-003"],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-023",
+      "name": "ConditionalBehaviorStrategy",
+      "category": "behavioral",
+      "description": "Çalışma zamanı koşullarına ve yapılandırma parametrelerine bağlı olarak farklı davranışlar sergileyen modüler strateji deseni",
+      "benefits": [
+        "Farklı çalışma modu ve yapılandırmalara uyum sağlar",
+        "Tek bir sınıf içinde çoklu uygulama stratejileri barındırır",
+        "Kod tekrarını azaltır",
+        "İstemci kodunu basitleştirir"
+      ],
+      "implementation_notes": "Belirli davranışların yapılandırma parametrelerine veya çalışma zamanı durumuna göre koşullu olarak uygulanması. Genellikle if-else karar yapıları, strateji örüntüsü veya fabrika deseni ile birleştirilir.",
+      "examples": [
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding.forward (konumsal kodlama)",
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding.__init__ (projeksiyon katmanı)"
+      ],
+      "related_patterns": ["PT-015", "PT-002"],
+      "last_updated": "2024-06-23"
+    },
+    {
+      "pattern_id": "PT-024",
+      "name": "DynamicPositionEncoding",
+      "category": "transformer",
+      "description": "Farklı tip ve boyutlardaki konum kodlamalarını destekleyen esnek mekanizma",
+      "benefits": [
+        "Öğrenilebilir veya sabit konum kodlamaları arasında seçim imkanı",
+        "Değişken girdi boyutlarına uyum sağlama",
+        "Farklı modeller ve görevlere kolayca uyarlanabilir",
+        "Hesaplama verimliliği ve bellek kullanımı arasında denge"
+      ],
+      "implementation_notes": "Sinüzoidal, öğrenilebilir veya rölatif konum kodlamalarını yapılandırmaya göre uygular. Kodlamaların dinamik olarak hesaplanması veya önceden tanımlı olması desteklenir. Farklı boyutlara uyum için interpolasyon kullanabilir.",
+      "examples": [
+        "m3tm.embedding.image_embedding.ImagePatchEmbedding.forward",
+        "m3tm.image.patch.get_2d_sincos_pos_embed"
+      ],
+      "related_patterns": ["PT-023", "PT-021", "PT-016"],
+      "last_updated": "2024-06-23"
     }
   ],
-  "last_updated": "2024-06-11"
+  "last_updated": "2024-06-23"
 } 

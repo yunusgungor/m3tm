@@ -65,7 +65,7 @@ def patchify_image(
         # [B, C, num_patches_h, num_patches_w, patch_size, patch_size] -> 
         # [B, num_patches_h*num_patches_w, C*patch_size*patch_size]
         patches = patches.permute(0, 2, 4, 1, 3, 5).contiguous()
-        patches = patches.view(batch_size, num_patches, -1)
+        patches = patches.view(batch_size, num_patches, channels * patch_size * patch_size)
     else:
         # [B, C, num_patches_h, num_patches_w, patch_size, patch_size] -> 
         # [B, num_patches_h*num_patches_w, C, patch_size, patch_size]
@@ -98,10 +98,17 @@ def unpatchify_image(
     if patches.dim() == 3:
         # [B, num_patches, channels*patch_size*patch_size] -> [B, num_patches, channels, patch_size, patch_size]
         batch_size, num_patches, flattened_dim = patches.shape
+        # Kanal sayısını tahmin et
         channels = flattened_dim // (patch_size ** 2)
+        if channels * (patch_size ** 2) != flattened_dim:
+            raise ValueError(f"Düzleştirilmiş boyut {flattened_dim}, patch_size²({patch_size}²)={patch_size**2}'nin tam katı olmalıdır")
         patches = patches.view(batch_size, num_patches, channels, patch_size, patch_size)
     
-    batch_size, num_patches, channels, patch_size, patch_size = patches.shape
+    batch_size, num_patches, channels, p_height, p_width = patches.shape
+    
+    # Yama boyutlarının tutarlı olduğunu kontrol et
+    if p_height != patch_size or p_width != patch_size:
+        raise ValueError(f"Yama boyutları ({p_height}, {p_width}) belirtilen patch_size {patch_size} ile tutarsız")
     
     # Görüntü boyutunu belirle
     if image_size is None:
@@ -122,10 +129,12 @@ def unpatchify_image(
             image_h, image_w = image_size
             
         # Tutarlılık kontrolü
-        if (image_h // patch_size) * (image_w // patch_size) != num_patches:
+        expected_num_patches = (image_h // patch_size) * (image_w // patch_size)
+        if expected_num_patches != num_patches:
             raise ValueError(
                 f"image_size {image_size} ve patch_size {patch_size} değerleri, "
-                f"num_patches {num_patches} ile tutarsız."
+                f"num_patches {num_patches} ile tutarsız. "
+                f"Beklenen: {expected_num_patches}"
             )
     
     # Yama sayılarını hesapla

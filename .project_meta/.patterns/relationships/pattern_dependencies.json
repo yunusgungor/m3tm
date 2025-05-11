@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2024-06-23T14:35:00Z",
+  "relationships": [
+    {
+      "source_pattern_id": "PT-001",
+      "target_pattern_id": "PT-009",
+      "relationship_type": "uses",
+      "strength": 0.85,
+      "description": "ConfigurationDataclass (PT-001) tipik olarak doğrulama için ConfigValidationPipeline (PT-009) desenini kullanır."
+    },
+    {
+      "source_pattern_id": "PT-003",
+      "target_pattern_id": "PT-016",
+      "relationship_type": "specializes",
+      "strength": 0.80,
+      "description": "VisionTransformerPatching (PT-016), ModelComposite (PT-003) deseninin görüntü işleme alanındaki özelleşmiş bir uygulamasıdır."
+    },
+    {
+      "source_pattern_id": "PT-016",
+      "target_pattern_id": "PT-021",
+      "relationship_type": "uses",
+      "strength": 0.78,
+      "description": "VisionTransformerPatching (PT-016), farklı boyutlardaki görüntüleri işlemek için FlexibleInputProcessing (PT-021) desenini kullanır."
+    },
+    {
+      "source_pattern_id": "PT-021",
+      "target_pattern_id": "PT-023",
+      "relationship_type": "relies_on",
+      "strength": 0.75,
+      "description": "FlexibleInputProcessing (PT-021), farklı girdi türlerini işleyebilmek için ConditionalBehaviorStrategy (PT-023) desenine güvenir."
+    },
+    {
+      "source_pattern_id": "PT-024",
+      "target_pattern_id": "PT-023",
+      "relationship_type": "uses",
+      "strength": 0.90,
+      "description": "DynamicPositionEncoding (PT-024), farklı kodlama stratejileri arasında seçim yapmak için ConditionalBehaviorStrategy (PT-023) desenini kullanır."
+    },
+    {
+      "source_pattern_id": "PT-024",
+      "target_pattern_id": "PT-021",
+      "relationship_type": "complements",
+      "strength": 0.82,
+      "description": "DynamicPositionEncoding (PT-024) ve FlexibleInputProcessing (PT-021) desenleri birbirini tamamlar, biri girdi işlemeyi diğeri pozisyon kodlamayı esnek hale getirir."
+    },
+    {
+      "source_pattern_id": "PT-003",
+      "target_pattern_id": "PT-022",
+      "relationship_type": "uses",
+      "strength": 0.70,
+      "description": "ModelComposite (PT-003) genellikle ParameterizedModuleInitialization (PT-022) desenini kullanarak alt modüllerini başlatır."
+    },
+    {
+      "source_pattern_id": "PT-002",
+      "target_pattern_id": "PT-023",
+      "relationship_type": "complements",
+      "strength": 0.65,
+      "description": "FactoryMethod (PT-002) ve ConditionalBehaviorStrategy (PT-023) desenleri genellikle birlikte çalışır, biri nesne oluşturma diğeri koşullu davranış uygulama sorumluluğunu üstlenir."
+    },
+    {
+      "source_pattern_id": "PT-016",
+      "target_pattern_id": "PT-024",
+      "relationship_type": "uses",
+      "strength": 0.88,
+      "description": "VisionTransformerPatching (PT-016), pozisyon bilgilerini kodlamak için DynamicPositionEncoding (PT-024) desenini kullanır."
+    }
+  ],
+  "clusters": [
+    {
+      "cluster_id": "CL-001",
+      "name": "Configuration Management Patterns",
+      "patterns": ["PT-001", "PT-009", "PT-012"],
+      "coherence": 0.85,
+      "description": "Yapılandırma yönetimi ve doğrulamasıyla ilgili desenler kümesi."
+    },
+    {
+      "cluster_id": "CL-002",
+      "name": "Model Creation and Composition Patterns",
+      "patterns": ["PT-002", "PT-003", "PT-014", "PT-022"],
+      "coherence": 0.80,
+      "description": "Model oluşturma ve birleştirme ile ilgili desenler kümesi."
+    },
+    {
+      "cluster_id": "CL-003",
+      "name": "Input Processing and Encoding Patterns",
+      "patterns": ["PT-016", "PT-021", "PT-023", "PT-024"],
+      "coherence": 0.88,
+      "description": "Girdi işleme, dönüştürme ve kodlama ile ilgili desenler kümesi."
+    }
+  ]
+} 

@@ -21,39 +21,41 @@ from m3tm.adapters.adapter import AdapterConfig, Adapter, create_adapter
 
 def get_adapter_positions(module: nn.Module) -> List[str]:
     """
-    Bir modülün desteklediği tüm adaptör pozisyonlarını döndürür.
+    Verilen modül için kullanılabilir adaptör pozisyonlarını döndürür.
     
     Args:
-        module: Adaptör pozisyonlarını sorgulamak için modül
-    
+        module: Adaptör pozisyonları istenen modül
+        
     Returns:
-        Desteklenen adaptör pozisyonlarının listesi
+        Kullanılabilir adaptör pozisyonlarının listesi
     """
-    # Açık bir "adapter_positions" özelliği varsa
-    if hasattr(module, "adapter_positions"):
-        if isinstance(module.adapter_positions, list):
-            return module.adapter_positions
-    
-    # Adaptör slotları sözlüğü varsa
+    # Modül kendi pozisyonlarını sağlıyorsa onları kullan
+    if hasattr(module, "get_adapter_positions") and callable(module.get_adapter_positions):
+        positions = module.get_adapter_positions()
+        if positions:
+            return positions
+            
+    # Adaptör_slots sözlüğü varsa anahtarları pozisyon olarak kullan
     if hasattr(module, "adapter_slots") and isinstance(module.adapter_slots, dict):
-        return list(module.adapter_slots.keys())
-    
-    # register_adapter metodu varsa
-    if hasattr(module, "register_adapter") and callable(module.register_adapter):
-        # SimpleModule sınıfı için test desteği
-        if module.__class__.__name__ == "SimpleModule":
-            return ["input", "output"]
-    
-    # Klasik Transformer pozisyonları
-    if hasattr(module, "attention") and hasattr(module, "feed_forward"):
+        if module.adapter_slots:
+            return list(module.adapter_slots.keys())
+            
+    # ProtoTransformerBlock için standart pozisyonlar
+    module_name = module.__class__.__name__
+    if module_name == "ProtoTransformerBlock":
         return ["pre_attention", "post_attention", "pre_ffn", "post_ffn"]
         
-    # ProtoTransformerBlock için pozisyonlar
-    if module.__class__.__name__ == "ProtoTransformerBlock":
+    # Position sınıf niteliği kullanılıyor mu kontrol et
+    if hasattr(module, "ADAPTER_POSITIONS"):
+        return module.ADAPTER_POSITIONS
+        
+    # Varsayılan pozisyonlar
+    if module_name.endswith("Transformer") or "Transformer" in module_name:
         return ["pre_attention", "post_attention", "pre_ffn", "post_ffn"]
-    
-    # Adaptör destekli değil
-    return []
+    elif "Embedding" in module_name:
+        return ["post_embedding"]
+    else:
+        return ["input", "output"]  # Genel pozisyonlar
 
 
 def get_module_dim(module: nn.Module, position: str) -> Optional[int]:

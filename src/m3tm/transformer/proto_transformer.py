@@ -263,7 +263,7 @@ class ProtoTransformerBlock(nn.Module):
     
     def get_adapter_positions(self) -> List[str]:
         """Desteklenen adapter pozisyonlarını döndürür."""
-        return list(self.adapter_slots.keys())
+        return ["pre_attention", "post_attention", "pre_ffn", "post_ffn"]
     
     def get_adapter_names(self, position: str) -> List[str]:
         """Belirli bir pozisyondaki adaptör isimlerini döndürür.
@@ -399,7 +399,7 @@ class ProtoTransformerBlock(nn.Module):
             # Eğer pozisyon yoksa, slot oluştur
             if position not in self.adapter_slots:
                 from m3tm.transformer.adapter import AdapterSlot
-                self.adapter_slots[position] = AdapterSlot(self.hidden_size)
+                self.adapter_slots[position] = AdapterSlot(adapter_config, self.hidden_size)
                 
             # Adaptörü kaydet
             self.register_adapter(adapter, position, adapter_name)

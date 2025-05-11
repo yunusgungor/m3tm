@@ -345,10 +345,10 @@ class TestFusionFactory(TestBaseFusion):
         fusion_module = FusionFactory.create_fusion(config)
         self.assertIsInstance(fusion_module, ConcatenationFusion)
         
-        # Özel konfigürasyonla
+        # Özel konfigürasyonla - weighted_sum için boyutları eşit yapmalıyız
         config = WeightedSumFusionConfig(
-            text_dim=self.text_dim,
-            image_dim=self.image_dim
+            text_dim=64,
+            image_dim=64  # Aynı boyut kullanmak gerekiyor
         )
         fusion_module = FusionFactory.create_fusion(config)
         self.assertIsInstance(fusion_module, WeightedSumFusion)

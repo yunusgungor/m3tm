@@ -529,16 +529,37 @@ class AdapterManager:
         all_adapters = self.list_adapters(active_only=False)
         
         adapter_info = []
+        total_adapter_parameters = 0
         for adapter_id in all_adapters:
             info = self.get_adapter_info(adapter_id)
             if info:
                 adapter_info.append(info)
+                
+                # Adapter parametrelerini say
+                adapter = self.adapter_instances.get(adapter_id)
+                if adapter:
+                    total_adapter_parameters += sum(p.numel() for p in adapter.parameters())
         
+        # Model parametrelerini say
+        model_parameters = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+        
+        # Modüllerin isimleri
+        modules_with_adapters = list(self.module_registry.keys())
+        
+        # Adapter yüzdesi
+        adapter_percentage = 0
+        if model_parameters > 0:
+            adapter_percentage = (total_adapter_parameters / model_parameters) * 100.0
+            
         return {
-            "active_adapter_count": len(active_adapters),
-            "total_adapter_count": len(all_adapters),
+            "total_adapters": len(all_adapters),
+            "active_adapters": len(active_adapters),
             "adapters": adapter_info,
-            "module_count": len(self.module_registry)
+            "module_count": len(self.module_registry),
+            "modules_with_adapters": modules_with_adapters,
+            "total_adapter_parameters": total_adapter_parameters,
+            "model_parameters": model_parameters,
+            "adapter_percentage": adapter_percentage
         }
     
     def set_adapters_trainable(self, adapter_names: Optional[List[str]] = None) -> None:

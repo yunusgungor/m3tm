@@ -37,8 +37,8 @@ class TestSearchEmbeddingProjection:
         batch_size = 4
         x = torch.rand(batch_size, input_dim)
         
-        # Forward geçişi
-        output = projection(x)
+        # Forward geçişi - dictionary yerine tensor almak için return_dict=False
+        output = projection(x, return_dict=False)
         
         # Çıktı kontrolü
         assert output.shape == (batch_size, output_dim)

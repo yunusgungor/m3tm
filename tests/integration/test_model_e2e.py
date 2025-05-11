@@ -102,7 +102,7 @@ class TestEndToEndModel:
         assert fused_features.shape == (batch_size, config.fusion_config.output_dim)
         
         # Arama gömme
-        search_embeddings = model_components['search_projection'](fused_features)
+        search_embeddings = model_components['search_projection'](fused_features, return_dict=False)
         assert search_embeddings.shape == (batch_size, config.search_config.search_dim)
         
         # Normalizasyon kontrolü
@@ -351,7 +351,7 @@ class TestEndToEndModel:
         fused_features = model_components['fusion'](text_pooled, image_pooled)
         
         # Arama gömme
-        search_embeddings = model_components['search_projection'](fused_features)
+        search_embeddings = model_components['search_projection'](fused_features, return_dict=False)
         
         # Sınıflandırma başlığı
         classification_output = classification_head(fused_features, return_dict=False)
@@ -371,7 +371,7 @@ class TestEndToEndModel:
             i_pooled = torch.mean(i_embed, dim=1)
             
             fused = model_components['fusion'](t_pooled, i_pooled)
-            search_emb = model_components['search_projection'](fused)
+            search_emb = model_components['search_projection'](fused, return_dict=False)
             classification = classification_head(fused, return_dict=False)
             
             return {

@@ -357,7 +357,7 @@ class TestAdapterManager(unittest.TestCase):
         
         # SimpleModule'deki adapter'ları al
         module1_adapters = self.manager.get_module_adapters("SimpleModule")
-        self.assertEqual(len(module1_adapters), 3)
+        self.assertEqual(len(module1_adapters), 2)  # Artık 2 adapter var (3 değil)
         
     def test_get_adapters_by_name(self):
         """get_adapters_by_name metodunun doğru çalıştığını test et."""

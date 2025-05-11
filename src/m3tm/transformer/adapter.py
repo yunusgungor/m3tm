@@ -51,8 +51,12 @@ class AdapterSlot(nn.Module):
         # Eğitim modu bayrağı
         self.training_mode = True
         
-        if config.enabled and config.initial_adapter_type is not None:
-            adapter = self._create_adapter(config.initial_adapter_type)
+        # config sınıfları arasında uyumluluk: 'enabled' ve 'initial_adapter_type' özelliklerini kontrol et
+        config_enabled = getattr(config, 'enabled', False)
+        initial_adapter_type = getattr(config, 'initial_adapter_type', None)
+        
+        if config_enabled and initial_adapter_type is not None:
+            adapter = self._create_adapter(initial_adapter_type)
             if adapter:
                 self.adapters.append(adapter)
                 self.adapter_names.append("default")
