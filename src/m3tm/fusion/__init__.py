@@ -18,6 +18,8 @@ from .fusion_strategies import (
     GatedFusion
 )
 from .factory import FusionFactory
+from .cross_attention_fusion import CrossAttentionFusion
+from .adaptive_weighting_fusion import AdaptiveWeightingFusion
 
 __all__ = [
     'FusionConfig',
@@ -29,5 +31,7 @@ __all__ = [
     'ConcatenationFusion',
     'WeightedSumFusion',
     'GatedFusion',
-    'FusionFactory'
+    'FusionFactory',
+    'CrossAttentionFusion',
+    'AdaptiveWeightingFusion'
 ]

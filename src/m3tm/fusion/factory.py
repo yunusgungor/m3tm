@@ -16,10 +16,14 @@ from .config import (
     ConcatenationFusionConfig, 
     WeightedSumFusionConfig, 
     GatedFusionConfig, 
+    CrossAttentionFusionConfig,
+    AdaptiveWeightingFusionConfig,
     FusionType
 )
 from .base_fusion import BaseFusion
 from .fusion_strategies import ConcatenationFusion, WeightedSumFusion, GatedFusion
+from .cross_attention_fusion import CrossAttentionFusion
+from .adaptive_weighting_fusion import AdaptiveWeightingFusion
 
 
 class FusionFactory:
@@ -52,6 +56,10 @@ class FusionFactory:
             return WeightedSumFusion
         elif fusion_type == FusionType.GATED:
             return GatedFusion
+        elif fusion_type == FusionType.CROSS_ATTENTION:
+            return CrossAttentionFusion
+        elif fusion_type == FusionType.ADAPTIVE_WEIGHTING:
+            return AdaptiveWeightingFusion
         else:
             raise ValueError(f"Bilinmeyen füzyon tipi: {fusion_type}")
     
@@ -75,6 +83,10 @@ class FusionFactory:
             return WeightedSumFusionConfig
         elif fusion_type == FusionType.GATED:
             return GatedFusionConfig
+        elif fusion_type == FusionType.CROSS_ATTENTION:
+            return CrossAttentionFusionConfig
+        elif fusion_type == FusionType.ADAPTIVE_WEIGHTING:
+            return AdaptiveWeightingFusionConfig
         else:
             raise ValueError(f"Bilinmeyen füzyon tipi: {fusion_type}")
     
@@ -231,6 +243,86 @@ class FusionFactory:
             gate_activation=gate_activation,
             hidden_dim=hidden_dim,
             use_residual=use_residual,
+            **kwargs
+        )
+        
+        return cls.create_fusion(config)
+    
+    @classmethod
+    def create_cross_attention_fusion(cls,
+                                     text_dim: int,
+                                     image_dim: int,
+                                     output_dim: Optional[int] = None,
+                                     num_heads: int = 4,
+                                     dropout: float = 0.1,
+                                     **kwargs) -> BaseFusion:
+        """
+        CrossAttention füzyon modülü oluşturur.
+        
+        Args:
+            text_dim: Metin girdi boyutu
+            image_dim: Görüntü girdi boyutu
+            output_dim: Çıktı boyutu (belirtilmezse min(text_dim, image_dim) kullanılır)
+            num_heads: Dikkat mekanizmasındaki kafa sayısı
+            dropout: Dropout oranı
+            **kwargs: Diğer yapılandırma parametreleri
+            
+        Returns:
+            BaseFusion: Oluşturulan füzyon modülü
+        """
+        if output_dim is None:
+            if text_dim == image_dim:
+                output_dim = text_dim
+            else:
+                output_dim = min(text_dim, image_dim)
+        
+        config = CrossAttentionFusionConfig(
+            fusion_type=FusionType.CROSS_ATTENTION,
+            text_dim=text_dim,
+            image_dim=image_dim,
+            output_dim=output_dim,
+            num_heads=num_heads,
+            dropout=dropout,
+            **kwargs
+        )
+        
+        return cls.create_fusion(config)
+    
+    @classmethod
+    def create_adaptive_weighting_fusion(cls,
+                                        text_dim: int,
+                                        image_dim: int,
+                                        output_dim: Optional[int] = None,
+                                        hidden_dim: int = 512,
+                                        dropout: float = 0.1,
+                                        **kwargs) -> BaseFusion:
+        """
+        AdaptiveWeighting füzyon modülü oluşturur.
+        
+        Args:
+            text_dim: Metin girdi boyutu
+            image_dim: Görüntü girdi boyutu
+            output_dim: Çıktı boyutu (belirtilmezse min(text_dim, image_dim) kullanılır)
+            hidden_dim: Ağırlık tahmin ağındaki gizli katman boyutu
+            dropout: Dropout oranı
+            **kwargs: Diğer yapılandırma parametreleri
+            
+        Returns:
+            BaseFusion: Oluşturulan füzyon modülü
+        """
+        if output_dim is None:
+            if text_dim == image_dim:
+                output_dim = text_dim
+            else:
+                output_dim = min(text_dim, image_dim)
+        
+        config = AdaptiveWeightingFusionConfig(
+            fusion_type=FusionType.ADAPTIVE_WEIGHTING,
+            text_dim=text_dim,
+            image_dim=image_dim,
+            output_dim=output_dim,
+            hidden_dim=hidden_dim,
+            dropout=dropout,
             **kwargs
         )
         

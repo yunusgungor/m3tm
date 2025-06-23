@@ -27,15 +27,51 @@ class BaseFusion(nn.Module, abc.ABC):
     Örüntü: ModelComposite (PT-003)
     """
     
-    def __init__(self, config: FusionConfig):
+    def __init__(self, 
+                config_or_text_dim: Union[FusionConfig, int],
+                image_dim: Optional[int] = None,
+                output_dim: Optional[int] = None):
         """
         BaseFusion sınıfını başlatır.
         
         Args:
-            config: Füzyon yapılandırması
+            config_or_text_dim: Füzyon yapılandırması (FusionConfig) veya metin boyutu
+            image_dim: Görüntü boyutu (config_or_text_dim bir FusionConfig değilse kullanılır)
+            output_dim: Çıktı boyutu (config_or_text_dim bir FusionConfig değilse kullanılır)
         """
         super().__init__()
-        self.config = config
+        
+        # FusionConfig veya boyut parametrelerini kullanarak yapılandırma oluştur
+        if isinstance(config_or_text_dim, FusionConfig):
+            self.config = config_or_text_dim
+        else:
+            if image_dim is None or output_dim is None:
+                raise ValueError("image_dim ve output_dim, config yerine text_dim kullanıldığında gereklidir")
+            
+            # Basit bir yapılandırma nesnesi oluştur (FusionConfig değil)
+            self.config = type('SimpleConfig', (), {
+                'text_dim': config_or_text_dim,
+                'image_dim': image_dim,
+                'output_dim': output_dim,
+                'use_layer_norm': False,
+                'layer_norm_eps': 1e-12,
+                'dropout_rate': 0.1,
+                'fusion_type': None,
+                'num_attention_heads': 4  # Test için gereken özellik
+            })
+        
+        # Varsayılan değerleri ayarla (custom config nesneleri için)
+        if not hasattr(self.config, 'use_layer_norm'):
+            self.config.use_layer_norm = False
+        
+        if not hasattr(self.config, 'layer_norm_eps'):
+            self.config.layer_norm_eps = 1e-12
+            
+        if not hasattr(self.config, 'dropout_rate'):
+            self.config.dropout_rate = 0.1
+            
+        if not hasattr(self.config, 'num_attention_heads'):
+            self.config.num_attention_heads = 4
         
         # Boyutları ayarla veya doğrula
         self._validate_and_set_dimensions()
@@ -58,44 +94,39 @@ class BaseFusion(nn.Module, abc.ABC):
         Alt sınıflar bu metodu override edebilir.
         """
         # text_dim ve image_dim her zaman belirtilmelidir
-        if self.config.text_dim is None or self.config.image_dim is None:
+        if not hasattr(self.config, 'text_dim') or not hasattr(self.config, 'image_dim'):
             raise ValueError(
-                "text_dim ve image_dim belirtilmelidir."
+                "config nesnesi text_dim ve image_dim özelliklerine sahip olmalıdır."
             )
         
-        # output_dim belirtilmemişse, füzyon tipine göre varsayılan değeri hesapla
-        if self.config.output_dim is None:
-            if self.config.fusion_type == FusionType.CONCATENATION:
-                self.config.output_dim = self.config.text_dim + self.config.image_dim
-            else:  # WEIGHTED_SUM, GATED ve diğerleri için
-                # Giriş boyutları farklı ise uyumlu olmayabilir
-                if self.config.text_dim != self.config.image_dim:
-                    raise ValueError(
-                        f"{self.config.fusion_type.value} füzyon için text_dim ve image_dim "
-                        f"aynı olmalıdır veya output_dim açıkça belirtilmelidir."
-                    )
-                self.config.output_dim = self.config.text_dim
+        # output_dim belirtilmemişse hata ver
+        if not hasattr(self.config, 'output_dim'):
+            raise ValueError("config nesnesi output_dim özelliğine sahip olmalıdır.")
     
     def _check_input_dimensions(self, text_embeddings: torch.Tensor, image_embeddings: torch.Tensor) -> None:
         """
         Girdi tensor boyutlarını kontrol eder.
         
         Args:
-            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim]
-            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim]
+            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim] veya [batch_size, text_dim]
+            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim] veya [batch_size, image_dim]
         
         Raises:
             ValueError: Girdi boyutları yapılandırma ile uyuşmazsa
         """
-        if text_embeddings.size(-1) != self.config.text_dim:
+        # Son boyutu kontrol et
+        text_dim = text_embeddings.size(-1)
+        if text_dim != self.config.text_dim:
             raise ValueError(
-                f"text_embeddings boyutu ({text_embeddings.size(-1)}) yapılandırma ile "
+                f"text_embeddings boyutu ({text_dim}) yapılandırma ile "
                 f"uyuşmuyor (text_dim={self.config.text_dim})."
             )
         
-        if image_embeddings.size(-1) != self.config.image_dim:
+        # Son boyutu kontrol et
+        image_dim = image_embeddings.size(-1)
+        if image_dim != self.config.image_dim:
             raise ValueError(
-                f"image_embeddings boyutu ({image_embeddings.size(-1)}) yapılandırma ile "
+                f"image_embeddings boyutu ({image_dim}) yapılandırma ile "
                 f"uyuşmuyor (image_dim={self.config.image_dim})."
             )
         
@@ -133,8 +164,8 @@ class BaseFusion(nn.Module, abc.ABC):
         Metin ve görüntü gömmelerini birleştirir.
         
         Args:
-            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim]
-            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim]
+            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim] veya [batch_size, text_dim]
+            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim] veya [batch_size, image_dim]
             text_mask: Metin maskesi [batch_size, seq_len]
             image_mask: Görüntü maskesi [batch_size, num_patches]
             
@@ -153,8 +184,8 @@ class BaseFusion(nn.Module, abc.ABC):
         Füzyon modülünün ileri geçişi.
         
         Args:
-            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim]
-            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim]
+            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim] veya [batch_size, text_dim]
+            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim] veya [batch_size, image_dim]
             text_mask: Metin maskesi [batch_size, seq_len]
             image_mask: Görüntü maskesi [batch_size, num_patches]
             return_dict: Çıktı sözlük formatında döndürülsün mü?
@@ -199,11 +230,10 @@ class BaseFusion(nn.Module, abc.ABC):
             
             output = self.dropout(output)
         
-        # Çıktıyı oluştur
+        # Çıktı formatını belirle
         if return_dict:
             return {
-                "fused_embeddings": output,
-                "fusion_type": self.config.fusion_type.value
+                "fused_embeddings": output
             }
         else:
             return output
@@ -213,33 +243,67 @@ class BaseFusion(nn.Module, abc.ABC):
                          text_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Sadece metin modalitesi durumunu ele alır.
-        Alt sınıflar bu metodu override edebilir.
         
         Args:
-            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim]
+            text_embeddings: Metin gömmeleri [batch_size, seq_len, text_dim] veya [batch_size, text_dim]
             text_mask: Metin maskesi [batch_size, seq_len]
             
         Returns:
             torch.Tensor: İşlenmiş metin gömmeleri
         """
-        # Varsayılan davranış: metin gömmelerini olduğu gibi döndür
-        # Alt sınıflar, metin gömmelerini çıkış boyutuna projekte eden bir projeksiyon tanımlayabilir
-        return text_embeddings
+        # Varsayılan davranış - alt sınıflar bu metodu override edebilir
+        batch_size = text_embeddings.size(0)
+        
+        # Metin gömmelerini düzleştir (eğer sequence ise)
+        if text_embeddings.dim() > 2:
+            # Text masking
+            if text_mask is not None:
+                text_mask = text_mask.unsqueeze(-1)
+                text_embeddings = (text_embeddings * text_mask).sum(dim=1) / text_mask.sum(dim=1).clamp(min=1e-6)
+            else:
+                text_embeddings = text_embeddings.mean(dim=1)
+        
+        # Görüntü modalitesi için sıfır vektörü
+        dummy_image_embeddings = torch.zeros(
+            batch_size, self.config.image_dim, 
+            device=text_embeddings.device, 
+            dtype=text_embeddings.dtype
+        )
+        
+        # İki modaliteyi birleştir, bu durumda image modalitesi sıfır
+        return self.fuse(text_embeddings, dummy_image_embeddings)
     
     def _handle_image_only(self, 
                           image_embeddings: torch.Tensor, 
                           image_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Sadece görüntü modalitesi durumunu ele alır.
-        Alt sınıflar bu metodu override edebilir.
         
         Args:
-            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim]
+            image_embeddings: Görüntü gömmeleri [batch_size, num_patches, image_dim] veya [batch_size, image_dim]
             image_mask: Görüntü maskesi [batch_size, num_patches]
             
         Returns:
             torch.Tensor: İşlenmiş görüntü gömmeleri
         """
-        # Varsayılan davranış: görüntü gömmelerini olduğu gibi döndür
-        # Alt sınıflar, görüntü gömmelerini çıkış boyutuna projekte eden bir projeksiyon tanımlayabilir
-        return image_embeddings 
+        # Varsayılan davranış - alt sınıflar bu metodu override edebilir
+        batch_size = image_embeddings.size(0)
+        
+        # Görüntü gömmelerini düzleştir (eğer sequence ise)
+        if image_embeddings.dim() > 2:
+            # Image masking
+            if image_mask is not None:
+                image_mask = image_mask.unsqueeze(-1)
+                image_embeddings = (image_embeddings * image_mask).sum(dim=1) / image_mask.sum(dim=1).clamp(min=1e-6)
+            else:
+                image_embeddings = image_embeddings.mean(dim=1)
+        
+        # Metin modalitesi için sıfır vektörü
+        dummy_text_embeddings = torch.zeros(
+            batch_size, self.config.text_dim, 
+            device=image_embeddings.device, 
+            dtype=image_embeddings.dtype
+        )
+        
+        # İki modaliteyi birleştir, bu durumda text modalitesi sıfır
+        return self.fuse(dummy_text_embeddings, image_embeddings) 

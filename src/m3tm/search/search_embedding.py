@@ -7,7 +7,7 @@ Bu modül, arama için özelleştirilmiş gömme projeksiyonlarını içerir.
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import Dict, Union, Tuple
+from typing import Dict, Union, Tuple, Optional
 
 from m3tm.config.model_config import SearchConfig
 
@@ -19,17 +19,34 @@ class SearchEmbeddingProjection(nn.Module):
     Arama gömme vektörleri birim uzunluğa normalize edilir (L2 norm).
     """
     
-    def __init__(self, config: SearchConfig):
+    def __init__(self, 
+                config_or_input_dim: Union[SearchConfig, int], 
+                output_dim: Optional[int] = None,
+                use_normalization: bool = True,
+                metric: str = "cosine"):
         """
         Args:
-            config: Arama yapılandırması
+            config_or_input_dim: Arama yapılandırması veya girdi boyutu
+            output_dim: Çıktı boyutu (config kullanılmadığında gerekli)
+            use_normalization: Normalizasyon kullanılıp kullanılmayacağı
+            metric: Kullanılacak metrik ("cosine", "inner_product" vs.)
         """
         super(SearchEmbeddingProjection, self).__init__()
-        self.config = config
-        self.input_dim = config.input_dim
-        self.output_dim = config.search_dim
-        self.use_normalization = config.use_normalization
-        self.metric = config.metric
+        
+        if isinstance(config_or_input_dim, SearchConfig):
+            self.config = config_or_input_dim
+            self.input_dim = self.config.input_dim
+            self.output_dim = self.config.search_dim
+            self.use_normalization = self.config.use_normalization
+            self.metric = self.config.metric
+        else:
+            if output_dim is None:
+                raise ValueError("output_dim, SearchConfig yerine input_dim kullanıldığında gereklidir")
+            self.config = None
+            self.input_dim = config_or_input_dim
+            self.output_dim = output_dim
+            self.use_normalization = use_normalization
+            self.metric = metric
         
         # Doğrusal projeksiyon katmanı
         self.projection = nn.Linear(self.input_dim, self.output_dim)
@@ -42,51 +59,32 @@ class SearchEmbeddingProjection(nn.Module):
     
     def forward(self, x: torch.Tensor, return_dict: bool = True) -> Union[torch.Tensor, Dict[str, torch.Tensor]]:
         """
-        İleri geçiş.
-        
         Args:
-            x: Girdi özellikleri [batch_size, input_dim] veya [batch_size, seq_len, input_dim]
-            return_dict: True ise çıktıyı sözlük olarak döndürür, False ise doğrudan tensor olarak
+            x: Girdi tensörü, shape: [batch_size, hidden_dim]
+            return_dict: Sözlük dönmeyi belirler, False ise doğrudan embedding tensörü döner
             
         Returns:
-            Union[torch.Tensor, Dict[str, torch.Tensor]]: 
-                Normalize edilmiş arama gömmeleri [batch_size, output_dim]
-                veya bunları içeren bir sözlük
+            return_dict=True ise:
+                Dict[str, Tensor]: {'projections': çıktı tensörü}
+                
+            return_dict=False ise:
+                Tensor: çıktı tensörü, [batch_size, search_dim]
         """
-        # Giriş boyutlarını kontrol et
-        if x.dim() == 3:
-            # [batch_size, seq_len, input_dim] -> Ortalama havuzlama yap
-            x = x.mean(dim=1)
-        
-        # Girdi boyutunu doğrula
-        if x.shape[-1] != self.input_dim:
-            raise ValueError(f"Input dimension mismatch: expected {self.input_dim}, got {x.shape[-1]}")
-        
         # Doğrusal projeksiyon
-        projections = self.projection(x)
+        x = self.projection(x)
         
-        # Layer norm
-        projections = self.layer_norm(projections)
-        
-        # Dropout
-        projections = self.dropout(projections)
-        
-        # Konfigürasyona göre normalizasyon
+        # Normalizasyon (eğer isteniyorsa)
         if self.use_normalization:
-            if self.metric == "cosine" or self.metric == "inner_product":
-                # L2 normalizasyonu
-                search_embeddings = F.normalize(projections, p=2, dim=1)
-            else:
-                # Diğer metrikler için normalizasyon yok
-                search_embeddings = projections
-        else:
-            search_embeddings = projections
+            # Katman normalizasyonu
+            x = self.layer_norm(x)
+            
+            # Dropout
+            x = self.dropout(x)
+            
+            # L2 normalizasyon
+            if self.metric == "cosine":
+                x = F.normalize(x, p=2, dim=-1)
         
         if return_dict:
-            return {
-                "search_embedding": search_embeddings,  # backward compatibility için search_embedding
-                "search_embeddings": search_embeddings,
-                "projections": projections
-            }
-        else:
-            return search_embeddings 
+            return {"projections": x}
+        return x 

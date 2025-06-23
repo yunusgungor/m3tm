@@ -767,64 +767,39 @@
     },
     {
       "pattern_id": "PT-027",
-      "name": "MobileOptimizationPattern",
-      "category": "optimization",
-      "description": "Modelleri mobil cihazlarda verimli çalışacak şekilde optimize eden desen",
+      "name": "MultimodalAttention",
+      "category": "fusion",
+      "description": "Çapraz dikkat mekanizması kullanarak farklı modaliteleri (metin, görüntü) birleştiren bir multimodal füzyon deseni",
       "benefits": [
-        "Düşük depolama gereksinimleri",
-        "Hızlı çıkarım süresi",
-        "Batarya kullanımını azaltma",
-        "Sınırlı donanım kaynaklarında performans sağlama"
+        "Modaliteler arası etkileşimi dikkat mekanizması ile modelleyebilme",
+        "Farklı modalitelere dinamik olarak ağırlık verebilme",
+        "İçeriğe duyarlı füzyon yapabilme",
+        "Modalitelerin önem derecesini otomatik olarak belirleyebilme"
       ],
-      "implementation_notes": "Modellerden gereksiz katmanları kaldırma, kuantalama, budama (pruning), model sıkıştırma ve platform spesifik optimizasyonlar uygulanır. Genellikle optimize_model_for_mobile gibi işlevlerle gerçekleştirilir ve TorchScript veya ONNX formatına dönüştürme içerebilir.",
+      "implementation_notes": "Hem metin hem de görüntü modalitelerinden gelen özellikleri bir query-key-value dikkat mekanizması ile birleştirir. Query modalitelerin ortalama değerinden, key ve value ise her bir modaliteden elde edilir. Dikkat skorları softmax ile normalize edilir ve çıktı weighted-sum olarak hesaplanır.",
       "examples": [
-        "m3tm.mobile.optimization.optimize_model_for_mobile",
-        "tests/training/test_on_device_training.py"
+        "m3tm.fusion.cross_attention_fusion.CrossAttentionFusion"
       ],
-      "related_patterns": ["PT-025", "PT-021"],
-      "last_updated": "2024-06-23"
+      "related_patterns": ["PT-003", "PT-028"],
+      "last_updated": "2024-06-24"
     },
     {
       "pattern_id": "PT-028",
-      "name": "TestFixturePattern",
-      "category": "testing",
-      "description": "Test öncesi ortam kurulumu ve test sonrası temizleme işlemlerini standartlaştıran desen",
+      "name": "AdaptiveWeighting",
+      "category": "fusion",
+      "description": "Modalitelerin içeriğine göre adaptif ağırlıklandırma yapan bir multimodal füzyon deseni",
       "benefits": [
-        "Test kodunun yeniden kullanılabilirliği",
-        "Tekrarlanan kurulum/temizleme kodunun azaltılması",
-        "Test izolasyonunun sağlanması",
-        "Kaynakların etkin yönetimi"
+        "İçeriğe duyarlı füzyon yapabilme",
+        "Modalitelerin önemini dinamik olarak belirleyebilme",
+        "Tek modalite durumlarını otomatik olarak ele alabilme",
+        "Öğrenilebilir ağırlıklandırma mekanizması"
       ],
-      "implementation_notes": "pytest fixture'ları kullanarak, testlerin ihtiyaç duyduğu nesnelerin oluşturulması ve testlerden sonra temizlenmesi sağlanır. Özellikle bellek yoğun işlemlerde önemlidir.",
+      "implementation_notes": "Modalitelerden gelen özellikleri önce birleştirir, ardından bu birleşik özellikler üzerinde çalışan bir MLP ile her bir modalite için ağırlık skoru oluşturur. Bu ağırlıklar softmax ile normalize edilir ve modalite temsillerinin ağırlıklı toplamı alınır.",
       "examples": [
-        "tests/training/test_on_device_training.py:model_fixture",
-        "tests/training/test_on_device_training.py:adapter_fixture",
-        "tests/training/test_on_device_training.py:trainer_fixture",
-        "tests/training/test_on_device_training.py:dummy_dataset"
+        "m3tm.fusion.adaptive_weighting_fusion.AdaptiveWeightingFusion"
       ],
-      "related_patterns": [],
-      "last_updated": "2024-06-23"
-    },
-    {
-      "pattern_id": "PT-029",
-      "name": "ParametrizedTestPattern",
-      "category": "testing",
-      "description": "Aynı test kodunu farklı parametrelerle çalıştırmayı sağlayan test deseni",
-      "benefits": [
-        "Test kapsamının artırılması",
-        "Tekrarlı test kodu yazımının azaltılması",
-        "Sınır değerlerin ve farklı senaryoların kolay test edilmesi",
-        "Test bakımının kolaylaştırılması"
-      ],
-      "implementation_notes": "pytest.mark.parametrize dekoratörü kullanılarak, aynı test fonksiyonu farklı giriş parametreleriyle birden çok kez çalıştırılır. Bu desen, özellikle farklı model boyutları, batch size'lar veya öğrenme oranları gibi değişkenlerin test edilmesinde kullanışlıdır.",
-      "examples": [
-        "tests/training/test_on_device_training.py:test_training_parameters",
-        "tests/training/test_on_device_training.py:test_boundary_batch_sizes",
-        "tests/training/test_on_device_training.py:test_boundary_sequence_lengths",
-        "tests/training/test_on_device_training.py:test_adapter_output_shape_property"
-      ],
-      "related_patterns": ["PT-028"],
-      "last_updated": "2024-06-23"
+      "related_patterns": ["PT-003", "PT-027"],
+      "last_updated": "2024-06-24"
     },
     {
       "multidimensional_parameter_sweep": {

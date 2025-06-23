@@ -17,6 +17,8 @@ class FusionType(Enum):
     CONCATENATION = "concatenation"
     WEIGHTED_SUM = "weighted_sum"
     GATED = "gated"
+    CROSS_ATTENTION = "cross_attention"
+    ADAPTIVE_WEIGHTING = "adaptive_weighting"
 
 
 @dataclass
@@ -127,4 +129,32 @@ class GatedFusionConfig(FusionConfig):
             raise ValueError(
                 f"gate_activation şunlardan biri olmalıdır: {valid_activations}, "
                 f"alınan: {self.gate_activation}"
-            ) 
+            )
+
+
+@dataclass
+class CrossAttentionFusionConfig(FusionConfig):
+    """
+    CrossAttention füzyon mekanizması için özel yapılandırma.
+    
+    Örüntü: ConfigurationComposite (PT-012), MultimodalAttention (PT-027)
+    """
+    fusion_type: FusionType = FusionType.CROSS_ATTENTION
+    
+    # CrossAttention özel parametreleri
+    num_heads: int = 4  # Dikkat mekanizmasındaki kafa sayısı
+    dropout: float = 0.1  # Dropout oranı
+
+
+@dataclass
+class AdaptiveWeightingFusionConfig(FusionConfig):
+    """
+    AdaptiveWeighting füzyon mekanizması için özel yapılandırma.
+    
+    Örüntü: ConfigurationComposite (PT-012), AdaptiveWeighting (PT-028)
+    """
+    fusion_type: FusionType = FusionType.ADAPTIVE_WEIGHTING
+    
+    # AdaptiveWeighting özel parametreleri
+    hidden_dim: int = 512  # Ağırlık tahmin ağındaki gizli katman boyutu
+    dropout: float = 0.1  # Dropout oranı 
