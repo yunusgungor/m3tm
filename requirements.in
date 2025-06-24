@@ -1,10 +1,12 @@
 torch
 torchvision
-numpy==1.25.2
+numpy<2
 pillow
 tqdm
 sentencepiece
 faiss-cpu
+pyyaml
+psutil
 
 # Development dependencies
 pytest

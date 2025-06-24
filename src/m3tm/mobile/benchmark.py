@@ -279,3 +279,58 @@ class MobileBenchmark:
             print(f"Rapor başarıyla kaydedildi: {output_path}")
             
         return report 
+
+
+def benchmark_model(
+    model: Union[nn.Module, BaseModel, torch.jit.ScriptModule],
+    example_inputs: Any,
+    model_name: str = "model",
+    device: str = "cpu",
+    num_runs: int = 100,
+    warmup_runs: int = 10
+) -> Dict[str, Any]:
+    """
+    Legacy function - Model benchmarking için kullanılan ana fonksiyon.
+    
+    Args:
+        model: Benchmark yapılacak model
+        example_inputs: Örnek girdiler  
+        model_name: Model adı
+        device: Çalıştırılacak cihaz
+        num_runs: Ölçüm sayısı
+        warmup_runs: Isınma turu sayısı
+        
+    Returns:
+        Benchmark sonuçları
+    """
+    benchmark = MobileBenchmark()
+    
+    # Çıkarım süresi benchmarkı
+    latency_results = benchmark.benchmark_inference_time(
+        model=model,
+        example_inputs=example_inputs,
+        num_runs=num_runs,
+        warmup_runs=warmup_runs,
+        device=device
+    )
+    
+    # Bellek kullanımı benchmarkı
+    memory_results = benchmark.benchmark_memory_usage(
+        model=model,
+        example_inputs=example_inputs,
+        device=device
+    )
+    
+    # Model boyutu benchmarkı
+    size_results = benchmark.benchmark_model_size(model)
+    
+    # Sonuçları birleştir
+    results = {
+        "model_name": model_name,
+        "device": device,
+        **latency_results,
+        **memory_results,
+        **size_results
+    }
+    
+    return results
