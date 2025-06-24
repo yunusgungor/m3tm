@@ -1,0 +1,100 @@
+{
+  "identified_technologies": [
+    {
+      "category": "framework",
+      "name": "PyTorch",
+      "version": "2.2.2",
+      "critical": true,
+      "usage": "Core ML framework for model development",
+      "documentation_priority": "high"
+    },
+    {
+      "category": "framework", 
+      "name": "Android SDK",
+      "version": "33",
+      "critical": true,
+      "usage": "Mobile SDK development for Android",
+      "documentation_priority": "high"
+    },
+    {
+      "category": "library",
+      "name": "TorchVision", 
+      "version": "0.17.2",
+      "critical": true,
+      "usage": "Computer vision and image processing",
+      "documentation_priority": "high"
+    },
+    {
+      "category": "library",
+      "name": "FAISS",
+      "version": "1.11.0", 
+      "critical": true,
+      "usage": "Similarity search and clustering",
+      "documentation_priority": "high"
+    },
+    {
+      "category": "library",
+      "name": "SentencePiece",
+      "version": "0.2.0",
+      "critical": true,
+      "usage": "Text tokenization",
+      "documentation_priority": "medium"
+    },
+    {
+      "category": "tool",
+      "name": "CMake",
+      "version": "latest",
+      "critical": true,
+      "usage": "Native C++ build system for Android",
+      "documentation_priority": "medium"
+    },
+    {
+      "category": "framework",
+      "name": "JNI",
+      "version": "latest",
+      "critical": true,
+      "usage": "Java Native Interface for Android integration",
+      "documentation_priority": "medium"
+    },
+    {
+      "category": "tool",
+      "name": "TensorBoard",
+      "version": "2.19.0",
+      "critical": false,
+      "usage": "Model visualization and monitoring",
+      "documentation_priority": "low"
+    },
+    {
+      "category": "tool",
+      "name": "Pytest",
+      "version": "8.3.5",
+      "critical": false,
+      "usage": "Testing framework",
+      "documentation_priority": "low"
+    },
+    {
+      "category": "tool",
+      "name": "Sphinx",
+      "version": "8.2.3",
+      "critical": false,
+      "usage": "Documentation generation",
+      "documentation_priority": "low"
+    }
+  ],
+  "documentation_status": {
+    "PyTorch": "pending",
+    "Android SDK": "pending", 
+    "TorchVision": "pending",
+    "FAISS": "pending",
+    "SentencePiece": "pending",
+    "CMake": "pending",
+    "JNI": "pending",
+    "TensorBoard": "pending",
+    "Pytest": "pending",
+    "Sphinx": "pending"
+  },
+  "mobile_platforms": ["Android", "iOS"],
+  "ai_ml_stack": ["PyTorch", "TorchVision", "FAISS", "SentencePiece"],
+  "build_tools": ["CMake", "Gradle", "setuptools"],
+  "last_analysis": "2025-06-24T00:00:00Z"
+}

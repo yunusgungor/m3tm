@@ -1,0 +1,76 @@
+{
+  "technologies": [
+    {
+      "name": "PyTorch",
+      "category": "framework",
+      "file_path": "frameworks/pytorch_mobile_optimization.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/pytorch/pytorch",
+      "topics": ["mobile optimization", "performance", "quantization", "deployment"]
+    },
+    {
+      "name": "TIMM",
+      "category": "library",
+      "file_path": "libraries/timm_mobile_optimization.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/huggingface/pytorch-image-models",
+      "topics": ["mobile optimization", "model architecture", "efficient models"]
+    },
+    {
+      "name": "FAISS",
+      "category": "library",
+      "file_path": "libraries/faiss_mobile_optimization.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/facebookresearch/faiss",
+      "topics": ["mobile optimization", "similarity search", "vector databases"]
+    },
+    {
+      "name": "SentencePiece",
+      "category": "library",
+      "file_path": "libraries/sentencepiece_mobile_optimization.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/google/sentencepiece",
+      "topics": ["mobile optimization", "tokenization", "performance", "memory"]
+    },
+    {
+      "name": "CMake",
+      "category": "framework",
+      "file_path": "frameworks/cmake_mobile_crossplatform.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/kitware/cmake",
+      "topics": ["mobile cross-platform", "Android iOS toolchain", "optimization"]
+    },
+    {
+      "name": "JNI",
+      "category": "api",
+      "file_path": "apis/jni_android_development.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/androidx/androidx",
+      "topics": ["JNI native interface", "Android NDK", "performance optimization"]
+    },
+    {
+      "name": "TorchVision",
+      "category": "library",
+      "file_path": "libraries/torchvision_mobile_optimization.md",
+      "last_updated": "2024-12-28T00:00:00Z",
+      "context7_id": "/pytorch/pytorch",
+      "topics": ["computer vision", "mobile optimization", "CNN architecture", "image processing"]
+    }
+  ],
+  "last_updated": "2024-12-28T00:00:00Z",
+  "version_tracking": {
+    "pytorch": "latest",
+    "timm": "latest",
+    "faiss": "latest",
+    "sentencepiece": "latest",
+    "cmake": "latest",
+    "jni": "latest",
+    "torchvision": "latest"
+  },
+  "cache_metadata": {
+    "cache_version": "1.0",
+    "created_date": "2025-06-24T00:00:00Z",
+    "total_documents": 7,
+    "total_size_mb": 2.8
+  }
+}
