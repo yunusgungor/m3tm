@@ -2,7 +2,7 @@
   "story_id": "story_22",
   "title": "Model küçültme ve optimizasyon",
   "description": "M³TM modelinin mobil cihazlarda verimli çalışması için quantization, pruning, knowledge distillation ve TorchScript optimizasyonu tekniklerini uygulama",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "high",
   "business_value": 9,
   "technical_complexity": 8,
