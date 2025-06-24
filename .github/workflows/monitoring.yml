@@ -1,0 +1,224 @@
+name: M³TM Performance Monitoring
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  performance-monitoring:
+    name: Performance Monitoring
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-monitoring-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-monitoring-
+          
+    - name: Install monitoring dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install psutil memory-profiler py-spy
+        
+    - name: Run performance benchmarks
+      run: |
+        python -m pytest tests/unit/test_mobile_optimization.py::test_mobile_optimization_benchmarks -v
+        
+    - name: Generate performance report
+      run: |
+        python examples/mobile_optimization_example.py --benchmark --output-report performance_report.json
+        
+    - name: Memory profiling
+      run: |
+        python -m memory_profiler examples/simplified_mobile_demo.py
+        
+    - name: Upload performance artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-reports-${{ github.run_number }}
+        path: |
+          performance_report.json
+          *.dat
+        retention-days: 90
+
+  infrastructure-monitoring:
+    name: Infrastructure Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check Android build environment
+      run: |
+        echo "Checking Android SDK..."
+        ls -la $ANDROID_HOME/platforms/ || echo "Android SDK not found"
+        
+    - name: Check PyTorch installation
+      run: |
+        python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
+        python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
+        
+    - name: System resource check
+      run: |
+        echo "=== System Information ==="
+        uname -a
+        echo "=== CPU Information ==="
+        lscpu
+        echo "=== Memory Information ==="
+        free -h
+        echo "=== Disk Space ==="
+        df -h
+        
+    - name: Dependency vulnerability scan
+      run: |
+        pip install safety
+        safety check --json --output vulnerability_report.json || true
+        
+    - name: Upload infrastructure reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: infrastructure-reports-${{ github.run_number }}
+        path: |
+          vulnerability_report.json
+        retention-days: 30
+
+  model-health-check:
+    name: Model Health Monitoring
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Check model integrity
+      run: |
+        python -c "
+        import torch
+        import os
+        
+        model_dir = 'model_checkpoints'
+        if os.path.exists(model_dir):
+            for file in os.listdir(model_dir):
+                if file.endswith('.pt'):
+                    try:
+                        model_path = os.path.join(model_dir, file)
+                        model = torch.load(model_path, map_location='cpu')
+                        print(f'✓ {file}: Model loaded successfully')
+                    except Exception as e:
+                        print(f'✗ {file}: Error loading model - {e}')
+        else:
+            print('No model checkpoints directory found')
+        "
+        
+    - name: Test model inference
+      run: |
+        python examples/simplified_mobile_demo.py --test-mode --quick-test
+        
+    - name: Model performance regression test
+      run: |
+        python -c "
+        import time
+        import torch
+        from src.m3tm.examples.simplified_mobile_demo import quick_inference_test
+        
+        # Run multiple inference tests and measure performance
+        times = []
+        for i in range(5):
+            start = time.time()
+            try:
+                quick_inference_test()
+                end = time.time()
+                times.append(end - start)
+                print(f'Inference test {i+1}: {end - start:.3f}s')
+            except Exception as e:
+                print(f'Inference test {i+1} failed: {e}')
+        
+        if times:
+            avg_time = sum(times) / len(times)
+            print(f'Average inference time: {avg_time:.3f}s')
+            
+            # Alert if inference is too slow (>2 seconds)
+            if avg_time > 2.0:
+                print('⚠️ WARNING: Inference time exceeds 2 seconds')
+                exit(1)
+            else:
+                print('✓ Inference performance is within acceptable range')
+        "
+
+  notification:
+    name: Send Monitoring Report
+    runs-on: ubuntu-latest
+    needs: [performance-monitoring, infrastructure-monitoring, model-health-check]
+    if: always()
+    
+    steps:
+    - name: Download all monitoring artifacts
+      uses: actions/download-artifact@v3
+      
+    - name: Prepare monitoring summary
+      run: |
+        echo "# M³TM Monitoring Report - $(date)" > monitoring_summary.md
+        echo "" >> monitoring_summary.md
+        echo "## Job Status" >> monitoring_summary.md
+        echo "- Performance Monitoring: ${{ needs.performance-monitoring.result }}" >> monitoring_summary.md
+        echo "- Infrastructure Monitoring: ${{ needs.infrastructure-monitoring.result }}" >> monitoring_summary.md
+        echo "- Model Health Check: ${{ needs.model-health-check.result }}" >> monitoring_summary.md
+        echo "" >> monitoring_summary.md
+        echo "## Artifacts Generated" >> monitoring_summary.md
+        ls -la | grep performance-reports || echo "No performance reports"
+        ls -la | grep infrastructure-reports || echo "No infrastructure reports"
+        
+    - name: Create monitoring issue on failure
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: '🚨 M³TM Monitoring Alert - ' + new Date().toISOString().split('T')[0],
+            body: `
+            ## Monitoring Alert
+            
+            One or more monitoring jobs have failed.
+            
+            **Job Results:**
+            - Performance Monitoring: ${{ needs.performance-monitoring.result }}
+            - Infrastructure Monitoring: ${{ needs.infrastructure-monitoring.result }}
+            - Model Health Check: ${{ needs.model-health-check.result }}
+            
+            **Workflow Run:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            Please investigate and resolve any issues.
+            `,
+            labels: ['monitoring', 'alert', 'high-priority']
+          })

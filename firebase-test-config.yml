@@ -1,0 +1,83 @@
+# M³TM Firebase Test Lab Configuration
+# Enhanced with Context7 best practices
+
+# Test APK configuration
+test-setup:
+  app: ./android/app/build/outputs/apk/debug/app-debug.apk
+  test: ./android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+
+# Comprehensive device matrix for M³TM testing
+device:
+  # Popular phones - Different Android versions
+  - model: Pixel2
+    version: 28  # Android 9
+    locale: en
+    orientation: portrait
+  - model: MediumPhone.arm
+    version: 30  # Android 11
+    locale: en
+    orientation: portrait
+  - model: Pixel6
+    version: 31  # Android 12
+    locale: en
+    orientation: portrait
+  - model: MediumPhone.arm
+    version: 33  # Android 13
+    locale: en
+    orientation: portrait
+    
+  # Tablet testing for different form factors
+  - model: MediumTablet.arm
+    version: 30
+    locale: en
+    orientation: landscape
+    
+  # Low-end device for performance testing
+  - model: LowEndPhone
+    version: 29
+    locale: en
+    orientation: portrait
+
+# Test targets specifically for M³TM functionality
+test-targets:
+  # Core M³TM tests
+  - class com.m3tm.core.M3TMCoreTest
+  - class com.m3tm.inference.InferenceTest
+  - class com.m3tm.optimization.OptimizationTest
+  
+  # Integration tests
+  - class com.m3tm.integration.EndToEndTest
+  - class com.m3tm.integration.PerformanceTest
+  
+  # UI tests
+  - class com.m3tm.ui.MainActivityTest
+  - class com.m3tm.ui.DemoActivityTest
+
+# Test execution configuration
+test-timeout: 20m
+results-bucket: gs://m3tm-firebase-test-results
+results-dir: m3tm-test-$(date +%Y%m%d_%H%M%S)
+
+# Performance and debugging settings
+performance-metrics: true
+video-quality: high
+record-video: true
+capture-screenshots: true
+
+# Additional test arguments for M³TM
+test-runner-class: androidx.test.runner.AndroidJUnitRunner
+test-targets-for-shard: true
+
+# Environment variables for tests
+environment-variables:
+  M3TM_TEST_MODE: "firebase_test_lab"
+  M3TM_PERFORMANCE_TEST: "true"
+  M3TM_LOG_LEVEL: "debug"
+
+# Network profile for testing under different conditions
+network-profile: LTE
+
+# Test sharding for faster execution
+num-flaky-test-attempts: 3
+disable-performance-metrics: false
+disable-video-recording: false

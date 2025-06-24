@@ -23,3 +23,14 @@ sphinx-rtd-theme
 tensorboard
 
 aiohttp>=3.8.0
+
+# Observability and monitoring
+matplotlib
+seaborn
+pandas
+requests
+
+# Mobile optimization and acceleration
+coremltools; sys_platform == "darwin"
+psutil
+sqlite3; python_version >= "3.0"

@@ -1,6 +1,8 @@
 # M³TM Mobile - Fastlane Configuration
 # Enhanced with Context7 best practices
 
+require_relative './MonitoringLanes'
+
 default_platform(:android)
 
 platform :android do

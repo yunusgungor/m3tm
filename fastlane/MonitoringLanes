@@ -1,0 +1,235 @@
+# M³TM Production Monitoring & Observability
+# Enhanced with Context7 best practices
+
+desc "Production health monitoring"
+lane :monitor_production do
+  # Performance monitoring
+  performance_data = {}
+  
+  # Check Firebase Analytics
+  if ENV['FIREBASE_PROJECT_ID']
+    puts "📊 Checking Firebase Analytics..."
+    # Firebase analytics check would go here
+    performance_data[:firebase_active_users] = "checking..."
+    performance_data[:crash_free_rate] = "checking..."
+  end
+  
+  # Check app store metrics
+  if ENV['APP_STORE_CONNECT_API_KEY']
+    puts "📈 Checking App Store metrics..."
+    app_store_versions_info(
+      platform: :ios,
+      app_identifier: ENV['IOS_BUNDLE_IDENTIFIER']
+    )
+  end
+  
+  # Check Play Console metrics
+  if ENV['PLAY_STORE_JSON_KEY']
+    puts "📱 Checking Google Play metrics..."
+    # Play Console metrics check would go here
+  end
+  
+  # Model performance check
+  puts "🧠 Checking model performance..."
+  performance_report = sh("python ../examples/mobile_optimization_example.py --benchmark --json-output")
+  
+  # Memory usage monitoring
+  puts "💾 Checking memory usage..."
+  memory_report = sh("python -c \"
+import psutil
+import json
+memory = psutil.virtual_memory()
+print(json.dumps({
+  'total': memory.total,
+  'available': memory.available,
+  'percent': memory.percent,
+  'used': memory.used
+}))\"")
+  
+  # Generate monitoring report
+  monitoring_report = {
+    timestamp: Time.now.iso8601,
+    performance: performance_data,
+    memory: JSON.parse(memory_report),
+    status: "healthy"
+  }
+  
+  # Save monitoring data
+  File.write("../monitoring_report.json", JSON.pretty_generate(monitoring_report))
+  
+  # Send alerts if needed
+  if performance_data[:crash_free_rate] && performance_data[:crash_free_rate].to_f < 99.0
+    slack(
+      message: "🚨 ALERT: Crash rate is below 99%",
+      channel: "#alerts",
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  puts "✅ Production monitoring completed"
+end
+
+desc "Performance regression testing"
+lane :performance_test do
+  puts "🏃‍♂️ Running performance regression tests..."
+  
+  # Baseline performance metrics
+  baseline_file = "../performance_baseline.json"
+  current_metrics = {}
+  
+  # Run inference benchmarks
+  benchmark_output = sh("python ../examples/mobile_optimization_example.py --benchmark --detailed")
+  
+  # Parse benchmark results
+  current_metrics = JSON.parse(benchmark_output) rescue {}
+  
+  if File.exist?(baseline_file)
+    baseline_metrics = JSON.parse(File.read(baseline_file))
+    
+    # Compare with baseline
+    if current_metrics['inference_time'] && baseline_metrics['inference_time']
+      performance_change = ((current_metrics['inference_time'] - baseline_metrics['inference_time']) / baseline_metrics['inference_time']) * 100
+      
+      if performance_change > 10.0  # 10% performance degradation threshold
+        slack(
+          message: "⚠️ Performance regression detected: #{performance_change.round(2)}% slower than baseline",
+          channel: "#performance-alerts",
+          slack_url: ENV['SLACK_WEBHOOK_URL']
+        ) if ENV['SLACK_WEBHOOK_URL']
+        
+        UI.important("Performance regression detected!")
+      elsif performance_change < -5.0  # 5% improvement
+        slack(
+          message: "🚀 Performance improvement: #{(-performance_change).round(2)}% faster than baseline",
+          channel: "#performance-alerts",
+          slack_url: ENV['SLACK_WEBHOOK_URL']
+        ) if ENV['SLACK_WEBHOOK_URL']
+      end
+    end
+  else
+    puts "📝 Creating baseline performance metrics..."
+    File.write(baseline_file, JSON.pretty_generate(current_metrics))
+  end
+  
+  puts "✅ Performance testing completed"
+end
+
+desc "Security monitoring"
+lane :security_scan do
+  puts "🔒 Running security scans..."
+  
+  # Dependency vulnerability scan
+  puts "🔍 Scanning dependencies..."
+  sh("pip install safety")
+  safety_output = sh("safety check --json", error_callback: ->(result) {})
+  
+  # Code security scan
+  puts "🔍 Scanning code..."
+  sh("pip install bandit")
+  bandit_output = sh("bandit -r ../src/ -f json", error_callback: ->(result) {})
+  
+  # Parse security results
+  security_issues = 0
+  
+  begin
+    safety_results = JSON.parse(safety_output)
+    security_issues += safety_results.length if safety_results.is_a?(Array)
+  rescue JSON::ParserError
+    puts "Could not parse safety output"
+  end
+  
+  begin
+    bandit_results = JSON.parse(bandit_output)
+    security_issues += bandit_results['results'].length if bandit_results['results']
+  rescue JSON::ParserError
+    puts "Could not parse bandit output"
+  end
+  
+  # Generate security report
+  security_report = {
+    timestamp: Time.now.iso8601,
+    total_issues: security_issues,
+    safety_scan: safety_output,
+    bandit_scan: bandit_output,
+    status: security_issues == 0 ? "clean" : "issues_found"
+  }
+  
+  File.write("../security_report.json", JSON.pretty_generate(security_report))
+  
+  # Send alert if security issues found
+  if security_issues > 0
+    slack(
+      message: "🚨 Security issues found: #{security_issues} total issues detected",
+      channel: "#security-alerts",
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  puts "✅ Security scan completed"
+end
+
+desc "Comprehensive health check"
+lane :health_check do
+  puts "🏥 Running comprehensive health check..."
+  
+  health_status = {
+    timestamp: Time.now.iso8601,
+    checks: {},
+    overall_status: "healthy"
+  }
+  
+  # Check critical dependencies
+  begin
+    sh("python -c 'import torch; import transformers; print(\"Dependencies OK\")'")
+    health_status[:checks][:dependencies] = "healthy"
+  rescue
+    health_status[:checks][:dependencies] = "unhealthy"
+    health_status[:overall_status] = "unhealthy"
+  end
+  
+  # Check model files
+  model_files_exist = Dir.glob("../model_checkpoints/*.pt").any?
+  health_status[:checks][:model_files] = model_files_exist ? "healthy" : "warning"
+  
+  # Check disk space
+  disk_usage = sh("df -h . | tail -1 | awk '{print $5}' | sed 's/%//'").to_i
+  health_status[:checks][:disk_space] = disk_usage < 90 ? "healthy" : "warning"
+  
+  # Check memory usage
+  begin
+    memory_info = JSON.parse(sh("python -c \"
+import psutil
+import json
+memory = psutil.virtual_memory()
+print(json.dumps({'percent': memory.percent}))\""))
+    
+    health_status[:checks][:memory] = memory_info['percent'] < 85 ? "healthy" : "warning"
+  rescue
+    health_status[:checks][:memory] = "unknown"
+  end
+  
+  # Save health check results
+  File.write("../health_check.json", JSON.pretty_generate(health_status))
+  
+  # Send summary
+  if health_status[:overall_status] != "healthy"
+    slack(
+      message: "⚠️ Health check detected issues. Check health_check.json for details.",
+      channel: "#monitoring",
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  puts "✅ Health check completed: #{health_status[:overall_status]}"
+end
+
+# Automated monitoring lane that runs all checks
+desc "Run full monitoring suite"
+lane :monitor_all do
+  monitor_production
+  performance_test
+  security_scan
+  health_check
+  
+  puts "🎯 Full monitoring suite completed!"
+end

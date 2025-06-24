@@ -40,6 +40,11 @@ from m3tm.mobile.pruning import PruningManager, create_pruning_pipeline, MOBILE_
 from m3tm.mobile.knowledge_distillation import DistillationTrainer, create_distillation_pipeline
 from m3tm.mobile.torchscript_converter import TorchScriptConverter, create_torchscript_pipeline
 
+# S26: Advanced mobile optimization modules (Context7 enhanced)
+from m3tm.mobile.advanced_cache import AdvancedCacheManager, CacheConfig
+from m3tm.mobile.advanced_profiler import AdvancedPerformanceProfiler, ProfilingConfig
+from m3tm.mobile.hardware_acceleration import HardwareAccelerationManager, AccelerationConfig
+
 logger = logging.getLogger(__name__)
 
 
@@ -49,6 +54,7 @@ class Context7OptimizationConfig:
     
     Implements mobile-first optimization strategies based on current
     PyTorch best practices from official documentation.
+    S26 Enhanced: Advanced caching, profiling, and hardware acceleration.
     """
     
     def __init__(self,
@@ -70,12 +76,21 @@ class Context7OptimizationConfig:
                  enable_knowledge_distillation: bool = True,
                  enable_torch_compile: bool = True,
                  
+                 # S26: Advanced mobile optimization features
+                 enable_advanced_caching: bool = True,
+                 enable_advanced_profiling: bool = True,
+                 enable_hardware_acceleration: bool = True,
+                 cache_strategy: str = "multi_level",  # multi_level, memory_only, persistent
+                 profiling_level: str = "comprehensive",  # basic, standard, comprehensive
+                 hardware_targets: Optional[List[str]] = None,  # ["nnapi", "coreml", "gpu"]
+                 
                  # Context7: Validation and safety
                  validation_frequency: int = 1,  # Validate after each technique
                  early_stopping_threshold: float = 0.02,  # Stop if accuracy drops too much
                  checkpoint_enabled: bool = True):
         """
         Context7-enhanced optimization configuration.
+        S26 Enhanced: Advanced caching, profiling, and hardware acceleration.
         
         Args:
             target_size_reduction: Hedef boyut azaltımı (0.0-1.0)
@@ -90,6 +105,12 @@ class Context7OptimizationConfig:
             enable_structured_pruning: Structured pruning kullan (real speedup)
             enable_knowledge_distillation: Knowledge distillation kullan
             enable_torch_compile: torch.compile optimization kullan
+            enable_advanced_caching: S26 Advanced caching system
+            enable_advanced_profiling: S26 Comprehensive profiling
+            enable_hardware_acceleration: S26 Hardware acceleration
+            cache_strategy: Cache stratejisi
+            profiling_level: Profiling detay seviyesi
+            hardware_targets: Donanım hedefleri
             validation_frequency: Validation sıklığı
             early_stopping_threshold: Erken durdurma eşiği
             checkpoint_enabled: Checkpoint kaydetme aktif
@@ -116,6 +137,14 @@ class Context7OptimizationConfig:
         self.enable_knowledge_distillation = enable_knowledge_distillation
         self.enable_torch_compile = enable_torch_compile
         
+        # S26: Advanced mobile optimization settings
+        self.enable_advanced_caching = enable_advanced_caching
+        self.enable_advanced_profiling = enable_advanced_profiling
+        self.enable_hardware_acceleration = enable_hardware_acceleration
+        self.cache_strategy = cache_strategy
+        self.profiling_level = profiling_level
+        self.hardware_targets = hardware_targets or ["nnapi", "coreml", "gpu"]
+        
         # Context7: Validation and safety
         self.validation_frequency = validation_frequency
         self.early_stopping_threshold = early_stopping_threshold
@@ -124,6 +153,8 @@ class Context7OptimizationConfig:
         logger.info(f"Context7 optimization config: techniques={optimization_techniques}, "
                    f"targets=size:{target_size_reduction:.0%}, speed:{target_speed_improvement}x, "
                    f"memory:{target_memory_reduction:.0%}")
+        logger.info(f"S26 advanced features: cache={enable_advanced_caching}, "
+                   f"profile={enable_advanced_profiling}, hw_accel={enable_hardware_acceleration}")
 
 
 class OptimizationPipeline:
@@ -132,6 +163,12 @@ class OptimizationPipeline:
     
     Context7 documentation'dan alınan best practices ile geliştirilmiş
     comprehensive optimization pipeline. Mobile deployment için optimize edilmiştir.
+    
+    S26 Enhanced Features:
+    - Advanced multi-level persistent caching system
+    - Comprehensive device profiling with battery/thermal monitoring
+    - Hardware acceleration layer (NNAPI/CoreML/GPU)
+    - Real-time performance analytics and regression detection
     
     Features:
     - Multi-technique orchestration with optimal ordering
@@ -146,6 +183,7 @@ class OptimizationPipeline:
                  benchmarker: Optional[ModelBenchmarker] = None):
         """
         Context7-enhanced OptimizationPipeline initialization.
+        S26 Enhanced: Advanced caching, profiling, and hardware acceleration.
         
         Args:
             config: Optimization configuration
@@ -163,6 +201,41 @@ class OptimizationPipeline:
         )
         self.distillation_trainer = create_distillation_pipeline()
         self.torchscript_converter = create_torchscript_pipeline()
+        
+        # S26: Initialize advanced mobile optimization modules
+        self.advanced_cache = None
+        self.advanced_profiler = None
+        self.hardware_accelerator = None
+        
+        if self.config.enable_advanced_caching:
+            cache_config = CacheConfig(
+                strategy=self.config.cache_strategy,
+                max_cache_size_mb=512,  # 512MB cache
+                enable_persistent=True,
+                enable_analytics=True
+            )
+            self.advanced_cache = AdvancedCacheManager(cache_config)
+            logger.info("S26 Advanced caching initialized")
+        
+        if self.config.enable_advanced_profiling:
+            profiling_config = ProfilingConfig(
+                level=self.config.profiling_level,
+                enable_battery_monitoring=True,
+                enable_thermal_monitoring=True,
+                enable_regression_detection=True,
+                enable_device_analytics=True
+            )
+            self.advanced_profiler = AdvancedPerformanceProfiler()
+            logger.info("S26 Advanced profiling initialized")
+        
+        if self.config.enable_hardware_acceleration:
+            accel_config = AccelerationConfig(
+                target_platforms=self.config.hardware_targets,
+                enable_fallback=True,
+                auto_select_optimal=True
+            )
+            self.hardware_accelerator = HardwareAccelerationManager(accel_config)
+            logger.info("S26 Hardware acceleration initialized")
         
         # Context7: Track optimization state
         self.optimization_history = []
@@ -195,6 +268,25 @@ class OptimizationPipeline:
         """
         logger.info("Starting Context7-enhanced model optimization pipeline")
         
+        # S26: Advanced initialization - cache, profiling, hardware acceleration
+        if self.advanced_cache:
+            # Check cache for previously optimized model
+            cache_key = self.advanced_cache.generate_cache_key(model, self.config)
+            cached_result = self.advanced_cache.get_cached_result(cache_key)
+            if cached_result:
+                logger.info("S26: Found cached optimized model, returning cached result")
+                return cached_result['model'], cached_result['metrics']
+                
+        if self.advanced_profiler:
+            # Start comprehensive profiling
+            self.advanced_profiler.start_profiling_session(model)
+            logger.info("S26: Advanced profiling session started")
+            
+        if self.hardware_accelerator:
+            # Initialize hardware acceleration
+            self.hardware_accelerator.initialize_for_model(model)
+            logger.info("S26: Hardware acceleration initialized")
+        
         # Context7: Initial benchmarking
         original_model = copy.deepcopy(model)
         current_model = model
@@ -203,8 +295,16 @@ class OptimizationPipeline:
         baseline_metrics = self._get_baseline_metrics(original_model)
         self.current_metrics = baseline_metrics.copy()
         
+        # S26: Enhanced baseline metrics with advanced profiling
+        if self.advanced_profiler:
+            advanced_baseline = self.advanced_profiler.profile_model_inference(original_model)
+            baseline_metrics.update(advanced_baseline)
+        
         logger.info(f"Baseline metrics: size={baseline_metrics.get('model_size_mb', 0):.1f}MB, "
                    f"params={baseline_metrics.get('total_parameters', 0):,}")
+        if self.advanced_profiler:
+            logger.info(f"S26 Advanced baseline: battery={baseline_metrics.get('battery_impact', 'N/A')}, "
+                       f"thermal={baseline_metrics.get('thermal_impact', 'N/A')}")
         
         try:
             # Context7: Execute optimization techniques in optimal order
@@ -236,6 +336,19 @@ class OptimizationPipeline:
                     logger.warning(f"Unknown optimization technique: {technique}")
                     continue
                 
+                # S26: Advanced profiling after each technique
+                if self.advanced_profiler:
+                    step_profiling = self.advanced_profiler.profile_model_inference(current_model)
+                    technique_metrics.update({f"{technique}_profiling": step_profiling})
+                    
+                    # Check for performance regression at each step
+                    if len(self.optimization_history) > 0:
+                        previous_metrics = self.optimization_history[-1]['metrics']
+                        regression_check = self.advanced_profiler.detect_performance_regression(
+                            previous_metrics, technique_metrics
+                        )
+                        technique_metrics[f"{technique}_regression_check"] = regression_check
+                
                 # Context7: Validate after each technique
                 if self.config.validation_frequency > 0:
                     validation_metrics = self._validate_optimization_step(
@@ -263,6 +376,49 @@ class OptimizationPipeline:
                 
             # Context7: Final comprehensive evaluation
             final_metrics = self._get_final_metrics(original_model, current_model)
+            
+            # S26: Enhanced final evaluation with advanced modules
+            if self.advanced_profiler:
+                # Final profiling and regression detection
+                final_profiling = self.advanced_profiler.profile_model_inference(current_model)
+                regression_analysis = self.advanced_profiler.detect_performance_regression(
+                    baseline_metrics, final_profiling
+                )
+                final_metrics.update(final_profiling)
+                final_metrics['regression_analysis'] = regression_analysis
+                
+                # Stop profiling session
+                profiling_summary = self.advanced_profiler.stop_profiling_session()
+                final_metrics['profiling_summary'] = profiling_summary
+                
+            if self.hardware_accelerator:
+                # Apply hardware acceleration to optimized model
+                try:
+                    accelerated_model = self.hardware_accelerator.accelerate_model(current_model)
+                    acceleration_metrics = self.hardware_accelerator.benchmark_acceleration(
+                        current_model, accelerated_model
+                    )
+                    current_model = accelerated_model
+                    final_metrics['hardware_acceleration'] = acceleration_metrics
+                    logger.info("S26: Hardware acceleration applied successfully")
+                except Exception as e:
+                    logger.warning(f"S26: Hardware acceleration failed: {e}")
+                    final_metrics['hardware_acceleration'] = {"error": str(e)}
+                    
+            if self.advanced_cache:
+                # Cache the optimized model for future use
+                cache_key = self.advanced_cache.generate_cache_key(original_model, self.config)
+                cache_result = {
+                    'model': current_model,
+                    'metrics': final_metrics,
+                    'optimization_history': self.optimization_history
+                }
+                self.advanced_cache.cache_result(cache_key, cache_result)
+                
+                # Update cache analytics
+                cache_analytics = self.advanced_cache.get_cache_analytics()
+                final_metrics['cache_analytics'] = cache_analytics
+                logger.info("S26: Optimized model cached successfully")
             
             # Context7: Apply torch.compile if enabled and supported
             if self.config.enable_torch_compile:
