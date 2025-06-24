@@ -226,9 +226,43 @@ The system manages all metadata and operational files within `.project_meta`, en
   - `.project_meta/.context7/fetched_docs/guides/`
   - `.project_meta/.context7/validation_reports/`
 - Initialize all required JSON files with proper schemas and default content including:
-  - `.project_meta/.context7/doc_metadata.json` with initial content: `{"technologies": [], "last_updated": null}`
-  - `.project_meta/.context7/tech_stack_docs.json` with initial content: `{"identified_technologies": [], "documentation_status": {}}`
-  - `.project_meta/.context7/last_fetch_timestamps.json` with initial content: `{}`
+  - **Context7 Files:**
+    - `.project_meta/.context7/doc_metadata.json` with initial content: `{"technologies": [], "last_updated": null}`
+    - `.project_meta/.context7/tech_stack_docs.json` with initial content: `{"identified_technologies": [], "documentation_status": {}}`
+    - `.project_meta/.context7/last_fetch_timestamps.json` with initial content: `{}`
+  - **Stories Files:**
+    - `.project_meta/.stories/roadmap.json` with initial content: `{"current_iteration_id": null, "stories": [], "iterations": []}`
+    - `.project_meta/.stories/mappings/story_module_map.json` with initial content: `{}`
+    - `.project_meta/.stories/mappings/story_requirement_map.json` with initial content: `{}`
+    - `.project_meta/.stories/mappings/story_dependency_map.json` with initial content: `{"nodes": [], "edges": []}`
+    - `.project_meta/.stories/mappings/story_architectural_impact_map.json` with initial content: `{}`
+    - All metrics JSON files in `.project_meta/.stories/metrics/`
+  - **Architecture Files:**
+    - `.project_meta/.architecture/adr_log.json` with initial content: `[]`
+    - `.project_meta/.architecture/module_definitions.json` with initial content: `{"modules": []}`
+    - `.project_meta/.architecture/architecture_constraints.json` with initial content: `[]`
+    - All metrics JSON files in `.project_meta/.architecture/architecture_metrics/`
+    - `.project_meta/.architecture/reviews/architecture_review_summary.json`
+  - **Integration Files:**
+    - `.project_meta/.integration/integration_status.json` with initial content: `{"overall_status": "pending", "last_run": null, "component_status": {}}`
+    - All metrics JSON files in `.project_meta/.integration/metrics/`
+    - All reports JSON files in `.project_meta/.integration/reports/`
+  - **Dependencies Files:**
+    - `.project_meta/.dependencies/dependency_graph.json` with initial content: `{"nodes": [], "edges": []}`
+    - `.project_meta/.dependencies/conflict_log.json` with initial content: `[]`
+  - **Error Management Files:**
+    - `.project_meta/.errors/error_log.json` with initial content: `[]`
+    - All metrics JSON files in `.project_meta/.errors/metrics/`
+  - **Documentation Files:**
+    - All metrics JSON files in `.project_meta/.docs/metrics/`
+    - All validation JSON files in `.project_meta/.docs/validation/`
+  - **Pattern Files:**
+    - `.project_meta/.patterns/pattern_catalog.json` with initial content: `[]`
+    - `.project_meta/.patterns/anti_patterns.json` with initial content: `[]`
+    - `.project_meta/.patterns/pattern_schema.json` with standardized schema
+    - All metrics JSON files in `.project_meta/.patterns/metrics/`
+  - **Decision Files:**
+    - `.project_meta/.decisions/decision_log.json` with initial content: `[]`
 - Set up version control system (git)
 - Create initial cross-references between related files
 - Verify all creations with integrity checks
