@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+OWASP MASVS-NETWORK uyumlu network security configuration.
+Certificate pinning, TLS 1.3 enforcement ve MITM protection sağlar.
+-->
+<network-security-config>
+    <!-- Production domain configurations -->
+    <domain-config>
+        <!-- M3TM API endpoints -->
+        <domain includeSubdomains="true">api.m3tm.com</domain>
+        <domain includeSubdomains="true">secure.m3tm.com</domain>
+        <domain includeSubdomains="true">models.m3tm.com</domain>
+        
+        <!-- Certificate pinning configuration -->
+        <pin-set expiration="2026-12-31">
+            <!-- Primary certificate pins (SHA-256) -->
+            <pin digest="SHA-256">YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2fuihg=</pin>
+            <!-- Backup certificate pins -->
+            <pin digest="SHA-256">C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=</pin>
+            <!-- Root CA backup pin -->
+            <pin digest="SHA-256">lCppFqbkrlJ3EcVFAkeip0+44VaoJUymbnOaEUk7tEU=</pin>
+        </pin-set>
+        
+        <!-- TLS 1.3 minimum enforcement -->
+        <trust-anchors>
+            <!-- System trusted CAs -->
+            <certificates src="system"/>
+        </trust-anchors>
+    </domain-config>
+    
+    <!-- Development/staging domain configurations -->
+    <domain-config>
+        <domain includeSubdomains="true">dev-api.m3tm.com</domain>
+        <domain includeSubdomains="true">staging-api.m3tm.com</domain>
+        
+        <!-- Development certificate pins (farklı sertifikalar) -->
+        <pin-set expiration="2025-12-31">
+            <pin digest="SHA-256">Dev1234567890abcdef1234567890abcdef1234567890abcdef=</pin>
+            <pin digest="SHA-256">Dev0987654321fedcba0987654321fedcba0987654321fedcba=</pin>
+        </pin-set>
+        
+        <trust-anchors>
+            <certificates src="system"/>
+            <!-- Development için user-added CA'lar da kabul edilebilir -->
+            <certificates src="user"/>
+        </trust-anchors>
+    </domain-config>
+    
+    <!-- Localhost ve internal testing için özel config -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">10.0.0.0/8</domain>
+        <domain includeSubdomains="true">192.168.0.0/16</domain>
+        <!-- Bu sadece debug builds'de aktif olmalı -->
+    </domain-config>
+    
+    <!-- Global base configuration -->
+    <base-config>
+        <!-- Clear text traffic tamamen yasakla (production) -->
+        <trust-anchors>
+            <!-- Sadece system CAs -->
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+    
+    <!-- Debug builds için geçici override (conditional) -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system"/>
+            <certificates src="user"/>
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

@@ -116,6 +116,26 @@
       "impact_level": "high",
       "affected_principles": ["1.1", "1.3", "2.4", "4.1", "4.3", "4.6"],
       "notes": "Demo uygulama, tüm mimari prensiplerin gerçek dünya senaryosunda test edilmesini sağlar."
+    },
+    "story_S24": {
+      "impact_level": "critical",
+      "affected_principles": ["1.3", "2.4", "4.6"],
+      "notes": "OWASP MASVS güvenlik implementasyonu, gizlilik odaklı tasarımı ve güvenlik kısıtlamalarını doğrudan etkiler."
+    },
+    "story_S27": {
+      "impact_level": "high",
+      "affected_principles": ["1.1", "1.3", "4.1", "4.2", "4.3", "4.5"],
+      "notes": "Gerçek cihaz test altyapısı, performans, bellek, batarya kısıtlamalarının doğrulanmasını ve test edilebilirliği etkiler."
+    },
+    "story_S25": {
+      "impact_level": "critical",
+      "affected_principles": ["1.2", "2.4", "4.5", "4.6"],
+      "notes": "CI/CD pipeline ve production infrastructure, tüm sistemin güvenilirliğini, test edilebilirliğini ve dağıtım kalitesini etkiler."
+    },
+    "story_S26": {
+      "impact_level": "critical",
+      "affected_principles": ["1.1", "1.2", "4.1", "4.2", "4.3"],
+      "notes": "Gelişmiş optimizasyon teknikleri, ultra-hafif tasarım, modülerlik, performans, bellek ve batarya kısıtlamalarını doğrudan etkiler."
     }
   }
 } 

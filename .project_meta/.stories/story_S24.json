@@ -1,0 +1,324 @@
+{
+  "story_id": "S24",
+  "title": "OWASP MASVS V1-V7 Core Security Implementation",
+  "priority": "P0",
+  "status": "DONE", 
+  "assigned_iteration": "iter_8",
+  "estimated_effort": "12 günkişi",
+  "complexity": "High",
+  "created_date": "2025-06-24T22:45:00Z",
+  "updated_date": "2025-06-24T22:45:00Z",
+  
+  "description": "OWASP Mobile Application Security Testing Guide (MASTG) guideline'larına göre temel mobil güvenlik standartlarını uygulayarak, M³TM v2.3 projesini production-ready güvenlik seviyesine çıkarma.",
+  
+  "business_value": "Critical - Ürünün production ortamında güvenli şekilde kullanılabilmesi için zorunlu. Kurumsal müşteriler için compliance requirement.",
+  
+  "acceptance_criteria": [
+    {
+      "id": "AC-S24-001",
+      "category": "MASVS-STORAGE",
+      "description": "Android KeyStore & iOS Keychain entegrasyonu",
+      "verification": "Hassas veriler hardware-backed keystore'da şifrelenerek saklanıyor",
+      "tests": [
+        "Encrypted SharedPreferences ile hassas data depolama",
+        "Hardware keystore availability detection ve fallback",
+        "Key rotation ve lifecycle management"
+      ]
+    },
+    {
+      "id": "AC-S24-002", 
+      "category": "MASVS-CRYPTO",
+      "description": "AES-GCM-256 şifreleme ve secure random generation",
+      "verification": "Tüm cryptographic operations current best practices kullanıyor",
+      "tests": [
+        "AES-GCM-256 encryption/decryption doğruluğu",
+        "SecureRandom entropy quality validation",
+        "Key derivation function (PBKDF2/Argon2) implementation"
+      ]
+    },
+    {
+      "id": "AC-S24-003",
+      "category": "MASVS-AUTH", 
+      "description": "Biometric authentication & secure session management",
+      "verification": "Biometric authentication güvenli şekilde implement edilmiş",
+      "tests": [
+        "BiometricPrompt API (Android) integration",
+        "LocalAuthentication framework (iOS) implementation", 
+        "Session timeout ve secure session storage"
+      ]
+    },
+    {
+      "id": "AC-S24-004",
+      "category": "MASVS-NETWORK",
+      "description": "Certificate pinning & TLS 1.3 enforcement", 
+      "verification": "Network communication tamamen güvenli ve pinned certificates kullanıyor",
+      "tests": [
+        "TrustKit (iOS) certificate pinning validation",
+        "Network Security Config (Android) enforcement",
+        "TLS 1.3 minimum version enforcement",
+        "Certificate validation bypass detection"
+      ]
+    },
+    {
+      "id": "AC-S24-005",
+      "category": "MASVS-PLATFORM",
+      "description": "Secure IPC & exported component protection",
+      "verification": "Platform integration güvenlik best practices uygulanmış",
+      "tests": [
+        "Exported activities/services security validation",
+        "Intent filter security ve data sanitization",
+        "Inter-process communication güvenliği"
+      ]
+    },
+    {
+      "id": "AC-S24-006",
+      "category": "MASVS-CODE", 
+      "description": "Code obfuscation & anti-debugging measures",
+      "verification": "Code protection ve reverse engineering korumaları aktif",
+      "tests": [
+        "ProGuard/R8 optimization (Android) effectiveness",
+        "Swift code obfuscation (iOS) validation",
+        "Anti-debugging detection capabilities"
+      ]
+    },
+    {
+      "id": "AC-S24-007",
+      "category": "MASVS-RESILIENCE",
+      "description": "Runtime protection & tampering detection",
+      "verification": "Runtime attacks ve tampering girişimleri detect ediliyor",
+      "tests": [
+        "Root/jailbreak detection accuracy",
+        "Debugger attachment detection",
+        "Code injection attempt detection",
+        "App integrity verification"
+      ]
+    }
+  ],
+
+  "technical_requirements": [
+    {
+      "platform": "Android",
+      "requirements": [
+        {
+          "component": "Secure Storage",
+          "implementation": "EncryptedSharedPreferences with hardware-backed Android KeyStore",
+          "api_level": "API 23+ (Android 6.0+)",
+          "code_example": "androidx.security.crypto.EncryptedSharedPreferences",
+          "validation": "Hardware security module (HSM) availability check"
+        },
+        {
+          "component": "Network Security", 
+          "implementation": "Network Security Configuration with certificate pinning",
+          "api_level": "API 24+ (Android 7.0+)",
+          "code_example": "res/xml/network_security_config.xml",
+          "validation": "Certificate validation ve MITM protection test"
+        },
+        {
+          "component": "Biometric Authentication",
+          "implementation": "androidx.biometric.BiometricPrompt API",
+          "api_level": "API 28+ (Android 9.0+)", 
+          "code_example": "BiometricPrompt.authenticate() with crypto object",
+          "validation": "Hardware-backed biometric authentication"
+        },
+        {
+          "component": "Code Protection",
+          "implementation": "ProGuard/R8 with advanced obfuscation rules",
+          "build_config": "buildTypes.release.minifyEnabled = true",
+          "validation": "Decompilation resistance analysis"
+        }
+      ]
+    },
+    {
+      "platform": "iOS",
+      "requirements": [
+        {
+          "component": "Secure Storage",
+          "implementation": "Keychain Services with kSecAttrAccessibleWhenUnlockedThisDeviceOnly",
+          "ios_version": "iOS 13.0+",
+          "code_example": "Security.framework SecItemAdd/SecItemCopyMatching",
+          "validation": "Secure Enclave availability ve key protection level"
+        },
+        {
+          "component": "Network Security",
+          "implementation": "TrustKit framework for certificate pinning",
+          "ios_version": "iOS 13.0+", 
+          "code_example": "TrustKit.framework ile URLSessionDelegate",
+          "validation": "Certificate pinning validation ve bypass prevention"
+        },
+        {
+          "component": "Biometric Authentication", 
+          "implementation": "LocalAuthentication.framework with LAContext",
+          "ios_version": "iOS 13.0+",
+          "code_example": "LAContext.evaluatePolicy with biometry",
+          "validation": "Touch ID/Face ID security level verification"
+        },
+        {
+          "component": "Code Protection",
+          "implementation": "Swift compiler optimizations ve symbol obfuscation",
+          "build_config": "Swift Optimization Level = -O with whole module optimization", 
+          "validation": "Static analysis resistance evaluation"
+        }
+      ]
+    }
+  ],
+
+  "context7_documentation": [
+    {
+      "source": "/owasp/owasp-mastg",
+      "sections": [
+        "MASVS-STORAGE implementation guidelines",
+        "MASVS-CRYPTO best practices", 
+        "MASVS-AUTH secure authentication patterns",
+        "Mobile security testing methodology"
+      ],
+      "last_fetched": "2025-06-24T22:30:00Z",
+      "key_insights": [
+        "Hardware-backed keystores critical for production security",
+        "Certificate pinning essential for preventing MITM attacks",
+        "Biometric authentication must be coupled with hardware security",
+        "Runtime protection requires multi-layered approach"
+      ]
+    },
+    {
+      "source": "/pytorch/pytorch",
+      "sections": [
+        "Mobile security considerations for PyTorch models",
+        "Model protection ve intellectual property security",
+        "Secure model loading ve validation"
+      ],
+      "last_fetched": "2025-06-24T22:30:00Z",
+      "key_insights": [
+        "Model files require integrity validation",
+        "Secure model loading from encrypted storage",
+        "Runtime model protection against extraction"
+      ]
+    }
+  ],
+
+  "implementation_plan": {
+    "phase_1": {
+      "name": "Foundation Security Setup",
+      "duration": "4 gün", 
+      "tasks": [
+        "Android KeyStore ve iOS Keychain basic implementation",
+        "AES-GCM-256 encryption utility classes",
+        "Secure random number generation setup",
+        "Basic certificate pinning configuration"
+      ]
+    },
+    "phase_2": {
+      "name": "Authentication & Network Security",
+      "duration": "4 gün",
+      "tasks": [
+        "Biometric authentication integration",
+        "Session management implementation", 
+        "Advanced certificate pinning with backup pins",
+        "TLS 1.3 enforcement ve validation"
+      ]
+    },
+    "phase_3": {
+      "name": "Platform & Code Protection",
+      "duration": "3 gün",
+      "tasks": [
+        "Exported component security hardening",
+        "Code obfuscation ve optimization",
+        "Anti-debugging measures implementation",
+        "Runtime tampering detection"
+      ]
+    },
+    "phase_4": {
+      "name": "Testing & Validation",
+      "duration": "1 gün",
+      "tasks": [
+        "Security test suite execution",
+        "Penetration testing scenarios",
+        "Compliance validation checklist",
+        "Documentation ve code review"
+      ]
+    }
+  },
+
+  "testing_strategy": {
+    "unit_tests": [
+      "Encryption/decryption functionality validation",
+      "Key generation ve management operations",
+      "Authentication flow testing with mocked biometrics",
+      "Certificate validation logic testing"
+    ],
+    "integration_tests": [
+      "End-to-end authentication flow",
+      "Network security configuration validation",
+      "Keystore/Keychain integration testing",
+      "Cross-platform security parity validation"
+    ],
+    "security_tests": [
+      "Static analysis with security-focused rules",
+      "Dynamic testing with Frida-based hooks",
+      "Man-in-the-middle attack simulation",
+      "Root/jailbreak detection effectiveness",
+      "Code tampering resistance validation"
+    ],
+    "performance_tests": [
+      "Encryption/decryption performance benchmarks",
+      "Biometric authentication latency measurement",
+      "Certificate validation overhead analysis",
+      "Security startup time impact assessment"
+    ]
+  },
+
+  "dependencies": [
+    {
+      "type": "Technical",
+      "description": "Core M³TM model implementation completed",
+      "blocking": true
+    },
+    {
+      "type": "External",
+      "description": "OWASP MASTG documentation access", 
+      "blocking": false
+    },
+    {
+      "type": "Infrastructure",
+      "description": "Security testing environment setup",
+      "blocking": false
+    }
+  ],
+
+  "risks": [
+    {
+      "risk": "Hardware keystore unavailability on older devices",
+      "impact": "High",
+      "probability": "Medium",
+      "mitigation": "Software-based fallback with user warning"
+    },
+    {
+      "risk": "Certificate pinning implementation complexity",
+      "impact": "Medium", 
+      "probability": "Low",
+      "mitigation": "Use established libraries (TrustKit, Network Security Config)"
+    },
+    {
+      "risk": "Performance impact of security measures",
+      "impact": "Medium",
+      "probability": "Medium", 
+      "mitigation": "Performance testing ve optimization in parallel"
+    }
+  ],
+
+  "success_criteria": [
+    "100% OWASP MASVS V1-V7 compliance achieved",
+    "Security test suite passing with 0 critical vulnerabilities",
+    "Performance impact <10% compared to non-secure version",
+    "Cross-platform security parity maintained",
+    "Production readiness security checklist completed"
+  ],
+
+  "deliverables": [
+    "Security implementation code for Android ve iOS",
+    "Security configuration files ve documentation",
+    "Comprehensive security test suite",
+    "Security best practices documentation", 
+    "Compliance validation report",
+    "Performance impact analysis report"
+  ]
+}

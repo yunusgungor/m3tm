@@ -1,0 +1,226 @@
+{
+  "story_id": "S25",
+  "story_name": "Production Infrastructure & CI/CD Pipeline",
+  "iteration": "Production Readiness",
+  "priority": "CRITICAL",
+  "category": "DevOps & Infrastructure",
+  "effort_estimate": "8-10 story points",
+  "status": "in_progress",
+  "completion_status": "75%",
+  "started_date": "2025-06-24T23:35:00Z",
+  
+  "description": "Build comprehensive production-ready infrastructure including CI/CD pipeline automation with Context7 best practices, real device testing via Firebase Test Lab, release packaging with Fastlane, and performance monitoring for M³TM mobile deployment.",
+  
+  "acceptance_criteria": [
+    {
+      "id": "AC25.1",
+      "description": "CI/CD Pipeline Implementation",
+      "requirements": [
+        "GitHub Actions workflow for automated testing with mobile starter workflows",
+        "Multi-platform builds (Android/iOS/PyTorch Mobile) using matrix strategies",
+        "Automated security scanning integration with current practices",
+        "Performance regression testing with Firebase Test Lab integration",
+        "Artifact generation and storage with proper caching"
+      ]
+    },
+    {
+      "id": "AC25.2", 
+      "description": "Real Device Testing Infrastructure",
+      "requirements": [
+        "Android device farm integration (Firebase Test Lab) with cloud infrastructure",
+        "iOS device testing setup (Xcode Cloud/Firebase Test Lab)",
+        "Performance benchmarking on target devices with automated metrics",
+        "Memory usage and battery impact testing via Firebase Test Lab",
+        "Cross-device compatibility validation using device matrix"
+      ]
+    },
+    {
+      "id": "AC25.3",
+      "description": "Release Packaging & Distribution",
+      "requirements": [
+        "Automated APK/AAB generation for Android using Fastlane",
+        "iOS framework packaging and distribution via TestFlight automation",
+        "PyTorch Mobile model versioning system with proper artifact management",
+        "SDK documentation generation with automated updates",
+        "Example app bundling and testing with Firebase App Distribution"
+      ]
+    },
+    {
+      "id": "AC25.4",
+      "description": "Monitoring & Observability",
+      "requirements": [
+        "Application performance monitoring (APM)",
+        "Crash reporting and analytics integration",
+        "Model inference metrics collection",
+        "Resource usage tracking",
+        "Production logging and alerting"
+      ]
+    }
+  ],
+  
+  "technical_requirements": [
+    {
+      "component": "CI/CD Pipeline",
+      "technologies": ["GitHub Actions", "Docker", "Fastlane"],
+      "requirements": [
+        "Multi-stage pipeline with security gates",
+        "Parallel testing across platforms",
+        "Automated quality gates and approvals",
+        "Environment-specific deployments",
+        "Rollback capabilities"
+      ]
+    },
+    {
+      "component": "Device Testing",
+      "technologies": ["Firebase Test Lab", "Xcode Cloud", "Appium"],
+      "requirements": [
+        "Real device matrix testing",
+        "Performance baseline establishment",
+        "Automated UI testing",
+        "API integration testing",
+        "Load testing scenarios"
+      ]
+    },
+    {
+      "component": "Monitoring Stack", 
+      "technologies": ["Sentry", "Firebase Analytics", "Prometheus"],
+      "requirements": [
+        "Real-time error tracking",
+        "Performance metrics dashboard",
+        "Usage analytics collection", 
+        "Custom metric reporting",
+        "Alert management system"
+      ]
+    }
+  ],
+  
+  "implementation_tasks": [
+    {
+      "task_id": "T25.1",
+      "title": "Setup GitHub Actions CI/CD Pipeline",
+      "description": "Create comprehensive workflow for automated testing, building, and deployment",
+      "estimated_hours": 16,
+      "dependencies": [],
+      "deliverables": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/release.yml", 
+        "Docker build configurations",
+        "Security scanning integration"
+      ]
+    },
+    {
+      "task_id": "T25.2", 
+      "title": "Implement Real Device Testing",
+      "description": "Setup automated testing on real Android and iOS devices",
+      "estimated_hours": 20,
+      "dependencies": ["T25.1"],
+      "deliverables": [
+        "Firebase Test Lab configuration",
+        "iOS testing setup",
+        "Performance test suites",
+        "Device compatibility matrix"
+      ]
+    },
+    {
+      "task_id": "T25.3",
+      "title": "Build Release Packaging System",
+      "description": "Automate SDK and application packaging for distribution",
+      "estimated_hours": 12,
+      "dependencies": ["T25.1"],
+      "deliverables": [
+        "Android packaging scripts",
+        "iOS framework generation",
+        "Version management system",
+        "Distribution automation"
+      ]
+    },
+    {
+      "task_id": "T25.4",
+      "title": "Setup Production Monitoring",
+      "description": "Implement comprehensive monitoring and observability",
+      "estimated_hours": 14,
+      "dependencies": ["T25.2", "T25.3"],
+      "deliverables": [
+        "APM integration",
+        "Analytics dashboard",
+        "Alerting system",
+        "Performance baseline"
+      ]
+    }
+  ],
+  
+  "risks_and_mitigations": [
+    {
+      "risk": "Device testing infrastructure complexity",
+      "probability": "Medium",
+      "impact": "High",
+      "mitigation": "Start with cloud-based solutions, gradual expansion to on-premise"
+    },
+    {
+      "risk": "CI/CD pipeline performance bottlenecks",
+      "probability": "Medium", 
+      "impact": "Medium",
+      "mitigation": "Implement parallel execution and caching strategies"
+    },
+    {
+      "risk": "Monitoring overhead impact",
+      "probability": "Low",
+      "impact": "Medium", 
+      "mitigation": "Implement sampling and configurable monitoring levels"
+    }
+  ],
+  
+  "testing_strategy": [
+    {
+      "test_type": "Pipeline Testing",
+      "description": "Validate CI/CD workflow functionality",
+      "coverage": "All pipeline stages and failure scenarios"
+    },
+    {
+      "test_type": "Integration Testing",
+      "description": "Test infrastructure component interactions",
+      "coverage": "Monitoring, testing, and deployment integrations"
+    },
+    {
+      "test_type": "Performance Testing",
+      "description": "Validate pipeline performance and device testing speed",
+      "coverage": "Build times, test execution, deployment speed"
+    }
+  ],
+  
+  "definition_of_done": [
+    "CI/CD pipeline successfully builds and tests all platforms",
+    "Real device testing runs automatically on commits",
+    "Release artifacts are generated and distributed correctly", 
+    "Monitoring system captures all critical metrics",
+    "Pipeline documentation is complete and accessible",
+    "All quality gates pass consistently",
+    "Performance baselines are established and tracked"
+  ],
+  
+  "context7_references": [
+    {
+      "source": "/firebase/firebase-tools",
+      "topic": "Firebase Test Lab integration for Android testing"
+    },
+    {
+      "source": "/actions/github-actions",
+      "topic": "CI/CD pipeline automation and workflows"
+    },
+    {
+      "source": "/getsentry/sentry",
+      "topic": "Application monitoring and error tracking"
+    }
+  ],
+  
+  "compliance_requirements": [
+    {
+      "standard": "DevSecOps",
+      "requirements": ["Security scanning in pipeline", "Automated vulnerability assessment"]
+    },
+    {
+      "standard": "OWASP SAMM",
+      "requirements": ["Secure build process", "Release integrity verification"]
+    }
+  ]
+}

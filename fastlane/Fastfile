@@ -1,0 +1,249 @@
+# M³TM Mobile - Fastlane Configuration
+# Enhanced with Context7 best practices
+
+default_platform(:android)
+
+platform :android do
+  desc "Build and distribute Android beta"
+  lane :beta do
+    gradle(
+      task: 'clean assembleRelease',
+      project_dir: './android/'
+    )
+    
+    firebase_app_distribution(
+      app: ENV['FIREBASE_APP_ID_ANDROID'],
+      groups: "qa-team, trusted-testers",
+      release_notes: "Latest M³TM mobile build with performance optimizations",
+      firebase_cli_token: ENV['FIREBASE_TOKEN']
+    )
+    
+    slack(
+      message: "🚀 M³TM Android beta successfully distributed!",
+      channel: "#mobile-releases",
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  desc "Deploy Android to Play Store"
+  lane :release do
+    gradle(
+      task: 'clean bundleRelease',
+      project_dir: './android/'
+    )
+    
+    upload_to_play_store(
+      track: 'internal',
+      aab: './android/app/build/outputs/bundle/release/app-release.aab',
+      json_key_data: ENV['PLAY_STORE_JSON_KEY'],
+      skip_upload_metadata: false,
+      skip_upload_images: false,
+      skip_upload_screenshots: false
+    )
+    
+    slack(
+      message: "🎉 M³TM Android released to Play Store!",
+      channel: "#mobile-releases",
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  desc "Generate Android screenshots"
+  lane :screenshots do
+    capture_android_screenshots(
+      locales: ['en-US'],
+      clear_previous_screenshots: true,
+      output_directory: './fastlane/metadata/android/screenshots'
+    )
+    
+    upload_to_play_store(
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true
+    )
+  end
+end
+
+platform :ios do
+  desc "Setup CI environment"
+  lane :setup_ci_if_needed do
+    setup_ci if ENV['CI']
+  end
+  
+  desc "Sync code signing"
+  lane :certificates do
+    setup_ci_if_needed
+    
+    match(
+      type: "appstore",
+      readonly: is_ci,
+      keychain_name: ENV['MATCH_KEYCHAIN_NAME'],
+      keychain_password: ENV['MATCH_KEYCHAIN_PASSWORD']
+    )
+  end
+  
+  desc "Build and distribute iOS beta"
+  lane :beta do
+    setup_ci_if_needed
+    certificates
+    
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "./ios/M3TM.xcodeproj"
+    )
+    
+    build_app(
+      scheme: "M3TM",
+      workspace: "./ios/M3TM.xcworkspace",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: true,
+        compileBitcode: false
+      }
+    )
+    
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      changelog: "Latest M³TM mobile build with performance optimizations"
+    )
+    
+    slack(
+      message: "🚀 M³TM iOS beta successfully uploaded to TestFlight!",
+      channel: "#mobile-releases",
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  desc "Deploy iOS to App Store"
+  lane :release do
+    setup_ci_if_needed
+    certificates
+    
+    build_app(
+      scheme: "M3TM",
+      workspace: "./ios/M3TM.xcworkspace",
+      configuration: "Release",
+      export_method: "app-store"
+    )
+    
+    upload_to_app_store(
+      force: true,
+      submit_for_review: true,
+      automatic_release: true,
+      submission_information: {
+        add_id_info_serves_ads: false,
+        add_id_info_tracks_install: false,
+        add_id_info_tracks_action: false,
+        add_id_info_uses_idfa: false,
+        content_rights_has_rights: true,
+        content_rights_contains_third_party_content: false,
+        export_compliance_platform: 'ios',
+        export_compliance_compliance_required: false,
+        export_compliance_encryption_updated: false,
+        export_compliance_app_type: nil,
+        export_compliance_uses_encryption: false,
+        export_compliance_is_exempt: false,
+        export_compliance_contains_third_party_cryptography: false,
+        export_compliance_contains_proprietary_cryptography: false,
+        export_compliance_available_on_french_store: false
+      }
+    )
+    
+    slack(
+      message: "🎉 M³TM iOS released to App Store!",
+      channel: "#mobile-releases", 
+      slack_url: ENV['SLACK_WEBHOOK_URL']
+    ) if ENV['SLACK_WEBHOOK_URL']
+  end
+  
+  desc "Generate iOS screenshots"
+  lane :screenshots do
+    capture_screenshots(
+      workspace: "./ios/M3TM.xcworkspace",
+      scheme: "M3TMUITests",
+      devices: [
+        "iPhone 14 Pro",
+        "iPhone 14 Pro Max",
+        "iPad Pro (12.9-inch) (6th generation)"
+      ],
+      languages: ['en-US'],
+      clear_previous_screenshots: true,
+      override_status_bar: true,
+      add_photos: ["./fastlane/screenshots/demo_photos/sample1.jpg"]
+    )
+    
+    frame_screenshots(
+      white: true,
+      path: './fastlane/screenshots'
+    )
+    
+    upload_to_app_store(
+      skip_binary_upload: true,
+      skip_metadata: true
+    )
+  end
+end
+
+# Common lanes for both platforms
+desc "Run all tests"
+lane :test do
+  # Android tests
+  gradle(
+    task: 'test',
+    project_dir: './android/'
+  )
+  
+  # iOS tests (if on macOS)
+  if RUBY_PLATFORM.include?('darwin')
+    run_tests(
+      workspace: "./ios/M3TM.xcworkspace",
+      scheme: "M3TM",
+      device: "iPhone 14 Pro"
+    )
+  end
+end
+
+desc "Setup project dependencies"
+lane :setup do
+  # Install dependencies
+  sh("pip install -r ../requirements.txt") if File.exist?("../requirements.txt")
+  
+  # Setup Android dependencies
+  gradle(
+    task: 'dependencies',
+    project_dir: './android/'
+  )
+  
+  puts "✅ Project setup completed!"
+end
+
+desc "Clean all build artifacts"
+lane :clean do
+  # Clean Android
+  gradle(
+    task: 'clean',
+    project_dir: './android/'
+  )
+  
+  # Clean iOS (if on macOS)
+  if RUBY_PLATFORM.include?('darwin')
+    clear_derived_data
+  end
+  
+  # Clean Python cache
+  sh("find .. -name '*.pyc' -delete")
+  sh("find .. -name '__pycache__' -type d -exec rm -rf {} +")
+  
+  puts "✅ All build artifacts cleaned!"
+end
+
+error do |lane, exception|
+  slack(
+    message: "❌ Lane #{lane} failed: #{exception.message}",
+    channel: "#mobile-releases",
+    slack_url: ENV['SLACK_WEBHOOK_URL'],
+    success: false
+  ) if ENV['SLACK_WEBHOOK_URL']
+end

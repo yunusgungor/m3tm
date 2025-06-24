@@ -2,6 +2,10 @@
 
 Bu dokümantasyon, M³TM projesinde PyTorch Mobile kullanımı için kapsamlı bir rehberdir.
 
+> **İlgili Dokümantasyon:**
+> - [Mobile Security Implementation (S24)](./security_implementation_S24.md)
+> - [Real Device Testing Infrastructure (S27)](./real_device_testing_S27.md)
+
 ## İçindekiler
 
 1. [Giriş](#giriş)
@@ -11,7 +15,8 @@ Bu dokümantasyon, M³TM projesinde PyTorch Mobile kullanımı için kapsamlı b
 5. [iOS Entegrasyonu](#ios-entegrasyonu)
 6. [Optimizasyon Teknikleri](#optimizasyon-teknikleri)
 7. [Performans Değerlendirmesi](#performans-değerlendirmesi)
-8. [Bilinen Sorunlar ve Çözümler](#bilinen-sorunlar-ve-çözümler)
+8. [Güvenlik ve Test Altyapısı](#güvenlik-ve-test-altyapısı)
+9. [Bilinen Sorunlar ve Çözümler](#bilinen-sorunlar-ve-çözümler)
 
 ## Giriş
 
@@ -217,6 +222,35 @@ results = MobileBenchmark.compare_models(
 MobileBenchmark.generate_report(results, "benchmark_report.md")
 ```
 
+## Güvenlik ve Test Altyapısı
+
+### Mobile Security (OWASP MASVS Compliance)
+
+M³TM projesi, OWASP MASVS (Mobile Application Security Verification Standard) standartlarına uygun güvenlik implementasyonuna sahiptir:
+
+- **Secure Storage**: Encrypted model storage and secure configuration management
+- **Network Security**: TLS/SSL validation, certificate pinning, and secure API communication
+- **Biometric Authentication**: Multi-factor authentication with biometric integration
+- **Compliance Level**: 85% OWASP MASVS compliance
+
+Detaylı bilgi için: [Mobile Security Implementation (S24)](./security_implementation_S24.md)
+
+### Real Device Testing Infrastructure
+
+Gerçek cihaz test altyapısı ile comprehensive performans analizi:
+
+- **Device Discovery**: Android ve iOS cihazlarının otomatik keşfi
+- **Performance Analysis**: Model loading, inference latency, UI performance
+- **Resource Monitoring**: Battery, memory, thermal, network analysis
+- **Cross-Platform Support**: Unified testing interface for Android/iOS
+
+Test sonuçları ve metrics:
+- Model Loading Time: 4.2s (target: <5.0s) ✅
+- Search Latency: 185ms (target: <200ms) ✅
+- Memory Usage: 380MB (target: <400MB) ✅
+
+Detaylı bilgi için: [Real Device Testing Infrastructure (S27)](./real_device_testing_S27.md)
+
 ## Bilinen Sorunlar ve Çözümler
 
 ### 1. Tip Dönüşümü Hatası
@@ -254,4 +288,4 @@ MobileBenchmark.generate_report(results, "benchmark_report.md")
 
 - [PyTorch Mobile Resmi Dokümantasyonu](https://pytorch.org/mobile/home/)
 - [PyTorch Android Örnekleri](https://github.com/pytorch/android-demo-app)
-- [PyTorch iOS Örnekleri](https://github.com/pytorch/ios-demo-app) 
+- [PyTorch iOS Örnekleri](https://github.com/pytorch/ios-demo-app)

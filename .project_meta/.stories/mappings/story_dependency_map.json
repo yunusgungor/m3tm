@@ -24,6 +24,10 @@
     "story_20": ["story_18", "story_19"],
     "story_21": ["story_18", "story_19", "story_20"],
     "story_22": ["story_18", "story_19"],
-    "story_23": ["story_18", "story_19", "story_21", "story_22"]
+    "story_23": ["story_18", "story_19", "story_21", "story_22"],
+    "story_S24": ["story_18", "story_19", "story_22"],
+    "story_S27": ["story_18", "story_19", "story_22", "story_S24"],
+    "story_S25": ["story_21", "story_22", "story_S24", "story_S27"],
+    "story_S26": ["story_22", "story_S24", "story_S25"]
   }
 } 

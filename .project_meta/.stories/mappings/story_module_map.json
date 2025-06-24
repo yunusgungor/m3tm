@@ -45,6 +45,55 @@
       "impact_level": "high",
       "optimization_focus": ["model_size", "inference_speed", "memory_usage"]
     },
-    "story_23": ["demo_app", "testing"]
+    "story_23": ["demo_app", "testing"],
+    "story_S24": {
+      "primary_module": "mobile",
+      "secondary_modules": ["security", "core", "config"],
+      "file_paths": [
+        "src/m3tm/mobile/security/secure_storage.py",
+        "src/m3tm/mobile/security/network_security.py",
+        "src/m3tm/mobile/security/biometric_auth.py",
+        "src/m3tm/mobile/security/owasp_compliance.py"
+      ],
+      "impact_level": "high",
+      "security_focus": ["data_protection", "secure_communication", "authentication"]
+    },
+    "story_S27": {
+      "primary_module": "mobile",
+      "secondary_modules": ["device_testing", "core", "utils"],
+      "file_paths": [
+        "src/m3tm/mobile/device_testing/real_device_manager.py",
+        "src/m3tm/mobile/device_testing/performance_analyzer.py",
+        "src/m3tm/mobile/device_testing/battery_analyzer.py",
+        "src/m3tm/mobile/device_testing/memory_profiler.py",
+        "src/m3tm/mobile/device_testing/thermal_monitor.py",
+        "src/m3tm/mobile/device_testing/network_analyzer.py"
+      ],
+      "impact_level": "high",
+      "testing_focus": ["device_discovery", "performance_analysis", "resource_monitoring"]
+    },
+    "story_S25": {
+      "primary_module": "cicd",
+      "secondary_modules": ["mobile", "testing", "deployment"],
+      "file_paths": [
+        ".github/workflows/mobile-cicd.yml",
+        "fastlane/Fastfile",
+        "fastlane/Pluginfile",
+        "Gemfile",
+        "tests/integration/test_cicd_integration.py"
+      ],
+      "impact_level": "critical",
+      "infrastructure_focus": ["automation", "testing", "deployment", "monitoring"]
+    },
+    "story_S26": {
+      "primary_module": "mobile",
+      "secondary_modules": ["optimization", "performance", "core"],
+      "file_paths": [
+        "src/m3tm/mobile/mobile_optimizer.py",
+        "tests/integration/test_mobile_optimizer_integration.py"
+      ],
+      "impact_level": "high",
+      "optimization_focus": ["quantization", "hardware_acceleration", "caching", "profiling"]
+    }
   }
 }
