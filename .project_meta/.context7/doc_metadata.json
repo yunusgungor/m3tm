@@ -55,6 +55,32 @@
       "last_updated": "2024-12-28T00:00:00Z",
       "context7_id": "/pytorch/pytorch",
       "topics": ["computer vision", "mobile optimization", "CNN architecture", "image processing"]
+    },
+    {
+      "name": "PyTorch Mobile Optimization",
+      "category": "optimization_guide",
+      "file_path": "pytorch_mobile_optimization.md",
+      "last_updated": "2024-12-24T00:00:00Z",
+      "context7_id": "/pytorch/tutorials",
+      "topics": [
+        "quantization_techniques",
+        "pruning_methods", 
+        "knowledge_distillation",
+        "torchscript_optimization",
+        "mobile_deployment",
+        "performance_benchmarks"
+      ],
+      "coverage": {
+        "quantization": "comprehensive",
+        "pruning": "comprehensive",
+        "knowledge_distillation": "comprehensive",
+        "mobile_deployment": "comprehensive"
+      },
+      "optimization_targets": {
+        "model_size_reduction": "50-95%",
+        "inference_speedup": "1.5-4x",
+        "memory_reduction": "30-75%"
+      }
     }
   ],
   "last_updated": "2024-12-28T00:00:00Z",

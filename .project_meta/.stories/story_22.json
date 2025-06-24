@@ -1,0 +1,319 @@
+{
+  "story_id": "story_22",
+  "title": "Model küçültme ve optimizasyon",
+  "description": "M³TM modelinin mobil cihazlarda verimli çalışması için quantization, pruning, knowledge distillation ve TorchScript optimizasyonu tekniklerini uygulama",
+  "status": "todo",
+  "priority": "high",
+  "business_value": 9,
+  "technical_complexity": 8,
+  "estimated_effort": 13,
+  "iteration_target": "iter_7",
+  "milestone": "Mobile Optimization",
+  "creation_date": "2024-12-24",
+  "last_updated": "2024-12-24",
+  
+  "acceptance_criteria": [
+    {
+      "id": "AC_22_1",
+      "description": "Model boyutunu en az %60 azaltmak (quantization + pruning kombinasyonu ile)",
+      "priority": "must_have"
+    },
+    {
+      "id": "AC_22_2", 
+      "description": "Inference hızını en az 2x artırmak (TorchScript + mobil optimizasyonlar ile)",
+      "priority": "must_have"
+    },
+    {
+      "id": "AC_22_3",
+      "description": "Hafıza kullanımını en az %50 azaltmak (mixed precision + gradient checkpointing ile)",
+      "priority": "must_have"
+    },
+    {
+      "id": "AC_22_4",
+      "description": "Model doğruluğunda maksimum %5 kayıp ile optimizasyon gerçekleştirmek",
+      "priority": "must_have"
+    },
+    {
+      "id": "AC_22_5",
+      "description": "Android ve iOS platformları için optimize edilmiş model format'ları oluşturmak",
+      "priority": "must_have"
+    },
+    {
+      "id": "AC_22_6",
+      "description": "Optimizasyon öncesi/sonrası performans benchmark'larını oluşturmak",
+      "priority": "should_have"
+    },
+    {
+      "id": "AC_22_7",
+      "description": "Knowledge distillation ile student model oluşturmak (%60-80 parametre azaltımı ile)",
+      "priority": "should_have"
+    }
+  ],
+
+  "detailed_description": "Bu story, M³TM modelinin mobil cihazlarda optimal performans göstermesi için kapsamlı model optimizasyonu gerçekleştirmeyi hedefler. PyTorch'un sunduğu modern optimizasyon tekniklerini kullanarak model boyutunu, inference süresini ve hafıza kullanımını önemli ölçüde iyileştirecek.",
+
+  "technical_requirements": {
+    "context7_research": {
+      "pytorch_mobile": "Güncel PyTorch Mobile dokümantasyonu incelendi",
+      "quantization_techniques": "Dynamic, static ve QAT quantization teknikleri araştırıldı",
+      "pruning_methods": "Structured ve unstructured pruning yöntemleri değerlendirildi",
+      "knowledge_distillation": "Teacher-student architecture pattern'leri incelendi",
+      "torchscript_optimization": "JIT compilation ve mobile optimization teknikleri araştırıldı"
+    },
+    "optimization_targets": {
+      "model_size_reduction": "Minimum %60 azaltım",
+      "inference_speed": "Minimum 2x hızlanma", 
+      "memory_usage": "Minimum %50 azaltım",
+      "accuracy_preservation": "Maksimum %5 kayıp"
+    },
+    "techniques_to_implement": [
+      "Dynamic Quantization (FP32 -> INT8)",
+      "Static Quantization (kalibratasyon ile)",
+      "Structured Pruning (channel-wise)",
+      "Unstructured Pruning (magnitude-based)",
+      "Knowledge Distillation (teacher-student)",
+      "TorchScript JIT Compilation",
+      "Mobile-specific optimizations",
+      "Mixed Precision Training",
+      "Gradient Checkpointing"
+    ]
+  },
+
+  "implementation_plan": {
+    "phase_1_quantization": {
+      "description": "Model quantization implementasyonu",
+      "tasks": [
+        "Dynamic quantization pipeline oluşturma",
+        "Static quantization için kalibratasyon dataset hazırlama", 
+        "QAT (Quantization Aware Training) implementasyonu",
+        "Quantization sonrası doğruluk değerlendirmesi"
+      ],
+      "estimated_hours": 24,
+      "deliverables": [
+        "src/m3tm/mobile/quantization.py",
+        "tests/test_quantization.py",
+        "Quantization benchmark raporu"
+      ]
+    },
+    "phase_2_pruning": {
+      "description": "Model pruning implementasyonu",
+      "tasks": [
+        "Structured pruning (channel-wise) implementasyonu",
+        "Unstructured pruning (magnitude-based) implementasyonu", 
+        "Progressive pruning strategy geliştirme",
+        "Pruning sonrası fine-tuning pipeline"
+      ],
+      "estimated_hours": 20,
+      "deliverables": [
+        "src/m3tm/mobile/pruning.py",
+        "tests/test_pruning.py", 
+        "Pruning strategy dokümantasyonu"
+      ]
+    },
+    "phase_3_knowledge_distillation": {
+      "description": "Knowledge distillation implementasyonu",
+      "tasks": [
+        "Teacher-student architecture tasarımı",
+        "Distillation loss functions implementasyonu",
+        "Student model training pipeline",
+        "Temperature scaling optimizasyonu"
+      ],
+      "estimated_hours": 18,
+      "deliverables": [
+        "src/m3tm/mobile/knowledge_distillation.py",
+        "Student model configurations",
+        "Distillation training scripts"
+      ]
+    },
+    "phase_4_torchscript_optimization": {
+      "description": "TorchScript ve mobil optimizasyonlar",
+      "tasks": [
+        "Model TorchScript'e dönüştürme",
+        "Mobile-specific optimizations uygulama",
+        "JIT compilation optimizasyonları",
+        "Platform-specific export (Android/iOS)"
+      ],
+      "estimated_hours": 16,
+      "deliverables": [
+        "src/m3tm/mobile/torchscript_converter.py",
+        "Mobile optimized model exports",
+        "Platform deployment guides"
+      ]
+    },
+    "phase_5_integration_and_benchmarking": {
+      "description": "Entegrasyon ve performans değerlendirme",
+      "tasks": [
+        "Tüm optimizasyon tekniklerini birleştirme",
+        "Comprehensive benchmarking suite oluşturma",
+        "Performance regression testing",
+        "Mobil cihazlarda test senaryoları"
+      ],
+      "estimated_hours": 18,
+      "deliverables": [
+        "src/m3tm/mobile/optimization_pipeline.py",
+        "Comprehensive benchmark suite",
+        "Performance optimization report"
+      ]
+    }
+  },
+
+  "file_changes": {
+    "new_files": [
+      "src/m3tm/mobile/__init__.py",
+      "src/m3tm/mobile/quantization.py",
+      "src/m3tm/mobile/pruning.py", 
+      "src/m3tm/mobile/knowledge_distillation.py",
+      "src/m3tm/mobile/torchscript_converter.py",
+      "src/m3tm/mobile/optimization_pipeline.py",
+      "src/m3tm/mobile/benchmark_utils.py",
+      "tests/test_mobile_optimization.py",
+      "tests/test_quantization.py",
+      "tests/test_pruning.py",
+      "tests/test_knowledge_distillation.py",
+      "examples/mobile_optimization_example.py"
+    ],
+    "modified_files": [
+      "src/m3tm/core/base_model.py",
+      "src/m3tm/config/model_config.py",
+      "src/m3tm/training/trainer.py",
+      "requirements.txt"
+    ]
+  },
+
+  "dependencies": {
+    "blocked_by": [],
+    "blocks": ["story_23"],
+    "related_stories": ["story_21"],
+    "external_dependencies": [
+      "PyTorch >= 1.13.0",
+      "TorchVision >= 0.14.0", 
+      "Mobile development SDKs"
+    ]
+  },
+
+  "architectural_impact": {
+    "affected_modules": [
+      "mobile",
+      "core", 
+      "training",
+      "config"
+    ],
+    "new_interfaces": [
+      "MobileOptimizer",
+      "QuantizationManager", 
+      "PruningManager",
+      "DistillationTrainer"
+    ],
+    "performance_implications": [
+      "Significantly reduced model size",
+      "Faster inference on mobile devices",
+      "Lower memory footprint",
+      "Potential accuracy trade-offs"
+    ]
+  },
+
+  "quality_metrics": {
+    "code_coverage_target": 85,
+    "performance_benchmarks": {
+      "model_size_baseline": "100MB",
+      "model_size_target": "<40MB",
+      "inference_time_baseline": "500ms",
+      "inference_time_target": "<250ms",
+      "memory_usage_baseline": "200MB", 
+      "memory_usage_target": "<100MB"
+    },
+    "accuracy_thresholds": {
+      "text_embedding_accuracy": ">95%",
+      "image_embedding_accuracy": ">95%",
+      "fusion_accuracy": ">92%"
+    }
+  },
+
+  "testing_strategy": {
+    "unit_tests": [
+      "Quantization correctness tests",
+      "Pruning functionality tests",
+      "Knowledge distillation training tests",
+      "TorchScript conversion tests"
+    ],
+    "integration_tests": [
+      "End-to-end optimization pipeline tests",
+      "Mobile deployment tests",
+      "Cross-platform compatibility tests"
+    ],
+    "performance_tests": [
+      "Benchmark suite execution",
+      "Memory profiling tests", 
+      "Inference speed measurements",
+      "Model size validations"
+    ],
+    "device_tests": [
+      "Android device testing",
+      "iOS device testing",
+      "Resource constraint testing"
+    ]
+  },
+
+  "documentation_requirements": [
+    "Mobile optimization user guide",
+    "Performance tuning documentation", 
+    "Platform-specific deployment guides",
+    "Benchmark results documentation",
+    "API reference for optimization modules"
+  ],
+
+  "risks_and_mitigations": {
+    "high_risks": [
+      {
+        "risk": "Significant accuracy loss during optimization",
+        "probability": "medium",
+        "impact": "high", 
+        "mitigation": "Gradual optimization approach, extensive validation"
+      },
+      {
+        "risk": "Platform-specific compatibility issues",
+        "probability": "medium",
+        "impact": "medium",
+        "mitigation": "Early testing on target devices, fallback strategies"
+      }
+    ],
+    "medium_risks": [
+      {
+        "risk": "Optimization techniques not achieving target metrics",
+        "probability": "low",
+        "impact": "medium",
+        "mitigation": "Conservative targets, iterative improvement"
+      }
+    ]
+  },
+
+  "success_criteria": {
+    "primary": [
+      "Model boyutu %60+ azaltım",
+      "Inference hızı 2x+ artış", 
+      "Hafıza kullanımı %50+ azaltım",
+      "Doğruluk kaybı <%5"
+    ],
+    "secondary": [
+      "Smooth mobile deployment",
+      "Comprehensive benchmarking",
+      "Developer-friendly optimization tools"
+    ]
+  },
+
+  "context7_references": [
+    ".project_meta/.context7/fetched_docs/pytorch_mobile_optimization.md",
+    ".project_meta/.context7/tech_stack_docs.json"
+  ],
+
+  "tags": [
+    "mobile",
+    "optimization", 
+    "quantization",
+    "pruning",
+    "knowledge_distillation",
+    "torchscript",
+    "performance",
+    "deployment"
+  ]
+}

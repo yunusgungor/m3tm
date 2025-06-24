@@ -6,5 +6,11 @@
   "cmake": "2024-12-28T00:00:00Z",
   "jni": "2024-12-28T00:00:00Z",
   "android_ndk": "2024-12-28T00:00:00Z",
-  "torchvision": "2024-12-28T00:00:00Z"
+  "torchvision": "2024-12-28T00:00:00Z",
+  "pytorch_mobile_optimization": "2024-12-24T00:00:00Z",
+  "quantization_techniques": "2024-12-24T00:00:00Z",
+  "pruning_methods": "2024-12-24T00:00:00Z",
+  "knowledge_distillation": "2024-12-24T00:00:00Z",
+  "torchscript_optimization": "2024-12-24T00:00:00Z",
+  "mobile_deployment": "2024-12-24T00:00:00Z"
 }

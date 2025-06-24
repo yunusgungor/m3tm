@@ -31,7 +31,20 @@
     "story_19": ["sdk", "ios"],
     "story_20": ["sdk", "documentation"],
     "story_21": ["testing"],
-    "story_22": ["optimization"],
+    "story_22": {
+      "primary_module": "mobile",
+      "secondary_modules": ["core", "training", "config"],
+      "file_paths": [
+        "src/m3tm/mobile/quantization.py",
+        "src/m3tm/mobile/pruning.py",
+        "src/m3tm/mobile/knowledge_distillation.py",
+        "src/m3tm/mobile/torchscript_converter.py",
+        "src/m3tm/mobile/optimization_pipeline.py",
+        "src/m3tm/mobile/benchmark_utils.py"
+      ],
+      "impact_level": "high",
+      "optimization_focus": ["model_size", "inference_speed", "memory_usage"]
+    },
     "story_23": ["demo_app", "testing"]
   }
-} 
+}

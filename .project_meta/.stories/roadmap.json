@@ -155,7 +155,17 @@
     {
       "story_id": "story_22",
       "title": "Model küçültme ve optimizasyon",
-      "status": "todo"
+      "status": "todo",
+      "priority": "high",
+      "estimated_effort": 13,
+      "business_value": 9,
+      "technical_complexity": 8,
+      "optimization_targets": {
+        "model_size_reduction": "60%+",
+        "inference_speedup": "2x+", 
+        "memory_reduction": "50%+",
+        "accuracy_preservation": "95%+"
+      }
     },
     {
       "story_id": "story_23",
@@ -163,5 +173,5 @@
       "status": "todo"
     }
   ],
-  "last_updated": "2024-06-15"
+  "last_updated": "2024-12-24"
 } 
