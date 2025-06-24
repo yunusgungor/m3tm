@@ -42,7 +42,7 @@
     {
       "iteration_id": "iter_7",
       "goal": "Test, Optimizasyon ve Entegrasyon",
-      "status": "in_progress",
+      "status": "completed",
       "story_ids": ["story_21", "story_22", "story_23"]
     }
   ],
@@ -184,8 +184,8 @@
     {
       "story_id": "story_23",
       "title": "Demo uygulama geliştirme ve baştan sona test",
-      "status": "todo"
+      "status": "completed"
     }
   ],
-  "last_updated": "2024-12-24"
+  "last_updated": "2025-06-24"
 } 
