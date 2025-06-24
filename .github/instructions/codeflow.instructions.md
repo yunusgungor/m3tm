@@ -1,3 +1,6 @@
+---
+applyTo: '**'
+---
 # GitHub Copilot Instructions: Codeflow System
 
 ## System Overview
