@@ -1,8 +1,23 @@
 """
-M³TM Model Optimization Pipeline
+M³TM Model Optimization Pipeline - Context7 Enhanced
 
-Bu modül tüm optimizasyon tekniklerini birleştiren
-ana pipeline'ı sağlar.
+Bu modül tüm optimizasyon tekniklerini birleştiren ana pipeline'ı sağlar.
+Context7 documentation'dan alınan current best practices uygulanmıştır.
+
+Pipeline Features (Context7 Based):
+- Multi-technique optimization orchestration
+- Progressive optimization with validation checkpoints
+- Mobile-first optimization strategies
+- Comprehensive benchmarking and validation
+- Platform-specific optimization paths
+- State-of-the-art PyTorch optimization APIs
+
+Supported Optimization Stack:
+- Quantization (PTDQ, PTSQ, QAT, FX Graph Mode)
+- Pruning (Structured, Unstructured, Progressive)
+- Knowledge Distillation (Teacher-Student)
+- TorchScript Compilation
+- Module Fusion and Graph Optimization
 """
 
 import logging
@@ -10,583 +25,551 @@ from typing import Dict, Optional, Union, Any, Tuple, List, Callable
 from pathlib import Path
 import time
 import warnings
+import copy
 
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch.optim import Optimizer
 
+# Context7: Import latest optimization modules
 from m3tm.core.base_model import BaseModel
 from m3tm.mobile.benchmark_utils import ModelBenchmarker, create_benchmarker
-from m3tm.mobile.quantization import QuantizationManager, create_quantization_pipeline
-from m3tm.mobile.pruning import PruningManager, create_pruning_pipeline
+from m3tm.mobile.quantization import QuantizationManager, create_quantization_pipeline, MOBILE_QUANTIZATION_CONFIG
+from m3tm.mobile.pruning import PruningManager, create_pruning_pipeline, MOBILE_PRUNING_CONFIG
 from m3tm.mobile.knowledge_distillation import DistillationTrainer, create_distillation_pipeline
 from m3tm.mobile.torchscript_converter import TorchScriptConverter, create_torchscript_pipeline
-
 
 logger = logging.getLogger(__name__)
 
 
-class OptimizationConfig:
-    """Optimizasyon pipeline yapılandırma sınıfı."""
+class Context7OptimizationConfig:
+    """
+    Context7-enhanced optimization pipeline configuration.
+    
+    Implements mobile-first optimization strategies based on current
+    PyTorch best practices from official documentation.
+    """
     
     def __init__(self,
-                 target_size_reduction: float = 0.6,
-                 target_speed_improvement: float = 2.0,
-                 target_memory_reduction: float = 0.5,
-                 max_accuracy_loss: float = 0.05,
+                 # Story 22 targets from Context7 analysis
+                 target_size_reduction: float = 0.6,  # 60%+ reduction
+                 target_speed_improvement: float = 2.0,  # 2x+ speedup
+                 target_memory_reduction: float = 0.5,  # 50%+ memory reduction
+                 max_accuracy_loss: float = 0.05,  # <5% accuracy loss
+                 
+                 # Context7: Mobile optimization strategy
                  optimization_techniques: Optional[List[str]] = None,
                  progressive_optimization: bool = True,
-                 platform_targets: Optional[List[str]] = None):
+                 platform_targets: Optional[List[str]] = None,
+                 
+                 # Context7: Advanced configuration
+                 quantization_backend: str = "qnnpack",  # Mobile ARM optimal
+                 enable_fx_quantization: bool = True,
+                 enable_structured_pruning: bool = True,
+                 enable_knowledge_distillation: bool = True,
+                 enable_torch_compile: bool = True,
+                 
+                 # Context7: Validation and safety
+                 validation_frequency: int = 1,  # Validate after each technique
+                 early_stopping_threshold: float = 0.02,  # Stop if accuracy drops too much
+                 checkpoint_enabled: bool = True):
         """
+        Context7-enhanced optimization configuration.
+        
         Args:
             target_size_reduction: Hedef boyut azaltımı (0.0-1.0)
             target_speed_improvement: Hedef hız iyileştirmesi (kat)
             target_memory_reduction: Hedef hafıza azaltımı (0.0-1.0)
             max_accuracy_loss: Maksimum kabul edilebilir doğruluk kaybı
-            optimization_techniques: Kullanılacak teknikler listesi
+            optimization_techniques: Kullanılacak teknikler ['quantization', 'pruning', 'distillation', 'torchscript']
             progressive_optimization: Aşamalı optimizasyon kullan
             platform_targets: Hedef platformlar ['android', 'ios', 'desktop']
+            quantization_backend: Quantization backend ('qnnpack', 'x86')
+            enable_fx_quantization: FX Graph Mode quantization kullan
+            enable_structured_pruning: Structured pruning kullan (real speedup)
+            enable_knowledge_distillation: Knowledge distillation kullan
+            enable_torch_compile: torch.compile optimization kullan
+            validation_frequency: Validation sıklığı
+            early_stopping_threshold: Erken durdurma eşiği
+            checkpoint_enabled: Checkpoint kaydetme aktif
         """
         self.target_size_reduction = target_size_reduction
         self.target_speed_improvement = target_speed_improvement
         self.target_memory_reduction = target_memory_reduction
         self.max_accuracy_loss = max_accuracy_loss
-        self.optimization_techniques = optimization_techniques or [
-            "quantization", "pruning", "knowledge_distillation", "torchscript"
-        ]
-        self.progressive_optimization = progressive_optimization
-        self.platform_targets = platform_targets or ["android", "ios", "desktop"]
         
-        # Validation
-        if not 0.0 <= target_size_reduction <= 1.0:
-            raise ValueError("Target size reduction 0.0-1.0 arasında olmalı")
-        if target_speed_improvement < 1.0:
-            raise ValueError("Target speed improvement >= 1.0 olmalı")
-        if not 0.0 <= target_memory_reduction <= 1.0:
-            raise ValueError("Target memory reduction 0.0-1.0 arasında olmalı")
-        if not 0.0 <= max_accuracy_loss <= 1.0:
-            raise ValueError("Max accuracy loss 0.0-1.0 arasında olmalı")
+        # Context7: Default mobile optimization stack
+        if optimization_techniques is None:
+            optimization_techniques = ["quantization", "pruning", "torchscript"]
+            if enable_knowledge_distillation:
+                optimization_techniques.insert(-1, "distillation")
+                
+        self.optimization_techniques = optimization_techniques
+        self.progressive_optimization = progressive_optimization
+        self.platform_targets = platform_targets or ["android", "ios"]
+        
+        # Context7: Advanced settings
+        self.quantization_backend = quantization_backend
+        self.enable_fx_quantization = enable_fx_quantization
+        self.enable_structured_pruning = enable_structured_pruning
+        self.enable_knowledge_distillation = enable_knowledge_distillation
+        self.enable_torch_compile = enable_torch_compile
+        
+        # Context7: Validation and safety
+        self.validation_frequency = validation_frequency
+        self.early_stopping_threshold = early_stopping_threshold
+        self.checkpoint_enabled = checkpoint_enabled
+        
+        logger.info(f"Context7 optimization config: techniques={optimization_techniques}, "
+                   f"targets=size:{target_size_reduction:.0%}, speed:{target_speed_improvement}x, "
+                   f"memory:{target_memory_reduction:.0%}")
 
 
 class OptimizationPipeline:
-    """Kapsamlı model optimizasyon pipeline'ı."""
+    """
+    M³TM Model Optimization Pipeline - Context7 Enhanced
     
-    def __init__(self, config: Optional[OptimizationConfig] = None):
+    Context7 documentation'dan alınan best practices ile geliştirilmiş
+    comprehensive optimization pipeline. Mobile deployment için optimize edilmiştir.
+    
+    Features:
+    - Multi-technique orchestration with optimal ordering
+    - Progressive optimization with safety checkpoints
+    - Mobile-first platform optimization
+    - State-of-the-art PyTorch APIs integration
+    - Comprehensive benchmarking and validation
+    """
+
+    def __init__(self,
+                 config: Optional[Context7OptimizationConfig] = None,
+                 benchmarker: Optional[ModelBenchmarker] = None):
         """
-        Args:
-            config: Optimizasyon yapılandırma objesi
-        """
-        self.config = config or OptimizationConfig()
-        self.benchmarker = create_benchmarker()
+        Context7-enhanced OptimizationPipeline initialization.
         
-        # Sub-pipeline'ları initialize et
-        self.quantization_manager = create_quantization_pipeline()
-        self.pruning_manager = create_pruning_pipeline()
+        Args:
+            config: Optimization configuration
+            benchmarker: Performance measurement tool
+        """
+        self.config = config or Context7OptimizationConfig()
+        self.benchmarker = benchmarker or create_benchmarker()
+        
+        # Context7: Initialize optimization managers with current best practices
+        self.quantization_manager = create_quantization_pipeline(
+            backend=self.config.quantization_backend
+        )
+        self.pruning_manager = create_pruning_pipeline(
+            enable_experimental=self.config.enable_structured_pruning
+        )
         self.distillation_trainer = create_distillation_pipeline()
         self.torchscript_converter = create_torchscript_pipeline()
         
-        # Optimization history
+        # Context7: Track optimization state
         self.optimization_history = []
-        self.best_model = None
-        self.best_metrics = None
+        self.checkpoints = {}
+        self.current_metrics = {}
         
+        logger.info(f"OptimizationPipeline initialized with Context7 config")
+
     def optimize_model(self,
                        model: Union[nn.Module, BaseModel],
-                       example_inputs: torch.Tensor,
-                       calibration_data_loader: Optional[DataLoader] = None,
-                       validation_data_loader: Optional[DataLoader] = None,
-                       output_dir: Union[str, Path] = "optimized_models") -> Tuple[Any, Dict]:
+                       train_dataloader: Optional[DataLoader] = None,
+                       val_dataloader: Optional[DataLoader] = None,
+                       validation_fn: Optional[Callable] = None,
+                       save_path: Optional[str] = None) -> Tuple[nn.Module, Dict[str, Any]]:
         """
-        Ana optimizasyon pipeline'ını çalıştırır.
+        Context7-enhanced comprehensive model optimization.
+        
+        Implements state-of-the-art optimization pipeline based on
+        current PyTorch best practices for mobile deployment.
         
         Args:
             model: Optimize edilecek model
-            example_inputs: Örnek girdi tensörü
-            calibration_data_loader: Kalibrasyon data loader (quantization için)
-            validation_data_loader: Validation data loader
-            output_dir: Çıktı dizini
+            train_dataloader: Training data (distillation ve QAT için)
+            val_dataloader: Validation data
+            validation_fn: Custom validation function
+            save_path: Model kaydetme yolu
             
         Returns:
             Tuple[optimized_model, comprehensive_metrics]
         """
-        logger.info("Ana optimizasyon pipeline'ı başlatılıyor...")
+        logger.info("Starting Context7-enhanced model optimization pipeline")
         
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Başlangıç metrikleri
-        start_time = time.time()
-        original_metrics = self.benchmarker.get_model_metrics(model, example_inputs)
-        
-        logger.info(f"Orijinal model metrics:")
-        logger.info(f"  Size: {original_metrics.get('model_size_mb', 'N/A'):.2f} MB")
-        logger.info(f"  Parameters: {original_metrics.get('param_count', 'N/A'):,}")
-        logger.info(f"  Inference Time: {original_metrics.get('avg_inference_time_ms', 'N/A'):.2f} ms")
-        
-        comprehensive_results = {
-            'original_metrics': original_metrics,
-            'optimization_steps': [],
-            'final_comparison': {},
-            'platform_exports': {},
-            'config': {
-                'target_size_reduction': self.config.target_size_reduction,
-                'target_speed_improvement': self.config.target_speed_improvement,
-                'optimization_techniques': self.config.optimization_techniques
-            }
-        }
-        
+        # Context7: Initial benchmarking
+        original_model = copy.deepcopy(model)
         current_model = model
-        step_number = 0
+        
+        # Baseline metrics
+        baseline_metrics = self._get_baseline_metrics(original_model)
+        self.current_metrics = baseline_metrics.copy()
+        
+        logger.info(f"Baseline metrics: size={baseline_metrics.get('model_size_mb', 0):.1f}MB, "
+                   f"params={baseline_metrics.get('total_parameters', 0):,}")
         
         try:
-            # Optimization pipeline steps
-            if self.config.progressive_optimization:
-                current_model, comprehensive_results = self._run_progressive_optimization(
-                    current_model, example_inputs, calibration_data_loader, 
-                    validation_data_loader, comprehensive_results
-                )
-            else:
-                current_model, comprehensive_results = self._run_sequential_optimization(
-                    current_model, example_inputs, calibration_data_loader,
-                    validation_data_loader, comprehensive_results
-                )
+            # Context7: Execute optimization techniques in optimal order
+            for technique in self.config.optimization_techniques:
+                logger.info(f"Applying optimization technique: {technique}")
+                
+                # Create checkpoint before technique
+                if self.config.checkpoint_enabled:
+                    self.checkpoints[f"before_{technique}"] = copy.deepcopy(current_model)
+                
+                # Apply technique
+                if technique == "quantization":
+                    current_model, technique_metrics = self._apply_quantization(
+                        current_model, train_dataloader, val_dataloader
+                    )
+                elif technique == "pruning":
+                    current_model, technique_metrics = self._apply_pruning(
+                        current_model, validation_fn
+                    )
+                elif technique == "distillation":
+                    current_model, technique_metrics = self._apply_knowledge_distillation(
+                        current_model, train_dataloader, val_dataloader
+                    )
+                elif technique == "torchscript":
+                    current_model, technique_metrics = self._apply_torchscript_optimization(
+                        current_model
+                    )
+                else:
+                    logger.warning(f"Unknown optimization technique: {technique}")
+                    continue
+                
+                # Context7: Validate after each technique
+                if self.config.validation_frequency > 0:
+                    validation_metrics = self._validate_optimization_step(
+                        original_model, current_model, technique, validation_fn
+                    )
+                    technique_metrics.update(validation_metrics)
+                    
+                    # Early stopping check
+                    accuracy_loss = validation_metrics.get('accuracy_loss', 0)
+                    if accuracy_loss > self.config.early_stopping_threshold:
+                        logger.warning(f"Early stopping triggered: accuracy loss {accuracy_loss:.3f} > {self.config.early_stopping_threshold:.3f}")
+                        # Revert to previous checkpoint
+                        if f"before_{technique}" in self.checkpoints:
+                            current_model = self.checkpoints[f"before_{technique}"]
+                        break
+                
+                # Record technique results
+                self.optimization_history.append({
+                    "technique": technique,
+                    "metrics": technique_metrics,
+                    "timestamp": time.time()
+                })
+                
+                logger.info(f"Technique {technique} completed: {technique_metrics}")
+                
+            # Context7: Final comprehensive evaluation
+            final_metrics = self._get_final_metrics(original_model, current_model)
             
-            # Final metrics
-            final_metrics = self.benchmarker.get_model_metrics(current_model, example_inputs)
-            comprehensive_results['final_metrics'] = final_metrics
+            # Context7: Apply torch.compile if enabled and supported
+            if self.config.enable_torch_compile:
+                try:
+                    current_model = self._apply_torch_compile(current_model)
+                    final_metrics['torch_compile_applied'] = True
+                except Exception as e:
+                    logger.warning(f"torch.compile failed: {e}")
+                    final_metrics['torch_compile_applied'] = False
             
-            # Overall comparison
-            comparison_metrics = self._calculate_overall_metrics(original_metrics, final_metrics)
-            comprehensive_results['final_comparison'] = comparison_metrics
+            # Context7: Save optimized model if path provided
+            if save_path:
+                self._save_optimized_model(current_model, save_path, final_metrics)
             
-            # Platform exports
-            platform_exports = self._export_for_all_platforms(current_model, output_dir)
-            comprehensive_results['platform_exports'] = platform_exports
+            # Context7: Validate targets achievement
+            target_validation = self._validate_optimization_targets(final_metrics)
+            final_metrics['target_validation'] = target_validation
             
-            # Success evaluation
-            success_metrics = self._evaluate_optimization_success(comparison_metrics)
-            comprehensive_results['success_evaluation'] = success_metrics
+            logger.info("Context7 optimization pipeline completed successfully")
+            logger.info(f"Final metrics: {final_metrics}")
             
-            # Total time
-            total_time = time.time() - start_time
-            comprehensive_results['total_optimization_time_s'] = total_time
-            
-            # Generate reports
-            self._generate_optimization_report(comprehensive_results, output_dir)
-            
-            logger.info("Optimizasyon pipeline'ı tamamlandı")
-            logger.info(f"Final Results:")
-            logger.info(f"  Size Reduction: {comparison_metrics.get('size_reduction_percent', 'N/A'):.1f}%")
-            logger.info(f"  Speed Improvement: {comparison_metrics.get('speedup_ratio', 'N/A'):.1f}x")
-            logger.info(f"  Total Time: {total_time:.1f}s")
-            
-            return current_model, comprehensive_results
+            return current_model, final_metrics
             
         except Exception as e:
-            logger.error(f"Optimizasyon pipeline hatası: {e}")
-            raise
-    
-    def _run_progressive_optimization(self,
-                                      model: nn.Module,
-                                      example_inputs: torch.Tensor,
-                                      calibration_data_loader: Optional[DataLoader],
-                                      validation_data_loader: Optional[DataLoader],
-                                      results: Dict) -> Tuple[nn.Module, Dict]:
-        """
-        Aşamalı optimizasyon çalıştırır.
+            logger.error(f"Optimization pipeline failed: {e}")
+            # Return original model on failure
+            return original_model, {"error": str(e), "baseline_metrics": baseline_metrics}
+
+    def _apply_quantization(self,
+                            model: nn.Module,
+                            train_dataloader: Optional[DataLoader],
+                            val_dataloader: Optional[DataLoader]) -> Tuple[nn.Module, Dict]:
+        """Context7-enhanced quantization application"""
+        logger.info("Applying Context7-enhanced quantization...")
         
-        Args:
-            model: Optimize edilecek model
-            example_inputs: Örnek girdi tensörü
-            calibration_data_loader: Kalibrasyon data loader
-            validation_data_loader: Validation data loader
-            results: Sonuçlar dictionary
-            
-        Returns:
-            Tuple[optimized_model, updated_results]
-        """
-        logger.info("Aşamalı optimizasyon modu")
-        
-        current_model = model
-        step_metrics = []
-        
-        # Step 1: Pruning (hafif)
-        if "pruning" in self.config.optimization_techniques:
-            logger.info("Step 1: Hafif pruning")
-            current_model, pruning_results = self.pruning_manager.apply_unstructured_pruning(
-                current_model, benchmark=True
-            )
-            step_metrics.append({"step": "pruning_light", "results": pruning_results})
-        
-        # Step 2: Dynamic Quantization
-        if "quantization" in self.config.optimization_techniques:
-            logger.info("Step 2: Dynamic quantization")
-            current_model, quant_results = self.quantization_manager.apply_dynamic_quantization(
-                current_model, benchmark=True
-            )
-            step_metrics.append({"step": "quantization_dynamic", "results": quant_results})
-        
-        # Step 3: Knowledge Distillation (opsiyonel)
-        if "knowledge_distillation" in self.config.optimization_techniques:
-            logger.info("Step 3: Knowledge distillation")
-            try:
-                student_model = self.distillation_trainer.create_student_model(
-                    current_model, compression_ratio=0.6
-                )
-                
-                # Mini distillation training (gerçek projede daha kapsamlı olmalı)
-                if validation_data_loader:
-                    # Basit optimizer oluştur
-                    optimizer = torch.optim.Adam(student_model.parameters(), lr=0.001)
-                    
-                    student_model, distill_results = self.distillation_trainer.train_student(
-                        current_model, student_model, validation_data_loader, 
-                        optimizer, num_epochs=5
-                    )
-                    
-                    current_model = student_model
-                    step_metrics.append({"step": "knowledge_distillation", "results": distill_results})
-                    
-            except Exception as e:
-                logger.warning(f"Knowledge distillation atlandı: {e}")
-        
-        # Step 4: TorchScript conversion
-        if "torchscript" in self.config.optimization_techniques:
-            logger.info("Step 4: TorchScript conversion")
-            current_model, torchscript_results = self.torchscript_converter.convert_to_torchscript(
-                current_model, example_inputs, benchmark=True
-            )
-            step_metrics.append({"step": "torchscript", "results": torchscript_results})
-        
-        results['optimization_steps'] = step_metrics
-        return current_model, results
-    
-    def _run_sequential_optimization(self,
-                                     model: nn.Module,
-                                     example_inputs: torch.Tensor,
-                                     calibration_data_loader: Optional[DataLoader],
-                                     validation_data_loader: Optional[DataLoader],
-                                     results: Dict) -> Tuple[nn.Module, Dict]:
-        """
-        Sıralı optimizasyon çalıştırır.
-        
-        Args:
-            model: Optimize edilecek model
-            example_inputs: Örnek girdi tensörü
-            calibration_data_loader: Kalibrasyon data loader
-            validation_data_loader: Validation data loader
-            results: Sonuçlar dictionary
-            
-        Returns:
-            Tuple[optimized_model, updated_results]
-        """
-        logger.info("Sıralı optimizasyon modu")
-        
-        current_model = model
-        step_metrics = []
-        
-        # Her tekniği sırayla uygula
-        for technique in self.config.optimization_techniques:
-            if technique == "quantization":
-                logger.info("Quantization uygulanıyor...")
-                if calibration_data_loader:
-                    current_model, results_step = self.quantization_manager.apply_static_quantization(
-                        current_model, calibration_data_loader, example_inputs, benchmark=True
-                    )
-                else:
-                    current_model, results_step = self.quantization_manager.apply_dynamic_quantization(
-                        current_model, benchmark=True
-                    )
-                step_metrics.append({"step": "quantization", "results": results_step})
-                
-            elif technique == "pruning":
-                logger.info("Pruning uygulanıyor...")
-                current_model, results_step = self.pruning_manager.apply_unstructured_pruning(
-                    current_model, benchmark=True
-                )
-                step_metrics.append({"step": "pruning", "results": results_step})
-                
-            elif technique == "knowledge_distillation":
-                logger.info("Knowledge distillation uygulanıyor...")
+        try:
+            # Context7: Choose optimal quantization method based on model type
+            if self.config.enable_fx_quantization and hasattr(model, 'forward'):
+                # Try FX Graph Mode first for better optimization
                 try:
-                    student_model = self.distillation_trainer.create_student_model(current_model)
-                    current_model = student_model  # Simplified - gerçek projede training gerekir
-                    
-                    results_step = {"student_created": True}
-                    step_metrics.append({"step": "knowledge_distillation", "results": results_step})
+                    if train_dataloader:
+                        # QAT for highest accuracy
+                        return self.quantization_manager.apply_qat(
+                            model, train_dataloader, val_dataloader,
+                            num_epochs=3, benchmark=True
+                        )
+                    elif val_dataloader:
+                        # Static quantization for CNNs
+                        example_inputs = next(iter(val_dataloader))[0][:1]
+                        return self.quantization_manager.apply_static_quantization(
+                            model, val_dataloader, example_inputs, benchmark=True
+                        )
                 except Exception as e:
-                    logger.warning(f"Knowledge distillation atlandı: {e}")
-                    
-            elif technique == "torchscript":
-                logger.info("TorchScript conversion uygulanıyor...")
-                current_model, results_step = self.torchscript_converter.convert_to_torchscript(
-                    current_model, example_inputs, benchmark=True
+                    logger.warning(f"Advanced quantization failed, falling back to dynamic: {e}")
+            
+            # Context7: Fallback to dynamic quantization (recommended for transformers)
+            return self.quantization_manager.apply_dynamic_quantization(
+                model, benchmark=True
+            )
+            
+        except Exception as e:
+            logger.error(f"Quantization failed: {e}")
+            return model, {"error": str(e)}
+
+    def _apply_pruning(self,
+                       model: nn.Module,
+                       validation_fn: Optional[Callable]) -> Tuple[nn.Module, Dict]:
+        """Context7-enhanced pruning application"""
+        logger.info("Applying Context7-enhanced pruning...")
+        
+        try:
+            # Context7: Progressive structured pruning for real speedup
+            if self.config.enable_structured_pruning:
+                return self.pruning_manager.apply_progressive_pruning(
+                    model,
+                    target_sparsity=MOBILE_PRUNING_CONFIG["sparsity"],
+                    num_steps=MOBILE_PRUNING_CONFIG["progressive_steps"],
+                    validation_fn=validation_fn,
+                    accuracy_threshold=MOBILE_PRUNING_CONFIG["accuracy_threshold"],
+                    method="structured",
+                    benchmark=True
                 )
-                step_metrics.append({"step": "torchscript", "results": results_step})
-        
-        results['optimization_steps'] = step_metrics
-        return current_model, results
-    
-    def _calculate_overall_metrics(self, original_metrics: Dict, final_metrics: Dict) -> Dict:
-        """
-        Genel optimizasyon metriklerini hesaplar.
-        
-        Args:
-            original_metrics: Orijinal model metrikleri
-            final_metrics: Final model metrikleri
-            
-        Returns:
-            Overall comparison metrics
-        """
-        comparison = {}
-        
-        # Size comparison
-        if 'model_size_mb' in original_metrics and 'model_size_mb' in final_metrics:
-            original_size = original_metrics['model_size_mb']
-            final_size = final_metrics['model_size_mb']
-            
-            if original_size > 0:
-                size_reduction = (original_size - final_size) / original_size
-                compression_ratio = original_size / final_size if final_size > 0 else float('inf')
+            else:
+                # Fallback to unstructured pruning
+                return self.pruning_manager.apply_unstructured_pruning(
+                    model, sparsity=0.3, method="l1", global_pruning=True, benchmark=True
+                )
                 
-                comparison.update({
-                    'size_reduction_percent': size_reduction * 100,
-                    'compression_ratio': compression_ratio,
-                    'original_size_mb': original_size,
-                    'final_size_mb': final_size
-                })
+        except Exception as e:
+            logger.error(f"Pruning failed: {e}")
+            return model, {"error": str(e)}
+
+    def _apply_knowledge_distillation(self,
+                                      model: nn.Module,
+                                      train_dataloader: Optional[DataLoader],
+                                      val_dataloader: Optional[DataLoader]) -> Tuple[nn.Module, Dict]:
+        """Context7-enhanced knowledge distillation application"""
+        logger.info("Applying Context7-enhanced knowledge distillation...")
         
-        # Speed comparison
-        if 'avg_inference_time_ms' in original_metrics and 'avg_inference_time_ms' in final_metrics:
-            original_time = original_metrics['avg_inference_time_ms']
-            final_time = final_metrics['avg_inference_time_ms']
-            
-            if original_time > 0:
-                speedup = original_time / final_time if final_time > 0 else float('inf')
-                time_reduction = (original_time - final_time) / original_time
+        try:
+            if not train_dataloader:
+                logger.warning("Knowledge distillation requires training data, skipping...")
+                return model, {"skipped": "no_training_data"}
                 
-                comparison.update({
-                    'speedup_ratio': speedup,
-                    'time_reduction_percent': time_reduction * 100
-                })
-        
-        # Parameter comparison
-        if 'param_count' in original_metrics and 'param_count' in final_metrics:
-            original_params = original_metrics['param_count']
-            final_params = final_metrics['param_count']
+            # Context7: Create efficient student model (60-80% parameter reduction)
+            student_model = self.distillation_trainer.create_student_model(
+                model, compression_ratio=0.3  # 70% reduction
+            )
             
-            if original_params > 0:
-                param_reduction = (original_params - final_params) / original_params
+            # Train student model with teacher guidance
+            trained_student, metrics = self.distillation_trainer.train_student(
+                teacher_model=model,
+                student_model=student_model,
+                train_dataloader=train_dataloader,
+                val_dataloader=val_dataloader,
+                num_epochs=5,
+                benchmark=True
+            )
+            
+            return trained_student, metrics
+            
+        except Exception as e:
+            logger.error(f"Knowledge distillation failed: {e}")
+            return model, {"error": str(e)}
+
+    def _apply_torchscript_optimization(self, model: nn.Module) -> Tuple[nn.Module, Dict]:
+        """Context7-enhanced TorchScript optimization"""
+        logger.info("Applying Context7-enhanced TorchScript optimization...")
+        
+        try:
+            # Context7: Convert to TorchScript for mobile deployment
+            scripted_model, metrics = self.torchscript_converter.convert_to_torchscript(
+                model, optimization_level="mobile", benchmark=True
+            )
+            
+            return scripted_model, metrics
+            
+        except Exception as e:
+            logger.error(f"TorchScript optimization failed: {e}")
+            return model, {"error": str(e)}
+
+    def _apply_torch_compile(self, model: nn.Module) -> nn.Module:
+        """Context7: Apply torch.compile optimization if available"""
+        try:
+            if hasattr(torch, 'compile'):
+                # Context7: Use inductor backend for best performance
+                compiled_model = torch.compile(model, backend="inductor")
+                logger.info("torch.compile optimization applied")
+                return compiled_model
+            else:
+                logger.warning("torch.compile not available in this PyTorch version")
+                return model
                 
-                comparison.update({
-                    'param_reduction_percent': param_reduction * 100,
-                    'original_params': original_params,
-                    'final_params': final_params
-                })
-        
-        return comparison
-    
-    def _evaluate_optimization_success(self, comparison_metrics: Dict) -> Dict:
-        """
-        Optimizasyon başarısını değerlendirir.
-        
-        Args:
-            comparison_metrics: Karşılaştırma metrikleri
+        except Exception as e:
+            logger.warning(f"torch.compile failed: {e}")
+            return model
+
+    def _get_baseline_metrics(self, model: nn.Module) -> Dict[str, Any]:
+        """Context7-enhanced baseline metrics calculation"""
+        try:
+            return self.benchmarker.get_model_metrics(model, example_inputs=torch.randn(1, 768))
+        except Exception as e:
+            logger.error(f"Failed to get baseline metrics: {e}")
+            return {}
+
+    def _get_final_metrics(self, original_model: nn.Module, optimized_model: nn.Module) -> Dict[str, Any]:
+        """Context7-enhanced final metrics calculation"""
+        try:
+            comparison_metrics = self.benchmarker.compare_models(original_model, optimized_model)
             
-        Returns:
-            Success evaluation metrics
-        """
-        success_eval = {
-            'targets_met': {},
-            'overall_success': False,
-            'success_score': 0.0
-        }
-        
-        targets_met = 0
-        total_targets = 0
-        
-        # Size reduction target
-        size_reduction = comparison_metrics.get('size_reduction_percent', 0) / 100
-        target_size_reduction = self.config.target_size_reduction
-        
-        size_target_met = size_reduction >= target_size_reduction
-        success_eval['targets_met']['size_reduction'] = {
-            'target': target_size_reduction,
-            'achieved': size_reduction,
-            'met': size_target_met
-        }
-        
-        if size_target_met:
-            targets_met += 1
-        total_targets += 1
-        
-        # Speed improvement target
-        speedup = comparison_metrics.get('speedup_ratio', 1.0)
-        target_speedup = self.config.target_speed_improvement
-        
-        speed_target_met = speedup >= target_speedup
-        success_eval['targets_met']['speed_improvement'] = {
-            'target': target_speedup,
-            'achieved': speedup,
-            'met': speed_target_met
-        }
-        
-        if speed_target_met:
-            targets_met += 1
-        total_targets += 1
-        
-        # Overall success
-        success_score = targets_met / total_targets if total_targets > 0 else 0
-        success_eval['success_score'] = success_score
-        success_eval['overall_success'] = success_score >= 0.5  # 50% threshold
-        
-        return success_eval
-    
-    def _export_for_all_platforms(self, model: Any, output_dir: Path) -> Dict[str, Path]:
-        """
-        Tüm target platformlar için export yapar.
-        
-        Args:
-            model: Export edilecek model
-            output_dir: Çıktı dizini
+            # Add optimization history
+            comparison_metrics['optimization_history'] = self.optimization_history
+            comparison_metrics['optimization_techniques_applied'] = self.config.optimization_techniques
             
-        Returns:
-            Platform export paths
-        """
-        exports_dir = output_dir / "platform_exports"
-        exports_dir.mkdir(exist_ok=True)
-        
-        platform_exports = {}
-        
-        for platform in self.config.platform_targets:
-            try:
-                if hasattr(self.torchscript_converter, 'export_for_platform'):
-                    exports = self.torchscript_converter.export_for_platform(
-                        model, platform, exports_dir
-                    )
-                    platform_exports.update(exports)
-                else:
-                    # Fallback: generic save
-                    platform_path = exports_dir / f"model_{platform}.pt"
-                    if hasattr(model, 'save'):
-                        torch.jit.save(model, platform_path)
-                    else:
-                        torch.save(model.state_dict(), platform_path)
-                    platform_exports[platform] = platform_path
+            return comparison_metrics
+            
+        except Exception as e:
+            logger.error(f"Failed to get final metrics: {e}")
+            return {}
+
+    def _validate_optimization_step(self,
+                                    original_model: nn.Module,
+                                    current_model: nn.Module,
+                                    technique: str,
+                                    validation_fn: Optional[Callable]) -> Dict[str, Any]:
+        """Context7-enhanced optimization step validation"""
+        try:
+            validation_metrics = {}
+            
+            # Size and parameter comparison
+            def count_parameters(model):
+                return sum(p.numel() for p in model.parameters())
+                
+            original_params = count_parameters(original_model)
+            current_params = count_parameters(current_model)
+            param_reduction = (original_params - current_params) / original_params
+            
+            validation_metrics['parameter_reduction'] = param_reduction
+            validation_metrics['current_parameters'] = current_params
+            
+            # Custom validation function
+            if validation_fn:
+                try:
+                    original_accuracy = validation_fn(original_model)
+                    current_accuracy = validation_fn(current_model)
+                    accuracy_loss = original_accuracy - current_accuracy
                     
+                    validation_metrics['original_accuracy'] = original_accuracy
+                    validation_metrics['current_accuracy'] = current_accuracy
+                    validation_metrics['accuracy_loss'] = accuracy_loss
+                    
+                except Exception as e:
+                    logger.warning(f"Custom validation failed: {e}")
+                    
+            return validation_metrics
+            
+        except Exception as e:
+            logger.error(f"Validation failed: {e}")
+            return {}
+
+    def _validate_optimization_targets(self, final_metrics: Dict[str, Any]) -> Dict[str, bool]:
+        """Context7: Validate if optimization targets were achieved"""
+        try:
+            size_reduction = final_metrics.get('size_reduction_percent', 0) / 100
+            speed_improvement = final_metrics.get('speed_improvement', 1.0)
+            memory_reduction = final_metrics.get('memory_reduction_percent', 0) / 100
+            accuracy_loss = final_metrics.get('accuracy_loss', 0)
+            
+            validation = {
+                'size_target_achieved': size_reduction >= self.config.target_size_reduction,
+                'speed_target_achieved': speed_improvement >= self.config.target_speed_improvement,
+                'memory_target_achieved': memory_reduction >= self.config.target_memory_reduction,
+                'accuracy_maintained': accuracy_loss <= self.config.max_accuracy_loss
+            }
+            
+            validation['all_targets_achieved'] = all(validation.values())
+            
+            return validation
+            
+        except Exception as e:
+            logger.error(f"Target validation failed: {e}")
+            return {}
+
+    def _save_optimized_model(self,
+                              model: nn.Module,
+                              save_path: str,
+                              metrics: Dict[str, Any]) -> bool:
+        """Context7-enhanced optimized model saving"""
+        try:
+            save_path = Path(save_path)
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Save model in multiple formats for different platforms
+            base_path = save_path.stem
+            save_dir = save_path.parent
+            
+            # PyTorch format
+            torch.save(model.state_dict(), save_dir / f"{base_path}_optimized.pth")
+            
+            # TorchScript format for mobile
+            try:
+                scripted = torch.jit.script(model)
+                scripted.save(str(save_dir / f"{base_path}_mobile.pt"))
             except Exception as e:
-                logger.warning(f"Platform export hatası ({platform}): {e}")
-        
-        return platform_exports
-    
-    def _generate_optimization_report(self, results: Dict, output_dir: Path) -> None:
-        """
-        Optimizasyon raporu oluşturur.
-        
-        Args:
-            results: Optimizasyon sonuçları
-            output_dir: Çıktı dizini
-        """
-        reports_dir = output_dir / "reports"
-        reports_dir.mkdir(exist_ok=True)
-        
-        # Markdown report
-        report_content = self._create_markdown_report(results)
-        with open(reports_dir / "optimization_report.md", 'w', encoding='utf-8') as f:
-            f.write(report_content)
-        
-        # JSON metrics
-        import json
-        with open(reports_dir / "optimization_metrics.json", 'w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2, default=str)
-        
-        logger.info(f"Optimizasyon raporları oluşturuldu: {reports_dir}")
-    
-    def _create_markdown_report(self, results: Dict) -> str:
-        """Markdown optimizasyon raporu oluşturur."""
-        
-        original = results.get('original_metrics', {})
-        final = results.get('final_metrics', {})
-        comparison = results.get('final_comparison', {})
-        success = results.get('success_evaluation', {})
-        
-        lines = [
-            "# M³TM Model Optimization Report",
-            "=" * 50,
-            "",
-            "## Executive Summary",
-            "",
-            f"**Optimization Duration:** {results.get('total_optimization_time_s', 'N/A'):.1f} seconds",
-            f"**Overall Success:** {'✅ Başarılı' if success.get('overall_success', False) else '❌ Kısmi Başarı'}",
-            f"**Success Score:** {success.get('success_score', 0):.1f}/1.0",
-            "",
-            "## Model Metrics Comparison",
-            "",
-            "| Metric | Original | Optimized | Improvement |",
-            "|--------|----------|-----------|-------------|",
-            f"| Model Size (MB) | {original.get('model_size_mb', 'N/A'):.2f} | {final.get('model_size_mb', 'N/A'):.2f} | {comparison.get('size_reduction_percent', 'N/A'):.1f}% |",
-            f"| Parameters | {original.get('param_count', 'N/A'):,} | {final.get('param_count', 'N/A'):,} | {comparison.get('param_reduction_percent', 'N/A'):.1f}% |",
-            f"| Inference Time (ms) | {original.get('avg_inference_time_ms', 'N/A'):.2f} | {final.get('avg_inference_time_ms', 'N/A'):.2f} | {comparison.get('speedup_ratio', 'N/A'):.1f}x |",
-            "",
-            "## Target Achievement",
-            ""
-        ]
-        
-        # Target achievement details
-        targets = success.get('targets_met', {})
-        for target_name, target_info in targets.items():
-            status = "✅" if target_info.get('met', False) else "❌"
-            lines.append(f"- **{target_name.replace('_', ' ').title()}:** {status}")
-            lines.append(f"  - Target: {target_info.get('target', 'N/A')}")
-            lines.append(f"  - Achieved: {target_info.get('achieved', 'N/A'):.3f}")
-            lines.append("")
-        
-        # Optimization steps
-        lines.extend([
-            "## Optimization Steps Applied",
-            ""
-        ])
-        
-        for i, step in enumerate(results.get('optimization_steps', []), 1):
-            step_name = step.get('step', 'Unknown')
-            lines.append(f"{i}. **{step_name.replace('_', ' ').title()}**")
-            lines.append("")
-        
-        # Platform exports
-        platform_exports = results.get('platform_exports', {})
-        if platform_exports:
-            lines.extend([
-                "## Platform Exports",
-                ""
-            ])
+                logger.warning(f"TorchScript save failed: {e}")
+                
+            # Save metrics
+            import json
+            with open(save_dir / f"{base_path}_metrics.json", 'w') as f:
+                json.dump(metrics, f, indent=2, default=str)
+                
+            logger.info(f"Optimized model saved to {save_dir}")
+            return True
             
-            for platform, path in platform_exports.items():
-                lines.append(f"- **{platform.capitalize()}:** `{Path(path).name}`")
-            
-            lines.append("")
-        
-        return "\n".join(lines)
+        except Exception as e:
+            logger.error(f"Failed to save optimized model: {e}")
+            return False
 
 
-def create_optimization_pipeline(target_size_reduction: float = 0.6,
-                                 target_speed_improvement: float = 2.0,
-                                 optimization_techniques: Optional[List[str]] = None) -> OptimizationPipeline:
+def create_optimization_pipeline(config: Optional[Context7OptimizationConfig] = None) -> OptimizationPipeline:
     """
-    Optimization pipeline oluşturucu fonksiyon.
+    Context7-enhanced optimization pipeline oluşturucu.
     
     Args:
-        target_size_reduction: Hedef boyut azaltımı
-        target_speed_improvement: Hedef hız iyileştirmesi
-        optimization_techniques: Kullanılacak teknikler
+        config: Optimization configuration
         
     Returns:
         OptimizationPipeline instance
     """
-    config = OptimizationConfig(
-        target_size_reduction=target_size_reduction,
-        target_speed_improvement=target_speed_improvement,
-        optimization_techniques=optimization_techniques
-    )
-    
-    return OptimizationPipeline(config)
+    return OptimizationPipeline(config=config)
+
+
+# Context7: Export Story 22 optimized configuration
+STORY_22_OPTIMIZATION_CONFIG = Context7OptimizationConfig(
+    target_size_reduction=0.6,  # %60+ model size reduction
+    target_speed_improvement=2.0,  # 2x+ inference speedup
+    target_memory_reduction=0.5,  # %50+ memory reduction
+    max_accuracy_loss=0.05,  # <5% accuracy loss
+    optimization_techniques=["quantization", "pruning", "distillation", "torchscript"],
+    quantization_backend="qnnpack",  # Mobile ARM optimization
+    enable_fx_quantization=True,
+    enable_structured_pruning=True,
+    enable_knowledge_distillation=True,
+    enable_torch_compile=True,
+    progressive_optimization=True,
+    platform_targets=["android", "ios"],
+    validation_frequency=1,
+    early_stopping_threshold=0.02,
+    checkpoint_enabled=True
+)

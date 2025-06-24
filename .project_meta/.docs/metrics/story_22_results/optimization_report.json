@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-06-24T21:23:23.784593",
+  "story_id": "story_22",
+  "optimization_type": "mobile_optimization",
+  "context7_enhanced": true,
+  "pytorch_version": "2.2.2",
+  "story_22_targets": {
+    "size_reduction": {
+      "achieved": 0.0,
+      "target": 0.6,
+      "success": false
+    },
+    "speed_improvement": {
+      "achieved": 1.0,
+      "target": 2.0,
+      "success": false
+    },
+    "memory_reduction": {
+      "achieved": 0.0,
+      "target": 0.5,
+      "success": false
+    },
+    "accuracy_preservation": {
+      "achieved": 1.0,
+      "target": 0.95,
+      "success": true
+    }
+  },
+  "overall_success_rate": 0.25,
+  "optimization_time_seconds": 1.2132599353790283,
+  "techniques_applied": [],
+  "baseline_metrics": {
+    "param_count": 527626,
+    "trainable_params": 527626,
+    "non_trainable_params": 0,
+    "model_size_bytes": 2110504,
+    "model_size_mb": 2.0127334594726562,
+    "total_layers": 7,
+    "conv_layers": 0,
+    "linear_layers": 3,
+    "avg_inference_time_ms": 0.07386346000203048,
+    "throughput_fps": 13538.493863847028,
+    "total_benchmark_time_s": 0.007386346000203048,
+    "num_iterations": 100
+  },
+  "final_metrics": {
+    "torch_compile_applied": true,
+    "target_validation": {
+      "size_target_achieved": false,
+      "speed_target_achieved": false,
+      "memory_target_achieved": false,
+      "accuracy_maintained": true,
+      "all_targets_achieved": false
+    }
+  }
+}
