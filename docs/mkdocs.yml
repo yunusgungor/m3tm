@@ -1,0 +1,266 @@
+# M³TM Developer Documentation - Configuration
+
+site_name: M³TM Developer Hub
+site_description: Comprehensive documentation for M³TM mobile multi-modal transformer
+site_author: M³TM Development Team
+site_url: https://m3tm.docs
+
+# Repository
+repo_name: m3tm/mobilemodel
+repo_url: https://github.com/m3tm/mobilemodel
+edit_uri: edit/main/docs/
+
+# Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Quick Start: getting-started/quick-start.md
+    - Installation: getting-started/installation.md
+    - Your First App: getting-started/first-app.md
+    - Platform Setup: getting-started/platform-setup.md
+  - API Reference:
+    - Core SDK: api/core/index.md
+    - Android API: api/android/index.md
+    - iOS API: api/ios/index.md
+    - Configuration: api/configuration.md
+    - Error Handling: api/errors.md
+  - Tutorials:
+    - Basic Integration: tutorials/basic-integration.md
+    - Custom Models: tutorials/custom-models.md
+    - Performance Optimization: tutorials/optimization.md
+    - Production Deployment: tutorials/production.md
+  - Examples:
+    - Sample Apps: examples/sample-apps.md
+    - Integration Patterns: examples/integration-patterns.md
+    - Best Practices: examples/best-practices.md
+    - Use Cases: examples/use-cases.md
+  - Developer Tools:
+    - CLI Reference: tools/cli-reference.md
+    - Debugging Tools: tools/debugging.md
+    - Profiling Utils: tools/profiling.md
+    - IDE Integration: tools/ide-integration.md
+  - Community:
+    - Contributing: community/contributing.md
+    - Code of Conduct: community/code-of-conduct.md
+    - Discussion Forum: community/discussions.md
+    - Support: community/support.md
+
+# Theme Configuration
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
+    - content.footnote.tooltips
+    - content.tabs.link
+    - content.tooltips
+    - header.autohide
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  icon:
+    logo: logo
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+            show_signature_annotations: true
+            show_source: true
+            show_category_heading: true
+            show_root_heading: true
+            show_root_toc_entry: false
+            show_object_full_path: false
+            group_by_category: true
+            heading_level: 2
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+  - git-committers:
+      repository: m3tm/mobilemodel
+      branch: main
+  - minify:
+      minify_html: true
+  - social:
+      cards_layout_options:
+        background_color: "#2094f3"
+  - tags:
+      tags_file: tags.md
+  - blog:
+      blog_dir: blog
+      blog_toc: true
+      post_date_format: full
+      post_url_date_format: yyyy/MM/dd
+      post_url_format: "{date}/{slug}"
+      categories_allowed:
+        - Tutorials
+        - Updates
+        - Examples
+        - Tips
+
+# Markdown Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: m3tm
+      repo: mobilemodel
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra
+extra:
+  analytics:
+    provider: google
+    property: !ENV GA_TRACKING_ID
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback! Help us improve our docs by
+            <a href="https://github.com/m3tm/mobilemodel/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">telling us what you found helpful or what could be improved</a>.
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve our docs by
+            <a href="https://github.com/m3tm/mobilemodel/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">telling us what could be improved</a>.
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/m3tm/mobilemodel
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/m3tm/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/m3tm_dev
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/m3tm
+  version:
+    provider: mike
+    default: stable
+  status:
+    new: Recently added
+    deprecated: Deprecated
+
+# Watch
+watch:
+  - docs
+  - src/m3tm
+
+# Validation
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+
+# Custom CSS and JavaScript  
+extra_css:
+  - stylesheets/extra.css
+  - stylesheets/neoteroi-mkdocs.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - javascripts/feedback.js
+  - javascripts/shortcuts.js

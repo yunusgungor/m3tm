@@ -122,6 +122,38 @@
         "inference_speedup": "1.5-4x",
         "memory_reduction": "30-75%"
       }
+    },
+    {
+      "name": "MkDocs Material",
+      "category": "documentation",
+      "file_path": "fetched_docs/mkdocs_material_docs.md",
+      "last_updated": "2025-06-25T18:30:00Z",
+      "context7_id": "/squidfunk/mkdocs-material",
+      "topics": ["documentation creation", "interactive features", "API documentation", "developer experience"],
+      "relevance_score": 9.5,
+      "key_features": [
+        "Interactive content tabs",
+        "Code annotations", 
+        "Live feedback system",
+        "Mobile responsive design",
+        "GitHub Actions integration"
+      ]
+    },
+    {
+      "name": "Sphinx",
+      "category": "documentation",
+      "file_path": "fetched_docs/sphinx_docs.md", 
+      "last_updated": "2025-06-25T18:30:00Z",
+      "context7_id": "/sphinx-doc/sphinx",
+      "topics": ["API documentation", "interactive documentation", "tutorials"],
+      "relevance_score": 9.2,
+      "key_features": [
+        "Automatic API generation",
+        "Cross-referencing",
+        "Multiple output formats", 
+        "Extensions ecosystem",
+        "Source code integration"
+      ]
     }
   ],
   "last_updated": "2025-06-24T23:30:00Z",
