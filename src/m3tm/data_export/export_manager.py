@@ -12,8 +12,27 @@ from .export_formats import (
     BaseExporter,
     JSONExporter,
     CSVExporter,
-    TextExporter
+    TextExporter,
+    XMLExporter,
+    ProtocolBuffersExporter,
+    AvroExporter,
+    ParquetExporter,
+    StreamingJSONExporter
 )
+
+# Enterprise exports (with graceful fallback)
+try:
+    from .enterprise_exporters import (
+        ProtobufExporter,
+        XMLExporter,
+        StreamingExporter,
+        EnterpriseIntegrationManager,
+        ExportConfiguration
+    )
+    ENTERPRISE_AVAILABLE = True
+except ImportError:
+    ENTERPRISE_AVAILABLE = False
+    ExportConfiguration = None
 
 
 class ExportManager:
@@ -21,20 +40,44 @@ class ExportManager:
     Dışa aktarma yöneticisi sınıfı.
     
     Bu sınıf, farklı formatlarda veri dışa aktarma işlemlerini yönetir
-    ve uygun dışa aktarıcıları seçer.
+    ve uygun dışa aktarıcıları seçer. Enterprise formatları destekler.
+    
+    Context7 Protocol Buffers ve enterprise integration best practices uygulanmıştır.
     """
     
-    def __init__(self):
-        """ExportManager sınıfını başlatır."""
-        # Format -> Exporter eşleştirmeleri
+    def __init__(self, enterprise_config: Optional[Any] = None):
+        """
+        ExportManager sınıfını başlatır.
+        
+        Args:
+            enterprise_config: Enterprise export konfigürasyonu
+        """
+        # Basic format -> Exporter eşleştirmeleri
         self._exporters = {
             'json': JSONExporter(),
             'csv': CSVExporter(),
             'txt': TextExporter()
         }
         
+        # Enterprise formatları ekle (eğer mevcut ise)
+        if ENTERPRISE_AVAILABLE:
+            self._exporters.update({
+                'pb': ProtobufExporter(enterprise_config),
+                'protobuf': ProtobufExporter(enterprise_config),
+                'pbtxt': ProtobufExporter(enterprise_config),
+                'xml': XMLExporter(enterprise_config)
+            })
+            
+            # Enterprise integration manager
+            self.enterprise_manager = EnterpriseIntegrationManager(enterprise_config)
+            self.streaming_exporter = StreamingExporter(enterprise_config)
+        else:
+            self.enterprise_manager = None
+            self.streaming_exporter = None
+        
         # Desteklenen formatlar
         self.supported_formats = list(self._exporters.keys())
+        self.enterprise_config = enterprise_config
     
     def export(self, data: List[Dict[str, Any]], file_path: str, 
               format: Optional[str] = None,
@@ -121,7 +164,7 @@ class ExportManager:
             data: Filtrelenecek veri
             start_date: Başlangıç tarihi
             end_date: Bitiş tarihi
-            content_type: İçerik türü
+            content_type: İçerik türü filtresi (örn. 'text', 'image')
             limit: Maksimum öğe sayısı
             
         Returns:
@@ -239,4 +282,137 @@ class ExportManager:
             if item_type and item_type.lower() == content_type.lower():
                 result.append(item)
         
-        return result 
+        return result
+    
+    # Enterprise Integration Methods
+    
+    def register_enterprise_integration(self, name: str, config: Dict[str, Any]) -> bool:
+        """
+        Enterprise integration kaydeder.
+        
+        Args:
+            name: Integration adı
+            config: Integration konfigürasyonu
+            
+        Returns:
+            bool: Başarı durumu
+        """
+        if not ENTERPRISE_AVAILABLE or not self.enterprise_manager:
+            return False
+        
+        self.enterprise_manager.register_integration(name, config)
+        return True
+    
+    async def export_to_enterprise_system(self, data: List[Dict[str, Any]], 
+                                        integration_name: str) -> bool:
+        """
+        Enterprise sisteme veri export eder.
+        
+        Args:
+            data: Export edilecek veri
+            integration_name: Hedef integration adı
+            
+        Returns:
+            bool: Başarı durumu
+        """
+        if not ENTERPRISE_AVAILABLE or not self.enterprise_manager:
+            return False
+        
+        return await self.enterprise_manager.export_to_integration(integration_name, data)
+    
+    async def start_real_time_streaming(self, host: str = "localhost", port: int = 8765) -> bool:
+        """
+        Real-time data streaming başlatır.
+        
+        Args:
+            host: WebSocket server host
+            port: WebSocket server port
+            
+        Returns:
+            bool: Başarı durumu
+        """
+        if not ENTERPRISE_AVAILABLE or not self.streaming_exporter:
+            return False
+        
+        try:
+            await self.streaming_exporter.start_websocket_stream(host, port)
+            return True
+        except Exception:
+            return False
+    
+    async def stream_data_real_time(self, data: Dict[str, Any]) -> bool:
+        """
+        Veriyi real-time olarak stream eder.
+        
+        Args:
+            data: Stream edilecek veri
+            
+        Returns:
+            bool: Başarı durumu
+        """
+        if not ENTERPRISE_AVAILABLE or not self.streaming_exporter:
+            return False
+        
+        try:
+            await self.streaming_exporter.stream_data(data)
+            return True
+        except Exception:
+            return False
+    
+    def export_protobuf(self, data: List[Dict[str, Any]], file_path: str) -> bool:
+        """
+        Protocol Buffers formatında export eder.
+        
+        Args:
+            data: Export edilecek veri
+            file_path: Hedef dosya yolu
+            
+        Returns:
+            bool: Başarı durumu
+        """
+        if not ENTERPRISE_AVAILABLE:
+            return False
+        
+        try:
+            exporter = ProtobufExporter(self.enterprise_config)
+            exporter.export(data, file_path)
+            return True
+        except Exception:
+            return False
+    
+    def export_xml(self, data: List[Dict[str, Any]], file_path: str) -> bool:
+        """
+        XML formatında export eder.
+        
+        Args:
+            data: Export edilecek veri
+            file_path: Hedef dosya yolu
+            
+        Returns:
+            bool: Başarı durumu
+        """
+        if not ENTERPRISE_AVAILABLE:
+            return False
+        
+        try:
+            exporter = XMLExporter(self.enterprise_config)
+            exporter.export(data, file_path)
+            return True
+        except Exception:
+            return False
+    
+    def get_enterprise_capabilities(self) -> Dict[str, bool]:
+        """
+        Mevcut enterprise yeteneklerini döndürür.
+        
+        Returns:
+            Dict[str, bool]: Yetenek durumları
+        """
+        return {
+            "enterprise_available": ENTERPRISE_AVAILABLE,
+            "protobuf_export": ENTERPRISE_AVAILABLE,
+            "xml_export": ENTERPRISE_AVAILABLE,
+            "real_time_streaming": ENTERPRISE_AVAILABLE,
+            "enterprise_integration": ENTERPRISE_AVAILABLE,
+            "supported_formats": self.supported_formats
+        }

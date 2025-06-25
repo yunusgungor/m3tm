@@ -1,0 +1,271 @@
+syntax = "proto3";
+
+package m3tm.streaming;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// Simplified streaming message (without external imports)
+message StreamExportData {
+  string export_id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  repeated float vector_data = 3;
+  string content_type = 4;
+  map<string, string> metadata = 5;
+}
+
+// Real-time streaming export servisi
+service StreamingExportService {
+  // Gerçek zamanlı veri akışı başlatır
+  rpc StartDataStream(StreamRequest) returns (stream StreamResponse);
+  
+  // Batch export işlemi başlatır
+  rpc StartBatchExport(BatchExportRequest) returns (BatchExportResponse);
+  
+  // Export durumunu sorgular
+  rpc GetExportStatus(StatusRequest) returns (ExportStatus);
+  
+  // Export işlemini iptal eder
+  rpc CancelExport(CancelRequest) returns (google.protobuf.Empty);
+  
+  // Webhook subscription oluşturur
+  rpc SubscribeToEvents(SubscriptionRequest) returns (SubscriptionResponse);
+}
+
+// Stream talep mesajı
+message StreamRequest {
+  string stream_id = 1;
+  StreamConfig config = 2;
+  DataFilter filter = 3;
+  OutputFormat output_format = 4;
+}
+
+message StreamConfig {
+  int32 batch_size = 1;
+  int32 max_retry_count = 2;
+  int32 timeout_seconds = 3;
+  bool enable_compression = 4;
+  CompressionType compression_type = 5;
+}
+
+enum CompressionType {
+  COMPRESSION_TYPE_UNSPECIFIED = 0;
+  COMPRESSION_TYPE_GZIP = 1;
+  COMPRESSION_TYPE_LZ4 = 2;
+  COMPRESSION_TYPE_SNAPPY = 3;
+}
+
+message DataFilter {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+  repeated string content_types = 3;
+  repeated string user_ids = 4;
+  map<string, string> custom_filters = 5;
+}
+
+enum OutputFormat {
+  OUTPUT_FORMAT_UNSPECIFIED = 0;
+  OUTPUT_FORMAT_PROTOBUF = 1;
+  OUTPUT_FORMAT_JSON = 2;
+  OUTPUT_FORMAT_AVRO = 3;
+  OUTPUT_FORMAT_PARQUET = 4;
+}
+
+// Stream yanıt mesajı
+message StreamResponse {
+  string stream_id = 1;
+  int64 sequence_number = 2;
+  oneof payload {
+    m3tm.streaming.StreamExportData data = 3;
+    StreamError error = 4;
+    StreamMetadata metadata = 5;
+  }
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+message StreamError {
+  ErrorCode code = 1;
+  string message = 2;
+  bool is_retryable = 3;
+}
+
+enum ErrorCode {
+  ERROR_CODE_UNSPECIFIED = 0;
+  ERROR_CODE_RATE_LIMIT = 1;
+  ERROR_CODE_PERMISSION_DENIED = 2;
+  ERROR_CODE_INTERNAL_ERROR = 3;
+  ERROR_CODE_DATA_NOT_FOUND = 4;
+  ERROR_CODE_INVALID_REQUEST = 5;
+}
+
+message StreamMetadata {
+  int64 total_records = 1;
+  int64 processed_records = 2;
+  float progress_percentage = 3;
+  google.protobuf.Timestamp estimated_completion = 4;
+}
+
+// Batch export mesajları
+message BatchExportRequest {
+  string export_id = 1;
+  DataFilter filter = 2;
+  OutputConfig output_config = 3;
+  NotificationConfig notification_config = 4;
+}
+
+message OutputConfig {
+  OutputFormat format = 1;
+  string destination_uri = 2; // S3, GCS, Azure Blob, etc.
+  map<string, string> destination_config = 3;
+  bool enable_encryption = 4;
+  string encryption_key = 5;
+}
+
+message NotificationConfig {
+  repeated string webhook_urls = 1;
+  repeated string email_addresses = 2;
+  bool notify_on_completion = 3;
+  bool notify_on_error = 4;
+}
+
+message BatchExportResponse {
+  string export_id = 1;
+  ExportStatus status = 2;
+  google.protobuf.Timestamp estimated_completion = 3;
+}
+
+// Export durumu
+message ExportStatus {
+  string export_id = 1;
+  ExportState state = 2;
+  int64 total_records = 3;
+  int64 processed_records = 4;
+  float progress_percentage = 5;
+  google.protobuf.Timestamp started_at = 6;
+  google.protobuf.Timestamp completed_at = 7;
+  repeated string output_files = 8;
+  ExportMetrics metrics = 9;
+  string error_message = 10;
+}
+
+enum ExportState {
+  EXPORT_STATE_UNSPECIFIED = 0;
+  EXPORT_STATE_PENDING = 1;
+  EXPORT_STATE_RUNNING = 2;
+  EXPORT_STATE_COMPLETED = 3;
+  EXPORT_STATE_FAILED = 4;
+  EXPORT_STATE_CANCELLED = 5;
+}
+
+message ExportMetrics {
+  int64 bytes_processed = 1;
+  int64 bytes_exported = 2;
+  float compression_ratio = 3;
+  int32 error_count = 4;
+  float throughput_mbps = 5;
+}
+
+// Status sorgu mesajları
+message StatusRequest {
+  string export_id = 1;
+}
+
+message CancelRequest {
+  string export_id = 1;
+  string reason = 2;
+}
+
+// Webhook subscription mesajları
+message SubscriptionRequest {
+  string subscription_id = 1;
+  repeated EventType event_types = 2;
+  string webhook_url = 3;
+  map<string, string> headers = 4;
+  string secret_token = 5;
+}
+
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_EXPORT_STARTED = 1;
+  EVENT_TYPE_EXPORT_COMPLETED = 2;
+  EVENT_TYPE_EXPORT_FAILED = 3;
+  EVENT_TYPE_DATA_UPDATED = 4;
+  EVENT_TYPE_MODEL_TRAINED = 5;
+}
+
+message SubscriptionResponse {
+  string subscription_id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+// Enterprise system integration mesajları
+message EnterpriseIntegrationConfig {
+  DatabaseConfig database = 1;
+  MessageQueueConfig message_queue = 2;
+  CloudStorageConfig cloud_storage = 3;
+  AuthenticationConfig auth = 4;
+}
+
+message DatabaseConfig {
+  DatabaseType type = 1;
+  string connection_string = 2;
+  map<string, string> connection_params = 3;
+  int32 max_connections = 4;
+  int32 timeout_seconds = 5;
+}
+
+enum DatabaseType {
+  DATABASE_TYPE_UNSPECIFIED = 0;
+  DATABASE_TYPE_POSTGRESQL = 1;
+  DATABASE_TYPE_MYSQL = 2;
+  DATABASE_TYPE_MONGODB = 3;
+  DATABASE_TYPE_REDIS = 4;
+  DATABASE_TYPE_ELASTICSEARCH = 5;
+}
+
+message MessageQueueConfig {
+  QueueType type = 1;
+  string broker_url = 2;
+  string topic_name = 3;
+  map<string, string> queue_params = 4;
+}
+
+enum QueueType {
+  QUEUE_TYPE_UNSPECIFIED = 0;
+  QUEUE_TYPE_KAFKA = 1;
+  QUEUE_TYPE_RABBITMQ = 2;
+  QUEUE_TYPE_REDIS_PUBSUB = 3;
+  QUEUE_TYPE_AWS_SQS = 4;
+}
+
+message CloudStorageConfig {
+  StorageType type = 1;
+  string bucket_name = 2;
+  string region = 3;
+  map<string, string> storage_params = 4;
+}
+
+enum StorageType {
+  STORAGE_TYPE_UNSPECIFIED = 0;
+  STORAGE_TYPE_AWS_S3 = 1;
+  STORAGE_TYPE_GCP_GCS = 2;
+  STORAGE_TYPE_AZURE_BLOB = 3;
+  STORAGE_TYPE_MINIO = 4;
+}
+
+message AuthenticationConfig {
+  AuthType type = 1;
+  string client_id = 2;
+  string client_secret = 3;
+  string token_url = 4;
+  repeated string scopes = 5;
+}
+
+enum AuthType {
+  AUTH_TYPE_UNSPECIFIED = 0;
+  AUTH_TYPE_OAUTH2 = 1;
+  AUTH_TYPE_JWT = 2;
+  AUTH_TYPE_API_KEY = 3;
+  AUTH_TYPE_BASIC = 4;
+}

@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package m3tm.data_export.batch;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// M3TM ana veri eksport mesajı (Batch processing için)
+message BatchExportData {
+  // Metadata
+  BatchExportMetadata metadata = 1;
+  
+  // Ana veri kategorileri
+  repeated BatchEmbeddingData embeddings = 2;
+  repeated BatchUserData user_data = 3;
+  repeated BatchModelData model_data = 4;
+  repeated BatchSearchResult search_results = 5;
+  repeated BatchTrainingData training_data = 6;
+}
+
+// Export metadata
+message BatchExportMetadata {
+  string export_id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  string export_version = 3;
+  string source_system = 4;
+  string export_type = 5; // "full", "incremental", "filtered"
+  int64 total_records = 6;
+  map<string, string> custom_fields = 7;
+  ExportConfiguration config = 8;
+}
+
+// Export konfigürasyonu
+message ExportConfiguration {
+  bool include_embeddings = 1;
+  bool include_user_data = 2;
+  bool include_model_data = 3;
+  bool include_search_results = 4;
+  bool include_training_data = 5;
+  repeated string data_filters = 6;
+  google.protobuf.Timestamp start_date = 7;
+  google.protobuf.Timestamp end_date = 8;
+  int32 max_records_per_type = 9;
+}
+
+// Embedding verisi (Batch)
+message BatchEmbeddingData {
+  string embedding_id = 1;
+  string content_type = 2; // "text", "image", "multimodal"
+  repeated float vector = 3;
+  int32 dimension = 4;
+  string source_content = 5;
+  google.protobuf.Timestamp created_at = 6;
+  map<string, string> metadata = 7;
+  string model_version = 8;
+}
+
+// Kullanıcı verisi (Batch)
+message BatchUserData {
+  string user_id = 1;
+  string content_id = 2;
+  string content_type = 3; // "text", "image", "document"
+  google.protobuf.Any content_data = 4; // Flexible content storage
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp modified_at = 6;
+  map<string, string> tags = 7;
+  BatchUserDataPrivacy privacy_settings = 8;
+}
+
+// Kullanıcı veri gizliliği ayarları (Batch)
+message BatchUserDataPrivacy {
+  bool is_exportable = 1;
+  bool requires_anonymization = 2;
+  repeated string restricted_fields = 3;
+  string consent_level = 4; // "full", "limited", "none"
+}
+
+// Model verisi (Batch)
+message BatchModelData {
+  string model_id = 1;
+  string model_name = 2;
+  string model_version = 3;
+  string model_type = 4; // "base", "adapter", "task_head"
+  bytes model_weights = 5; // Serialized model weights
+  BatchModelConfiguration config = 6;
+  BatchModelMetrics metrics = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+// Model konfigürasyonu (Batch)
+message BatchModelConfiguration {
+  int32 embedding_dim = 1;
+  int32 num_layers = 2;
+  int32 num_heads = 3;
+  map<string, string> hyperparameters = 4;
+  repeated string supported_modalities = 5;
+}
+
+// Model metrikleri (Batch)
+message BatchModelMetrics {
+  float accuracy = 1;
+  float loss = 2;
+  float inference_time_ms = 3;
+  float memory_usage_mb = 4;
+  map<string, float> custom_metrics = 5;
+}
+
+// Arama sonuçları (Batch)
+message BatchSearchResult {
+  string search_id = 1;
+  string query = 2;
+  string query_type = 3; // "text", "image", "semantic"
+  repeated BatchSearchHit results = 4;
+  float search_time_ms = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  BatchSearchParameters parameters = 7;
+}
+
+// Arama parametreleri (Batch)
+message BatchSearchParameters {
+  int32 top_k = 1;
+  float similarity_threshold = 2;
+  repeated string filters = 3;
+  string ranking_method = 4;
+  map<string, string> advanced_params = 5;
+}
+
+// Arama sonucu hit (Batch)
+message BatchSearchHit {
+  string content_id = 1;
+  float similarity_score = 2;
+  string content_type = 3;
+  string content_preview = 4;
+  map<string, string> metadata = 5;
+  int32 rank = 6;
+}
+
+// Eğitim verisi (Batch)
+message BatchTrainingData {
+  string training_id = 1;
+  string model_id = 2;
+  google.protobuf.Timestamp started_at = 3;
+  google.protobuf.Timestamp completed_at = 4;
+  BatchTrainingConfiguration config = 5;
+  BatchTrainingMetrics metrics = 6;
+  BatchTrainingStatus status = 7;
+}
+
+// Eğitim konfigürasyonu (Batch)
+message BatchTrainingConfiguration {
+  float learning_rate = 1;
+  int32 batch_size = 2;
+  int32 epochs = 3;
+  string optimizer = 4;
+  string loss_function = 5;
+  map<string, string> advanced_config = 6;
+}
+
+// Eğitim metrikleri (Batch)
+message BatchTrainingMetrics {
+  repeated float epoch_losses = 1;
+  repeated float epoch_accuracies = 2;
+  float final_loss = 3;
+  float final_accuracy = 4;
+  float training_time_minutes = 5;
+  map<string, string> custom_metrics = 6; // JSON string olarak saklayabiliriz
+}
+
+// Eğitim durumu (Batch)
+enum BatchTrainingStatus {
+  BATCH_TRAINING_STATUS_UNKNOWN = 0;
+  BATCH_TRAINING_STATUS_PENDING = 1;
+  BATCH_TRAINING_STATUS_RUNNING = 2;
+  BATCH_TRAINING_STATUS_COMPLETED = 3;
+  BATCH_TRAINING_STATUS_FAILED = 4;
+  BATCH_TRAINING_STATUS_CANCELLED = 5;
+}
+
+// Streaming export için event wrapper
+message BatchExportEvent {
+  string event_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string event_type = 3; // "data", "metadata", "status", "error"
+  google.protobuf.Any payload = 4;
+  int64 sequence_number = 5;
+}
+
+// Batch export için container
+message BatchExportContainer {
+  string batch_id = 1;
+  int32 batch_number = 2;
+  int32 total_batches = 3;
+  BatchExportData data = 4;
+  bool is_final_batch = 5;
+}

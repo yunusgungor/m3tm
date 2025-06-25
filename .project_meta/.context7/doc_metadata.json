@@ -50,6 +50,14 @@
       "topics": ["mobile optimization", "model architecture", "efficient models"]
     },
     {
+      "name": "Protocol Buffers",
+      "category": "serialization",
+      "file_path": "libraries/protobuf_enterprise_integration.md",
+      "last_updated": "2025-06-25T00:00:00Z",
+      "context7_id": "/protocolbuffers/protobuf",
+      "topics": ["data serialization", "enterprise integration", "high-performance data export", "multi-format support", "schema evolution"]
+    },
+    {
       "name": "FAISS",
       "category": "library",
       "file_path": "libraries/faiss_mobile_optimization.md",

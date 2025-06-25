@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package m3tm.enterprise;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// Enterprise integration ana mesajı
+message EnterpriseIntegrationRequest {
+  string request_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string source_system = 3;
+  string target_system = 4;
+  IntegrationType integration_type = 5;
+  IntegrationConfig config = 6;
+  repeated DataTransformation transformations = 7;
+}
+
+// Integration türleri
+enum IntegrationType {
+  INTEGRATION_TYPE_UNKNOWN = 0;
+  INTEGRATION_TYPE_REALTIME_STREAM = 1;
+  INTEGRATION_TYPE_BATCH_EXPORT = 2;
+  INTEGRATION_TYPE_API_SYNC = 3;
+  INTEGRATION_TYPE_DATABASE_SYNC = 4;
+  INTEGRATION_TYPE_MESSAGE_QUEUE = 5;
+  INTEGRATION_TYPE_FILE_TRANSFER = 6;
+}
+
+// Integration konfigürasyonu
+message IntegrationConfig {
+  // Connection bilgileri
+  ConnectionConfig connection = 1;
+  
+  // Veri formatı
+  DataFormat data_format = 2;
+  
+  // Güvenlik ayarları
+  SecurityConfig security = 3;
+  
+  // Performance ayarları
+  PerformanceConfig performance = 4;
+  
+  // Retry ve error handling
+  ErrorHandlingConfig error_handling = 5;
+}
+
+// Bağlantı konfigürasyonu
+message ConnectionConfig {
+  string endpoint_url = 1;
+  int32 port = 2;
+  string protocol = 3; // "http", "https", "grpc", "kafka", "redis"
+  map<string, string> headers = 4;
+  AuthenticationConfig auth = 5;
+  int32 timeout_seconds = 6;
+  bool use_ssl = 7;
+}
+
+// Kimlik doğrulama konfigürasyonu
+message AuthenticationConfig {
+  AuthType auth_type = 1;
+  string username = 2;
+  string password = 3; // Should be encrypted/hashed
+  string api_key = 4;
+  string token = 5;
+  map<string, string> oauth_params = 6;
+  string certificate_path = 7;
+}
+
+enum AuthType {
+  AUTH_TYPE_UNKNOWN = 0;
+  AUTH_TYPE_NONE = 1;
+  AUTH_TYPE_BASIC = 2;
+  AUTH_TYPE_API_KEY = 3;
+  AUTH_TYPE_OAUTH2 = 4;
+  AUTH_TYPE_JWT = 5;
+  AUTH_TYPE_CERTIFICATE = 6;
+}
+
+// Veri formatı
+enum DataFormat {
+  DATA_FORMAT_UNKNOWN = 0;
+  DATA_FORMAT_PROTOBUF = 1;
+  DATA_FORMAT_JSON = 2;
+  DATA_FORMAT_XML = 3;
+  DATA_FORMAT_CSV = 4;
+  DATA_FORMAT_AVRO = 5;
+  DATA_FORMAT_PARQUET = 6;
+}
+
+// Güvenlik konfigürasyonu
+message SecurityConfig {
+  bool encrypt_data = 1;
+  string encryption_algorithm = 2;
+  bool validate_certificates = 3;
+  repeated string allowed_ips = 4;
+  bool enable_rate_limiting = 5;
+  int32 rate_limit_requests_per_minute = 6;
+  bool enable_audit_logging = 7;
+}
+
+// Performance konfigürasyonu
+message PerformanceConfig {
+  int32 batch_size = 1;
+  int32 max_concurrent_connections = 2;
+  int32 buffer_size_mb = 3;
+  bool enable_compression = 4;
+  string compression_algorithm = 5; // "gzip", "lz4", "snappy"
+  int32 chunk_size_kb = 6;
+  bool enable_streaming = 7;
+}
+
+// Error handling konfigürasyonu
+message ErrorHandlingConfig {
+  int32 max_retries = 1;
+  int32 retry_delay_seconds = 2;
+  bool exponential_backoff = 3;
+  repeated string retriable_errors = 4;
+  string dead_letter_queue = 5;
+  bool fail_fast = 6;
+  int32 circuit_breaker_threshold = 7;
+}
+
+// Veri transformasyonu
+message DataTransformation {
+  string transformation_id = 1;
+  TransformationType type = 2;
+  string source_field = 3;
+  string target_field = 4;
+  google.protobuf.Any transformation_config = 5;
+  int32 execution_order = 6;
+}
+
+enum TransformationType {
+  TRANSFORMATION_TYPE_UNKNOWN = 0;
+  TRANSFORMATION_TYPE_FIELD_MAPPING = 1;
+  TRANSFORMATION_TYPE_DATA_TYPE_CONVERSION = 2;
+  TRANSFORMATION_TYPE_AGGREGATION = 3;
+  TRANSFORMATION_TYPE_FILTERING = 4;
+  TRANSFORMATION_TYPE_ANONYMIZATION = 5;
+  TRANSFORMATION_TYPE_VALIDATION = 6;
+  TRANSFORMATION_TYPE_ENRICHMENT = 7;
+}
+
+// Integration yanıtı
+message EnterpriseIntegrationResponse {
+  string request_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  IntegrationStatus status = 3;
+  string message = 4;
+  IntegrationMetrics metrics = 5;
+  repeated IntegrationError errors = 6;
+  google.protobuf.Any result_data = 7;
+}
+
+enum IntegrationStatus {
+  INTEGRATION_STATUS_UNKNOWN = 0;
+  INTEGRATION_STATUS_SUCCESS = 1;
+  INTEGRATION_STATUS_PARTIAL_SUCCESS = 2;
+  INTEGRATION_STATUS_FAILED = 3;
+  INTEGRATION_STATUS_IN_PROGRESS = 4;
+  INTEGRATION_STATUS_CANCELLED = 5;
+}
+
+// Integration metrikleri
+message IntegrationMetrics {
+  int64 records_processed = 1;
+  int64 records_success = 2;
+  int64 records_failed = 3;
+  float processing_time_seconds = 4;
+  float throughput_records_per_second = 5;
+  int64 bytes_transferred = 6;
+  float transfer_rate_mbps = 7;
+  map<string, float> custom_metrics = 8;
+}
+
+// Integration hataları
+message IntegrationError {
+  string error_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  ErrorSeverity severity = 3;
+  string error_code = 4;
+  string error_message = 5;
+  string component = 6;
+  map<string, string> context = 7;
+  bool is_retryable = 8;
+}
+
+enum ErrorSeverity {
+  ERROR_SEVERITY_UNKNOWN = 0;
+  ERROR_SEVERITY_INFO = 1;
+  ERROR_SEVERITY_WARNING = 2;
+  ERROR_SEVERITY_ERROR = 3;
+  ERROR_SEVERITY_CRITICAL = 4;
+}
+
+// Real-time streaming için event
+message StreamingEvent {
+  string event_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string stream_id = 3;
+  EventType event_type = 4;
+  google.protobuf.Any payload = 5;
+  map<string, string> metadata = 6;
+  int64 sequence_number = 7;
+}
+
+enum EventType {
+  EVENT_TYPE_UNKNOWN = 0;
+  EVENT_TYPE_DATA_CREATED = 1;
+  EVENT_TYPE_DATA_UPDATED = 2;
+  EVENT_TYPE_DATA_DELETED = 3;
+  EVENT_TYPE_EMBEDDING_GENERATED = 4;
+  EVENT_TYPE_SEARCH_PERFORMED = 5;
+  EVENT_TYPE_TRAINING_STARTED = 6;
+  EVENT_TYPE_TRAINING_COMPLETED = 7;
+  EVENT_TYPE_SYSTEM_STATUS = 8;
+}

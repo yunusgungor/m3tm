@@ -33,4 +33,16 @@ requests
 # Mobile optimization and acceleration
 coremltools; sys_platform == "darwin"
 psutil
-sqlite3; python_version >= "3.0"
+
+# Enterprise data export and integration
+protobuf>=4.21.0
+lxml>=4.9.0
+kafka-python>=2.0.2
+redis>=4.5.0
+grpcio>=1.50.0
+grpcio-tools>=1.50.0
+websockets>=11.0.0
+avro>=1.11.0
+pyarrow>=10.0.0
+fastapi>=0.100.0
+uvicorn>=0.20.0
