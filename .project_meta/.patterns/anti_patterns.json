@@ -199,6 +199,54 @@
       ],
       "related_good_patterns": [],
       "last_updated": "2024-06-15"
+    },
+    {
+      "pattern_id": "AP-004",
+      "name": "SemanticSearchOvercomplexity",
+      "category": "architectural",
+      "description": "Mobil deployment constraints'leri dikkate almadan aşırı kompleks semantik arama implementasyonu yapma anti-pattern'i",
+      "symptoms": [
+        "Memory usage >2GB mobil deployment için",
+        "Search latency >100ms",
+        "Battery drain from intensive vector operations",
+        "Gereksiz yere kompleks indexing algorithms",
+        "Context7 FAISS optimization patterns'lerini ignore etme"
+      ],
+      "negative_consequences": [
+        "Mobil cihazlarda kullanım zorluğu",
+        "Battery life impact",
+        "Poor user experience",
+        "Resource inefficiency",
+        "Scalability sorunları"
+      ],
+      "remediation": "PT-022 (MobileSemanticSearchStrategy) pattern'ini uygulayın. Context7 FAISS optimizations kullanın. HNSW32 veya IVF1024,PQ8 gibi mobile-optimized index factories tercih edin. Memory constraints'leri (<2GB) dikkate alın ve ARM SVE optimizations enable edin.",
+      "related_good_patterns": ["PT-022", "PT-015", "PT-001"],
+      "context7_enhanced": true,
+      "last_updated": "2025-06-25"
+    },
+    {
+      "pattern_id": "AP-005", 
+      "name": "CrossModalTightCoupling",
+      "category": "structural",
+      "description": "Multi-modal implementations'da strategy switching'i engelleyen tight coupling anti-pattern'i",
+      "symptoms": [
+        "Hardcoded fusion algorithms",
+        "Early/Late/Attention fusion arasında switch edememe",
+        "Platform-specific multi-modal code",
+        "Strategy pattern'ini ignore etme",
+        "Runtime'da fusion method değiştirememe"
+      ],
+      "negative_consequences": [
+        "Flexibility eksikliği", 
+        "Test zorluğu",
+        "Maintainability sorunları",
+        "Platform portability sorunları",
+        "Performance optimization zorluğu"
+      ],
+      "remediation": "PT-023 (CrossModalFusionStrategy) pattern'ini uygulayın. Pluggable fusion components kullanın. Strategy pattern ile runtime'da fusion method switching enable edin. Platform-agnostic multi-modal interfaces design edin.",
+      "related_good_patterns": ["PT-023", "PT-015", "PT-003"],
+      "context7_enhanced": true,
+      "last_updated": "2025-06-25"
     }
   ]
 } 
