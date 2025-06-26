@@ -188,6 +188,56 @@
           "Squeeze-and-excitation blocks"
         ]
       }
+    },
+    "FAISS": {
+      "status": "fetched",
+      "library_id": "/facebookresearch/faiss",
+      "topics": [
+        "mobile optimization",
+        "ARM compilation",
+        "index types",
+        "performance optimization"
+      ],
+      "last_fetch": "2025-06-26T12:00:00Z",
+      "version": "current",
+      "key_insights": {
+        "mobile_optimization": {
+          "arm_support": "Supports ARM SVE (Scalable Vector Extension) optimizations with -march=armv8-a+sve",
+          "compilation_options": [
+            "FAISS_OPT_LEVEL=generic for basic mobile support",
+            "FAISS_OPT_LEVEL=sve for ARM optimizations",
+            "CMAKE flags: -DFAISS_ENABLE_GPU=OFF for mobile builds"
+          ],
+          "mobile_considerations": [
+            "Use FAISS_USE_LTO=ON for size optimization",
+            "Disable GPU support for mobile builds",
+            "Consider memory constraints with FINTEGER=int",
+            "Mobile-specific index types: IndexFlatIP, IndexIVFFlat, IndexHNSWFlat"
+          ]
+        },
+        "index_types": {
+          "mobile_recommended": [
+            "IndexFlatIP - Exact inner product search",
+            "IndexIVFFlat - Inverted file with flat quantizer",
+            "IndexHNSWFlat - Hierarchical Navigable Small World for ANN"
+          ],
+          "performance_characteristics": {
+            "IndexFlatIP": "O(n) search, exact results, high memory",
+            "IndexIVFFlat": "Sub-linear search, good accuracy/speed tradeoff",
+            "IndexHNSWFlat": "Logarithmic search, excellent for ANN queries"
+          }
+        },
+        "compilation_instructions": {
+          "mobile_cmake": [
+            "cmake -B build . -DFAISS_OPT_LEVEL=generic -DFAISS_ENABLE_GPU=OFF -DFAISS_ENABLE_PYTHON=OFF -DFAISS_USE_LTO=ON",
+            "make -C build -j faiss"
+          ],
+          "arm_optimization": [
+            "cmake -B build . -DFAISS_OPT_LEVEL=sve -DFAISS_ENABLE_GPU=OFF",
+            "make -C build -j faiss_sve"
+          ]
+        }
+      }
     }
   },
   "mobile_platforms": ["Android", "iOS"],
