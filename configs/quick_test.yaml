@@ -1,0 +1,82 @@
+# M³TM Hızlı Test Konfigürasyonu
+# Geliştirme ve test amaçlı hızlı eğitim konfigürasyonu
+
+# Model konfigürasyonu
+model:
+  size: "tiny"  # En küçük model boyutu
+  use_text_modality: true
+  use_image_modality: false  # Hızlı test için sadece text
+  num_transformer_blocks: 2
+
+# Eğitim konfigürasyonu
+training:
+  # Hızlı test için minimal parametreler
+  batch_size: 8
+  learning_rate: 1e-3
+  weight_decay: 0.01
+  epochs: 3  # Çok az epoch
+  
+  # Optimizer
+  optimizer: "adamw"
+  scheduler: "constant"  # Scheduler yok
+  warmup_steps: 10
+  
+  # Regularization
+  gradient_clip: 1.0
+  
+  # Early stopping
+  early_stopping_patience: 2
+  
+  # Cihaz
+  device: "cpu"  # CPU'da test
+  mixed_precision: false
+  
+  # Checkpoint
+  save_every_n_epochs: 1
+  eval_every_n_steps: 10
+  log_every_n_steps: 5
+
+# Veri konfigürasyonu
+data:
+  # Küçük örnek veri setleri
+  train_file: null  # Dummy data kullanılacak
+  eval_file: null
+  test_file: null
+  
+  # Minimal boyutlar
+  max_seq_length: 64
+  tokenizer_name: "default"
+  
+  # DataLoader
+  train_batch_size: 8
+  eval_batch_size: 16
+  num_workers: 0  # CPU'da paralel işlem yok
+  
+  # Minimal önişleme
+  preprocessing:
+    normalize_text: false
+    image_augmentation: false
+
+# Logging
+logging:
+  level: "DEBUG"
+  tensorboard: false  # Hızlı test için TensorBoard yok
+  
+  track_metrics:
+    - "loss"
+    - "accuracy"
+
+# Çıktı
+output:
+  save_dir: "./outputs/quick_test"
+  model_name: "m3tm_test_model"
+  save_optimizer_state: false
+  
+  export_formats:
+    - "pytorch"
+
+# Debug
+debug:
+  profile_memory: true
+  detect_anomaly: true
+  deterministic: true

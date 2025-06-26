@@ -1,0 +1,194 @@
+# M³TM Multimodal Eğitim Konfigürasyonu
+# Metin ve görüntü modalitelerini birlikte eğitmek için özelleştirilmiş konfigürasyon
+
+# Model konfigürasyonu
+model:
+  size: "base"
+  use_text_modality: true
+  use_image_modality: true
+  num_transformer_blocks: 8
+  
+  # Multimodal özel ayarları
+  fusion_strategy: "cross_attention"  # cross_attention, concatenation, gated_fusion
+  modality_dropout: 0.1  # Modalite seviyesinde dropout
+  
+  # Boyut ayarları
+  text_embed_dim: 512
+  image_embed_dim: 512
+  fused_embed_dim: 768
+
+# Eğitim konfigürasyonu
+training:
+  # Multimodal eğitim için optimize edilmiş parametreler
+  batch_size: 24  # Görüntü işleme nedeniyle daha küçük batch
+  learning_rate: 1e-4
+  weight_decay: 0.01
+  epochs: 100
+  
+  # Optimizer
+  optimizer: "adamw"
+  scheduler: "cosine"
+  warmup_steps: 2000
+  
+  # Regularization
+  gradient_clip: 1.0
+  dropout: 0.1
+  
+  # Early stopping
+  early_stopping_patience: 15
+  
+  # Cihaz
+  device: "auto"
+  mixed_precision: true
+  
+  # Multimodal özel eğitim stratejileri
+  modality_balancing: true  # Modaliteler arası dengeleme
+  curriculum_learning: true  # Kolay örneklerden zor örneklere
+  
+  # Progressive training
+  progressive_stages:
+    - stage: "text_only"
+      epochs: 10
+      freeze_image: true
+    - stage: "image_only" 
+      epochs: 10
+      freeze_text: true
+    - stage: "multimodal"
+      epochs: 80
+      freeze_text: false
+      freeze_image: false
+  
+  # Checkpoint
+  save_every_n_epochs: 5
+  eval_every_n_steps: 1000
+  log_every_n_steps: 100
+
+# Veri konfigürasyonu
+data:
+  # Multimodal veri dosyaları
+  train_file: "data/multimodal_train.jsonl"
+  eval_file: "data/multimodal_val.jsonl"
+  test_file: "data/multimodal_test.jsonl"
+  
+  # Text processing
+  max_seq_length: 512
+  tokenizer_name: "default"
+  
+  # Image processing
+  image_size: [224, 224]
+  image_channels: 3
+  patch_size: 16
+  
+  # DataLoader
+  train_batch_size: 24
+  eval_batch_size: 32
+  num_workers: 8  # Görüntü işleme için daha fazla worker
+  
+  # Multimodal önişleme
+  preprocessing:
+    # Text
+    normalize_text: true
+    remove_special_chars: false
+    lowercase: false
+    
+    # Image
+    image_augmentation: true
+    augmentation_strategies:
+      - "random_crop"
+      - "horizontal_flip"
+      - "color_jitter"
+      - "random_rotation"
+    
+    # Modality alignment
+    align_modalities: true
+    max_text_image_pairs: 1000000
+
+# Loss konfigürasyonu
+loss:
+  # Multimodal loss bileşenleri
+  components:
+    - name: "text_classification"
+      weight: 0.4
+      type: "cross_entropy"
+    
+    - name: "image_classification"
+      weight: 0.4
+      type: "cross_entropy"
+    
+    - name: "multimodal_alignment"
+      weight: 0.2
+      type: "contrastive"
+      temperature: 0.07
+  
+  # Loss balancing
+  adaptive_weighting: true
+  uncertainty_weighting: false
+
+# Logging ve monitoring
+logging:
+  level: "INFO"
+  tensorboard: true
+  wandb: true  # Multimodal eğitim için detaylı tracking
+  
+  track_metrics:
+    - "total_loss"
+    - "text_loss"
+    - "image_loss"
+    - "alignment_loss"
+    - "text_accuracy"
+    - "image_accuracy"
+    - "multimodal_accuracy"
+    - "modality_balance"
+
+# Çıktı
+output:
+  save_dir: "./outputs/multimodal_training"
+  model_name: "m3tm_multimodal_model"
+  save_optimizer_state: true
+  
+  export_formats:
+    - "pytorch"
+    - "onnx"
+    - "torchscript"
+    - "mobile_optimized"
+
+# Değerlendirme
+evaluation:
+  # Multimodal değerlendirme metrikleri
+  metrics:
+    - "accuracy"
+    - "f1_score"
+    - "precision"
+    - "recall"
+    - "cross_modal_retrieval"
+    - "modality_gap"
+  
+  # Ablation studies
+  ablation_tests:
+    - "text_only"
+    - "image_only"
+    - "multimodal"
+  
+  # Cross-modal evaluation
+  cross_modal_tasks:
+    - "text_to_image_retrieval"
+    - "image_to_text_retrieval"
+    - "multimodal_classification"
+
+# Distributed training
+distributed:
+  enabled: true
+  backend: "nccl"
+  world_size: 4  # 4 GPU için
+  
+# Memory optimization
+memory:
+  gradient_checkpointing: true
+  activation_checkpointing: true
+  offload_optimizer: false
+  
+# Profiling
+profiling:
+  enabled: false
+  profile_steps: [10, 20, 30]
+  export_chrome_trace: true

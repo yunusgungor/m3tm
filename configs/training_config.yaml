@@ -1,0 +1,121 @@
+# M³TM Model Eğitim Konfigürasyonu
+# Tam model eğitimi için temel konfigürasyon
+
+# Model konfigürasyonu
+model:
+  size: "base"  # tiny, small, base, large
+  use_text_modality: true
+  use_image_modality: true
+  num_transformer_blocks: 6
+  
+  # Özel boyutlar (opsiyonel)
+  # text_embed_dim: 512
+  # image_embed_dim: 512
+  # transformer_embed_dim: 512
+
+# Eğitim konfigürasyonu
+training:
+  # Temel parametreler
+  batch_size: 32
+  learning_rate: 2e-4
+  weight_decay: 0.01
+  epochs: 50
+  
+  # Optimizer ve scheduler
+  optimizer: "adamw"  # adamw, adam, sgd
+  scheduler: "cosine"  # cosine, linear, constant
+  warmup_steps: 1000
+  
+  # Regularization
+  gradient_clip: 1.0
+  dropout: 0.1
+  
+  # Early stopping
+  early_stopping_patience: 10
+  
+  # Cihaz ve performans
+  device: "auto"  # auto, cpu, cuda, mps
+  mixed_precision: true
+  
+  # Checkpoint ve logging
+  save_every_n_epochs: 5
+  eval_every_n_steps: 500
+  log_every_n_steps: 100
+
+# Veri konfigürasyonu
+data:
+  # Veri dosyaları
+  train_file: "data/train.jsonl"
+  eval_file: "data/val.jsonl"
+  test_file: "data/test.jsonl"
+  
+  # Tokenization
+  max_seq_length: 512
+  tokenizer_name: "default"
+  
+  # DataLoader parametreleri
+  train_batch_size: 32
+  eval_batch_size: 64
+  num_workers: 4
+  
+  # Veri önişleme
+  preprocessing:
+    normalize_text: true
+    remove_special_chars: false
+    lowercase: false
+    max_image_size: [224, 224]
+    image_augmentation: true
+
+# Logging ve monitoring
+logging:
+  level: "INFO"
+  tensorboard: true
+  wandb: false  # Weights & Biases entegrasyonu
+  
+  # Metrikler
+  track_metrics:
+    - "loss"
+    - "accuracy"
+    - "f1_score"
+    - "learning_rate"
+    - "gradient_norm"
+
+# Çıktı konfigürasyonu
+output:
+  save_dir: "./outputs/full_training"
+  model_name: "m3tm_full_model"
+  save_optimizer_state: true
+  save_scheduler_state: true
+  
+  # Export formatları
+  export_formats:
+    - "pytorch"
+    - "onnx"
+    - "torchscript"
+
+# Distributed training (opsiyonel)
+distributed:
+  enabled: false
+  backend: "nccl"  # nccl, gloo, mpi
+  world_size: 1
+  rank: 0
+  local_rank: 0
+  master_addr: "localhost"
+  master_port: "12355"
+
+  # Multi-node ayarları
+  node_rank: 0
+  num_nodes: 1
+  gpus_per_node: 1
+
+  # Performans ayarları
+  find_unused_parameters: false
+  gradient_as_bucket_view: true
+  static_graph: false
+  
+# Profiling ve debugging
+debug:
+  profile_memory: false
+  profile_compute: false
+  detect_anomaly: false
+  deterministic: false

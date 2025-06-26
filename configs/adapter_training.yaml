@@ -1,0 +1,140 @@
+# M³TM Adapter Eğitim Konfigürasyonu
+# Sadece adapter katmanlarını eğitmek için optimize edilmiş konfigürasyon
+
+# Model konfigürasyonu
+model:
+  size: "base"
+  use_text_modality: true
+  use_image_modality: true
+  
+  # Adapter özel ayarları
+  adapter_config:
+    reduction_factor: 4
+    bottleneck_dim: 64
+    activation: "relu"
+    dropout: 0.1
+
+# Eğitim konfigürasyonu
+training:
+  # Adapter eğitimi için optimize edilmiş parametreler
+  batch_size: 64  # Daha büyük batch size kullanabiliriz
+  learning_rate: 1e-3  # Adapter eğitimi için daha yüksek LR
+  weight_decay: 0.01
+  epochs: 20  # Daha az epoch yeterli
+  
+  # Optimizer
+  optimizer: "adamw"
+  scheduler: "cosine"
+  warmup_steps: 500
+  
+  # Regularization
+  gradient_clip: 1.0
+  
+  # Early stopping
+  early_stopping_patience: 5
+  
+  # Cihaz
+  device: "auto"
+  mixed_precision: true
+  
+  # Adapter özel eğitim parametreleri
+  train_adapter_names: ["text_adapter", "image_adapter", "fusion_adapter"]
+  train_task_heads: true
+  freeze_core_model: true
+  memory_optimization_level: "moderate"
+  
+  # Checkpoint
+  save_every_n_epochs: 2
+  eval_every_n_steps: 200
+  log_every_n_steps: 50
+
+# Veri konfigürasyonu
+data:
+  # Veri dosyaları
+  train_file: "data/adapter_train.jsonl"
+  eval_file: "data/adapter_val.jsonl"
+  test_file: "data/adapter_test.jsonl"
+  
+  # Tokenization (adapter eğitimi için daha kısa sekanslar)
+  max_seq_length: 256
+  tokenizer_name: "default"
+  
+  # DataLoader
+  train_batch_size: 64
+  eval_batch_size: 128
+  num_workers: 4
+  
+  # Önişleme
+  preprocessing:
+    normalize_text: true
+    max_image_size: [224, 224]
+    image_augmentation: false  # Adapter eğitiminde daha az augmentation
+
+# Logging
+logging:
+  level: "INFO"
+  tensorboard: true
+  
+  track_metrics:
+    - "loss"
+    - "accuracy"
+    - "adapter_efficiency"
+    - "parameter_efficiency"
+
+# Çıktı
+output:
+  save_dir: "./outputs/adapter_training"
+  model_name: "m3tm_adapter_model"
+  save_optimizer_state: false  # Adapter eğitiminde optimizer state'i kaydetmeye gerek yok
+  
+  export_formats:
+    - "pytorch"
+    - "adapter_only"  # Sadece adapter ağırlıklarını kaydet
+
+# Adapter özel ayarları
+adapter:
+  # Hangi katmanlara adapter eklenecek
+  target_layers:
+    - "transformer_blocks"
+    - "text_embedding"
+    - "image_embedding"
+    - "fusion"
+  
+  # Adapter türleri
+  adapter_types:
+    - "bottleneck"
+    - "lora"  # Low-Rank Adaptation
+  
+  # LoRA özel parametreleri
+  lora:
+    rank: 16
+    alpha: 32
+    dropout: 0.1
+    target_modules: ["query", "key", "value", "dense"]
+
+# Task head konfigürasyonu
+task_heads:
+  - name: "classification"
+    type: "classification"
+    num_classes: 10
+    hidden_dim: 256
+    dropout: 0.1
+  
+  - name: "regression"
+    type: "regression"
+    output_dim: 1
+    hidden_dim: 128
+
+# Değerlendirme
+evaluation:
+  metrics:
+    - "accuracy"
+    - "f1_score"
+    - "precision"
+    - "recall"
+  
+  # Adapter efficiency metrikleri
+  efficiency_metrics:
+    - "parameter_ratio"  # Eğitilen parametrelerin toplam parametrelere oranı
+    - "memory_usage"
+    - "inference_speed"
