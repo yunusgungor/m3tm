@@ -157,8 +157,8 @@ class M3TMBaseModel(BaseModel):
         from m3tm.search.search_embedding import SearchEmbeddingProjection
         self.search_embedding = SearchEmbeddingProjection(config.search_config)
 
-        # Classification head (eğitim için)
-        self.classifier = nn.Linear(config.fusion_config.output_dim, 2)  # Binary classification için
+        # Language modeling head (SFT için)
+        self.lm_head = nn.Linear(config.fusion_config.output_dim, config.text_config.vocab_size)
     
     def forward(self, text_input=None, image_input=None, return_dict=True):
         """
@@ -292,18 +292,38 @@ class M3TMBaseModel(BaseModel):
             # ancak Transformer çıktıları [batch_size, seq_len, feature_dim] şeklinde.
             # Bu nedenle, seq_len ekseni boyunca ortalama alarak boyutları uyumlu hale getiriyoruz.
             
-            if text_features is not None:
-                # Tensor şekli kontrol et ve gerekirse ortalama al
-                if len(text_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
-                    text_features = torch.mean(text_features, dim=1)  # [batch_size, feature_dim]
-            
-            if image_features is not None:
-                # Tensor şekli kontrol et ve gerekirse ortalama al
-                if len(image_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
-                    image_features = torch.mean(image_features, dim=1)  # [batch_size, feature_dim]
-            
-            fused_features = self.fusion(text_features, image_features, return_dict=False)
-            outputs["fused_features"] = fused_features
+            # SFT için sequence boyutunu koru
+            preserve_sequence = (text_features is not None and
+                               len(text_features.shape) == 3 and
+                               hasattr(self, 'lm_head'))
+
+            if preserve_sequence:
+                # Language modeling için sequence boyutunu koru
+                batch_size, seq_len, embed_dim = text_features.shape
+
+                # Basit projection (fusion yerine)
+                if not hasattr(self, 'seq_projection'):
+                    self.seq_projection = nn.Linear(
+                        embed_dim,
+                        self.config.fusion_config.output_dim
+                    ).to(text_features.device)
+
+                fused_features = self.seq_projection(text_features)  # [batch_size, seq_len, output_dim]
+                outputs["fused_features"] = fused_features
+            else:
+                # Normal fusion (sequence boyutunu kaybet)
+                if text_features is not None:
+                    # Tensor şekli kontrol et ve gerekirse ortalama al
+                    if len(text_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
+                        text_features = torch.mean(text_features, dim=1)  # [batch_size, feature_dim]
+
+                if image_features is not None:
+                    # Tensor şekli kontrol et ve gerekirse ortalama al
+                    if len(image_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
+                        image_features = torch.mean(image_features, dim=1)  # [batch_size, feature_dim]
+
+                fused_features = self.fusion(text_features, image_features, return_dict=False)
+                outputs["fused_features"] = fused_features
         
         # Arama gömme
         if fused_features is not None:
@@ -321,8 +341,8 @@ class M3TMBaseModel(BaseModel):
                 search_embedding = search_embedding_output
                 outputs["search_embedding"] = search_embedding
 
-            # Classification logits
-            logits = self.classifier(fused_features)
+            # Language modeling logits
+            logits = self.lm_head(fused_features)
             outputs["logits"] = logits
 
         if not return_dict:
