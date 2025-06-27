@@ -139,11 +139,26 @@ class M3TMBaseModel(BaseModel):
         
         # Füzyon
         from m3tm.fusion.basic_fusion import BasicFusion
-        self.fusion = BasicFusion(config.fusion_config)
+        from m3tm.fusion.config import FusionConfig as FusionModuleConfig, FusionType
+
+        # Model config'deki FusionConfig'i fusion modülündeki FusionConfig'e dönüştür
+        fusion_config = FusionModuleConfig(
+            fusion_type=FusionType.CONCATENATION,  # Varsayılan olarak concatenation
+            text_dim=config.fusion_config.text_dim,
+            image_dim=config.fusion_config.image_dim,
+            output_dim=config.fusion_config.output_dim,
+            use_layer_norm=config.fusion_config.use_layer_norm,
+            dropout_rate=config.fusion_config.dropout
+        )
+
+        self.fusion = BasicFusion(fusion_config)
         
         # Arama gömme projeksiyonu
         from m3tm.search.search_embedding import SearchEmbeddingProjection
         self.search_embedding = SearchEmbeddingProjection(config.search_config)
+
+        # Classification head (eğitim için)
+        self.classifier = nn.Linear(config.fusion_config.output_dim, 2)  # Binary classification için
     
     def forward(self, text_input=None, image_input=None, return_dict=True):
         """
@@ -162,7 +177,21 @@ class M3TMBaseModel(BaseModel):
         # Metin gömme
         text_features = None
         if text_input is not None and self.text_embedding is not None:
-            text_features = self.text_embedding(text_input)
+            # text_input bir dict ise input_ids'i çıkar
+            if isinstance(text_input, dict):
+                input_ids = text_input.get('input_ids')
+                attention_mask = text_input.get('attention_mask')
+                text_embedding_output = self.text_embedding(input_ids, attention_mask)
+            else:
+                # text_input doğrudan tensor ise
+                text_embedding_output = self.text_embedding(text_input)
+
+            # TextEmbedding dict döndürüyorsa embeddings'i çıkar
+            if isinstance(text_embedding_output, dict):
+                text_features = text_embedding_output.get('embeddings')
+            else:
+                text_features = text_embedding_output
+
             outputs["text_features"] = text_features
         
         # Görüntü gömme
@@ -273,27 +302,32 @@ class M3TMBaseModel(BaseModel):
                 if len(image_features.shape) == 3:  # [batch_size, seq_len, feature_dim]
                     image_features = torch.mean(image_features, dim=1)  # [batch_size, feature_dim]
             
-            fused_features = self.fusion(text_features, image_features)
+            fused_features = self.fusion(text_features, image_features, return_dict=False)
             outputs["fused_features"] = fused_features
         
         # Arama gömme
         if fused_features is not None:
             search_embedding_output = self.search_embedding(fused_features)
-            
+
             # search_embedding_output bir tensor veya dict olabilir
             if isinstance(search_embedding_output, dict):
-                # search_embedding_output bir dict - içerden search_embedding'i al 
-                search_embedding = search_embedding_output["search_embedding"]
+                # search_embedding_output bir dict - içerden projections'ı al
+                search_embedding = search_embedding_output.get("projections", search_embedding_output)
                 # Tam çıktıyı da saklayalım
                 outputs.update(search_embedding_output)
+                outputs["search_embedding"] = search_embedding
             else:
                 # search_embedding_output direkt bir tensor
                 search_embedding = search_embedding_output
                 outputs["search_embedding"] = search_embedding
-        
+
+            # Classification logits
+            logits = self.classifier(fused_features)
+            outputs["logits"] = logits
+
         if not return_dict:
             return outputs.get("search_embedding", None)
-        
+
         return outputs
     
     def add_adapter(self, adapter_name: str, layer_id: int = 0):

@@ -676,7 +676,9 @@ def run_advanced_training(
             # Forward pass
             if training_config.mixed_precision and scaler:
                 with torch.cuda.amp.autocast():
-                    outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+                    # M3TMBaseModel için text_input parametresi kullan
+                    text_input = {'input_ids': input_ids, 'attention_mask': attention_mask}
+                    outputs = model(text_input=text_input)
                     if isinstance(outputs, dict) and 'logits' in outputs:
                         logits = outputs['logits']
                     else:
@@ -691,7 +693,9 @@ def run_advanced_training(
                 scaler.step(optimizer)
                 scaler.update()
             else:
-                outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+                # M3TMBaseModel için text_input parametresi kullan
+                text_input = {'input_ids': input_ids, 'attention_mask': attention_mask}
+                outputs = model(text_input=text_input)
                 if isinstance(outputs, dict) and 'logits' in outputs:
                     logits = outputs['logits']
                 else:
@@ -806,7 +810,9 @@ def evaluate_model_detailed(
                 attention_mask = attention_mask.to(device)
             labels = batch['labels'].to(device)
 
-            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+            # M3TMBaseModel için text_input parametresi kullan
+            text_input = {'input_ids': input_ids, 'attention_mask': attention_mask}
+            outputs = model(text_input=text_input)
             if isinstance(outputs, dict) and 'logits' in outputs:
                 logits = outputs['logits']
             else:

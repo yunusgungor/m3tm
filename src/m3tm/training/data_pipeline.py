@@ -184,7 +184,12 @@ class MultimodalDataset(Dataset):
         
         # Tokenizer
         if tokenizer is None:
-            self.tokenizer = SimpleTokenizer(vocab_size=config.vocab_size)
+            from ..embedding.config import TokenizerConfig
+            tokenizer_config = TokenizerConfig(
+                vocab_size=config.vocab_size,
+                max_seq_length=config.max_seq_length
+            )
+            self.tokenizer = SimpleTokenizer(tokenizer_config)
             # Basit vocab oluştur
             all_texts = [item.get(config.text_column, "") for item in data]
             self.tokenizer.build_vocab(all_texts)

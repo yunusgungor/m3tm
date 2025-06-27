@@ -273,6 +273,12 @@ def test_mini_training():
             log_every_n_steps=1
         )
         
+        # Distributed manager oluştur
+        from src.m3tm.training.distributed import DistributedManager, DistributedConfig
+        distributed_config = DistributedConfig(enabled=False)  # Test için disabled
+        distributed_manager = DistributedManager(distributed_config)
+        distributed_manager.setup()
+
         try:
             # Mini eğitim çalıştır
             results = run_advanced_training(
@@ -282,6 +288,7 @@ def test_mini_training():
                 training_config=training_config,
                 checkpoint_manager=checkpoint_manager,
                 training_monitor=training_monitor,
+                distributed_manager=distributed_manager,
                 start_epoch=0,
                 start_step=0,
                 config_dict=training_config_dict

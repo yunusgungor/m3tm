@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import Dict, Union, Tuple, Optional
 
-from m3tm.config.model_config import SearchConfig
+from ..config.model_config import SearchConfig
 
 class SearchEmbeddingProjection(nn.Module):
     """
@@ -33,12 +33,13 @@ class SearchEmbeddingProjection(nn.Module):
         """
         super(SearchEmbeddingProjection, self).__init__()
         
-        if isinstance(config_or_input_dim, SearchConfig):
+        # SearchConfig kontrolü - import path farklılıkları nedeniyle attribute kontrolü yapalım
+        if hasattr(config_or_input_dim, 'input_dim') and hasattr(config_or_input_dim, 'search_dim'):
             self.config = config_or_input_dim
             self.input_dim = self.config.input_dim
             self.output_dim = self.config.search_dim
-            self.use_normalization = self.config.use_normalization
-            self.metric = self.config.metric
+            self.use_normalization = getattr(self.config, 'use_normalization', True)
+            self.metric = getattr(self.config, 'metric', 'cosine')
         else:
             if output_dim is None:
                 raise ValueError("output_dim, SearchConfig yerine input_dim kullanıldığında gereklidir")
