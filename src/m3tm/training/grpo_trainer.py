@@ -235,8 +235,13 @@ class GRPOTrainer(BaseTrainer):
         data = []
         with open(data_path, 'r', encoding='utf-8') as f:
             for line in f:
-                data.append(json.loads(line.strip()))
-        
+                line_data = json.loads(line.strip())
+                # Eğer line_data bir liste ise, içindeki dict'leri ekle
+                if isinstance(line_data, list):
+                    data.extend(line_data)
+                else:
+                    data.append(line_data)
+
         return GRPODataset(data, self.tokenizer, self.config, mode)
     
     def train(
@@ -252,16 +257,16 @@ class GRPOTrainer(BaseTrainer):
             train_dataset,
             batch_size=self.config.batch_size,
             shuffle=True,
-            num_workers=2
+            num_workers=0  # Multiprocessing sorununu önlemek için 0
         )
-        
+
         val_loader = None
         if val_dataset:
             val_loader = DataLoader(
                 val_dataset,
                 batch_size=self.config.batch_size,
                 shuffle=False,
-                num_workers=2
+                num_workers=0  # Multiprocessing sorununu önlemek için 0
             )
         
         # Optimizer ve scheduler
