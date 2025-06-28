@@ -53,6 +53,7 @@ from transformers.utils import logging as hf_logging
 # TRL imports
 from trl import (
     SFTTrainer, 
+    SFTConfig,
     GRPOTrainer, 
     GRPOConfig,
     DPOTrainer,
@@ -102,7 +103,7 @@ class ComprehensiveTrainingConfig:
     model_name_or_path: str = "Qwen/Qwen2.5-0.5B-Instruct"
     tokenizer_name_or_path: Optional[str] = None
     model_max_length: int = 2048
-    max_seq_length: int = 2048  # Global max sequence length for training
+    max_length: int = 2048  # TRL SFTConfig/GRPOConfig için max_length parametresi
     
     # Training Stages
     enable_sft: bool = True
@@ -119,8 +120,8 @@ class ComprehensiveTrainingConfig:
         "learning_rate": 2e-5,
         "warmup_ratio": 0.1,
         "weight_decay": 0.01,
-        "max_seq_length": 2048,
-        "fp16": True,
+        "max_length": 2048,  # TRL SFTConfig parametresi
+        "bf16": True,
         "gradient_checkpointing": True,
         "dataloader_num_workers": 4,
         "remove_unused_columns": False,
@@ -133,6 +134,8 @@ class ComprehensiveTrainingConfig:
         "metric_for_best_model": "eval_loss",
         "greater_is_better": False,
         "report_to": ["tensorboard", "wandb"],
+        "packing": True,  # Memory efficiency için
+        "dataset_kwargs": {"skip_prepare_dataset": True},  # Manuel preprocessing için
     })
     
     # GRPO Configuration
@@ -233,76 +236,71 @@ class DataPreprocessor:
         if os.path.exists(self.config.sft_dataset_name):
             with open(self.config.sft_dataset_name, 'r', encoding='utf-8') as f:
                 for line in f:
-                    train_data.append(json.loads(line.strip()))
+                    try:
+                        data = json.loads(line.strip())
+                        # Veriyi standardize et - text formatına dönüştür
+                        if "instruction" in data and "response" in data:
+                            text = f"{data['instruction']}\n{data['response']}"
+                        elif "conversation" in data and isinstance(data["conversation"], list):
+                            # Conversation formatını text'e dönüştür
+                            conversation_text = ""
+                            for turn in data["conversation"]:
+                                if "content" in turn:
+                                    conversation_text += f"{turn.get('role', 'user')}: {turn['content']}\n"
+                            text = conversation_text.strip()
+                        elif "messages" in data and isinstance(data["messages"], list):
+                            # Messages formatını text'e dönüştür
+                            messages_text = ""
+                            for msg in data["messages"]:
+                                if "content" in msg:
+                                    messages_text += f"{msg.get('role', 'user')}: {msg['content']}\n"
+                            text = messages_text.strip()
+                        else:
+                            # Fallback: JSON'u string'e dönüştür
+                            text = str(data)
+                        
+                        train_data.append({"text": text})
+                    except json.JSONDecodeError:
+                        continue
         
         # Eval data
         if os.path.exists(self.config.sft_eval_dataset_name):
             with open(self.config.sft_eval_dataset_name, 'r', encoding='utf-8') as f:
                 for line in f:
-                    eval_data.append(json.loads(line.strip()))
+                    try:
+                        data = json.loads(line.strip())
+                        # Veriyi standardize et - text formatına dönüştür
+                        if "instruction" in data and "response" in data:
+                            text = f"{data['instruction']}\n{data['response']}"
+                        elif "conversation" in data and isinstance(data["conversation"], list):
+                            # Conversation formatını text'e dönüştür
+                            conversation_text = ""
+                            for turn in data["conversation"]:
+                                if "content" in turn:
+                                    conversation_text += f"{turn.get('role', 'user')}: {turn['content']}\n"
+                            text = conversation_text.strip()
+                        elif "messages" in data and isinstance(data["messages"], list):
+                            # Messages formatını text'e dönüştür
+                            messages_text = ""
+                            for msg in data["messages"]:
+                                if "content" in msg:
+                                    messages_text += f"{msg.get('role', 'user')}: {msg['content']}\n"
+                            text = messages_text.strip()
+                        else:
+                            # Fallback: JSON'u string'e dönüştür
+                            text = str(data)
+                        
+                        eval_data.append({"text": text})
+                    except json.JSONDecodeError:
+                        continue
+        
+        self.logger.info(f"Train data yüklendi: {len(train_data)} örnek")
+        self.logger.info(f"Eval data yüklendi: {len(eval_data)} örnek")
         
         # HuggingFace Dataset formatına dönüştür
         train_dataset = HFDataset.from_list(train_data)
         eval_dataset = HFDataset.from_list(eval_data)
         
-        # Tokenization
-        def tokenize_function(examples):
-            texts = []
-            
-            # Farklı veri formatlarını destekle
-            if "instruction" in examples and "response" in examples:
-                # instruction + response format
-                for i in range(len(examples["instruction"])):
-                    instruction = examples["instruction"][i]
-                    response = examples["response"][i]
-                    text = f"{instruction}\n{response}"
-                    texts.append(text)
-            elif "messages" in examples:
-                # Chat format için özel işleme
-                for messages in examples["messages"]:
-                    text = self.tokenizer.apply_chat_template(
-                        messages, 
-                        tokenize=False, 
-                        add_generation_prompt=False
-                    )
-                    texts.append(text)
-            elif "text" in examples:
-                texts = examples["text"]
-            elif "input" in examples and "output" in examples:
-                # Fallback: input + output birleştir
-                for i in range(len(examples["input"])):
-                    input_text = examples["input"][i]
-                    output_text = examples["output"][i]
-                    text = f"{input_text}\n{output_text}"
-                    texts.append(text)
-            else:
-                # Son fallback: ilk string kolonunu kullan
-                for key in examples.keys():
-                    if isinstance(examples[key], list) and len(examples[key]) > 0:
-                        texts = examples[key]
-                        break
-            
-            return self.tokenizer(
-                texts,
-                max_length=self.config.model_max_length,
-                truncation=True,
-                padding=True,
-                return_tensors="pt"
-            )
-        
-        train_dataset = train_dataset.map(
-            tokenize_function, 
-            batched=True,
-            remove_columns=train_dataset.column_names
-        )
-        
-        eval_dataset = eval_dataset.map(
-            tokenize_function, 
-            batched=True,
-            remove_columns=eval_dataset.column_names
-        )
-        
-        self.logger.info(f"SFT veri seti yüklendi: {len(train_dataset)} train, {len(eval_dataset)} eval")
         return train_dataset, eval_dataset
     
     def load_grpo_dataset(self) -> Tuple[HFDataset, HFDataset]:
@@ -599,8 +597,8 @@ class TrainingOrchestrator:
         # Veri setlerini yükle
         train_dataset, eval_dataset = self.data_preprocessor.load_sft_dataset()
         
-        # max_seq_length'i config'den al
-        max_seq_length = self.config.max_seq_length
+        # max_length'i config'den al
+        max_length = self.config.max_length
         
         # SFT veri seti preprocessing fonksiyonu
         def preprocess_function(examples):
@@ -625,7 +623,7 @@ class TrainingOrchestrator:
             # Tokenize et
             model_inputs = tokenizer(
                 texts,
-                max_length=max_seq_length,
+                max_length=max_length,
                 truncation=True,
                 padding=False  # Data collator padding yapacak
             )
@@ -660,30 +658,22 @@ class TrainingOrchestrator:
             sft_config["fp16"] = False
             sft_config["bf16"] = False
             self.logger.info("CPU tespit edildi, mixed precision devre dışı bırakıldı")
-        
-        # Custom data collator oluştur
-        from transformers import DataCollatorForSeq2Seq
-        data_collator = DataCollatorForSeq2Seq(
-            tokenizer=tokenizer,
-            padding=True,
-            max_length=max_seq_length,
-            pad_to_multiple_of=8,
-            return_tensors="pt"
-        )
 
-        training_args = TrainingArguments(
+        # TRL SFTConfig oluştur
+        from trl import SFTConfig
+        
+        training_args = SFTConfig(
             output_dir=sft_output_dir,
             **sft_config
         )
         
-        # SFTTrainer oluştur
+        # SFTTrainer oluştur - data_collator'ı kaldırdık, SFTTrainer otomatik hallediyor
         trainer = SFTTrainer(
             model=model,
             args=training_args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
-            data_collator=data_collator,
         )
         
         # Eğitimi başlat

@@ -12,7 +12,7 @@ seed: 42
 model_name_or_path: "Qwen/Qwen2.5-0.5B-Instruct"  # Production başlangıç modeli
 tokenizer_name_or_path: null  # Will use model's tokenizer if null
 model_max_length: 2048
-max_seq_length: 2048  # Global max sequence length for training
+max_length: 2048  # TRL SFTConfig için max_length parametresi
 
 # Data Configuration - Expanded datasets kullan
 train_data_path: "./data/expanded/sft_train_expanded.jsonl"
@@ -61,7 +61,7 @@ sft_config:
   
   # Advanced Training Parameters
   max_grad_norm: 1.0
-  lr_scheduler_type: "cosine_with_restarts"  # Better LR schedule
+  lr_scheduler_type: "cosine"  # TRL desteklenen schedule
 
 # ========================
 # GRPO (Generalized Reward Policy Optimization) Configuration - PRODUCTION
@@ -84,12 +84,11 @@ grpo_config:
   save_strategy: "steps"
   save_steps: 400
   logging_steps: 100
-  
-  # Model Selection
-  load_best_model_at_end: true
-  metric_for_best_model: "eval_rewards/mean"
-  greater_is_better: true
   save_total_limit: 3
+  
+  # CPU uyumluluğu için mixed precision devre dışı
+  bf16: false
+  fp16: false
 
 # ========================
 # Mobile Optimization Configuration - PRODUCTION
@@ -208,7 +207,6 @@ system:
   
   # Parallelism
   dataloader_num_workers: 8
-  preprocessing_num_workers: 8
   
   # Checkpointing
   resume_from_checkpoint: null  # Set to path for resume

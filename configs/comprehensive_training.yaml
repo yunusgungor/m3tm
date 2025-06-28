@@ -12,6 +12,7 @@ seed: 42
 model_name_or_path: "Qwen/Qwen2.5-0.5B-Instruct"  # Base model for training
 tokenizer_name_or_path: null  # Will use model's tokenizer if null
 model_max_length: 2048
+max_length: 2048  # Top-level max_length için validation
 
 # Training Stages - Hangi aşamaların aktif olacağı
 enable_sft: true
@@ -32,6 +33,7 @@ sft_config:
   warmup_ratio: 0.1
   weight_decay: 0.01
   max_seq_length: 2048
+  max_length: 2048  # SFTConfig için gerekli
   
   # Precision & Memory Optimization
   fp16: false  # CPU uyumluluğu için false, GPU'da otomatik düzeltilir

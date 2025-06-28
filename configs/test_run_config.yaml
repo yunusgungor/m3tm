@@ -1,0 +1,191 @@
+advanced:
+  ab_testing:
+    baseline_model: null
+    enable: false
+    test_variants: []
+  continual_learning:
+    enable: false
+    update_frequency: null
+  enable_experiment_tracking: true
+  experiment_tags:
+  - full_scale
+  - production
+  - mobile_optimized
+  model_versioning:
+    auto_increment: true
+    enable: true
+    version_prefix: v2.0
+  privacy:
+    enable_dp: false
+    max_grad_norm: 1.0
+    noise_multiplier: 1.0
+cache_dir: ./cache
+enable_dpo: false
+enable_grpo: true
+enable_mobile_optimization: true
+enable_reward_model: false
+enable_sft: true
+experiment_name: quick_test_run
+grpo_config:
+  beta: 0.1
+  bf16: false
+  eval_steps: 2
+  eval_strategy: steps
+  fp16: false
+  learning_rate: 5.0e-06
+  logging_steps: 1
+  max_steps: 3
+  num_train_epochs: 1
+  per_device_eval_batch_size: 16
+  per_device_train_batch_size: 2
+  save_steps: 10
+  save_strategy: steps
+  save_total_limit: 3
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+grpo_train_data_path: ./data/expanded/grpo_train_expanded.jsonl
+grpo_val_data_path: ./data/expanded/grpo_val_expanded.jsonl
+max_length: 2048
+mobile_optimization:
+  benchmark:
+    benchmark_iterations: 50
+    test_inputs_count: 100
+  enable_onnx: true
+  enable_pruning: true
+  enable_quantization: true
+  enable_torchscript: true
+  onnx:
+    dynamic_axes:
+      attention_mask:
+        0: batch_size
+        1: sequence
+      input_ids:
+        0: batch_size
+        1: sequence
+      logits:
+        0: batch_size
+        1: sequence
+    export_params: true
+    input_names:
+    - input_ids
+    - attention_mask
+    opset_version: 11
+    output_names:
+    - logits
+    verbose: false
+  pruning:
+    sparsity: 0.3
+    structured: false
+  quantization:
+    backend: fbgemm
+    method: dynamic
+    qconfig_spec: null
+  torchscript:
+    optimize_for_mobile: true
+    strict: false
+  validation:
+    expected_response_length: 100
+    quality_threshold: 0.7
+    test_prompts:
+    - Python'da fonksiyon nasıl yazılır?
+    - Makine öğrenimi nedir?
+    - Mobil uygulama geliştirme ipuçları nelerdir?
+    - Veri analizi nasıl yapılır?
+model_max_length: 2048
+model_name_or_path: Qwen/Qwen2.5-0.5B-Instruct
+monitoring:
+  detailed_metrics: true
+  enable_wandb: false
+  log_file: ./logs/full_training.log
+  log_level: INFO
+  log_model_size: true
+  monitor_cpu_usage: true
+  monitor_gpu_memory: true
+  report_frequency: 100
+  wandb_entity: null
+  wandb_project: mobile_model_full_training
+  wandb_run_name: full_production_run
+output_dir: ./test_run_output
+reward_functions:
+  diversity_reward:
+    enable: true
+    weight: 0.2
+  enable_multiple_rewards: true
+  length_reward:
+    length_penalty: 0.1
+    target_length: 200
+    weight: 0.2
+  mobile_reward:
+    response_length_penalty: 0.1
+    technical_accuracy_bonus: 0.3
+    weight: 0.2
+  quality_reward:
+    code_bonus: 0.3
+    min_words: 10
+    turkish_bonus: 0.2
+    weight: 0.4
+seed: 42
+sft_config:
+  bf16: false
+  dataloader_num_workers: 8
+  eval_steps: 2
+  eval_strategy: steps
+  fp16: false
+  gradient_checkpointing: true
+  greater_is_better: false
+  learning_rate: 1.0e-05
+  load_best_model_at_end: true
+  logging_steps: 1
+  lr_scheduler_type: cosine
+  max_grad_norm: 1.0
+  max_steps: 5
+  metric_for_best_model: eval_loss
+  num_train_epochs: 1
+  per_device_eval_batch_size: 32
+  per_device_train_batch_size: 2
+  remove_unused_columns: false
+  report_to: []
+  save_steps: 10
+  save_strategy: steps
+  save_total_limit: 5
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+system:
+  dataloader_num_workers: 8
+  deterministic: true
+  gradient_accumulation_steps: 2
+  ignore_data_skip: false
+  max_memory_gb: 16
+  remove_unused_columns: false
+  resume_from_checkpoint: null
+  save_safetensors: true
+  seed: 42
+  use_amp: false
+  use_cpu: true
+tokenizer_name_or_path: null
+train_data_path: ./data/expanded/sft_train_expanded.jsonl
+val_data_path: ./data/expanded/sft_val_expanded.jsonl
+validation:
+  enable_comprehensive_validation: true
+  model_constraints:
+    max_inference_time_ms: 1000
+    max_size_mb: 500
+  quality_benchmarks:
+  - expected_accuracy: 0.8
+    name: turkish_qa
+    prompts_file: ./benchmarks/turkish_qa.jsonl
+  - expected_accuracy: 0.7
+    name: code_generation
+    prompts_file: ./benchmarks/code_gen.jsonl
+  test_data_splits:
+  - metrics:
+    - loss
+    - perplexity
+    - bleu
+    name: sft_validation
+    path: ./data/expanded/sft_val_expanded.jsonl
+  - metrics:
+    - rewards
+    - kl_divergence
+    name: grpo_validation
+    path: ./data/expanded/grpo_val_expanded.jsonl
