@@ -164,7 +164,7 @@ class ComprehensiveTrainingConfig:
         "learning_rate": 1e-5,
         "warmup_ratio": 0.1,
         "weight_decay": 0.01,
-        "fp16": True,
+        "fp16": False,  # Disabled due to Half precision compatibility issues
         "gradient_checkpointing": True,
         "max_length": 2048,
     })

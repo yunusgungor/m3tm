@@ -815,7 +815,7 @@ class ScalabilityOptimizer:
         estimated_memory = self._estimate_memory_usage(dataset_size)
         if estimated_memory > self.max_memory_gb:
             optimization_config["use_quantization"] = True
-            optimization_config["precision"] = "fp16"
+            optimization_config["precision"] = "fp32"  # Use fp32 instead of fp16 to avoid Half precision issues
             optimization_config["chunk_size"] = max(1000, optimization_config["chunk_size"] // 2)
             
         self.optimization_stats["dataset_optimizations"].append({

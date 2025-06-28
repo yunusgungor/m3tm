@@ -115,7 +115,7 @@ reward_config:
   learning_rate: 1e-5
   warmup_ratio: 0.1
   weight_decay: 0.01
-  fp16: true
+  fp16: false
   gradient_checkpointing: true
   max_length: 2048
 

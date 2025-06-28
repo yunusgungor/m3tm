@@ -48,7 +48,7 @@ class ComprehensiveTrainingConfig:
     
     # Performance Configuration
     gradient_accumulation_steps: int = 4
-    fp16: bool = True
+    fp16: bool = False  # Disabled due to Half precision compatibility issues
     dataloader_num_workers: int = 2
     
     # Additional configurations
@@ -99,24 +99,47 @@ class TrainingOrchestrator:
         """Initialize tokenizer, model, and trainer."""
         logger.info(f"Setting up training with model: {self.config.model_name}")
         
-        # Setup tokenizer
+        # Setup tokenizer with Context7 best practices for attention mask
         tokenizer_name = self.config.tokenizer_name or self.config.model_name
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
         
-        # Add pad token if missing
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
+        # Context7 critical fix: Ensure pad_token_id != eos_token_id
+        if self.tokenizer.pad_token_id is None or self.tokenizer.pad_token_id == self.tokenizer.eos_token_id:
+            logger.info(f"🔧 Fixing pad_token conflict: pad_token_id={self.tokenizer.pad_token_id}, eos_token_id={self.tokenizer.eos_token_id}")
             
-        # Setup model
+            # Context7 recommended approach: Use distinct pad token
+            if hasattr(self.tokenizer, 'unk_token_id') and self.tokenizer.unk_token_id is not None and self.tokenizer.unk_token_id != self.tokenizer.eos_token_id:
+                self.tokenizer.pad_token_id = self.tokenizer.unk_token_id
+                self.tokenizer.pad_token = self.tokenizer.unk_token
+                logger.info(f"✅ Set pad_token to unk_token: {self.tokenizer.pad_token_id}")
+            else:
+                # Add a special pad token as per Context7 examples
+                try:
+                    self.tokenizer.add_special_tokens({'pad_token': '<pad>'})
+                    logger.info(f"✅ Added new pad token: {self.tokenizer.pad_token_id}")
+                except:
+                    # Fallback: use a different safe ID
+                    self.tokenizer.pad_token_id = 0 if self.tokenizer.eos_token_id != 0 else 1
+                    self.tokenizer.pad_token = '<pad>'
+                    logger.info(f"✅ Set fallback pad_token_id: {self.tokenizer.pad_token_id}")
+            
+            # Final verification they're different
+            if self.tokenizer.pad_token_id == self.tokenizer.eos_token_id:
+                self.tokenizer.pad_token_id = self.tokenizer.eos_token_id + 1 if self.tokenizer.eos_token_id < 50000 else self.tokenizer.eos_token_id - 1
+                logger.info(f"✅ Final verification - pad_token_id: {self.tokenizer.pad_token_id}")
+            
+        # Setup model with explicit float32 (avoid Half precision issues)
         self.model = AutoModelForCausalLM.from_pretrained(
             self.config.model_name,
-            torch_dtype=torch.float16 if self.config.fp16 else torch.float32,
+            torch_dtype=torch.float32,  # Force float32 to avoid Half precision errors
         )
         
-        # Resize token embeddings if needed
+        # Resize token embeddings if needed (Context7 best practice)
+        original_vocab_size = self.model.config.vocab_size
         self.model.resize_token_embeddings(len(self.tokenizer))
+        logger.info(f"📝 Resized embeddings: {original_vocab_size} -> {len(self.tokenizer)}")
         
-        logger.info("Setup completed successfully")
+        logger.info("✅ Setup completed successfully with Context7 fixes")
         
     def load_dataset(self, data_path: str):
         """Load and prepare dataset."""
@@ -204,7 +227,7 @@ def create_production_training_config(
         eval_steps=250,
         logging_steps=50,
         gradient_accumulation_steps=8,
-        fp16=True,
+        fp16=False,  # Disabled due to Half precision compatibility issues
         dataloader_num_workers=0,  # Avoid multiprocessing issues
         save_total_limit=2,
         load_best_model_at_end=True,

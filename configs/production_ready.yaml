@@ -15,7 +15,7 @@ training:
   eval_steps: 50
   logging_steps: 10
   gradient_accumulation_steps: 2  # Reduced accumulation
-  fp16: true  # Memory optimization
+  fp16: false  # Disabled due to Half precision issues
   dataloader_num_workers: 0  # Avoid multiprocessing
   save_total_limit: 2  # Limit checkpoints
   load_best_model_at_end: true

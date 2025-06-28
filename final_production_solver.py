@@ -16,6 +16,9 @@ os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
 
+# Force PyTorch to use float32 to avoid Half precision issues
+torch.set_default_dtype(torch.float32)
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -27,16 +30,23 @@ class FinalProductionSolver:
         self.solved_issues = []
         
     def apply_checkpoint_fixes(self):
-        """Apply aggressive checkpoint fixes."""
-        logger.info("🔧 Applying final checkpoint fixes...")
+        """Apply aggressive checkpoint and attention mask fixes."""
+        logger.info("🔧 Applying final checkpoint and attention mask fixes...")
         
         try:
-            # Import and apply final checkpoint fix
-            exec(open('final_checkpoint_fix.py').read())
+            # Import the checkpoint fix module properly
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("final_checkpoint_fix", "final_checkpoint_fix.py")
+            checkpoint_fix = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(checkpoint_fix)
+            
+            # Apply all fixes (attention_mask + checkpoints)
+            checkpoint_fix.apply_all_checkpoint_fixes()
+            self.solved_issues.append("attention_mask_fixed")
             self.solved_issues.append("checkpoint_system_fixed")
-            logger.info("✅ Checkpoint system enhanced")
+            logger.info("✅ Attention mask and checkpoint systems enhanced")
         except Exception as e:
-            logger.error(f"❌ Checkpoint fix failed: {e}")
+            logger.error(f"❌ Checkpoint/attention mask fix failed: {e}")
             
     def optimize_for_minimal_resources(self):
         """Optimize for minimal resource usage."""
@@ -82,6 +92,8 @@ training:
   logging_steps: 1
   gradient_accumulation_steps: 1
   fp16: false
+  bf16: false
+  torch_dtype: "float32"
   dataloader_num_workers: 0
   save_total_limit: 1
   load_best_model_at_end: false
