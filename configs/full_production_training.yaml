@@ -77,7 +77,6 @@ grpo_config:
   
   # GRPO Specific Parameters
   beta: 0.1  # KL divergence penalty
-  ref_model: null  # Will use SFT model as reference
   
   # Evaluation & Saving
   eval_strategy: "steps"

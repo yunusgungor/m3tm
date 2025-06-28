@@ -774,6 +774,7 @@ class TrainingOrchestrator:
             args=training_args,
             reward_funcs=combined_reward_function,
             train_dataset=train_dataset,
+            eval_dataset=eval_dataset,
             processing_class=tokenizer,
         )
         
