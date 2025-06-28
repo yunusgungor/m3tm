@@ -1,0 +1,47 @@
+dataloader_num_workers: 4
+eval_steps: 50
+generation_config:
+  do_sample: false
+  max_new_tokens: 50
+  num_beams: 1
+  repetition_penalty: 1.1
+  temperature: 1.0
+  top_k: 50
+  top_p: 0.9
+  use_cache: true
+group_by_length: true
+grpo_config:
+  beta: 0.1
+  gradient_accumulation_steps: 8
+  max_length: 256
+  max_steps: 50
+  per_device_train_batch_size: 2
+learning_rate: 2.0e-05
+load_best_model_at_end: false
+logging_steps: 5
+max_length: 256
+model_name: Qwen/Qwen2.5-0.5B-Instruct
+num_train_epochs: 2
+output_dir: ./optimized_outputs
+performance_optimizations:
+  dataloader_persistent_workers: true
+  dataloader_pin_memory: true
+  quantization_bits: 4
+  torch_compile: false
+  use_gradient_checkpointing: true
+  use_quantization: true
+remove_unused_columns: false
+report_to: []
+save_steps: 25
+save_total_limit: 3
+sft_config:
+  bf16: true
+  dataset_text_field: text
+  fp16: false
+  gradient_accumulation_steps: 4
+  max_length: 256
+  max_steps: 100
+  optim: adamw_torch
+  packing: false
+  per_device_train_batch_size: 4
+warmup_steps: 50

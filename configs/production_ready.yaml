@@ -1,0 +1,28 @@
+
+# Ultra-optimized training configuration for production readiness
+model:
+  name: "microsoft/DialoGPT-small"  # Smaller, faster model
+  max_length: 256  # Reduced context length
+  
+training:
+  output_dir: "./ultra_optimized_output"
+  num_train_epochs: 1  # Minimal epochs for validation
+  per_device_train_batch_size: 1  # Minimal batch size
+  per_device_eval_batch_size: 1
+  learning_rate: 5e-5  # Higher LR for faster convergence
+  warmup_steps: 10  # Minimal warmup
+  save_steps: 50  # Frequent saves for testing
+  eval_steps: 50
+  logging_steps: 10
+  gradient_accumulation_steps: 2  # Reduced accumulation
+  fp16: true  # Memory optimization
+  dataloader_num_workers: 0  # Avoid multiprocessing
+  save_total_limit: 2  # Limit checkpoints
+  load_best_model_at_end: true
+  report_to: []  # No external reporting
+  remove_unused_columns: false
+  
+data:
+  train_file: "./data/expanded/sft_train_expanded.jsonl"
+  eval_file: "./data/expanded/sft_val_expanded.jsonl"
+  max_samples: 100  # Limited samples for testing

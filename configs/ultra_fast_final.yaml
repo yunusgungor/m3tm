@@ -1,0 +1,98 @@
+# Ultra-Fast Production Validation Config - Complete Structure
+experiment_name: "ultra_fast_validation"
+output_dir: "./ultra_fast_output"
+cache_dir: "./cache"
+seed: 42
+
+# Model Configuration
+model_name_or_path: "microsoft/DialoGPT-small"  # Minimal model
+tokenizer_name_or_path: null
+model_max_length: 64
+max_length: 64
+
+# Training Stages
+enable_sft: true
+enable_reward_model: false
+enable_grpo: true
+enable_dpo: false
+enable_mobile_optimization: false
+
+# SFT Configuration
+sft_config:
+  num_train_epochs: 1
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  learning_rate: 1e-3
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_seq_length: 64
+  max_length: 64
+  
+  fp16: false
+  bf16: false
+  gradient_checkpointing: false
+  dataloader_num_workers: 0
+  remove_unused_columns: false
+  
+  eval_strategy: "no"
+  save_strategy: "steps"
+  save_steps: 5
+  logging_steps: 1
+
+# GRPO Configuration  
+grpo_config:
+  num_train_epochs: 1
+  per_device_train_batch_size: 1
+  learning_rate: 1e-4
+  max_seq_length: 64
+  max_length: 64
+  fp16: false
+  bf16: false
+
+# Data Configuration
+data_config:
+  # SFT Data
+  sft_train: "./data/ultra_minimal/sft_train_ultra.jsonl"
+  sft_val: "./data/ultra_minimal/sft_val_ultra.jsonl"
+  
+  # GRPO Data
+  grpo_train: "./data/ultra_minimal/sft_train_ultra.jsonl"  # Reuse minimal data
+  grpo_val: "./data/ultra_minimal/sft_val_ultra.jsonl"
+
+# Distributed Training
+distributed_config:
+  enable_distributed: false
+
+# Monitoring Configuration
+monitoring_config:
+  wandb_enabled: false
+  tensorboard_enabled: false
+
+# Hardware Configuration
+hardware_config:
+  device: "cpu"
+  mixed_precision: false
+  compile_model: false
+
+# Training Configuration (for compatibility)
+training:
+  output_dir: "./ultra_fast_output"
+  num_train_epochs: 1
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  learning_rate: 1e-3
+  warmup_steps: 1
+  save_steps: 5
+  eval_steps: 5
+  logging_steps: 1
+  gradient_accumulation_steps: 1
+  fp16: false
+  dataloader_num_workers: 0
+  save_total_limit: 1
+  load_best_model_at_end: false
+  remove_unused_columns: false
+  report_to: []
+  train_data_path: "./data/ultra_minimal/sft_train_ultra.jsonl"
+  eval_data_path: "./data/ultra_minimal/sft_val_ultra.jsonl"
+  model_name: "microsoft/DialoGPT-small"
+  max_length: 64
