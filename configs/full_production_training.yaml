@@ -1,0 +1,285 @@
+# Full-Scale Mobile Model Training Configuration
+# Bu config, gerçek büyük veri setiyle uzun dönemli model eğitimi için optimize edilmiştir
+# Expanded data ve production-grade parameters ile
+
+# Basic Configuration
+experiment_name: "mobile_gemini_full_production_training"
+output_dir: "./outputs/full_production_training"
+cache_dir: "./cache"
+seed: 42
+
+# Model Configuration
+model_name_or_path: "Qwen/Qwen2.5-0.5B-Instruct"  # Production başlangıç modeli
+tokenizer_name_or_path: null  # Will use model's tokenizer if null
+model_max_length: 2048
+max_seq_length: 2048  # Global max sequence length for training
+
+# Data Configuration - Expanded datasets kullan
+train_data_path: "./data/expanded/sft_train_expanded.jsonl"
+val_data_path: "./data/expanded/sft_val_expanded.jsonl"
+grpo_train_data_path: "./data/expanded/grpo_train_expanded.jsonl"
+grpo_val_data_path: "./data/expanded/grpo_val_expanded.jsonl"
+
+# Training Stages - Full pipeline aktif
+enable_sft: true
+enable_reward_model: false  # Şimdilik devre dışı (preference data eksik)
+enable_grpo: true
+enable_dpo: false  # Alternative to GRPO
+enable_mobile_optimization: true
+
+# ========================
+# SFT (Supervised Fine-Tuning) Configuration - PRODUCTION SCALE
+# ========================
+sft_config:
+  # Training Parameters - Long-term training
+  num_train_epochs: 15  # Uzun dönemli eğitim
+  per_device_train_batch_size: 16  # Daha büyük batch size
+  per_device_eval_batch_size: 32
+  learning_rate: 0.00001  # Daha düşük LR, daha stabil
+  warmup_ratio: 0.05  # Daha kısa warmup
+  weight_decay: 0.01
+  
+  # Precision & Memory Optimization
+  fp16: false  # CPU uyumluluğu için false, GPU'da otomatik düzeltilir
+  bf16: false  # Use fp16 or bf16, not both
+  gradient_checkpointing: true
+  dataloader_num_workers: 8  # Daha fazla worker
+  remove_unused_columns: false
+  
+  # Evaluation & Saving - Daha sık checkpoint
+  eval_strategy: "steps"
+  eval_steps: 100  # Daha sık evaluation
+  save_strategy: "steps"
+  save_steps: 200  # Daha sık kaydetme
+  logging_steps: 50  # Daha detaylı logging
+  
+  # Model Selection
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  save_total_limit: 5  # Son 5 checkpoint'i sakla
+  
+  # Advanced Training Parameters
+  max_grad_norm: 1.0
+  lr_scheduler_type: "cosine_with_restarts"  # Better LR schedule
+
+# ========================
+# GRPO (Generalized Reward Policy Optimization) Configuration - PRODUCTION
+# ========================
+grpo_config:
+  # Training Parameters
+  num_train_epochs: 8  # GRPO için yeterli epoch
+  per_device_train_batch_size: 8  # GRPO için daha küçük batch
+  per_device_eval_batch_size: 16
+  learning_rate: 0.000005  # GRPO için daha düşük LR
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  
+  # GRPO Specific Parameters
+  beta: 0.1  # KL divergence penalty
+  ref_model: null  # Will use SFT model as reference
+  
+  # Evaluation & Saving
+  eval_strategy: "steps"
+  eval_steps: 200
+  save_strategy: "steps"
+  save_steps: 400
+  logging_steps: 100
+  
+  # Model Selection
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_rewards/mean"
+  greater_is_better: true
+  save_total_limit: 3
+
+# ========================
+# Mobile Optimization Configuration - PRODUCTION
+# ========================
+mobile_optimization:
+  enable_quantization: true
+  enable_pruning: true
+  enable_torchscript: true
+  enable_onnx: true
+  
+  # Quantization Settings
+  quantization:
+    method: "dynamic"  # dynamic, static, qat
+    backend: "fbgemm"  # CPU optimization
+    qconfig_spec: null  # Will use default
+    
+  # Pruning Settings
+  pruning:
+    sparsity: 0.3  # 30% sparsity - agresssive but mobile-friendly
+    structured: false
+    
+  # Export Settings
+  torchscript:
+    strict: false  # Daha tolerant export
+    optimize_for_mobile: true
+    
+  onnx:
+    export_params: true
+    verbose: false
+    opset_version: 11
+    input_names: ["input_ids", "attention_mask"]
+    output_names: ["logits"]
+    dynamic_axes:
+      input_ids: {0: "batch_size", 1: "sequence"}
+      attention_mask: {0: "batch_size", 1: "sequence"}
+      logits: {0: "batch_size", 1: "sequence"}
+  
+  # Benchmark Settings
+  benchmark:
+    test_inputs_count: 100
+    benchmark_iterations: 50
+    
+  # Validation Settings
+  validation:
+    test_prompts:
+      - "Python'da fonksiyon nasıl yazılır?"
+      - "Makine öğrenimi nedir?"
+      - "Mobil uygulama geliştirme ipuçları nelerdir?"
+      - "Veri analizi nasıl yapılır?"
+    expected_response_length: 100
+    quality_threshold: 0.7
+
+# ========================
+# Reward Functions Configuration - PRODUCTION
+# ========================
+reward_functions:
+  enable_multiple_rewards: true
+  
+  # Length Reward
+  length_reward:
+    target_length: 200
+    length_penalty: 0.1
+    weight: 0.2
+  
+  # Quality Reward
+  quality_reward:
+    min_words: 10
+    turkish_bonus: 0.2
+    code_bonus: 0.3
+    weight: 0.4
+  
+  # Diversity Reward
+  diversity_reward:
+    enable: true
+    weight: 0.2
+  
+  # Mobile-specific Reward
+  mobile_reward:
+    response_length_penalty: 0.1  # Mobil için kısa response'ları teşvik et
+    technical_accuracy_bonus: 0.3
+    weight: 0.2
+
+# ========================
+# Monitoring & Logging Configuration - PRODUCTION
+# ========================
+monitoring:
+  enable_wandb: true
+  wandb_project: "mobile_model_full_training"
+  wandb_entity: null  # Will use default
+  wandb_run_name: "full_production_run"
+  
+  # Detailed logging
+  log_level: "INFO"
+  log_file: "./logs/full_training.log"
+  
+  # Performance monitoring
+  monitor_gpu_memory: true
+  monitor_cpu_usage: true
+  log_model_size: true
+  
+  # Progress reporting
+  report_frequency: 100  # Her 100 step'te rapor
+  detailed_metrics: true
+
+# ========================
+# System & Performance Configuration - PRODUCTION
+# ========================
+system:
+  # Memory Management
+  max_memory_gb: 16  # Maximum memory usage
+  gradient_accumulation_steps: 2  # Effective batch size artırmak için
+  
+  # CPU/GPU Settings
+  use_cpu: true  # CPU training for compatibility
+  use_amp: false  # CPU'da AMP genelde desteklenmez
+  
+  # Parallelism
+  dataloader_num_workers: 8
+  preprocessing_num_workers: 8
+  
+  # Checkpointing
+  resume_from_checkpoint: null  # Set to path for resume
+  save_safetensors: true  # Modern format
+  
+  # Error Handling
+  ignore_data_skip: false
+  remove_unused_columns: false
+  
+  # Reproducibility
+  seed: 42
+  deterministic: true
+
+# ========================
+# Validation & Testing Configuration - PRODUCTION
+# ========================
+validation:
+  # Comprehensive validation
+  enable_comprehensive_validation: true
+  
+  # Test sets
+  test_data_splits:
+    - name: "sft_validation"
+      path: "./data/expanded/sft_val_expanded.jsonl"
+      metrics: ["loss", "perplexity", "bleu"]
+    - name: "grpo_validation"
+      path: "./data/expanded/grpo_val_expanded.jsonl"
+      metrics: ["rewards", "kl_divergence"]
+  
+  # Quality benchmarks
+  quality_benchmarks:
+    - name: "turkish_qa"
+      prompts_file: "./benchmarks/turkish_qa.jsonl"
+      expected_accuracy: 0.8
+    - name: "code_generation"
+      prompts_file: "./benchmarks/code_gen.jsonl"
+      expected_accuracy: 0.7
+  
+  # Model size constraints
+  model_constraints:
+    max_size_mb: 500  # Mobile-friendly size limit
+    max_inference_time_ms: 1000  # Mobile latency constraint
+    
+# ========================
+# Advanced Features - PRODUCTION
+# ========================
+advanced:
+  # Experiment tracking
+  enable_experiment_tracking: true
+  experiment_tags: ["full_scale", "production", "mobile_optimized"]
+  
+  # Model versioning
+  model_versioning:
+    enable: true
+    version_prefix: "v2.0"
+    auto_increment: true
+  
+  # A/B testing setup
+  ab_testing:
+    enable: false  # Şimdilik devre dışı
+    baseline_model: null
+    test_variants: []
+  
+  # Continual learning
+  continual_learning:
+    enable: false  # Future feature
+    update_frequency: null
+    
+  # Security & Privacy
+  privacy:
+    enable_dp: false  # Differential privacy (ileride)
+    noise_multiplier: 1.0
+    max_grad_norm: 1.0

@@ -102,6 +102,7 @@ class ComprehensiveTrainingConfig:
     model_name_or_path: str = "Qwen/Qwen2.5-0.5B-Instruct"
     tokenizer_name_or_path: Optional[str] = None
     model_max_length: int = 2048
+    max_seq_length: int = 2048  # Global max sequence length for training
     
     # Training Stages
     enable_sft: bool = True
@@ -598,6 +599,57 @@ class TrainingOrchestrator:
         # Veri setlerini yükle
         train_dataset, eval_dataset = self.data_preprocessor.load_sft_dataset()
         
+        # max_seq_length'i config'den al
+        max_seq_length = self.config.max_seq_length
+        
+        # SFT veri seti preprocessing fonksiyonu
+        def preprocess_function(examples):
+            # SFT için instruction + response format kullan
+            if "instruction" in examples and "response" in examples:
+                # Instruction-response formatı
+                texts = [f"Instruction: {inst}\nResponse: {resp}" 
+                        for inst, resp in zip(examples["instruction"], examples["response"])]
+            elif "text" in examples:
+                # Doğrudan text formatı
+                texts = examples["text"]
+            elif len(examples) == 1 and isinstance(list(examples.values())[0], list):
+                # Tek bir list column varsa
+                texts = list(examples.values())[0]
+            else:
+                # Fallback: tüm değerleri birleştir
+                texts = [str(v) for v in examples.values() if isinstance(v, (str, list))]
+                if not texts:
+                    raise ValueError(f"Veri formatı desteklenmiyor: {list(examples.keys())}")
+                texts = texts[0] if len(texts) == 1 else texts
+            
+            # Tokenize et
+            model_inputs = tokenizer(
+                texts,
+                max_length=max_seq_length,
+                truncation=True,
+                padding=False  # Data collator padding yapacak
+            )
+            
+            # Labels ayarla (causal LM için input_ids'in kopyası)
+            model_inputs["labels"] = model_inputs["input_ids"].copy()
+            
+            return model_inputs
+
+        self.logger.info("SFT veri seti yüklendi: {} train, {} eval".format(len(train_dataset), len(eval_dataset)))
+        # Veri setini map et
+        train_dataset = train_dataset.map(
+            preprocess_function,
+            batched=True,
+            remove_columns=train_dataset.column_names
+        )
+        eval_dataset = eval_dataset.map(
+            preprocess_function,
+            batched=True,
+            remove_columns=eval_dataset.column_names
+        )
+        
+        self.logger.info("SFT veri seti preprocessing tamamlandı")
+        
         # Training arguments oluştur
         sft_output_dir = f"{self.config.output_dir}/sft"
         
@@ -609,6 +661,16 @@ class TrainingOrchestrator:
             sft_config["bf16"] = False
             self.logger.info("CPU tespit edildi, mixed precision devre dışı bırakıldı")
         
+        # Custom data collator oluştur
+        from transformers import DataCollatorForSeq2Seq
+        data_collator = DataCollatorForSeq2Seq(
+            tokenizer=tokenizer,
+            padding=True,
+            max_length=max_seq_length,
+            pad_to_multiple_of=8,
+            return_tensors="pt"
+        )
+
         training_args = TrainingArguments(
             output_dir=sft_output_dir,
             **sft_config
@@ -621,7 +683,7 @@ class TrainingOrchestrator:
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
-            # max_seq_length zaten tokenization'da ayarlandı
+            data_collator=data_collator,
         )
         
         # Eğitimi başlat
