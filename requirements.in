@@ -1,3 +1,4 @@
+# Core ML dependencies
 torch
 torchvision
 numpy<2
@@ -7,6 +8,9 @@ sentencepiece
 faiss-cpu
 pyyaml
 psutil
+
+# Build tools
+pip-tools
 
 # Development dependencies
 pytest
@@ -20,8 +24,14 @@ mypy
 sphinx
 sphinx-rtd-theme
 
+# Monitoring and logging
 tensorboard
+wandb>=0.12.0
 
+# Research dependencies
+jupyter>=1.0.0
+
+# Web framework
 aiohttp>=3.8.0
 
 # Observability and monitoring
@@ -32,7 +42,6 @@ requests
 
 # Mobile optimization and acceleration
 coremltools; sys_platform == "darwin"
-psutil
 
 # Enterprise data export and integration
 protobuf>=4.21.0
@@ -44,13 +53,12 @@ grpcio-tools>=1.50.0
 websockets>=11.0.0
 avro>=1.11.0
 pyarrow>=10.0.0
-fastapi>=0.100.0
-uvicorn>=0.20.0
 
 # Enterprise Features Dependencies
+fastapi>=0.115.6
+uvicorn[standard]>=0.34.0
 PyJWT==2.9.0
-fastapi==0.115.6
 fastapi-keycloak-middleware==1.3.0
-uvicorn[standard]==0.34.0
-psutil==6.1.1
-python-multipart==0.0.19
+python-multipart>=0.0.19
+pydantic>=1.9.0
+prometheus-client>=0.14.0

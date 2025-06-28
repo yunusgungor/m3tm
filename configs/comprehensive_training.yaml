@@ -1,0 +1,353 @@
+# Comprehensive Training Configuration for Mobile Model
+# Bu konfigürasyon dosyası, mobil model eğitimi için kapsamlı bir pipeline tanımlar
+# Modern PyTorch optimizasyonları, HuggingFace Transformers ve TRL entegrasyonu ile
+
+# Basic Configuration
+experiment_name: "mobile_gemini_comprehensive_training"
+output_dir: "./outputs/comprehensive_training"
+cache_dir: "./cache"
+seed: 42
+
+# Model Configuration
+model_name_or_path: "Qwen/Qwen2.5-0.5B-Instruct"  # Base model for training
+tokenizer_name_or_path: null  # Will use model's tokenizer if null
+model_max_length: 2048
+
+# Training Stages - Hangi aşamaların aktif olacağı
+enable_sft: true
+enable_reward_model: false  # Şimdilik devre dışı (preference data gerekli)
+enable_grpo: true
+enable_dpo: false  # Alternative to GRPO
+enable_mobile_optimization: true
+
+# ========================
+# SFT (Supervised Fine-Tuning) Configuration
+# ========================
+sft_config:
+  # Training Parameters
+  num_train_epochs: 3
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 16
+  learning_rate: 2e-5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_seq_length: 2048
+  
+  # Precision & Memory Optimization
+  fp16: false  # CPU uyumluluğu için false, GPU'da otomatik düzeltilir
+  bf16: false  # Use fp16 or bf16, not both
+  gradient_checkpointing: true
+  dataloader_num_workers: 4
+  remove_unused_columns: false
+  
+  # Evaluation & Saving
+  eval_strategy: "steps"
+  eval_steps: 500
+  save_strategy: "steps"
+  save_steps: 1000
+  logging_steps: 100
+  
+  # Model Selection
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  
+  # Monitoring
+  report_to: ["tensorboard", "wandb"]
+  
+  # Advanced Features
+  gradient_accumulation_steps: 1
+  max_grad_norm: 1.0
+  lr_scheduler_type: "cosine"
+  
+  # Checkpointing
+  save_total_limit: 3
+  resume_from_checkpoint: null
+
+# ========================
+# GRPO (Group Relative Policy Optimization) Configuration
+# ========================
+grpo_config:
+  # Training Parameters
+  num_train_epochs: 2
+  per_device_train_batch_size: 4  # Smaller for RL training
+  per_device_eval_batch_size: 8
+  learning_rate: 5e-6  # Lower LR for RL
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  
+  # Precision & Memory
+  bf16: false  # CPU uyumluluğu için false, GPU'da otomatik düzeltilir
+  fp16: false
+  gradient_checkpointing: true
+  logging_steps: 10
+  
+  # GRPO Specific
+  use_vllm: false  # Set to true if vLLM server available
+  vllm_server_host: "localhost"
+  vllm_server_port: 8000
+  ds3_gather_for_generation: false  # Memory optimization for DeepSpeed
+  
+  # Generation Parameters
+  max_new_tokens: 256
+  missing_eos_penalty: 1.0
+  temperature: 0.7
+  top_p: 0.9
+  do_sample: true
+  
+  # Advanced RL Parameters
+  reward_model_path: null  # Will use custom reward functions
+  kl_penalty: "kl"  # kl, abs, mse
+  cliprange: 0.2
+  cliprange_value: 0.2
+  vf_coef: 0.1
+  target_kl: 0.1
+
+# ========================
+# Reward Model Configuration (for future use)
+# ========================
+reward_config:
+  num_train_epochs: 1
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 16
+  learning_rate: 1e-5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  fp16: true
+  gradient_checkpointing: true
+  max_length: 2048
+
+# ========================
+# Dataset Configuration
+# ========================
+sft_dataset_name: "data/sft_train.jsonl"
+sft_eval_dataset_name: "data/sft_val.jsonl"
+grpo_dataset_name: "data/grpo_train.jsonl"
+grpo_eval_dataset_name: "data/grpo_val.jsonl"
+
+# Dataset Processing
+data_preprocessing:
+  max_samples_per_dataset: null  # No limit
+  shuffle_datasets: true
+  remove_duplicates: true
+  min_text_length: 10
+  max_text_length: 2048
+
+# ========================
+# Distributed Training Configuration
+# ========================
+distributed_backend: "nccl"
+gradient_accumulation_steps: 1
+ddp_find_unused_parameters: false
+
+# DeepSpeed Configuration (optional)
+deepspeed_config: null  # Path to deepspeed config JSON
+# deepspeed_config: "configs/deepspeed_zero3.json"
+
+# ========================
+# Performance Optimization
+# ========================
+# PyTorch Optimizations
+torch_compile: true
+torch_compile_backend: "inductor"  # inductor, aot_eager, cudagraphs
+torch_compile_mode: "default"  # default, reduce-overhead, max-autotune
+
+# Attention Optimization
+use_flash_attention: true
+
+# Memory Optimization
+dataloader_pin_memory: true
+dataloader_persistent_workers: true
+
+# ========================
+# Mobile Optimization Configuration
+# ========================
+mobile_optimization_config:
+  # Quantization Settings
+  quantization:
+    enabled: true
+    method: "dynamic"  # dynamic, static, qat (quantization-aware training)
+    dtype: "qint8"  # qint8, qint32, float16
+    calibration_samples: 100  # For static quantization
+  
+  # Pruning Settings
+  pruning:
+    enabled: true
+    sparsity: 0.3  # 30% sparsity
+    structured: false  # Unstructured pruning
+    gradual: true  # Gradual pruning during training
+  
+  # Mobile Optimization
+  optimization:
+    optimize_for_mobile: true
+    backend: "qnnpack"  # qnnpack, fbgemm
+    export_format: ["torchscript", "onnx"]  # Export formats
+    
+  # Model Validation
+  validate_mobile_model: true
+  run_benchmark: true
+  target_platforms: ["android", "ios"]
+
+# ========================
+# Monitoring and Logging
+# ========================
+# Weights & Biases Configuration
+use_wandb: true
+wandb_project: "mobile-gemini-training"
+wandb_entity: null  # Your W&B username/team
+wandb_tags: ["mobile", "gemini", "grpo", "sft"]
+
+# Logging Configuration
+log_level: "INFO"
+log_to_file: true
+log_file: "./outputs/training.log"
+
+# TensorBoard Configuration
+tensorboard_log_dir: "./outputs/tensorboard_logs"
+
+# Monitoring Intervals
+monitor_gpu_memory: true
+monitor_system_resources: true
+save_intermediate_checkpoints: true
+
+# ========================
+# Hub Configuration (for model sharing)
+# ========================
+push_to_hub: false
+hub_model_id: null  # "your-username/your-model-name"
+hub_token: null  # Your HuggingFace token
+hub_private_repo: true
+
+# ========================
+# Advanced Training Features
+# ========================
+# Early Stopping
+early_stopping:
+  enabled: true
+  patience: 5
+  min_delta: 0.001
+  monitor: "eval_loss"
+
+# Learning Rate Scheduling
+lr_scheduler:
+  type: "cosine"  # cosine, linear, polynomial, constant
+  num_cycles: 1
+  power: 2.0  # For polynomial
+
+# Data Augmentation (experimental)
+data_augmentation:
+  enabled: false
+  techniques: ["back_translation", "paraphrasing"]
+  probability: 0.1
+
+# ========================
+# Evaluation Configuration
+# ========================
+evaluation:
+  # Metrics to compute
+  compute_metrics: true
+  metrics: ["perplexity", "bleu", "rouge"]
+  
+  # Evaluation datasets
+  additional_eval_datasets: []
+  
+  # Generation evaluation
+  generation_config:
+    max_new_tokens: 256
+    temperature: 0.7
+    top_p: 0.9
+    do_sample: true
+    num_return_sequences: 1
+
+# ========================
+# Debugging and Development
+# ========================
+debug_mode: false
+limit_train_samples: null  # null for no limit, number for debugging
+limit_eval_samples: null
+overfit_batch: false  # Train on single batch for debugging
+
+# Profiling
+enable_profiling: false
+profile_steps: 10
+
+# ========================
+# Security and Safety
+# ========================
+# Model Safety Checks
+safety_checks:
+  enabled: true
+  check_harmful_content: true
+  content_filter_threshold: 0.8
+
+# Privacy
+privacy:
+  differential_privacy: false
+  noise_multiplier: 1.0
+  max_grad_norm: 1.0
+
+# ========================
+# Environment Variables (can be overridden)
+# ========================
+environment:
+  CUDA_VISIBLE_DEVICES: null  # Auto-detect
+  OMP_NUM_THREADS: 1
+  TOKENIZERS_PARALLELISM: false
+  PYTORCH_CUDA_ALLOC_CONF: "max_split_size_mb:128"
+
+# ========================
+# Custom Reward Functions for GRPO
+# ========================
+reward_functions:
+  # Length-based reward
+  length_reward:
+    enabled: true
+    target_length: 100
+    weight: 0.3
+    
+  # Quality-based reward  
+  quality_reward:
+    enabled: true
+    diversity_weight: 0.5
+    repetition_penalty: 0.5
+    weight: 0.4
+    
+  # Format-based reward
+  format_reward:
+    enabled: true
+    check_capitalization: true
+    check_punctuation: true
+    check_grammar: false  # Requires additional model
+    weight: 0.3
+
+# ========================
+# Model Architecture Customization
+# ========================
+model_customization:
+  # Custom model modifications
+  add_adapters: false
+  adapter_config:
+    r: 16
+    alpha: 32
+    dropout: 0.1
+    target_modules: ["q_proj", "v_proj"]
+  
+  # Custom layers
+  add_custom_layers: false
+  custom_layer_config: {}
+
+# ========================
+# Testing and Validation
+# ========================
+testing:
+  # Unit testing during training
+  run_unit_tests: false
+  test_frequency: 1000  # Every N steps
+  
+  # Model validation
+  validate_outputs: true
+  validation_samples: 10
+  
+  # Performance testing
+  benchmark_inference: true
+  benchmark_mobile_inference: true
